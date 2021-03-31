@@ -1,0 +1,59 @@
+h1 {
+    text-align: center;
+}
+
+.menu {
+    display: block;
+    flex-wrap: wrap;
+    margin: 0 15px;
+    position: relative;
+    top: 10%;
+}
+
+.item {
+    float: left;
+    width: 49%;
+    padding: 1em;
+    box-sizing: border-box;
+
+}
+
+.imgBlock {
+    display: block;
+    position: relative;
+    height: 200px;
+    width: 100%;
+    text-align: center;
+}
+
+.urlBlock {
+    display: block;
+    position: relative;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+
+.postImg {
+    height: 90%;
+    max-width: 100%;
+}
+
+.logoutBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    align-items: center;
+    display: flex;
+}
+
+.logoutBtn div {
+    padding-right: 3px;
+}
+
+@media only screen and (max-width: 480px) {
+    .item {
+        width: 100%;
+    }
+}

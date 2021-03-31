@@ -1,0 +1,86 @@
+
+.title {
+    font-family: "Open Sans";
+    text-transform: uppercase;
+    color: rgba(0, 35, 122, 0.5);
+    font-size: 18px;
+    text-align: center;
+}
+
+.body {
+    text-align: center;
+
+}
+
+/* .editButton{
+    font-size: 12px;
+    background-color: #3457AE;
+    border: none;
+    border-radius: 10%;
+    font-family: "Open Sans";
+    padding: 10px 24px;
+
+} */
+.editButton {
+    display: inline-block;
+    padding: 0.7em 1.7em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.2em;
+    border-top-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #FFFFFF;
+    background-color: #3369ff;
+    box-shadow: inset 0 -0.6em 1em -0.35em rgba(0, 0, 0, 0.17), inset 0 0.6em 2em -0.3em rgba(255, 255, 255, 0.15), inset 0 0 0em 0.05em rgba(255, 255, 255, 0.12);
+    text-align: center;
+    position: relative;
+}
+
+.editButton:active {
+    box-shadow: inset 0 0.6em 2em -0.3em rgba(0, 0, 0, 0.15), inset 0 0 0em 0.05em rgba(255, 255, 255, 0.12);
+}
+
+@media all and (max-width: 30em) {
+    .editButton {
+        display: block;
+        margin: 0.4em auto;
+    }
+}
+
+.submitButton {
+    display: inline-block;
+    padding: 0.7em 1.7em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.2em;
+    border-top-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: black;
+    background-color: #cccccc;
+    box-shadow: inset 0 -0.6em 1em -0.35em rgba(0, 0, 0, 0.17), inset 0 0.6em 2em -0.3em rgba(255, 255, 255, 0.15), inset 0 0 0em 0.05em rgba(255, 255, 255, 0.12);
+    text-align: center;
+    position: relative;
+}
+
+.submitButton:active {
+    box-shadow: inset 0 0.6em 2em -0.3em rgba(0, 0, 0, 0.15), inset 0 0 0em 0.05em rgba(255, 255, 255, 0.12);
+}
+
+@media all and (max-width: 30em) {
+    .submitButton {
+        display: block;
+        margin: 0.4em auto;
+    }
+}
+
+

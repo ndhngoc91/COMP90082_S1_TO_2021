@@ -1,0 +1,53 @@
+.card {
+    width: 100%;
+    border: 1px solid black;
+    padding: 1%;
+}
+
+.productImage {
+    display: inline-block;
+    border: 1px solid black;
+    vertical-align: middle;
+}
+
+.productImage img {
+    height: 15%;
+}
+
+.productBasicContainer {
+    display: inline-block;
+    width: 50%;
+    height: 15%;
+    padding-left: 5%;
+    vertical-align: middle;
+}
+
+.productBasic {
+    display: inline-block;
+    width: 100%;
+    height: 33.3%;
+}
+
+.productCustomizeContainer {
+    display: inline-block;
+    width: 20%;
+    vertical-align: middle;
+}
+
+.productCustomize {
+    display: inline-block;
+    width: 100%;
+}
+
+
+@media only screen and (max-width: 450px) {
+    .productBasicContainer {
+        width: 60%;
+    }
+
+    .productCustomizeContainer {
+        display: block;
+        text-align: center;
+        width: auto;
+    }
+}

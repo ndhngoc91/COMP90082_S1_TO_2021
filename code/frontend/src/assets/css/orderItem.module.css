@@ -1,0 +1,71 @@
+.reviewBox {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    list-style: none;
+    background-color: white;
+    font-size: 12px;
+    line-height: 1.55em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 40px;
+    letter-spacing: .8px;
+    color: #7d7c79;
+    position: relative;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(51, 51, 51, .2);
+    box-shadow: 0 2px 2px 0 rgba(51, 51, 51, .2);
+}
+
+
+.highlight {
+    color: black;
+}
+
+.orderButton {
+    right: 10px;
+    top: 4px;
+    position: absolute;
+    width: 25%;
+    text-align: right;
+    background: 0 0;
+    border: none;
+    color: #333;
+    font-weight: 400;
+    text-decoration: underline;
+    text-transform: none;
+    height: 50px;
+    letter-spacing: 1.71px;
+    padding: 3px 10px;
+    -webkit-appearance: none;
+    border-radius: 2px !important;
+    box-sizing: border-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    overflow: hidden;
+    line-height: 15px;
+    transition: all .3s ease-in-out;
+}
+
+.orderButton:active {
+    color: lightgray;
+    outline: none;
+}
+
+
+/*@media screen and (max-width: 1023px) {*/
+/*    #primary {*/
+/*        background: 0 0;*/
+/*        border: 0;*/
+/*        float: none;*/
+/*        margin: 0;*/
+/*        width: 100%;*/
+/*        display: inline-block;*/
+/*    }*/
+/*}*/
