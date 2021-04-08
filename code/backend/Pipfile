@@ -39,6 +39,9 @@ Jinja2 = "==2.11.2"
 MarkupSafe = "==1.1.1"
 PyMySQL = "==0.10.0"
 Werkzeug = "==1.0.1"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+SQLAlchemy = "==1.4.5"
 
 [dev-packages]
 

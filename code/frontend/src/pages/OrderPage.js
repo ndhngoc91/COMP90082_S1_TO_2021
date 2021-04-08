@@ -200,7 +200,7 @@ const OrderPage = observer(() => {
 
         // Query the database for product codes or barcodes that are similar to the input identifier
         const identifierType = inputType === "barcode" ? "barcode" : "productCode";
-        const result = await search(`/api/products/search?identifier=${identifier}&identifierType=${identifierType}`);
+        const result = await search(`http://127.0.0.1:8000/products/search?identifier=${identifier}&identifierType=${identifierType}`);
 
         // Result will be null in the case that the axios request was cancelled prematurely
         if (!result) {

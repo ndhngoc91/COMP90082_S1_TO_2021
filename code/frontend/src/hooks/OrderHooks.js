@@ -7,7 +7,7 @@ export const useRecentOrders = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get("/api/history", {
+        axios.get("http://127.0.0.1:8000/orders", {
             params: {
                 session_id: sessionStorage.getItem("sessionKey")
             },

@@ -11,7 +11,7 @@ export const useAddresses = () => {
     } = useStores();
 
     useEffect(() => {
-        axios.get(`api/customer/${customerId}/addresses`).then(res => {
+        axios.get(`http://127.0.0.1:8000/customers/${customerId}/addresses`).then(res => {
             setAddresses(res.data);
             setDeliveryAddrId(res.data[0].id);
             setBillingAddrId(res.data[0].id);
@@ -32,7 +32,7 @@ export const useHandleAddAddress = () => {
         country
     }, success, failure) => {
         setHandling(true);
-        axios.post(`/api/customer/${customerId}/addresses`, {
+        axios.post(`http://127.0.0.1:8000/customers/${customerId}/addresses`, {
             "contact": contact,
             "address_line1": addr1,
             "address_line2": addr2,

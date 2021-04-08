@@ -23,9 +23,8 @@ const ChooseCustomer = () => {
     let isRendered = useRef(false);
     useEffect(() => {
         isRendered = true;
-        axios.get("api/customers").then(res => {
+        axios.get("http://127.0.0.1:8000/customers").then(res => {
             if (isRendered) {
-                console.log(res.data);
                 setUsers(res.data);
             }
             return null

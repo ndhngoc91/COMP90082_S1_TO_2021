@@ -40,11 +40,7 @@ const TallCartProduct = ({product, onQuantityChange, onRemove}) => {
         const {productCode} = product;
         (async () => {
             // Retrieve 3D model metadata (if it exists) for the product
-            const response = await axios.get("/api/metadata/get", {
-                params: {
-                    productCode: productCode
-                }
-            });
+            const response = await axios.get(`http://127.0.0.1:8000/products/${productCode}/metadata/get`);
 
             // Check if 3D model metadata exists for the product
             if (response.data.found) {

@@ -34,18 +34,15 @@ const EditAddressForm = (prop) => {
         setLoading(true);
 
         // Edit Existing Address
-        axios({
-            method: "put",
-            url: "/api/customer/" + customerId + "/addresses/" + prop.address.id,
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-            data: {
-                "contact": contact,
-                "address_line1": addr1,
-                "address_line2": addr2,
-                "postcode": postcode,
-                "region": region,
-                "country": country
-            }
+        axios.put(`http://127.0.0.1:8000/customers/${customerId}/addresses/${prop.address.id}`, {
+            "contact": contact,
+            "address_line1": addr1,
+            "address_line2": addr2,
+            "postcode": postcode,
+            "region": region,
+            "country": country
+        }, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then((response) => {
             console.log(response);
             setLoading(false);
