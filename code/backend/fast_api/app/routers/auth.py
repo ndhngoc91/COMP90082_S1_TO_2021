@@ -1,7 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.service import user_service
-from app import schemas
+
+from app.token import verify_token
 
 router = APIRouter(
     prefix="/auth",
@@ -9,13 +11,11 @@ router = APIRouter(
 )
 
 
-# TODO: impure API
+@router.get("/verify-token")
+def validate_token(token: str):
+    verify_token(token)
+
+
 @router.post("/login")
-async def login(user_credentials: schemas.UserCredentials):
-    return user_service.validate(user_credentials.username, user_credentials.password)
-
-
-# TODO: impure API
-@router.get("/logout")
-async def logout():
-    return {"status": "success", "message": "LOGOUT_SUCCESS"}
+async def login(request: OAuth2PasswordRequestForm = Depends()):
+    return user_service.validate(request.username, request.password)

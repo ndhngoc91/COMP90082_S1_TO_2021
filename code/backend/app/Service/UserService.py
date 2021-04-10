@@ -20,8 +20,11 @@ def validate(username: str, password: str) -> dict:
         return {'status': "failure", 'data': {"session_id": None}, "message": "LOGIN_WRONG"}
 
     session['org_id'] = org_id
+    print(org_id)
     connection = authUtil.build_connection()
     session_id, status_code = connection.create_session()
+    print(session_id)
+    print(status_code)
     if status_code == "LOGIN_SUCCESS":
         session.permanent = True
         session['seesion_id'] = session_id

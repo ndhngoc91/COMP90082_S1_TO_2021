@@ -1,12 +1,12 @@
 from app.model.cate_prod import CateProd
 from app.model.category import Category
 from app.model.price import Price
-from app.resource.simple_model_resource import SimpleModelResource as SR
+from app.resource.simple_model_resource import SimpleModelResource
 from app.model.product import Product
 from app.resource.product_resource import ProductResource
 from app.resource.user_resource import UserResource
 from app.resource.model_metadata_resource import ModelMetadataResource
-from app.util import auth_util as authUtil
+from app.util import auth_util
 from app.resource.image_resource import ImageResource
 import json
 import logging
@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-def retrieve_products(customer_code="TESTDEBTOR") -> dict:
-    connection = authUtil.build_connection()
+def retrieve_products(org_id: str, customer_code: str = "TESTDEBTOR") -> dict:
+    connection = auth_util.build_connection(org_id=org_id)
     data_type = 3
     success, product_list = connection.retrieve_organisation_data(data_type, customer_code=customer_code)
     product_resource = ProductResource()
@@ -24,14 +24,14 @@ def retrieve_products(customer_code="TESTDEBTOR") -> dict:
         return product_resource.store_products(product_list)
 
     return {
-        'status': "error",
-        'data': None,
-        'Message': "Error while retrieving products data from server"
+        "status": "error",
+        "data": None,
+        "Message": "Error while retrieving products data from server"
     }
 
 
-def retrieve_prices() -> dict:
-    connection = authUtil.build_connection()
+def retrieve_prices(org_id: str) -> dict:
+    connection = auth_util.build_connection(org_id=org_id)
     data_type = 37
     success, price_list = connection.retrieve_organisation_data(data_type)
     product_resource = ProductResource()
@@ -39,9 +39,9 @@ def retrieve_prices() -> dict:
         return product_resource.store_prices(price_list)
 
     return {
-        'status': 'error',
-        'data': None,
-        'Message': 'Error while retrieving product prices data from server'
+        "status": "error",
+        "data": None,
+        "Message": "Error while retrieving product prices data from server"
     }
 
 
@@ -53,10 +53,10 @@ def get_product_by_barcode(barcode) -> dict:
     try:
         if product_record is not None:
             # Get Product images
-            image_records = get_product_images(product_record['id'])
+            image_records = get_product_images(product_record["id"])
 
             # Converting Decimal to float (Python serializable)
-            product_record['price'] = float(product_record['price'])
+            product_record["price"] = float(product_record["price"])
 
             # Packing data in the Model
             product_record = Product(product_record)
@@ -64,39 +64,39 @@ def get_product_by_barcode(barcode) -> dict:
                 product_record.imageList = image_records
 
             result = {
-                'status': "success",
-                'Message': "successfully retrieved product",
-                'data': product_record.__dict__
+                "status": "success",
+                "Message": "successfully retrieved product",
+                "data": product_record.__dict__
             }
 
         else:
             result = {
-                'status': "error",
-                'data': None,
-                'Message': "No data found"
+                "status": "error",
+                "data": None,
+                "Message": "No data found"
             }
     except Exception as e:
         result = {
-            'status': "error",
-            'data': None,
-            'Message': str(e)
+            "status": "error",
+            "data": None,
+            "Message": str(e)
         }
 
     return result
 
 
-def get_product_by_product_code(productCode) -> dict:
+def get_product_by_product_code(product_code) -> dict:
     # Get Product Details
     pr = ProductResource()
-    product_record = pr.get_product_by_product_code(productCode)
+    product_record = pr.get_product_by_product_code(product_code)
 
     try:
         if product_record is not None:
             # Get Product images
-            image_records = get_product_images(product_record['id'])
+            image_records = get_product_images(product_record["id"])
 
             # Converting Decimal to float (Python serializable)
-            product_record['price'] = float(product_record['price'])
+            product_record["price"] = float(product_record["price"])
 
             # Packing data in the Model
             product_record = Product(product_record)
@@ -104,68 +104,68 @@ def get_product_by_product_code(productCode) -> dict:
                 product_record.imageList = image_records
 
             result = {
-                'status': "success",
-                'message': "successfully retrieved product",
-                'data': product_record.__dict__
+                "status": "success",
+                "message": "successfully retrieved product",
+                "data": product_record.__dict__
             }
 
         else:
             result = {
-                'status': "error",
-                'data': None,
-                'Message': "No data found"
+                "status": "error",
+                "data": None,
+                "Message": "No data found"
             }
     except Exception as e:
         result = {
-            'status': "error",
-            'data': None,
-            'Message': str(e)
+            "status": "error",
+            "data": None,
+            "Message": str(e)
         }
 
     return result
 
 
-def search_products(identifier, identifierType):
+def search_products(identifier: str, identifier_type: str):
     """
     Takes an identifier value and returns the product codes or barcodes
     of products in the database that are similar to the identifier
 
     Args:
         identifier: a potential product code or barcode
-        identifierType: 'barcode' or 'productCode'
+        identifier_type: "barcode" or "productCode"
 
     Returns:
         JSON object including a list of similar identifiers, or no identifiers, if none were found
     """
 
     product_resource = ProductResource()
-    product_identifiers = product_resource.search_products(identifier, identifierType)
+    product_identifiers = product_resource.search_products(identifier, identifier_type)
 
     if not product_identifiers:
         result = {
-            'status': 'error',
-            'identifiers': None,
-            'message': 'No barcodes or product codes match the given identifier'
+            "status": "error",
+            "identifiers": None,
+            "message": "No barcodes or product codes match the given identifier"
         }
     else:
         result = {
-            'status': 'success',
-            'identifiers': product_identifiers,
-            'message': 'Successfully retrieved similar barcodes or product codes'
+            "status": "success",
+            "identifiers": product_identifiers,
+            "message": "Successfully retrieved similar barcodes or product codes"
         }
 
     return result
 
 
-def get_product_images(id) -> dict:
+def get_product_images(product_image_id) -> dict:
     image_resource = ImageResource()
-    image_records = image_resource.get_product_images_by_id(id)
+    image_records = image_resource.get_product_images_by_id(product_image_id)
     return image_records
 
 
-def update_products() -> dict:
+def update_products(org_id: str) -> dict:
     product_resource = ProductResource()
-    connection = authUtil.build_connection()
+    connection = auth_util.build_connection(org_id=org_id)
     data_type = 3
     success, product_list = connection.retrieve_organisation_data(data_type)
 
@@ -173,14 +173,14 @@ def update_products() -> dict:
         return product_resource.update_products(product_list)
 
     return {
-        'status': 'error',
-        'data': None,
-        'Message': 'Error while retrieving product from server'
+        "status": "error",
+        "data": None,
+        "Message": "Error while retrieving product from server"
     }
 
 
-def update_prices(customer_code='TESTDEBTOR') -> dict:
-    connection = authUtil.build_connection()
+def update_prices(org_id: str, customer_code: str = "TESTDEBTOR") -> dict:
+    connection = auth_util.build_connection(org_id=org_id)
     data_type = 37
     success, price_list = connection.retrieve_organisation_data(data_type, customer_code)
     product_resource = ProductResource()
@@ -189,28 +189,28 @@ def update_prices(customer_code='TESTDEBTOR') -> dict:
         return product_resource.update_prices(price_list)
 
     return {
-        'status': 'error',
-        'data': None,
-        'Message': "Error while retrieving product price from SQUIZZ server"
+        "status": "error",
+        "data": None,
+        "Message": "Error while retrieving product price from SQUIZZ server"
     }
 
 
 def import_metadata(data) -> dict:
-    username = data['Username']
-    password = data['Password']
+    username = data["Username"]
+    password = data["Password"]
     try:
         user_resource = UserResource()
         org_id = user_resource.validate_username_password(username, password)
     except AttributeError:
-        return {'status': "failure", "message": "LOGIN_ERROR"}
+        return {"status": "failure", "message": "LOGIN_ERROR"}
 
     if org_id is None:
         # wrong username or password
-        return {'status': "failure", "message": "LOGIN_ERROR"}
-    product_list = data['Products']
+        return {"status": "failure", "message": "LOGIN_ERROR"}
+    product_list = data["Products"]
     errormessage = ""
     for product in product_list:
-        code = product['Code']
+        code = product["Code"]
         product_resource = ProductResource()
         product_id = product_resource.get_product_id_by_product_code(code)
         if product_id is None:
@@ -287,9 +287,9 @@ def import_threedmodel(data) -> dict:
                 "message": "product code contains:" + errormessage + " failed to import ,please check product code or import again"}
 
 
-def get_metadata_by_product_code(productCode) -> dict:
+def get_metadata_by_product_code(product_code) -> dict:
     model_metadata_resource = ModelMetadataResource()
-    result = model_metadata_resource.get_metadata_by_product_code(productCode)
+    result = model_metadata_resource.get_metadata_by_product_code(product_code)
     if result is None:
         return {"found": False}
     meta_json = str(result['meta_json_string'])
@@ -297,8 +297,8 @@ def get_metadata_by_product_code(productCode) -> dict:
     return {"found": True, "json_data": json.loads(meta_json)}
 
 
-def restore_category():
-    connection = authUtil.build_connection()
+def restore_category(org_id: str):
+    connection = auth_util.build_connection(org_id=org_id)
     status, categories = connection.retrieve_organisation_data(8)
 
     if not status:
@@ -307,7 +307,7 @@ def restore_category():
             'message': 'Retrieve data from squizz failed.'
         }
 
-    sr = SR()
+    sr = SimpleModelResource()
     try:
         # Rewrite categories
         sr.truncate(CateProd, False)
@@ -346,8 +346,8 @@ def restore_category():
     }
 
 
-def restore_prices(customer_code="TESTDEBTOR"):
-    connection = authUtil.build_connection()
+def restore_prices(org_id: str, customer_code: str = "TESTDEBTOR"):
+    connection = auth_util.build_connection(org_id=org_id)
     status, prices = connection.retrieve_organisation_data(37, customer_code)
     if not status:
         return {
@@ -355,7 +355,7 @@ def restore_prices(customer_code="TESTDEBTOR"):
             'message': 'Retrieve data from squizz failed.'
         }
 
-    sr = SR()
+    sr = SimpleModelResource()
     try:
         # Truncate prices
         sr.truncate(Price, False)
@@ -393,7 +393,7 @@ def list_all_categories():
     c_cate_dict = {}
 
     # Retrieve all categories
-    for category in SR().list_all(Category):
+    for category in SimpleModelResource().list_all(Category):
         if category.keyCategoryParentID is None:
             p_cate_list.append(category)
         else:

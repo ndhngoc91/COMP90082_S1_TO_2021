@@ -28,12 +28,16 @@ class SquizzGatewayService:
         self.requests = requests.Session()
 
     # Web Service Endpoint: Create Organisation API Session
-    def create_session(self) -> Tuple[str, str]:
+    def create_session(self) -> Tuple[any, str]:
         header = {"Content-Type": "application/x-www-form-urlencoded"}
         parameter = {"org_id": self.org_id, "api_org_key": self.api_org_key, "api_org_pw": self.api_org_pw,
                      "create_session": "Y"}
         try:
             data = self.requests.post(self.base_url + "/org/create_session", data=parameter, headers=header).json()
+            print(self.base_url + "/org/create_session")
+            print(parameter)
+            print(header)
+            print(data)
             if data["result"] == "SUCCESS" and data["result_code"] == "SERVER_SUCCESS":
                 logger.info("Created a session in SQUIZZ")
                 return data["session_id"], "LOGIN_SUCCESS"

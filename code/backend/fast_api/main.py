@@ -7,6 +7,7 @@ from app.routers import customer_codes
 from app.routers import customers
 from app.routers import orders
 from app.routers import products
+from app.routers import squizz
 
 app = FastAPI()
 
@@ -29,3 +30,4 @@ app.include_router(customer_codes.router)
 app.include_router(customers.router)
 app.include_router(orders.router)
 app.include_router(products.router)
+app.include_router(squizz.router)

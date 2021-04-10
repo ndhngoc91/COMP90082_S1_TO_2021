@@ -1,5 +1,11 @@
+from fastapi import HTTPException
+from starlette import status
+
+from app import token
 from app.resource.user_resource import UserResource
 import logging
+
+from app.util import auth_util
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -9,28 +15,18 @@ def validate(username: str, password: str) -> dict:
     try:
         user_resource = UserResource()
         org_id = user_resource.validate_username_password(username, password)
-        if org_id is None:
-            # wrong username or password
-            return {'status': "failure", 'data': {"session_id": None}, "message": "LOGIN_WRONG"}
-        return {'status': "success", 'data': {"session_id": "TBD"}, "message": "LOGIN_SUCCESS"}
     except AttributeError:
-        return {'status': "failure", 'data': {"session_id": None}, "message": "LOGIN_WRONG"}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Credentials is not valid")
 
-    # if org_id is None:
-    #     # wrong username or password
-    #     return {'status': "failure", 'data': {"session_id": None}, "message": "LOGIN_WRONG"}
-    #
-    # session['org_id'] = org_id
-    # connection = authUtil.build_connection()
-    # session_id, status_code = connection.create_session()
-    # if status_code == "LOGIN_SUCCESS":
-    #     session.permanent = True
-    #     session['seesion_id'] = session_id
-    #     session['login_session'] = session_id
-    #     session_resource = SessionResource()
-    #     session_resource.store_session(username, session_id, org_id)
-    #     logger.info(f"Created a new login session with ID: {session_id}")
-    #     return {'status': "success", 'data': {"session_id": session_id}, "message": "LOGIN_SUCCESS"}
-    #
-    # else:
-    #     return {'status': "failure", 'data': {"session_id": None}, "message": status_code}
+    if org_id is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Org Id Not Found")
+
+    connection = auth_util.build_connection(org_id=org_id)
+    session_id, status_code = connection.create_session()
+    if status_code == "LOGIN_SUCCESS":
+        access_token = token.create_access_token(data={"username": username,
+                                                       "org_id": org_id,
+                                                       "session_id": session_id})
+        return {"access_token": access_token, "token_type": "bearer"}
+    else:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to connect to Squizz")

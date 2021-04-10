@@ -1,9 +1,6 @@
+from typing import Optional
+
 from pydantic import BaseModel
-
-
-class UserCredentials(BaseModel):
-    username: str
-    password: str
 
 
 class Customer(BaseModel):
@@ -17,3 +14,14 @@ class Address(BaseModel):
     postcode: str
     region: str
     country: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+    org_id: Optional[str] = None
+    session_id: Optional[str] = None

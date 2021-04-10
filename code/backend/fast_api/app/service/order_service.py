@@ -6,15 +6,15 @@ from app.model.customer import Customer
 from app.model.order_detail import OrderDetail
 from app.model.product import Product
 from app.model.session import Session
-from app.util import auth_util as authUtil
-from app.resource.order_resource import OrderResource as OR
-from app.resource.simple_model_resource import SimpleModelResource as SR
-from app.resource.product_resource import ProductResource as PR
+from app.util import auth_util
+from app.resource.order_resource import OrderResource
+from app.resource.simple_model_resource import SimpleModelResource
+from app.resource.product_resource import ProductResource
 
 
 def get_order_history(session_id) -> dict:
     try:
-        order_resource = OR()
+        order_resource = OrderResource()
         result = order_resource.get_order_history(session_id)
     except Exception:
         result = {
@@ -26,18 +26,18 @@ def get_order_history(session_id) -> dict:
     return result
 
 
-def save_order(session_key, customer_id, delivery_addr_id, billing_addr_id, lines, instructions=""):
+def save_order(org_id, session_key, customer_id, delivery_addr_id, billing_addr_id, lines, instructions=""):
     # Retrieve objs
-    sess = SR().find_one(Session({'sessionKey': session_key}))
-    org = SR().get_one_by_id(Organization(pk=sess.orgId))
-    cust = SR().get_one_by_id(Customer(pk=customer_id))
-    deli = SR().get_one_by_id(Address(pk=delivery_addr_id))
-    bill = SR().get_one_by_id(Address(pk=billing_addr_id))
+    sess = SimpleModelResource().find_one(Session({'sessionKey': session_key}))
+    org = SimpleModelResource().get_one_by_id(Organization(pk=sess.orgId))
+    cust = SimpleModelResource().get_one_by_id(Customer(pk=customer_id))
+    deli = SimpleModelResource().get_one_by_id(Address(pk=delivery_addr_id))
+    bill = SimpleModelResource().get_one_by_id(Address(pk=billing_addr_id))
     # Lines Info
     details_list = []
     for line in lines:
-        product = SR().get_one_by_id(Product(pk=line['product_id']))
-        PR().assign_price_and_images_to_product([product])
+        product = SimpleModelResource().get_one_by_id(Product(pk=line['product_id']))
+        ProductResource().assign_price_and_images_to_product([product])
         details = OrderDetail({
             'lineType': 'PRODUCT',
             'keyProductID': product.keyProductID,
@@ -50,7 +50,7 @@ def save_order(session_key, customer_id, delivery_addr_id, billing_addr_id, line
         details_list.append(details)
 
     # Post Order to SQUIZZ to get tax info
-    connection = authUtil.build_connection()
+    connection = auth_util.build_connection(org_id=org_id)
     result_code, tax_lines = connection.submit_order(org, cust, details_list)
     if result_code != 'SERVER_SUCCESS':
         raise SquizzException(f'Post order to SQUIZZ failed, code: {result_code}')
@@ -62,11 +62,11 @@ def save_order(session_key, customer_id, delivery_addr_id, billing_addr_id, line
         line.totalPrice = line.priceTotalIncTax
 
     # Save order and order lines
-    return OR().create_order(org, cust, deli, bill, details_list, result_code, instructions)
+    return OrderResource().create_order(org, cust, deli, bill, details_list, result_code, instructions)
 
 
 def get_order(order_id):
-    order = SR().get_one_by_id(Order(pk=order_id))
-    lines = SR().find_all(OrderDetail({'orderId': order_id}))
+    order = SimpleModelResource().get_one_by_id(Order(pk=order_id))
+    lines = SimpleModelResource().find_all(OrderDetail({'orderId': order_id}))
     order.lines = lines
     return order

@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from starlette import status
 
 from app import schemas
 from app.model.address import Address
+from app.oauth2 import get_current_user
 from app.service import customer_service
 from app.service.product_service import restore_prices as sync_products_prices
 
@@ -18,11 +19,10 @@ def list_customers():
     return [customer.__dict__ for customer in all_customers]
 
 
-# TODO: impure API
 @router.post("/switch-customer")
-def switch_customer(customer_info: schemas.Customer):
+def switch_customer(customer_info: schemas.Customer, current_user: schemas.TokenData = Depends(get_current_user)):
     customer = customer_service.get_one_customer(customer_info.customer_id)
-    sync_products_prices(customer.customer_code)
+    sync_products_prices(org_id=current_user.org_id, customer_code=customer.customer_code)
     return {"message": "Switch customer successfully"}
 
 

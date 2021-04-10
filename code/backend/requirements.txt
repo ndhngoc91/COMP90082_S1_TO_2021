@@ -40,3 +40,6 @@ uvicorn[standard]
 SQLAlchemy==1.4.5
 typing==3.7.4.3
 pydantic
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
