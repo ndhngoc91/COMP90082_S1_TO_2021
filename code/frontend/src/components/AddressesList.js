@@ -14,7 +14,7 @@ const AddressesList = observer(() => {
     const {
         addressStore: {
             addresses,
-            currentDevileryAddress,
+            currentDeliveryAddress,
             currentBillingAddress,
             getAddressString,
             selectBillingAddressIndex,
@@ -31,7 +31,7 @@ const AddressesList = observer(() => {
         } else {
             selectDeliveryAddressIndex(index);
             setAddAddr("none");
-            setDeliveryAddrId(currentDevileryAddress.id);
+            setDeliveryAddrId(currentDeliveryAddress.id);
         }
     }
 
@@ -75,10 +75,10 @@ const AddressesList = observer(() => {
                     {/* Display Current Delivery Address */}
                     <Form.Item>
                         <div style={{lineHeight: "8px", marginLeft: "16px"}}>
-                            <p>{currentDevileryAddress.address_line1}</p>
-                            <p>{currentDevileryAddress.address_line2}</p>
-                            <p>{currentDevileryAddress.region}, {currentDevileryAddress.country}, {currentDevileryAddress.postcode}</p>
-                            <p>Contact: {currentDevileryAddress.contact}</p>
+                            <p>{currentDeliveryAddress.address_line1}</p>
+                            <p>{currentDeliveryAddress.address_line2}</p>
+                            <p>{currentDeliveryAddress.region}, {currentDeliveryAddress.country}, {currentDeliveryAddress.postcode}</p>
+                            <p>Contact: {currentDeliveryAddress.contact}</p>
                         </div>
                         <Button type="link" onClick={() => setDvisible(true)}>
                             Edit this address
@@ -86,7 +86,7 @@ const AddressesList = observer(() => {
                     </Form.Item>
 
                     {/* Edit Address Form */}
-                    {dvisible && <EditAddressForm address={currentDevileryAddress} handleCancel={handleCancel}/>}
+                    {dvisible && <EditAddressForm address={currentDeliveryAddress} handleCancel={handleCancel}/>}
                 </Form>
             </div>
 

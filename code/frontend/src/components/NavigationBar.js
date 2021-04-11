@@ -9,20 +9,19 @@ import {
     ShoppingCartOutlined,
     UserSwitchOutlined
 } from "@ant-design/icons";
-import {useHandleLogout} from "../hooks/AuthHooks";
+import {useStores} from "../stores";
 
 const {Header} = Layout;
 
 const NavigationBar = ({defaultSelected}) => {
     const history = useHistory();
 
-    const [handleLogout] = useHandleLogout();
+    const {authStore: {logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
-            handleLogout(() => {
-                history.push("/login");
-            });
+            logout();
+            history.push("/login");
         } else if (key.startsWith("/")) {
             history.push(key)
         }

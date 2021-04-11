@@ -1,48 +1,32 @@
 import axios from "axios";
 import {useCallback, useState} from "react";
 import {message as antdMessage} from "antd";
+import {useStores} from "../stores";
 
 export const useHandleLogin = () => {
     const [handling, setHandling] = useState(false);
 
-    const handleLogin = useCallback( (username, password, success) => {
-        axios.post("api/login", {
-            "username": username,
-            "password": password
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
+    const {authStore} = useStores();
+
+    const handleLogin = useCallback((username, password, success) => {
+        const formData = new FormData();
+        formData.set("username", username);
+        formData.set("password", password);
+        axios.post("http://localhost:8000/auth/login", formData, {
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
         }).then(response => {
-            let {status} = response.data;
-            let {session_id} = response.data.data;
-            if (status === "success") {
-                sessionStorage.setItem("user", username);
-                sessionStorage.setItem("sessionKey", session_id);
-                success();
-            } else {
-                antdMessage.info("Sorry, your username and/or password are incorrect. Please try again.");
+            if (response.status === 200) {
+                authStore.login(username, response.data['access_token']);
             }
-        }).catch((e) => {
-            antdMessage.info(e.response.data);
+            success();
+        }).catch(e => {
+            if (e.response.status === 404) {
+                antdMessage.info(e.response.data['detail']);
+            }
         }).finally(() => {
             setHandling(false);
         });
     }, []);
 
     return [handleLogin, {handling}];
-};
-
-export const useHandleLogout = () => {
-    const [handling, setHandling] = useState(false);
-
-    const handleLogout = useCallback((success) => {
-        setHandling(true);
-        axios.get("api/logout").then(() => {
-            sessionStorage.removeItem("user");
-            success();
-        }).finally(() => {
-            setHandling(false);
-        });
-    }, []);
-
-    return [handleLogout, {handling}];
 };
