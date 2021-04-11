@@ -72,8 +72,6 @@ const OrderPage = observer(() => {
 
     const history = useHistory();
 
-    console.log(products);
-
     // Refreshes the search results when the input or input type is changed
     useEffect(() => {
         (async () => {
@@ -115,7 +113,6 @@ const OrderPage = observer(() => {
                 headers: {"Content-Type": "application/JSON; charset=UTF-8"}
             });
             setSearchLoading(false);
-            console.log(response.data);
 
             // Check if the product exists in the database
             if (response.data.status === "error") {

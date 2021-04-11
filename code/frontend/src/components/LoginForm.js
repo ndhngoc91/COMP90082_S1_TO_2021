@@ -1,4 +1,4 @@
-import {Form, Input, Button, Card, message as antdMessage} from "antd";
+import {Form, Input, Button, Card} from "antd";
 import {UserOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined} from "@ant-design/icons";
 import React, {useState} from "react";
 import {useHandleLogin} from "../hooks/AuthHooks";
@@ -7,17 +7,9 @@ import {useHistory} from "react-router-dom";
 const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [handleLogin, {loading, success, errorMessage}] = useHandleLogin();
+    const [handleLogin, {handling}] = useHandleLogin();
 
     const history = useHistory();
-
-    if (errorMessage !== "") {
-        antdMessage.info(errorMessage);
-    }
-
-    if (success) {
-        history.push("/choose");
-    }
 
     return (
         <Card bordered={false} style={{width: 300}} cover={<img alt="example"
@@ -25,7 +17,9 @@ const LoginForm = () => {
             <Form className="login-form"
                   initialValues={{remember: true}}
                   onFinish={() => {
-                      handleLogin(username, password);
+                      handleLogin(username, password, () => {
+                          history.push("/choose")
+                      });
                   }}>
                 <Form.Item name="username"
                            value={username}
@@ -49,7 +43,7 @@ const LoginForm = () => {
                                     iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}/>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" block="true" loading={loading}>
+                    <Button type="primary" htmlType="submit" block="true" loading={handling}>
                         Log in
                     </Button>
                 </Form.Item>

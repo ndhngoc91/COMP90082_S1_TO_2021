@@ -57,3 +57,4 @@ async def import_metadata(request: Request):
 @router.get("/update-categories")
 def update_product_categories(current_user: schemas.TokenData = Depends(get_current_user)):
     return product_service.restore_category(current_user.org_id)
+

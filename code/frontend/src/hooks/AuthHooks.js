@@ -1,12 +1,11 @@
 import axios from "axios";
 import {useCallback, useState} from "react";
+import {message as antdMessage} from "antd";
 
 export const useHandleLogin = () => {
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [handling, setHandling] = useState(false);
 
-    const handleLogin = useCallback((username, password) => {
+    const handleLogin = useCallback( (username, password, success) => {
         axios.post("api/login", {
             "username": username,
             "password": password
@@ -18,18 +17,18 @@ export const useHandleLogin = () => {
             if (status === "success") {
                 sessionStorage.setItem("user", username);
                 sessionStorage.setItem("sessionKey", session_id);
-                setSuccess(true);
+                success();
             } else {
-                setErrorMessage("Sorry, your username and/or password are incorrect. Please try again.");
+                antdMessage.info("Sorry, your username and/or password are incorrect. Please try again.");
             }
         }).catch((e) => {
-            setErrorMessage(e.response.data);
+            antdMessage.info(e.response.data);
         }).finally(() => {
-            setLoading(false);
+            setHandling(false);
         });
     }, []);
 
-    return [handleLogin, {loading, success, errorMessage}];
+    return [handleLogin, {handling}];
 };
 
 export const useHandleLogout = () => {
