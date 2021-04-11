@@ -98,12 +98,6 @@ const CheckOutPage = () => {
         }
     }
 
-    // Check if authenticated before rendering the page, otherwise redirect to the home page
-    if (!sessionStorage.getItem("user")) {
-        history.push("/login");
-    }
-
-
     return (
         <Layout style={{minHeight: "100vh"}}>
             {/* Top navigation bar */}

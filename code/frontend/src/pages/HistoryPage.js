@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Redirect, useHistory} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import {Button, Col, Layout, Row, Spin, Table, Tag, Typography} from "antd";
 import NavigationBar from "../components/NavigationBar";
 import {useRecentOrders} from "../hooks/OrderHooks";
@@ -7,30 +7,12 @@ import {useRecentOrders} from "../hooks/OrderHooks";
 const {Content, Footer} = Layout;
 const {Title} = Typography;
 
-/**
- * HistoryPage is the component that contains the order history table.
- * It is the component that is rendered when the "Order History" button
- * is clicked on the top navigation bar.
- *
- * It is also responsible for being able to view a specific order.
- * When a "View Order" button is clicked in the "Manage" column of the table,
- * it redirects to and renders the "OrderDetailsPage" page for that specific order.
- *
- */
 const HistoryPage = () => {
     const [orderId, setOrderId] = useState(null);    // The ID of the order to be viewed
     const [redirect, setRedirect] = useState(false); // Whether to redirect to view a specific order
 
-    const history = useHistory();
-
     const [recentOrders, {loading}] = useRecentOrders();
 
-    /**
-     * Handles the click of the "View Order" button in a row
-     * of the order history table. Sets the order ID, and
-     * faciliates redirection to the corresponding order details page
-     * @param {number} id order ID
-     */
     const handleViewOrder = (id) => {
         setOrderId(id);
         setRedirect(true);
@@ -102,11 +84,6 @@ const HistoryPage = () => {
                 }}
             />
         );
-    }
-
-    // Check if authenticated before rendering the page
-    if (!sessionStorage.getItem("user")) {
-        history.push("/login");
     }
 
     // Otherwise, just render the order history table
