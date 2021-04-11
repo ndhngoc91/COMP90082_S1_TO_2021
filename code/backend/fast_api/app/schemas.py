@@ -1,10 +1,23 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
 
 class Customer(BaseModel):
     customer_id: int
+
+
+class Product(BaseModel):
+    product_id: int
+    quantity: int
+
+
+class Order(BaseModel):
+    customer_id: int
+    delivery_addr_id: str
+    billing_addr_id: str
+    lines: List[Product]
+    instruction: str
 
 
 class Address(BaseModel):

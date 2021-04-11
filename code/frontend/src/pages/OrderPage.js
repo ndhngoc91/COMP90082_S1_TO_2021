@@ -104,9 +104,9 @@ const OrderPage = observer(() => {
         setOpen(false);
         try {
             setSearchLoading(true);
+            // TODO: fix this logic. Too confused
             const response = await axios.get(`/api/${inputType}`, {
                 params: {
-                    sessionKey: sessionStorage.getItem("sessionKey"),
                     barcode: value,
                     productCode: value
                 },
