@@ -43,9 +43,9 @@ const CreateForm = () => {
     useEffect(() => {
         Axios({
                 method: "get",
-                url: "api/customer_codes",
+                url: "http://127.0.0.1:8000/customer-codes",
                 headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-                params: {"used": 0}
+                params: {"used": false}
             }
         ).then((response) => {
             setCustomerCodeList(response.data);

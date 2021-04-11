@@ -33,10 +33,6 @@ const HomePage = () => {
         history.push("/history");
     }
 
-    if (!sessionStorage.getItem("user")) {
-        history.push("/login");
-    }
-
     return (
         <Layout style={{minHeight: "100vh"}}>
             {/* Top navigation bar */}

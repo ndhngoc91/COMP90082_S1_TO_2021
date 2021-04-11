@@ -1,49 +1,32 @@
 import axios from "axios";
 import {useCallback, useState} from "react";
+import {message as antdMessage} from "antd";
+import {useStores} from "../stores";
 
 export const useHandleLogin = () => {
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-
-    const handleLogin = useCallback((username, password) => {
-        axios.post("api/login", {
-            "username": username,
-            "password": password
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-        }).then(response => {
-            let {status} = response.data;
-            let {session_id} = response.data.data;
-            if (status === "success") {
-                sessionStorage.setItem("user", username);
-                sessionStorage.setItem("sessionKey", session_id);
-                setSuccess(true);
-            } else {
-                setErrorMessage("Sorry, your username and/or password are incorrect. Please try again.");
-            }
-        }).catch((e) => {
-            setErrorMessage(e.response.data);
-        }).finally(() => {
-            setLoading(false);
-        });
-    }, []);
-
-    return [handleLogin, {loading, success, errorMessage}];
-};
-
-export const useHandleLogout = () => {
     const [handling, setHandling] = useState(false);
 
-    const handleLogout = useCallback((success) => {
-        setHandling(true);
-        axios.get("api/logout").then(() => {
-            sessionStorage.removeItem("user");
+    const {authStore} = useStores();
+
+    const handleLogin = useCallback((username, password, success) => {
+        const formData = new FormData();
+        formData.set("username", username);
+        formData.set("password", password);
+        axios.post("http://localhost:8000/auth/login", formData, {
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        }).then(response => {
+            if (response.status === 200) {
+                authStore.login(username, response.data['access_token']);
+            }
             success();
+        }).catch(e => {
+            if (e.response.status === 404) {
+                antdMessage.info(e.response.data['detail']);
+            }
         }).finally(() => {
             setHandling(false);
         });
     }, []);
 
-    return [handleLogout, {handling}];
+    return [handleLogin, {handling}];
 };

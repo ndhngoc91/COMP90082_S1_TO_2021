@@ -5,7 +5,7 @@ export const useCategories = () => {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        axios.get("/api/categories", {
+        axios.get("http://127.0.0.1:8000/categories", {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
             setCategories(response.data);

@@ -54,11 +54,6 @@ const OrderDetailsPage = () => {
         });
     }
 
-    // Check if authenticated before rendering the page
-    if (!sessionStorage.getItem("user")) {
-        history.push("/login");
-    }
-
     return (
         <Layout style={{minHeight: "100vh"}}>
 

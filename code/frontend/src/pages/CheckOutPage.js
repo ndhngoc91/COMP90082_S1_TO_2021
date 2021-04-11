@@ -31,6 +31,7 @@ const CheckOutPage = () => {
 
     // Global customer & cart state
     const {
+        authStore: {accessToken},
         customerStore: {customerId, deliveryAddrId, billingAddrId},
         cartStore: {products, totalPrice, totalGST, emptyCart}
     } = useStores();
@@ -61,18 +62,20 @@ const CheckOutPage = () => {
         // Submit the order to the backend API endpoint
         try {
             setSubmitLoading(true);
-            const response = await axios.post("/api/orders",
-                {headers: {"Content-Type": "application/JSON; charset=UTF-8"}},
-                {
-                    data: {
-                        customer_id: customerId,
-                        delivery_addr_id: deliveryAddrId,
-                        billing_addr_id: billingAddrId,
-                        lines: lines,
-                        session_key: sessionStorage.getItem("sessionKey"),
-                        instructions: instruction
-                    }
-                });
+            const response = await axios.post("http://127.0.0.1:8000/orders", {
+                data: {
+                    customer_id: customerId,
+                    delivery_addr_id: deliveryAddrId,
+                    billing_addr_id: billingAddrId,
+                    lines: lines,
+                    instruction: instruction
+                }
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`,
+                    "Content-Type": "application/JSON; charset=UTF-8"
+                }
+            });
 
             console.log(response);
             setSubmitLoading(false);
@@ -97,12 +100,6 @@ const CheckOutPage = () => {
             }
         }
     }
-
-    // Check if authenticated before rendering the page, otherwise redirect to the home page
-    if (!sessionStorage.getItem("user")) {
-        history.push("/login");
-    }
-
 
     return (
         <Layout style={{minHeight: "100vh"}}>

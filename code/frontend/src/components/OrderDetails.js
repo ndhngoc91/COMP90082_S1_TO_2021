@@ -30,14 +30,9 @@ const OrderDetails = ({order, onBack}) => {
     useEffect(() => {
         const fetchProduct = async (line) => {
             const {productCode} = line;
-            const response = await axios.get("/api/product", {
-                params: {
-                    sessionKey: sessionStorage.getItem("sessionKey"),
-                    productCode: productCode
-                }
-            }, {
+            const response = await axios.get(`http://127.0.0.1:8000/products/${productCode}`, {
                 headers: {"Content-Type": "application/JSON; charset=UTF-8"}
-            })
+            });
             console.log(response);
             const product = {...response.data.data, ...line};
             setProducts(prev => [...prev, product]);

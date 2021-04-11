@@ -31,7 +31,7 @@ const ProductDetailsPage = () => {
     const productInfo = useProductInfo(productCode);
     const productMetaData = useProductMetaData(productCode);
 
-    const {cartStore} = useStores();
+    const {authStore:{authenticated}, cartStore} = useStores();
 
     // Event Handler for Product Quantity Change
     const onQuantityChange = (value) => {
@@ -47,7 +47,7 @@ const ProductDetailsPage = () => {
         });
     }
 
-    if (sessionStorage.getItem("user")) {
+    if (authenticated) {
         if (productInfo == null) {
             return (
                 <Layout style={{minHeight: "100vh"}}>

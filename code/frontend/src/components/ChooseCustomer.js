@@ -4,28 +4,18 @@ import {Redirect} from "react-router-dom"
 import {Button, Card, Form, List, Spin, Alert} from "antd";
 import {useStores} from "../stores";
 
-/**
- * Choose Customer Component will list all avaliable customers for the orgnization, it allows:
- *  1. select customer code
- *  2. update product table
- *  3. redirect to homepage if product table successfully loaded
- */
 const ChooseCustomer = () => {
     const [users, setUsers] = useState([])
     const [redirect, setRedirect] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    /**
-     * Global Customer Actions
-     */
-    const {customerStore: {setCustomerId}, cartStore: {emptyCart}} = useStores();
+    const {authStore: {accessToken}, customerStore: {setCustomerId}, cartStore: {emptyCart}} = useStores();
 
     let isRendered = useRef(false);
     useEffect(() => {
         isRendered = true;
-        axios.get("api/customers").then(res => {
+        axios.get("http://127.0.0.1:8000/customers").then(res => {
             if (isRendered) {
-                console.log(res.data);
                 setUsers(res.data);
             }
             return null
@@ -45,15 +35,17 @@ const ChooseCustomer = () => {
      * @param item
      */
     const onSelect = (item) => {
-        const custid = item.id
+        const customerId = item.id
 
         // update customerid in state
-        setCustomerId(custid);
+        setCustomerId(customerId);
 
         // update product with new customerid
         setLoading(true);
-        axios.post("/api/switch_customer", {
-            customer_id: custid,
+        axios.post("http://localhost:8000/customers/switch-customer", {
+            customer_id: customerId,
+        }, {
+            headers: {"Authorization": `Bearer ${accessToken}`},
         }).then(res => {
             console.log(res.data.message)
             setLoading(false);
@@ -62,7 +54,6 @@ const ChooseCustomer = () => {
             console.log(err);
         });
 
-        // Empty Shopping Cart
         emptyCart();
     }
 

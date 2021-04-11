@@ -8,15 +8,15 @@ export const useHandleGetItems = () => {
     const [pageItems, setPageItems] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const getItems = useCallback((pageCurrent, cate) => {
+    const getItems = useCallback((pageCurrent, categoryId) => {
         const params = {
             page: pageCurrent
         };
-        if (cate) {
-            params.cate = cate;
+        if (categoryId) {
+            params.category_id = categoryId;
         }
         setLoading(true);
-        axios.get("/api/products", {
+        axios.get("http://127.0.0.1:8000/products", {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
             params: params
         }).then((response) => {
@@ -39,11 +39,7 @@ export const useProducts = (...lines) => {
     useEffect(() => {
         const fetchProduct = async (line) => {
             const {productCode} = line;
-            const response = await axios.get("/api/product", {
-                params: {
-                    sessionKey: sessionStorage.getItem("sessionKey"),
-                    productCode: productCode
-                },
+            const response = await axios.get(`http://127.0.0.1:8000/products/${productCode}`, {
                 headers: {"Content-Type": "application/JSON; charset=UTF-8"}
             });
             const product = {...response.data.data, ...line};
@@ -65,11 +61,8 @@ export const useProductInfo = (productCode) => {
     const [productInfo, setProductInfo] = useState(null);
 
     useEffect(() => {
-        axios.get("/api/product", {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-            params: {
-                productCode: productCode
-            }
+        axios.get(`http://127.0.0.1:8000/products/${productCode}`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {
             response.data["data"]["quality"] = 1;
             setProductInfo(response.data["data"]);
@@ -83,11 +76,7 @@ export const useProductMetaData = (productCode) => {
     const [productMetaData, setProductMetaData] = useState(null);
 
     useEffect(() => {
-        axios.get("/api/metadata/get", {
-            params: {
-                productCode: productCode
-            }
-        }).then(response => {
+        axios.get(`http://127.0.0.1:8000/products/${productCode}/metadata/get`).then(response => {
             if (response.data["found"]) {
                 setProductMetaData(response.data["json_data"])
             }

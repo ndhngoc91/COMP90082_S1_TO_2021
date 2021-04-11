@@ -10,7 +10,7 @@ export class AddressStore {
             addresses: observable,
             selectedDeliveryAddressIndex: observable,
             selectedBillingAddressIndex: observable,
-            currentDevileryAddress: computed,
+            currentDeliveryAddress: computed,
             currentBillingAddress: computed,
             setAddresses: action,
             selectDeliveryAddressIndex: action,
@@ -22,7 +22,7 @@ export class AddressStore {
         this.selectedBillingAddressIndex = -1;
     }
 
-    get currentDevileryAddress() {
+    get currentDeliveryAddress() {
         if (this.addresses.length === 0) {
             return {};
         } else {

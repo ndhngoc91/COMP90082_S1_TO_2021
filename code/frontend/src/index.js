@@ -1,28 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
-import CreatePage from './pages/CreatePage';
-import ChooseCustomerPage from './pages/ChooseCustomerPage';
-import ProductListPage from './pages/ProductListPage';
-import ProductDetailsPage from './pages/ProductDetailsPage';
-import OrderDetailsPage from './pages/OrderDetailsPage';
-import HistoryPage from './pages/HistoryPage';
-import OrderPage from './pages/OrderPage';
-import CheckOutPage from './pages/CheckOutPage';
+import React from "react";
+import ReactDOM from "react-dom";
+import {Route, BrowserRouter} from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import CreatePage from "./pages/CreatePage";
+import ChooseCustomerPage from "./pages/ChooseCustomerPage";
+import ProductListPage from "./pages/ProductListPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
+import HistoryPage from "./pages/HistoryPage";
+import OrderPage from "./pages/OrderPage";
+import CheckOutPage from "./pages/CheckOutPage";
 
 // CSS
-import CategoryPage from './pages/CategoryPage';
-import 'antd/dist/antd.css';
-import './index.css';
+import CategoryPage from "./pages/CategoryPage";
+import "antd/dist/antd.css";
+import "./index.css";
 import {createStore, StoreContext} from "./stores";
 
 createStore().then(store => {
     ReactDOM.render(
         <StoreContext.Provider value={store}>
-            <Router>
-                <div className="App" style={{height: '100%', width: '100%'}}>
+            <BrowserRouter>
+                <div className="App" style={{height: "100%", width: "100%"}}>
                     <Route path="/" exact component={HomePage}/>
                     <Route path="/login" exact component={LoginPage}/>
                     <Route path="/history" exact component={HistoryPage}/>
@@ -35,8 +35,8 @@ createStore().then(store => {
                     <Route path="/productCategories/:id" exact component={CategoryPage}/>
                     <Route path="/checkout" exact component={CheckOutPage}/>
                 </div>
-            </Router>
+            </BrowserRouter>
         </StoreContext.Provider>,
-        document.getElementById('root')
+        document.getElementById("root")
     );
 });

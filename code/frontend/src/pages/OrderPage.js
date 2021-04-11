@@ -72,8 +72,6 @@ const OrderPage = observer(() => {
 
     const history = useHistory();
 
-    console.log(products);
-
     // Refreshes the search results when the input or input type is changed
     useEffect(() => {
         (async () => {
@@ -106,16 +104,15 @@ const OrderPage = observer(() => {
         setOpen(false);
         try {
             setSearchLoading(true);
+            // TODO: fix this logic. Too confused
             const response = await axios.get(`/api/${inputType}`, {
                 params: {
-                    sessionKey: sessionStorage.getItem("sessionKey"),
                     barcode: value,
                     productCode: value
                 },
                 headers: {"Content-Type": "application/JSON; charset=UTF-8"}
             });
             setSearchLoading(false);
-            console.log(response.data);
 
             // Check if the product exists in the database
             if (response.data.status === "error") {
@@ -200,7 +197,7 @@ const OrderPage = observer(() => {
 
         // Query the database for product codes or barcodes that are similar to the input identifier
         const identifierType = inputType === "barcode" ? "barcode" : "productCode";
-        const result = await search(`/api/products/search?identifier=${identifier}&identifierType=${identifierType}`);
+        const result = await search(`http://127.0.0.1:8000/products/search?identifier=${identifier}&identifierType=${identifierType}`);
 
         // Result will be null in the case that the axios request was cancelled prematurely
         if (!result) {
@@ -226,11 +223,6 @@ const OrderPage = observer(() => {
         setOpen(true);
     }
 
-
-    // Check if authenticated before rendering the page, otherwise redirect to the home page
-    if (!sessionStorage.getItem("user")) {
-        history.push("/login");
-    }
 
     return (
         <Layout style={{minHeight: "100vh"}}>
