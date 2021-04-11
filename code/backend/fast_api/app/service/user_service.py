@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from starlette import status
 
 from app import token
+from app.resource.session_resource import SessionResource
 from app.resource.user_resource import UserResource
 import logging
 
@@ -23,6 +24,8 @@ def validate(username: str, password: str) -> dict:
 
     connection = auth_util.build_connection(org_id=org_id)
     session_id, status_code = connection.create_session()
+    session_resource = SessionResource()
+    session_resource.store_session(username, session_id, org_id)
     if status_code == "LOGIN_SUCCESS":
         access_token = token.create_access_token(data={"username": username,
                                                        "org_id": org_id,
