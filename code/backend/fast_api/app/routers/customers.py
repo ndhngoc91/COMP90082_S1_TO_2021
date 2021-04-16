@@ -19,6 +19,12 @@ def list_customers():
     return [customer.__dict__ for customer in all_customers]
 
 
+@router.get("/search/{query}")
+def search_customers(query: str):
+    customers = customer_service.search_customers(query)
+    return [customer.__dict__ for customer in customers]
+
+
 @router.post("/switch-customer")
 def switch_customer(customer_info: schemas.Customer, current_user: schemas.TokenData = Depends(get_current_user)):
     customer = customer_service.get_one_customer(customer_info.customer_id)

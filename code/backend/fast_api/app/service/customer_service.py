@@ -1,4 +1,5 @@
 from app.resource.simple_model_resource import SimpleModelResource as SR
+from app.resource.customer_resource import CustomerResource
 from app.model.customer import Customer
 from app.model.address import Address
 
@@ -26,6 +27,10 @@ def list_unused_customer_codes():
 def list_all_customers():
     customers = SR().list_all(Customer)
     return customers
+
+
+def search_customers(query):
+    return CustomerResource().search(query)
 
 
 def get_one_customer(customer_id):
