@@ -21,7 +21,7 @@ const AdditionalCustomerSection = props => {
     const addCustomerButtonStage = _ => {
         if (!isAdd && !isSelect && !isCreate) {
             return (
-                <Button
+                <Button  
                     type="primary"
                     icon={<CheckCircleTwoTone/>}
                     size="large"
@@ -75,7 +75,9 @@ const AdditionalCustomerSection = props => {
         }
 
         return null;
-    }
+    };
+
+    const addCustomer = customer => [...props.customers, customer];
 
     return (
         <AccompanyCustomerContainer>
@@ -90,7 +92,19 @@ const AdditionalCustomerSection = props => {
                 (isAdd && isSelect && !isCreate)
                     ?
                     //search bar and add button
-                    <p>search bar and button</p>
+                    <div>
+                        <p>search bar and button</p>
+                        <Button
+                            type="primary"
+                            icon={<CheckCircleTwoTone/>}
+                            size="large"
+                            htmlType="button"
+                            className="signup-form-button"
+                            onClick={_ => {props.onAdd(addCustomer("an existing customer!"))}}
+                        >
+                            Found! Add Now!
+                        </Button>
+                    </div>
                     : null
             }
             {

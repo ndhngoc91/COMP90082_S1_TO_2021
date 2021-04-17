@@ -1,7 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import {
-    Form, Button, Divider, Row, Col, Input,
-    Collapse
+    Form, Button, Row, Col, Input, Collapse, List, Typography
 } from "antd";
 import {
     CheckCircleTwoTone
@@ -24,7 +23,7 @@ const gutterInfo = { xs: 8, sm: 16, md: 24, lg: 32 }
 
 const { Panel } = Collapse;
 const HiringForm = () => {  
-    const customers = [];
+    const [customers, setCustomerList] = useState("");
 
     const _handleSubmit = () => {
         console.log("submitting the form..");
@@ -51,13 +50,11 @@ const HiringForm = () => {
         return cols;
     };
 
-    const onAddCustomer = customerData => {
-        customers.push(customerData);
+    const removeCustomer = index => {
+        customers.splice(index, 1);
+        console.log(customers);
+        return customers;
     };
-
-    const onRemoveCustomer = customerData => {
-        // customers.splice()
-    }
 
     //Form UI Design
     return (
@@ -95,12 +92,22 @@ const HiringForm = () => {
                         
                     <Panel header="Additional Customers" key="2">
                         <AdditionalCustomerSection
-                            onAdd={onAddCustomer}
-                            onRemove={onRemoveCustomer}
+                            customers={customers}
+                            onAdd={setCustomerList}
+                            onRemove={setCustomerList}
                         />
-                        {
-
-                        }
+                        <List
+                            header={<div>Accompanying Customers</div>}
+                            bordered
+                            itemLayout="horizontal"
+                            dataSource={customers}
+                            renderItem={(item, index) => (
+                                <List.Item
+                                    extra={<Button size="small" onClick={_ => setCustomerList(removeCustomer(index))}>Delete</Button>}>
+                                    <Typography.Text mark>[ITEM]</Typography.Text>{item}
+                                </List.Item>
+                            )}
+                        ></List>
                     </Panel>
 
                     <Panel header="Equipment Hiring Basket" key="3">
