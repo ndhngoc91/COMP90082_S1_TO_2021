@@ -4,13 +4,14 @@ import {Route, BrowserRouter} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import CreatePage from "./pages/CreatePage";
-import ChooseCustomerPage from "./pages/ChooseCustomerPage";
 import ProductListPage from "./pages/ProductListPage";
+import ChooseCustomerPage from "./pages/ChooseCustomerPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
 import CheckOutPage from "./pages/CheckOutPage";
+import HiringFormPage from './pages/HiringFormPage'
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -34,6 +35,7 @@ createStore().then(store => {
                     <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
                     <Route path="/productCategories/:id" exact component={CategoryPage}/>
                     <Route path="/checkout" exact component={CheckOutPage}/>
+                    {/*<Route path="/HiringFormPage" exact component={HiringFormPage}/> */}
                 </div>
             </BrowserRouter>
         </StoreContext.Provider>,
