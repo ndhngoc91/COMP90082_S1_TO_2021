@@ -11,7 +11,7 @@ const LoginPage = () => {
                 </Col>
                 <Col>
                     <Button type="link" block href="/HiringFormPage">
-                        Create a hiring contract
+                        Create a hiring contract!
                     </Button>
                 </Col>
             </Row>

@@ -35,7 +35,7 @@ createStore().then(store => {
                     <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
                     <Route path="/productCategories/:id" exact component={CategoryPage}/>
                     <Route path="/checkout" exact component={CheckOutPage}/>
-                    {/*<Route path="/HiringFormPage" exact component={HiringFormPage}/> */}
+                    <Route path="/HiringFormPage" exact component={HiringFormPage}/>
                 </div>
             </BrowserRouter>
         </StoreContext.Provider>,

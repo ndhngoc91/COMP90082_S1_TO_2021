@@ -1,11 +1,14 @@
 import React from 'react'
-import HringForm from '../components/HiringForm';
+import HiringForm from '../components/HiringForm';
 import styled from 'styled-components';
 
 const HiringFormPage = () => {
     return (
         <Page>
-            <div style={{width: '90%'}}>
+            <div style={{height: "100%", width: "100%"}}>
+                <PageHeader>
+                    Customer Hiring Basket
+                </PageHeader>
                 <HiringForm/>
             </div>
         </Page>
@@ -18,8 +21,13 @@ const Page = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 90vh;
+    height: 100%;
+    width: 100%;
     -webkit-justify-content: center;
     background: #f1f1f3; // this is the color of the background of the login page
-    height: 160%
+`
+const PageHeader = styled.div`
+    margin: 30px;
+    text-align: center;
+    font-size: 30px;
 `
