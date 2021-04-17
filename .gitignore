@@ -17,12 +17,15 @@ _mailinglist
 __pycache__/
 flask_session/
 venv/
+squizz/
 .idea/
 docs/_build/
 .vscode
 
 # Node
 node_modules/
+package-lock.json
+yarn.lock
 
 # Coverage reports
 htmlcov/
