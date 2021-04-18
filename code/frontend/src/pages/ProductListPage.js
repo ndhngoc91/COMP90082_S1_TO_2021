@@ -49,7 +49,6 @@ const ProductListPage = () => {
             <Layout>
                 <Sider width={256} className="site-layout-background">
                     <CategoryTree/>
-
                 </Sider>
                 <Layout style={{padding: "0 24px 24px"}}>
                     <Content className="site-layout" style={{padding: "0 50px", marginTop: 64}}>
