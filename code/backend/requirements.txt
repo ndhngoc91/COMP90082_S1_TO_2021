@@ -42,3 +42,4 @@ pydantic
 python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
+pymysql
