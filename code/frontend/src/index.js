@@ -18,6 +18,7 @@ import CategoryPage from "./pages/CategoryPage";
 import "antd/dist/antd.css";
 import "./index.css";
 import {createStore, StoreContext} from "./stores";
+import CalendarPage from "./pages/CalendarPage";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -29,6 +30,7 @@ createStore().then(store => {
                     <Route path="/history" exact component={HistoryPage}/>
                     <Route path="/order" exact component={OrderPage}/>
                     <Route path="/package" exact component={PackagePage}/>
+                    <Route path="/calendar" exact component={CalendarPage}/>
                     <Route path="/create" exact component={CreatePage}/>
                     <Route path="/choose" exact component={ChooseCustomerPage}/>
                     <Route path="/productList" exact component={ProductListPage}/>

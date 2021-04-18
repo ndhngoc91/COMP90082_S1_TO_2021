@@ -51,7 +51,7 @@ const ProductListPage = () => {
                     <CategoryTree/>
                 </Sider>
                 <Layout style={{padding: "0 24px 24px"}}>
-                    <Content className="site-layout" style={{padding: "0 50px", marginTop: 64}}>
+                    <Content className="site-layout" style={{padding: "0 50px"}}>
                         <Breadcrumb style={{margin: "16px 0"}}>
                             <Breadcrumb.Item href="/">
                                 <HomeOutlined/>

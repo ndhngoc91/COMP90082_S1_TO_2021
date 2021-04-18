@@ -107,7 +107,7 @@ const HomePage = () => {
             </Content>
 
             {/* Footer */}
-            <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
+            <Footer className="footer" style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
         </Layout>
     )
 }
