@@ -19,8 +19,9 @@ import {
 
 const {Meta} = Card;
 const {Content, Sider, Footer} = Layout;
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleGetItems} from "../hooks/ProductHooks";
+import PageFooter from "../components/PageFooter/PageFooter";
 
 const ProductListPage = () => {
     const [pageCurrent, setPageCurrent] = useState(parseInt(window.location.hash.slice(1), 0) || 1);
@@ -96,10 +97,10 @@ const ProductListPage = () => {
                                     current={pageCurrent}
                                     onChange={onPageNumChange}
                                     showQuickJumper/>
-                        <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
                     </Content>
                 </Layout>
             </Layout>
+            <PageFooter/>
         </Layout>
     );
 }

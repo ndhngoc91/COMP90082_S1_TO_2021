@@ -20,7 +20,8 @@ import {
 const {Content, Footer} = Layout;
 const {Text, Title} = Typography;
 
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
+import PageFooter from "../components/PageFooter/PageFooter";
 
 const HomePage = () => {
     const history = useHistory();
@@ -106,8 +107,7 @@ const HomePage = () => {
                 </div>
             </Content>
 
-            {/* Footer */}
-            <Footer className="footer" style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
+            <PageFooter/>
         </Layout>
     )
 }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import AddressesList from "../components/AddressesList"
 import {
     Button,

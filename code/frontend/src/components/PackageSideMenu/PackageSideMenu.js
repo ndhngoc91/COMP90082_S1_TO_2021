@@ -1,14 +1,21 @@
 import React from "react";
 import {Menu} from "antd";
 import {CalendarOutlined, LinkOutlined, MailOutlined} from "@ant-design/icons";
+import {useHistory} from "react-router-dom";
 
-const AdminMenu = () => {
+const PackageSideMenu = () => {
+    const history = useHistory();
+
     return <Menu defaultSelectedKeys={['1']}
                  defaultOpenKeys={['sub1']}>
-        <Menu.Item key="1" icon={<MailOutlined/>}>
+        <Menu.Item key="1" icon={<MailOutlined/>} onClick={() => {
+            history.push("/package");
+        }}>
             Package
         </Menu.Item>
-        <Menu.Item key="2" icon={<CalendarOutlined/>}>
+        <Menu.Item key="2" icon={<CalendarOutlined/>} onClick={() => {
+            history.push("/package/calendar");
+        }}>
             Calendar
         </Menu.Item>
         <Menu.Item key="link" icon={<LinkOutlined/>}>
@@ -19,4 +26,4 @@ const AdminMenu = () => {
     </Menu>;
 };
 
-export default AdminMenu;
+export default PackageSideMenu;

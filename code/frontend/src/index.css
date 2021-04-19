@@ -9,12 +9,6 @@ ul{
     padding: 0;
 }
 
-header{
-}
-
-.footer{
-    padding: 80px 0 40px 0;
-    color: #FFF;
-    background: #00416a;
-    background: radial-gradient(ellipse at center, #00416a 0%, #001122 100%);
+.ant-layout-footer {
+    padding: 0;
 }

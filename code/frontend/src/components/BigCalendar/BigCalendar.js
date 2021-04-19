@@ -1,14 +1,8 @@
+import {Calendar, momentLocalizer, Views} from "react-big-calendar";
+import moment from "moment";
 import React from "react";
-import {Layout} from "antd";
-import NavigationBar from "../components/NavigationBar";
-import AdminMenu from "../components/AdminMenu";
-import {Calendar, Views, momentLocalizer} from "react-big-calendar"
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import moment from "moment"
 
 const localizer = momentLocalizer(moment)
-
-const {Content, Footer, Sider} = Layout;
 
 const now = new Date()
 
@@ -193,28 +187,15 @@ const myEventsList = [
     },
 ];
 
-const CalendarPage = () => {
-    return (
-        <Layout style={{height: "100vh"}}>
-            <NavigationBar defaultSelected="/package"/>
-            <Layout style={{height: "100%"}}>
-                <Sider style={{width: 512}}>
-                    <AdminMenu/>
-                </Sider>
-                <Content>
-                    <Calendar
-                        localizer={localizer}
-                        events={myEventsList}
-                        views={allViews}
-                        startAccessor="start"
-                        endAccessor="end"
-                        style={{height: 500}}
-                    />
-                </Content>
-            </Layout>
-            <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
-        </Layout>
-    );
-}
+const BigCalendar = () => {
+    return <Calendar
+        localizer={localizer}
+        events={myEventsList}
+        views={allViews}
+        startAccessor="start"
+        endAccessor="end"
+        style={{height: 500}}
+    />;
+};
 
-export default CalendarPage;
+export default BigCalendar;

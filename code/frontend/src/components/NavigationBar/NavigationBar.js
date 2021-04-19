@@ -3,7 +3,6 @@ import {useHistory} from "react-router-dom"
 import {Layout, Menu, Image} from "antd";
 import {
     HistoryOutlined,
-    HomeOutlined,
     ShopOutlined,
     LogoutOutlined,
     ShoppingCartOutlined,
@@ -11,8 +10,9 @@ import {
     ContainerOutlined,
     CalendarOutlined
 } from "@ant-design/icons";
-import {useStores} from "../stores";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
+import {useStores} from "../../stores";
+import rockyValleyLogo from "../../assets/rocky_valley.svg";
+import {useNavigationBarStyles} from "./styles";
 
 const {Header} = Layout;
 
@@ -30,25 +30,23 @@ const NavigationBar = ({defaultSelected}) => {
         }
     }
 
+    const {logoCls, leftItemCls, rightItemCls} = useNavigationBarStyles();
+
     return (
         <Header style={{width: "100%", padding: 0}}>
             <Menu onClick={handleClick} style={{backgroundColor: "#D8D8D5"}} mode="horizontal"
                   defaultSelectedKeys={[defaultSelected]}>
-                <div style={{
-                    float: "left",
-                    height: "100%"
-                }}>
-                    <Image style={{height: "100%"}} src={rockyValleyLogo} preview={false}/>
+                <div className={leftItemCls}>
+                    <Image className={logoCls} src={rockyValleyLogo} preview={false}/>
                 </div>
-                <Menu.Item style={{float: "left"}} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
-                <Menu.Item style={{float: "left"}} icon={<HistoryOutlined/>} key="/history">
+                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
+                <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
                     Order History
                 </Menu.Item>
-                <Menu.Item style={{float: "left"}} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
-                <Menu.Item style={{float: "left"}} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>
-                <Menu.Item style={{float: "left"}} icon={<CalendarOutlined/>} key="/calendar">Calendar</Menu.Item>
-                <Menu.Item style={{float: "right"}} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
-                <Menu.Item style={{float: "right"}} icon={<UserSwitchOutlined/>} key="/choose">
+                <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>
+                <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
+                <Menu.Item className={rightItemCls} icon={<UserSwitchOutlined/>} key="/choose">
                     Switch account
                 </Menu.Item>
             </Menu>

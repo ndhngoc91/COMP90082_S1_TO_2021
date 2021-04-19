@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {search} from "../utils/search";
 import TallCartProduct from "../components/TallCartProduct";
 import ShortCartProduct from "../components/ShortCartProduct";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {
     Affix,
     Alert,
@@ -28,6 +28,7 @@ import {
 import {useStores} from "../stores";
 import {observer} from "mobx-react-lite";
 import {useHistory} from "react-router-dom";
+import PageFooter from "../components/PageFooter/PageFooter";
 
 const {Content, Footer} = Layout;
 const {Search} = Input;
@@ -350,8 +351,7 @@ const OrderPage = observer(() => {
                 )}
             </Content>
 
-            {/* Footer */}
-            <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
+            <PageFooter/>
         </Layout>
     );
 });
