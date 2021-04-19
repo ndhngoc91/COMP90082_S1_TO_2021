@@ -9,9 +9,6 @@ ul{
     padding: 0;
 }
 
-header{
-}
-
-footer{
-
+.ant-layout-footer {
+    padding: 0;
 }

@@ -30,16 +30,22 @@ SUPPLIER_ORG_ID = "11EAF2251136B090BB69B6800B5BCB6D"
 # PASSWORD = os.environ.get("PASSWORD") or "12345678"
 # DB_NAME = os.environ.get("DB_NAME") or "squizz_app"
 
-HOST = "localhost"
+HOST = "localhost:3306"
 USER = "root"
-PASSWORD = "CHANGE-TO-YOUR-PASSWORD"
+PASSWORD = "rootpasswordgiven"
 DB_NAME = "squizz_app"
 
-SQLALCHEMY_DATABASE_URL = f"mysql://{USER}:{PASSWORD}@s{HOST}/{DB_NAME}"
+SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
