@@ -30,9 +30,10 @@ import {
 const {Meta} = Card;
 const {Content, Footer, Sider} = Layout;
 
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import CategoryTree from "../components/CategoryTree";
 import {useHandleGetItems} from "../hooks/ProductHooks";
+import PageFooter from "../components/PageFooter/PageFooter";
 
 const CategoryPage = () => {
     const {id: cate} = useParams();
@@ -238,9 +239,7 @@ const CategoryPage = () => {
                                 showQuickJumper
                             />
 
-                            <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and
-                                SQ-Koala</Footer>
-
+                            <PageFooter/>
                         </Content>
                     </Layout>
                 </Layout>

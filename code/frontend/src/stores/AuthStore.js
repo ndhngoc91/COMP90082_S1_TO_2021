@@ -4,6 +4,7 @@ import {persist} from "mobx-persist";
 export class AuthStore {
     @persist username;
     @persist accessToken;
+    @persist isStaff;
     @persist authenticated;
 
     constructor() {
@@ -19,9 +20,10 @@ export class AuthStore {
         this.authenticated = false;
     }
 
-    login = (username, accessToken) => {
+    login = (username, accessToken, isStaff) => {
         this.username = username;
         this.accessToken = accessToken;
+        this.isStaff = isStaff;
         this.authenticated = true;
     }
 

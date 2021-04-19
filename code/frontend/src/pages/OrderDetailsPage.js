@@ -13,10 +13,11 @@ import {
 const {Content, Footer} = Layout;
 import {ShoppingCartOutlined} from "@ant-design/icons";
 import HistoryProduct from "../components/HistoryProduct";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHistory, useLocation} from "react-router-dom";
 import {useProducts} from "../hooks/ProductHooks";
 import {useStores} from "../stores";
+import PageFooter from "../components/PageFooter/PageFooter";
 
 
 const OrderDetailsPage = () => {
@@ -92,8 +93,7 @@ const OrderDetailsPage = () => {
                 </Row>}
             </Content>
 
-            {/* Footer */}
-            <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
+            <Footer><PageFooter/></Footer>
         </Layout>
     );
 }
