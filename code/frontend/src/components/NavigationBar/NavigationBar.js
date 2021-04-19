@@ -13,13 +13,14 @@ import {
 import {useStores} from "../../stores";
 import rockyValleyLogo from "../../assets/rocky_valley.svg";
 import {useNavigationBarStyles} from "./styles";
+import {observer} from "mobx-react-lite";
 
 const {Header} = Layout;
 
-const NavigationBar = ({defaultSelected}) => {
+const NavigationBar = observer(({defaultSelected}) => {
     const history = useHistory();
 
-    const {authStore: {logout}} = useStores();
+    const {authStore: {isStaff, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
@@ -44,7 +45,8 @@ const NavigationBar = ({defaultSelected}) => {
                     Order History
                 </Menu.Item>
                 <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>
+                {isStaff &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
                 <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
                 <Menu.Item className={rightItemCls} icon={<UserSwitchOutlined/>} key="/choose">
                     Switch account
@@ -52,6 +54,6 @@ const NavigationBar = ({defaultSelected}) => {
             </Menu>
         </Header>
     );
-}
+});
 
 export default NavigationBar;
