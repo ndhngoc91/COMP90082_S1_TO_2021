@@ -21,5 +21,5 @@ SUPPLIER_ORG_ID = "11EAF2251136B090BB69B6800B5BCB6D"
 # MySQL Environment Variables
 HOST = "localhost"
 USER = "root"
-PASSWORD = "rootpasswordgiven"
+PASSWORD = "Wyf901106"
 DB_NAME = "squizz_app"

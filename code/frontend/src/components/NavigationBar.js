@@ -40,6 +40,7 @@ const NavigationBar = ({defaultSelected}) => {
                 }}>HolySAS</Menu.Item>
                 <Menu.Item style={{float: "left"}} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 <Menu.Item style={{float: "left"}} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
+                <Menu.Item style={{float: "left"}} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
                 <Menu.Item style={{float: "left"}} icon={<HistoryOutlined/>} key="/history">Order
                     History</Menu.Item>
                 <Menu.Item style={{float: "left"}} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
