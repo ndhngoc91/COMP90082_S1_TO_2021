@@ -20,15 +20,22 @@ def list_customers():
 
 
 @router.get("/search/{query}")
-def search_customers(query: str):
-    customers = customer_service.search_customers(query)
-    return [customer.__dict__ for customer in customers]
+@router.get("/search/{query}/{page_id}")
+def search_customers(query: str, page_id: int = None):
+    customers = customer_service.search_customers(query, page_id)
+    if type(customers).__name__ == "list":
+        return [customer.__dict__ for customer in customers]
+    elif type(customers).__name__ == "dict":
+        customers["items"] = [
+            customer.__dict__ for customer in customers["items"]]
+        return customers
 
 
 @router.post("/switch-customer")
 def switch_customer(customer_info: schemas.Customer, current_user: schemas.TokenData = Depends(get_current_user)):
     customer = customer_service.get_one_customer(customer_info.customer_id)
-    sync_products_prices(org_id=current_user.org_id, customer_code=customer.customer_code)
+    sync_products_prices(org_id=current_user.org_id,
+                         customer_code=customer.customer_code)
     return {"message": "Switch customer successfully"}
 
 

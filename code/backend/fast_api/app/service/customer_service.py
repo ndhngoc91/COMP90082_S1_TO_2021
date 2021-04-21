@@ -29,8 +29,8 @@ def list_all_customers():
     return customers
 
 
-def search_customers(query):
-    return CustomerResource().search(query)
+def search_customers(query, page_id):
+    return CustomerResource().search(query, page_id)
 
 
 def get_one_customer(customer_id):
@@ -82,12 +82,14 @@ def create_customer_address(customer_id, address):
 
 
 def delete_address(customer_id, address_id):
-    address = SR().find_one(Address({'id': address_id, 'customer_id': customer_id}))
+    address = SR().find_one(
+        Address({'id': address_id, 'customer_id': customer_id}))
     SR().delete(address)
 
 
 def get_one_address(customer_id, address_id):
-    addr = SR().find_one(Address({'id': address_id, 'customer_id': customer_id}))
+    addr = SR().find_one(
+        Address({'id': address_id, 'customer_id': customer_id}))
     return addr
 
 
