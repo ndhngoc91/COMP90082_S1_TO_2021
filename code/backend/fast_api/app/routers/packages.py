@@ -19,7 +19,7 @@ def list_all_packages(db: Session = Depends(get_db)):
     return package.get_all(db=db)
 
 
-@router.post("")
+@router.post("", status_code=201)
 def create_package(request: schemas.Package, db: Session = Depends(get_db)):
 
     new_package = models.Package(
