@@ -2,7 +2,8 @@ import React, {useEffect, useState} from "react";
 import {Button, Col, Layout, Row, Spin, Table, Tag, Space, Typography, Input} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useCustomersList} from "../hooks/CustomersHooks";
-const {Content, Footer} = Layout;
+const {Content} = Layout;
+import PageFooter from "../components/PageFooter/PageFooter";
 const {Title} = Typography;
 const {Search} = Input;
 
@@ -78,9 +79,7 @@ const CustomersPage = () => {
                 </Row>
             </Content>
 
-            {/* Footer */}
-            <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
-
+            <PageFooter/>
         </Layout>
     );
 
