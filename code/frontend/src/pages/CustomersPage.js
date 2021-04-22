@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Col, Layout, Row, Spin, Table, Tag, Space, Typography, Input} from "antd";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useCustomersList} from "../hooks/CustomersHooks";
 const {Content, Footer} = Layout;
 const {Title} = Typography;
@@ -60,7 +60,8 @@ const CustomersPage = () => {
         <Layout style={{minHeight: "100vh"}}>
             
              {/* Top navigation bar */}
-             <NavigationBar defaultSelected="/customers"/>
+             <NavigationBar defaultSelected="/customer"/>
+
 
             {/* Content body */}
             <Content style={{padding: "90px 16px"}}>

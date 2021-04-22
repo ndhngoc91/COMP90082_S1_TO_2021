@@ -41,6 +41,7 @@ const NavigationBar = observer(({defaultSelected}) => {
                     <Image className={logoCls} src={rockyValleyLogo} preview={false}/>
                 </div>
                 <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
+                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
                 <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
                     Order History
                 </Menu.Item>
