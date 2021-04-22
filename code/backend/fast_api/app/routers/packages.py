@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db, engine
@@ -19,7 +19,7 @@ def list_all_packages(db: Session = Depends(get_db)):
     return package.get_all(db=db)
 
 
-@router.post("", status_code=201)
+@router.post("", status_code=status.HTTP_201_CREATED)
 def create_package(request: schemas.Package, db: Session = Depends(get_db)):
 
     new_package = models.Package(
@@ -34,19 +34,15 @@ def create_package(request: schemas.Package, db: Session = Depends(get_db)):
     return new_package
 
 
-
-    # TODO: 1. define a request body for the api
-    # TODO: 2. write an add function in the package repository
-    # TODO: 3. call that function in the package repository
-    # TODO: 4. return 201 if successful
-
-
-
 @router.put("")
 def update_package(db: Session = Depends(get_db)):
     pass
 
 
-@router.delete("")
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_package(db: Session = Depends(get_db)):
-    pass
+    db.query(models.Package).filter(models.Package.id ==id).delete(synchronize_session=False)
+    db.commit()
+    return f'id {id} data is deleted'
+
+
