@@ -46,3 +46,8 @@ def delete_package(db: Session = Depends(get_db)):
     return f'id {id} data is deleted'
 
 
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+def delete_package(db: Session = Depends(get_db)):
+    db.query(models.Package).delete()
+    db.commit()
+    return 'all data being delted'
