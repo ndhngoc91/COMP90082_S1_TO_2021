@@ -49,7 +49,7 @@ const PackagePage = () => {
 
     return (
         <>
-            <Layout style={{height: "100vh"}}>
+            <Layout style={{minHeight: "100vh"}}>
                 <NavigationBar defaultSelected="/package"/>
                 <Layout style={{height: "100%"}}>
                     <Sider style={{width: 512}}>
@@ -85,7 +85,12 @@ const PackagePage = () => {
                                         <Button size="large" onClick={showCreatePackageModal}>Create</Button>
                                     </Col>
                                 </Row>
-                                <Table dataSource={packages} rowKey="id">
+                                <Table expandable={{
+                                    expandedRowRender: record => (
+                                        <p style={{ margin: 0 }}>{record.description}</p>
+                                    ),
+                                    rowExpandable: record => record.name !== "Not Expandable"
+                                }} dataSource={packages} rowKey="id">
                                     <Column title="Name" dataIndex="name" key="name"/>
                                     <Column title="What Is Included" dataIndex="what_is_included"
                                             key="what_is_included"/>

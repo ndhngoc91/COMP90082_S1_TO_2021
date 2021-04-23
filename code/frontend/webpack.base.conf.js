@@ -51,7 +51,7 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
             '/api/*': {
-                target: 'http://localhost:5000', // Might need to change this for production
+                target: 'http://localhost:8000', // Might need to change this for production
                 changeOrigin: false,             // Also might need to change this to false
                 secure: false
             }
