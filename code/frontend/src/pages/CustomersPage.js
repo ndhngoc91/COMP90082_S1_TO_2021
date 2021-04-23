@@ -2,10 +2,8 @@ import React, {useEffect, useState} from "react";
 import {Button, Col, Layout, Row, Spin, Table, Tag, Space, Typography, Input} from "antd";
 import PageFooter from "../components/PageFooter/PageFooter";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useCustomersList} from "../hooks/CustomersHooks";
 import axios from "axios";
 const {Content} = Layout;
-//import PageFooter from "../components/PageFooter/PageFooter";
 const {Title} = Typography;
 const {Search} = Input;
 
@@ -54,6 +52,8 @@ const CustomersPage = () => {
     ]
 
     const [customers, setCustomers] = useState([]);
+    const [searched_customers, setSearchedCustomers] = useState([]);
+    const [loadSearch, setLoadSearch] = useState(false);
 
     useEffect(() => {
 
@@ -77,14 +77,28 @@ const CustomersPage = () => {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
             let customers = response.data.items;
+            let pages_num = response.data.total_pages;
+            console.log(pages_num);
+
             for (var i = 0; i < response.data.length; i++) {
                 customers[i]["key"] = i;
             }
-            setCustomers(customers);
+            setSearchedCustomers(customers);
+            
+            setLoadSearch(true);
+            
         });
     }
 
-   
+    const handleChange = event => {
+        if (event.target.value === "") {
+            setLoadSearch(false);
+        }
+    }
+
+    const customerTable = <Table {...props} dataSource={customers} columns={columns} rowKey={(row) => row.id}/>;
+
+    const searchResult = <Table {...props} dataSource={searched_customers} columns={columns} rowKey={(row) => row.id}/>;
 
     return (
 
@@ -103,11 +117,12 @@ const CustomersPage = () => {
                     <Row>
                         <Col span={20}> <Title level={4}>Customer List</Title></Col>
                         <Col span={4}> 
-                        <Search placeholder="search" onSearch={handleSearch} style={{ width: 175 } } />                        
+                        <Search placeholder="search" onSearch={handleSearch} onChange={handleChange} style={{ width: 175 } } />                        
                         </Col>
                     </Row>
                     
-                    <Table {...props} dataSource={customers} columns={columns} rowKey={(row) => row.id}/>
+                    {/* <Table {...props} dataSource={customers} columns={columns} rowKey={(row) => row.id}/> */}
+                    { loadSearch ? searchResult : customerTable }
                     </Col>
                 </Row>
             </Content>
