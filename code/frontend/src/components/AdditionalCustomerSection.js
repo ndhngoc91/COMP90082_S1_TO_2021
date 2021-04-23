@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {
-    Row,
-    Col,
-    Divider,
-    Button
+    Button,
+    List,
+    Input,
+    Typography
 } from "antd";
 import {
     CheckCircleTwoTone
 } from "@ant-design/icons";
 import styled from 'styled-components'
+
+const { Search } = Input;
 
 const AdditionalCustomerSection = props => {
     // isAdd: true if we are adding a customer,
@@ -17,6 +19,10 @@ const AdditionalCustomerSection = props => {
     const [isAdd, setAddCustomer] = useState(false);
     const [isSelect, setSelectCustomer] = useState(false);
     const [isCreate, setCreateCustomer] = useState(false);
+
+    const [usersFound, setUsersFound] = useState(props.allUsers);
+
+    const [displayResult, setDisplayResult] = useState(false);
 
     const addCustomerButtonStage = _ => {
         if (!isAdd && !isSelect && !isCreate) {
@@ -77,7 +83,20 @@ const AdditionalCustomerSection = props => {
         return null;
     };
 
-    const addCustomer = customer => [...props.customers, customer];
+    const addCustomer = customer => {
+        setDisplayResult(false);
+        return [...props.customers, customer];
+    };
+
+    const searchUsers = value => {
+        setDisplayResult(true);
+        setUsersFound(usersFound => {
+            return props.allUsers.filter(u => {
+                const firstName = u.firstName.toLowerCase() + " " + u.lastName.toLowerCase();
+                return firstName.includes(value);
+            });
+        });
+    };
 
     return (
         <AccompanyCustomerContainer>
@@ -93,16 +112,33 @@ const AdditionalCustomerSection = props => {
                     ?
                     //search bar and add button
                     <div>
-                        <p>search bar and button</p>
-                        <Button
+                        <Search placeholder="input customer's phone number or name" onSearch={value => searchUsers(value)} loading={false} enterButton />
+                        {
+                            displayResult
+                                ?
+                                <List
+                                    header={<div>Selectable customers</div>}
+                                    bordered
+                                    itemLayout="horizontal"
+                                    dataSource={usersFound}
+                                    renderItem={(item, index) => (
+                                        <List.Item
+                                            actions={[<Button size="small" onClick={_ => props.onAdd(addCustomer(item))}>Add</Button>]}>
+                                            <Typography.Text mark>[ITEM]</Typography.Text>{item.firstName}
+                                        </List.Item>
+                                    )}
+                                ></List>
+                                : null
+                        }
+                         <Button
                             type="primary"
                             icon={<CheckCircleTwoTone/>}
                             size="large"
                             htmlType="button"
                             className="signup-form-button"
-                            onClick={_ => {props.onAdd(addCustomer("an existing customer!"))}}
+                            onClick={_ => {setCreateCustomer(true); setSelectCustomer(false);}}
                         >
-                            Found! Add Now!
+                            Create a new customer
                         </Button>
                     </div>
                     : null
@@ -111,7 +147,19 @@ const AdditionalCustomerSection = props => {
                 // is creating a new customer
                 (isAdd && !isSelect && isCreate)
                     ?
-                    <p>use the sign up form similar to Team 1's</p>
+                    <>
+                        <p>use the sign up form similar to Team 1's</p>
+                        <Button
+                            type="primary"
+                            icon={<CheckCircleTwoTone/>}
+                            size="large"
+                            htmlType="button"
+                            className="signup-form-button"
+                            onClick={_ => {setSelectCustomer(true); setCreateCustomer(false);}}
+                        >
+                            Select an existing customer
+                        </Button>
+                    </>
                     : null
             }
         </AccompanyCustomerContainer>
