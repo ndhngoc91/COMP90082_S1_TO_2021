@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import {Redirect} from "react-router-dom";
 import {Button, Col, Layout, Row, Spin, Table, Tag, Typography} from "antd";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useRecentOrders} from "../hooks/OrderHooks";
+import PageFooter from "../components/PageFooter/PageFooter";
 
 const {Content, Footer} = Layout;
 const {Title} = Typography;
@@ -103,8 +104,7 @@ const HistoryPage = () => {
                 </Row>
             </Content>
 
-            {/* Footer */}
-            <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
+            <PageFooter/>
         </Layout>
     );
 }
