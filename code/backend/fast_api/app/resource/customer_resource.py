@@ -19,7 +19,7 @@ class CustomerResource(SimpleModelResource):
     def __init__(self):
         super().__init__()
 
-    def search(self, query, page_id=None, page_size=2):
+    def search(self, query, page_id=None, page_size = 2):
 
         obj_filter = "WHERE first_name LIKE %s\
                          OR last_name LIKE %s\
@@ -28,6 +28,8 @@ class CustomerResource(SimpleModelResource):
 
         if page_id is None:
             paging_str = ""
+            cur_page = 0
+        
         else:
 
             cur_page = (page_id - 1) * page_size
