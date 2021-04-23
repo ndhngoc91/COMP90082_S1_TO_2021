@@ -13,8 +13,8 @@ import OrderPage from "./pages/OrderPage";
 import PackagePage from "./pages/PackagePage";
 import CheckOutPage from "./pages/CheckOutPage";
 import HiringFormPage from './pages/HiringFormPage';
-import HiringDetailsReviewPage from './pages/HiringDetailsReviewPage';
-import HiringCheckOutPage from './pages/HiringCheckOutPage';
+//import HiringDetailsReviewPage from './pages/HiringDetailsReviewPage';
+//import HiringCheckOutPage from './pages/HiringCheckOutPage';
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -40,8 +40,8 @@ createStore().then(store => {
                     <Route path="/productCategories/:id" exact component={CategoryPage}/>
                     <Route path="/checkout" exact component={CheckOutPage}/>
                     <Route path="/hiringForm" exact component={HiringFormPage}/>
-                    <Route path="/hiringReview" exact component={HiringDetailsReviewPage}/>
-                    <Route path="/hiringCheckout" exact component={HiringCheckOutPage}/>
+                    {/*<Route path="/hiringReview" exact component={HiringDetailsReviewPage}/>
+                    <Route path="/hiringCheckout" exact component={HiringCheckOutPage}/>*/}
                 </div>
             </BrowserRouter>
         </StoreContext.Provider>,
