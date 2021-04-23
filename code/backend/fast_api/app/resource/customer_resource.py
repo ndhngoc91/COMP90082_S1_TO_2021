@@ -28,9 +28,7 @@ class CustomerResource(SimpleModelResource):
 
         if page_id is None:
             paging_str = ""
-            
             cur_page = 0
-        
         else:
 
             cur_page = (page_id - 1) * page_size
@@ -48,11 +46,9 @@ class CustomerResource(SimpleModelResource):
             if page_id > total_pages or page_id < 1:
                 return {}
         
-
         ## page filter
         customer_list = "SELECT * FROM customers " + obj_filter + " LIMIT %s,%s"
-        
-
+    
         obj_dict_list = self.run_query(
             customer_list,
             [query, query, query, query, cur_page, page_size],
@@ -63,21 +59,9 @@ class CustomerResource(SimpleModelResource):
                     for obj_dict in obj_dict_list]
         
 
-        ## all customer
-        customer_list_all = "SELECT * FROM customers " + obj_filter
-
-        obj_dict_list_all = self.run_query(
-            customer_list_all,
-            [query, query, query, query],
-            False
-        )
-        obj_dict_list_all = [] if obj_dict_list_all is None else obj_dict_list_all
-        obj_list_all = [self.to_model(Customer, obj_dict_all)
-                    for obj_dict_all in obj_dict_list_all]
-
 
         if page_id is None:
-            return obj_list_all
+            return obj_list
         else:
             return {
                 "total_pages": total_pages,
