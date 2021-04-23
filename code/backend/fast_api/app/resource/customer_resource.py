@@ -61,7 +61,10 @@ class CustomerResource(SimpleModelResource):
 
 
         if page_id is None:
-            return obj_list
+            return {
+                "items":obj_list
+            }
+
         else:
             return {
                 "total_pages": total_pages,
