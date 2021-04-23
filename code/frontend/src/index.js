@@ -11,7 +11,9 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
 import CheckOutPage from "./pages/CheckOutPage";
-import HiringFormPage from './pages/HiringFormPage'
+import HiringFormPage from './pages/HiringFormPage';
+import HiringDetailsReviewPage from './pages/HiringDetailsReviewPage';
+import HiringCheckOutPage from './pages/HiringCheckOutPage';
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -35,7 +37,9 @@ createStore().then(store => {
                     <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
                     <Route path="/productCategories/:id" exact component={CategoryPage}/>
                     <Route path="/checkout" exact component={CheckOutPage}/>
-                    <Route path="/HiringFormPage" exact component={HiringFormPage}/>
+                    <Route path="/hiringForm" exact component={HiringFormPage}/>
+                    <Route path="/hiringReview" exact component={HiringDetailsReviewPage}/>
+                    <Route path="/hiringCheckout" exact component={HiringCheckOutPage}/>
                 </div>
             </BrowserRouter>
         </StoreContext.Provider>,
