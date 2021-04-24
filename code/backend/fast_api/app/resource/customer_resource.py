@@ -58,8 +58,7 @@ class CustomerResource(SimpleModelResource):
         obj_list = [self.to_model(Customer, obj_dict)
                     for obj_dict in obj_dict_list]
         
-
-
+        ## return base on page_id
         if page_id is None:
             return {
                 "items":obj_list
