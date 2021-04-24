@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from starlette import status
 
 from app import schemas
@@ -19,9 +19,10 @@ def list_customers():
     return [customer.__dict__ for customer in all_customers]
 
 
-@router.post("/search/")
-def search_customers(query: str = None, page_id: int = None):
-    customers = customer_service.search_customers(query, page_id)
+@router.post("/search")
+async def search_customers(req: Request):
+    req = await req.json()
+    customers = customer_service.search_customers(req["query"], req["page_id"])
 
     customers["items"] = [
         customer.__dict__ for customer in customers["items"]]
