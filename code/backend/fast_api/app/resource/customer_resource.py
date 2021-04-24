@@ -19,7 +19,7 @@ class CustomerResource(SimpleModelResource):
     def __init__(self):
         super().__init__()
 
-    def search(self, query, page_id=None, page_size=2):
+    def search(self, query, page_id=None, page_size=10):
         obj_filter = ""
         obj_filter_values = []
         if query is not None:
