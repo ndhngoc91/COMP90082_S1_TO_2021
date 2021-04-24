@@ -19,16 +19,13 @@ def list_customers():
     return [customer.__dict__ for customer in all_customers]
 
 
-@router.get("/search/{query}")
-@router.get("/search/{query}/{page_id}")
-def search_customers(query: str, page_id: int = None):
+@router.post("/search/")
+def search_customers(query: str = None, page_id: int = None):
     customers = customer_service.search_customers(query, page_id)
-    if type(customers).__name__ == "list":
-        return [customer.__dict__ for customer in customers]
-    elif type(customers).__name__ == "dict":
-        customers["items"] = [
-            customer.__dict__ for customer in customers["items"]]
-        return customers
+
+    customers["items"] = [
+        customer.__dict__ for customer in customers["items"]]
+    return customers
 
 
 @router.post("/switch-customer")

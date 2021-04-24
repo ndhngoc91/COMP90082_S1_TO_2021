@@ -29,6 +29,10 @@ def list_all_customers():
     return customers
 
 
+def get_customers(page_id):
+    return None
+
+
 def search_customers(query, page_id):
     return CustomerResource().search(query, page_id)
 
