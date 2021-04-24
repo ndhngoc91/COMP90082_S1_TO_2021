@@ -8,10 +8,11 @@ import {
     PlusOutlined,
     UpOutlined
 } from "@ant-design/icons";
-import AddCustomerModal from './AddCustomerModal'
-import EquipmentTable from './EquipmentTable'
-import Searchbar from './Searchbar'
-import { uniqueId } from 'lodash'
+import AddCustomerModal from "./AddCustomerModal"
+import EquipmentTable from "./EquipmentTable"
+import Searchbar from "./Searchbar"
+import { uniqueId } from "lodash"
+import { Redirect } from "react-router-dom"
 
 const mainContact = {
     'title': 'Mr.',
@@ -69,6 +70,7 @@ const HiringForm = () => {
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [hiringCustomers, setHiringCustomers] = useState([mainContact]);
+    const [createSuccess, setCreateSuccess] = useState(false);
 
     const mainContactInfoHtml = userData => {
         let cols = [];
@@ -111,7 +113,12 @@ const HiringForm = () => {
 
     const _handleSubmit = values => {
         console.log("submitting the form");
-    }
+        setCreateSuccess(true);
+    };
+
+    if (createSuccess) {
+        return <Redirect to={{pathname: "/hiringPaymentResult"}} />;
+    };
 
     return (
         <Form style={{width: "100%"}}
@@ -150,7 +157,7 @@ const HiringForm = () => {
                     >
                         Add an accompanying customer
                     </Button>
-                    { /*<Searchbar />*/}
+                    <Searchbar />
                     <AddCustomerModal 
                         visible={isModalVisible}
                         handleOk={handleSubmitCustomerModal}
