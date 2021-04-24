@@ -9,8 +9,11 @@ import {
     UpOutlined
 } from "@ant-design/icons";
 import AddCustomerModal from './AddCustomerModal'
+import EquipmentTable from './EquipmentTable'
+import Searchbar from './Searchbar'
+import { uniqueId } from 'lodash'
 
-const user = {
+const mainContact = {
     'title': 'Mr.',
     'firstName': 'Tom',
     'lastName': 'Smith',
@@ -65,8 +68,9 @@ const keyFormatter = key => {
 const HiringForm = () => {
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [hiringCustomers, setHiringCustomers] = useState([mainContact]);
 
-    const basicInfoHtml = userData => {
+    const mainContactInfoHtml = userData => {
         let cols = [];
         Object.entries(userData).forEach(([key, value], index) => {
             const formattedKey = keyFormatter(key);
@@ -76,12 +80,28 @@ const HiringForm = () => {
                         initialValue={value}
                         label={`${formattedKey}`}
                         name={`${key}`}
+                        id={uniqueId()}
                         style={{fontSize: "16px"}}>
                         <Input />
                     </Form.Item>
                 </Col>
             )
         });
+
+        cols.push(
+            <Col key="equipment-button" className="gutter-row" span={6} offset={18}>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined/>}
+                    size="large"
+                    className="add-equipment-form-button"
+                    onClick={_ => console.log('1')}
+                >
+                    Add an equipment
+                </Button>
+            </Col>
+        )
+
         return cols;
     };
 
@@ -97,6 +117,7 @@ const HiringForm = () => {
         <Form style={{width: "100%"}}
             className="hiring-form"
             form={form}
+            name="hiringForm"
             initialValues={{remember: true}}
             onFinish={_handleSubmit}
         >
@@ -114,20 +135,22 @@ const HiringForm = () => {
                 <Divider>Main Contact Information</Divider>
                 <Row gutter={gutterInfo} justify="space-around">
                     {
-                        basicInfoHtml(user)
+                        mainContactInfoHtml(mainContact)
                     }
                 </Row>
-                <Divider />
-                <div className="add-customer-section">
+                <EquipmentTable />
+                <Divider>Accompanying Customers</Divider>
+                <div className="add-customer-section" style={{'textAlign': 'center'}}>
                     <Button
                         type="primary"
-                        icon={<CheckCircleTwoTone/>}
+                        icon={<PlusOutlined/>}
                         size="large"
                         className="add-customer-form-button"
                         onClick={showAddCustomerModal}
                     >
                         Add an accompanying customer
                     </Button>
+                    { /*<Searchbar />*/}
                     <AddCustomerModal 
                         visible={isModalVisible}
                         handleOk={handleSubmitCustomerModal}
@@ -135,6 +158,7 @@ const HiringForm = () => {
                     />
                 </div>
 
+                <Divider />
                 <Form.Item style={{fontSize: "16px", textAlign: "center", alignItems: "center"}}>
                     <Button
                         type="primary"
