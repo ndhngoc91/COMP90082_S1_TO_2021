@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Layout, Row, Spin, Table, Tag, Space, Typography, Input} from "antd";
+import {Button, Col, Layout, Row, Spin, Table, Tag, Space, Typography, Input, Pagination, Divider} from "antd";
 import PageFooter from "../components/PageFooter/PageFooter";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import axios from "axios";
@@ -71,24 +71,34 @@ const CustomersPage = () => {
     }, []);
 
 
+    const [currPage, setCurrPage] = useState(1);
+    const [searchValue, setSearchValue] = useState("");
+   
 
-    const handleSearch = (value, event) => {
-        axios.get(`http://127.0.0.1:8000/customers/search/${value}/1`,{
+    const handleSearch = value => {
+
+        axios.get(`http://127.0.0.1:8000/customers/search/${value}/${currPage}`,{
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-        }).then((response) => {
+        }).then((response) => {            
             let customers = response.data.items;
-            let pages_num = response.data.total_pages;
-            console.log(pages_num);
-
+            //let pageSize = response.data.page_items;
+            let totalCustomers = response.data.total_items;
+            
             for (var i = 0; i < response.data.length; i++) {
                 customers[i]["key"] = i;
             }
             setSearchedCustomers(customers);
-            
             setLoadSearch(true);
+            //setPageSize(pageSize);
+            setTotalCustomers(totalCustomers);
+            setSearchValue(value);
+            console.log("search");
+            console.log(currPage);
             
         });
     }
+
+  
 
     const handleChange = event => {
         if (event.target.value === "") {
@@ -96,9 +106,45 @@ const CustomersPage = () => {
         }
     }
 
-    const customerTable = <Table {...props} dataSource={customers} columns={columns} rowKey={(row) => row.id}/>;
 
-    const searchResult = <Table {...props} dataSource={searched_customers} columns={columns} rowKey={(row) => row.id}/>;
+    const handlePaginationChange = pageNumber => {
+        setCurrPage(pageNumber);
+        handleSearch(searchValue)
+      }
+
+   
+    const customerPagination = {
+        defaultCurrent: 1,
+        defaultPageSize: 4
+    };
+
+    const [pageSize, setPageSize] = useState([]);
+    const [totalCustomers, setTotalCustomers] = useState([]);
+
+    const resultPagination = {
+        defaultCurrent: 1,
+        current: currPage,
+        onChange: handlePaginationChange,
+        pageSize: 2,
+        total: totalCustomers
+    };
+
+  
+
+
+    const customerTable = (
+        <>
+            <Table {...props} dataSource={customers} pagination={customerPagination} columns={columns} rowKey={(row) => row.id}/>
+        </>
+    );
+
+    const searchResult = (
+        <>
+        <Table {...props} dataSource={searched_customers} pagination={resultPagination} columns={columns} rowKey={(row) => row.id}/>
+
+        </>
+    
+    );
 
     return (
 
@@ -121,8 +167,8 @@ const CustomersPage = () => {
                         </Col>
                     </Row>
                     
-                    {/* <Table {...props} dataSource={customers} columns={columns} rowKey={(row) => row.id}/> */}
-                    { loadSearch ? searchResult : customerTable }
+                    {loadSearch ? searchResult : customerTable}
+                    
                     </Col>
                 </Row>
             </Content>
