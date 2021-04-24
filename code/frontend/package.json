@@ -52,6 +52,7 @@
     "express-http-proxy": "^1.6.0",
     "file-loader": "^6.0.0",
     "http-proxy-middleware": "^1.0.3",
+    "lodash": "^4.17.21",
     "mobx": "^6.1.8",
     "mobx-persist": "^0.4.1",
     "mobx-react-lite": "^3.2.0",
