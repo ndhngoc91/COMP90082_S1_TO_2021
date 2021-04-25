@@ -50,9 +50,10 @@ Listed below are the requirements to run the application:
 We recommend using [Visual Studio Code](https://code.visualstudio.com/download) or [PyCharm](https://www.jetbrains.com/pycharm/) for development.
 
 ## Technologies Used
-* [Python 3.8](https://www.python.org/)
-* [Flask](https://flask.palletsprojects.com/) for our backend framework
+* [Python 3.8](https://www.python.org/) as the programming language
+* [FastAPI](https://fastapi.tiangolo.com/) for our backend framework
 * [PyMySQL](https://pymysql.readthedocs.io/en/latest/) for a Python MySQL client library
+* [Pytest](https://docs.pytest.org/en/6.2.x/) for testing
 
 ## AWS Deployment Guide
 This repository includes a deployment guide and a Docker Compose file for deploying the entire application (including the frontend client and database) on AWS. These files can be found [here](./deployment).
