@@ -18,11 +18,6 @@ const PackageSideMenu = () => {
         }}>
             Calendar
         </Menu.Item>
-        <Menu.Item key="link" icon={<LinkOutlined/>}>
-            <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
-                Ant Design
-            </a>
-        </Menu.Item>
     </Menu>;
 };
 
