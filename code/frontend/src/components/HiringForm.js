@@ -13,6 +13,7 @@ import EquipmentTable from "./EquipmentTable"
 import Searchbar from "./Searchbar"
 import { uniqueId } from "lodash"
 import { Redirect } from "react-router-dom"
+import HiringUserEditSection from "./HiringUserEditSection";
 
 const mainContact = {
     'title': 'Mr.',
@@ -64,10 +65,13 @@ const keyFormatter = key => {
     const regex = /[A-Z]/g;
     let formattedKey = key.replaceAll(regex, ' $&');
     return formattedKey[0].toUpperCase() + formattedKey.substr(1);
-}
+};
 
 const HiringForm = () => {
     const [form] = Form.useForm();
+    const [isAddingUser, setIsAddingUser] = useState(false);
+    const [isSearchUser, setIsSearchUser] = useState(false);
+    const [isCreateUser, setIsCreateUser] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [hiringCustomers, setHiringCustomers] = useState([mainContact]);
     const [createSuccess, setCreateSuccess] = useState(false);
@@ -108,6 +112,7 @@ const HiringForm = () => {
     };
 
     const showAddCustomerModal = _ => setIsModalVisible(true);
+    const setAddCustomer = _ => setIsAddingUser(true);
     const handleSubmitCustomerModal = _ => setIsModalVisible(false);
     const handleCancelAddCustomer = _ => setIsModalVisible(false);
 
@@ -116,9 +121,72 @@ const HiringForm = () => {
         setCreateSuccess(true);
     };
 
+    const addHiringCustomers = _ => {
+        setHiringCustomers(hiringCustomers => {
+            hiringCustomers.push({
+                'title': 'Mr.',
+                'firstName': 'Test',
+                'lastName': 'User',
+                'dateOfBirth': '1900-01-01',
+                'phoneNumber': '012345678',
+                'email': 'abc@def.com',
+                'height': '183',
+                'weight': '60'
+            });
+            return hiringCustomers;
+        });
+        console.log(hiringCustomers);
+    };
+
     if (createSuccess) {
         return <Redirect to={{pathname: "/hiringPaymentResult"}} />;
     };
+
+    const addUserHtml = _ => {
+        if (isAddingUser) {
+            return (
+                <div className="add-user-selection-section">
+                    <div className="search-user" style={{'display': 'inline-block', 'width': '50%'}}>
+                        <div className="searchbar" style={{'width': '80%'}}><Searchbar /></div>
+                        <Button
+                            type="primary"
+                            size="small"
+                            className="add-selected-customer-form-button"
+                            onClick={_ => addHiringCustomers()}>
+                            Add selected to list
+                        </Button>
+                    </div>
+                    <div className="create-user" style={{'display': 'inline-block', 'width': '50%'}}>
+                        <Button
+                            type="primary"
+                            icon={<PlusOutlined/>}
+                            size="large"
+                            className="add-customer-form-button"
+                            onClick={showAddCustomerModal}
+                        >
+                            Create a new customer
+                        </Button>
+                        <AddCustomerModal 
+                            visible={isModalVisible}
+                            handleOk={handleSubmitCustomerModal}
+                            handleCancel={handleCancelAddCustomer}
+                        />
+                    </div>
+                </div>
+            );
+        };
+
+        return null;
+    };
+
+    const accompanyingCustomerHtml = _ => {
+        if (hiringCustomers.length > 1) {
+            console.log('customer added');
+            return hiringCustomers.slice(1).map(customerInfo => HiringUserEditSection(customerInfo));
+        }
+        // console.log('customer didnt add');
+        return null;
+    }
 
     return (
         <Form style={{width: "100%"}}
@@ -147,23 +215,29 @@ const HiringForm = () => {
                 </Row>
                 <EquipmentTable />
                 <Divider>Accompanying Customers</Divider>
+                {
+                    accompanyingCustomerHtml()
+                }
                 <div className="add-customer-section" style={{'textAlign': 'center'}}>
-                    <Button
-                        type="primary"
-                        icon={<PlusOutlined/>}
-                        size="large"
-                        className="add-customer-form-button"
-                        onClick={showAddCustomerModal}
-                    >
-                        Add an accompanying customer
-                    </Button>
-                    <Searchbar />
-                    <AddCustomerModal 
-                        visible={isModalVisible}
-                        handleOk={handleSubmitCustomerModal}
-                        handleCancel={handleCancelAddCustomer}
-                    />
+                    
+                    {
+                        !isAddingUser
+                            ?
+                            <Button
+                                type="primary"
+                                icon={<PlusOutlined/>}
+                                size="large"
+                                className="add-customer-form-button"
+                                onClick={setAddCustomer}
+                            >
+                                Add an accompanying customer
+                            </Button>
+                            : null
+                    }
                 </div>
+                {
+                    addUserHtml()
+                }
 
                 <Divider />
                 <Form.Item style={{fontSize: "16px", textAlign: "center", alignItems: "center"}}>
