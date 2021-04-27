@@ -60,7 +60,12 @@ const CustomersPage = () => {
         {
             title: "Nationality",
             dataIndex: "nationality_code",
+        },
+        {
+            title: "Add to Hiring List",
+            render: () => <a>Add</a>,
         }
+
     ];
 
     const pagination = {
