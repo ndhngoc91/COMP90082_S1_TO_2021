@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 
 export const usePackages = () => {
@@ -21,3 +21,30 @@ export const usePackages = () => {
     return [packages, {loading}];
 };
 
+export const useHandleAddPackage = () => {
+    const [handling, setHandling] = useState(false);
+
+    const handleAddPackage = useCallback(({name, description, products, available}, success, failure) => {
+        setHandling(true);
+        axios.post('http://127.0.0.1:8000/packages', {
+            name: name,
+            description: description,
+            what_is_included: products.join("-"),
+            available: available
+        }, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then(response => {
+            if (response.status === 201) {
+                success();
+            } else {
+                failure();
+            }
+        }).catch(() => {
+            failure();
+        }).finally(() => {
+            setHandling(false);
+        });
+    }, []);
+
+    return [handleAddPackage, {handling}];
+};

@@ -23,6 +23,10 @@ const PackagePage = () => {
         setIsCreatePackageModalVisible(true);
     };
 
+    const hideCreatePackageModal = () => {
+        setIsCreatePackageModalVisible(false);
+    };
+
     const showAddProductModal = () => {
         setIsAddProductModalVisible(true);
     };
@@ -112,7 +116,7 @@ const PackagePage = () => {
                 <PageFooter/>
             </Layout>
             <Modal title="Register a package " visible={isCreatePackageModalVisible}
-                   footer={null} closable={false}>
+                   footer={null} closable={false} onCancel={hideCreatePackageModal}>
                 <CreatePackageForm/>
             </Modal>
             <Modal title="Add a product " visible={isAddProductModalVisible}

@@ -2,50 +2,58 @@ import React from "react";
 import {
     Form,
     Input,
-    Button
+    Button,
+    notification
 } from "antd";
-import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import {MinusCircleOutlined, PlusOutlined, CheckSquareOutlined} from "@ant-design/icons";
+import {useHandleAddPackage} from "../../hooks/PackageHooks";
 
 const layout = {
-    labelCol: {span: 8},
-    wrapperCol: {span: 16},
+    labelCol: {span: 6},
+    wrapperCol: {span: 16}
 };
 const tailLayout = {
-    wrapperCol: {offset: 8, span: 16},
+    wrapperCol: {offset: 6, span: 16}
 };
 
 const formItemLayout = {
-    labelCol: {span: 8},
+    labelCol: {span: 6},
     wrapperCol: {span: 16}
 };
 const formItemLayoutWithOutLabel = {
-    wrapperCol: {offset: 8, span: 16},
+    wrapperCol: {offset: 6, span: 16}
 };
 
-
 const CreatePackageForm = () => {
+    const [form] = Form.useForm();
+
+    const [handleAddPackage, {handling}] = useHandleAddPackage();
+
     const onFinish = values => {
-        console.log(values);
+        form.resetFields();
+        handleAddPackage(values, () => {
+            notification.open({
+                message: "Added a package successfullly!",
+                description: "Added a package successfullly!",
+                icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
+                duration: 2
+            });
+        });
     };
 
-    const onFinishFailed = values => {
-        console.log(values);
-    }
-
     return (
-        <Form{...layout} name="basic" initialValues={{remember: true}}
-             onFinish={onFinish} onFinishFailed={onFinishFailed}>
+        <Form form={form} {...layout} name="basic" initialValues={{remember: true}} onFinish={onFinish}>
             <Form.Item label="Name"
                        name="name"
                        hasFeedback
-                       rules={[{required: true, message: 'Please input the product name!'}]}>
+                       rules={[{required: true, message: "Please input the product name!"}]}>
                 <Input/>
             </Form.Item>
 
             <Form.Item label="Description"
                        name="description"
                        hasFeedback
-                       rules={[{required: true, message: 'Please input the description!'}]}>
+                       rules={[{required: true, message: "Please input the description!"}]}>
                 <Input.TextArea placeholder="Description"
                                 autoSize={{minRows: 3, maxRows: 5}}/>
             </Form.Item>
@@ -53,7 +61,7 @@ const CreatePackageForm = () => {
             <Form.Item label="Available"
                        name="available"
                        hasFeedback
-                       rules={[{required: true, message: 'Required!'}]}>
+                       rules={[{required: true, message: "Required!"}]}>
                 <Input.TextArea placeholder="Description"
                                 autoSize={{minRows: 3, maxRows: 5}}/>
             </Form.Item>
@@ -63,7 +71,7 @@ const CreatePackageForm = () => {
                            {
                                validator: async (_, names) => {
                                    if (!names || names.length < 1) {
-                                       return Promise.reject(new Error('At least 1 product'));
+                                       return Promise.reject(new Error("At least 1 product"));
                                    }
                                }
                            }
@@ -72,11 +80,11 @@ const CreatePackageForm = () => {
                     <>
                         {fields.map((field, index) => (
                             <Form.Item{...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                                      label={index === 0 ? 'Products' : ''}
+                                      label={index === 0 ? "Products" : ""}
                                       required={false}
                                       key={field.key}>
                                 <Form.Item {...field}
-                                           validateTrigger={['onChange', 'onBlur']}
+                                           validateTrigger={["onChange", "onBlur"]}
                                            rules={[
                                                {
                                                    required: true,
@@ -85,7 +93,7 @@ const CreatePackageForm = () => {
                                                },
                                            ]}
                                            noStyle>
-                                    <Input placeholder="Product Id" style={{width: '60%'}}/>
+                                    <Input placeholder="Product Id" style={{width: "60%"}}/>
                                 </Form.Item>
                                 {fields.length > 1 ? (
                                     <MinusCircleOutlined
@@ -98,7 +106,7 @@ const CreatePackageForm = () => {
                         <Form.Item {...tailLayout}>
                             <Button type="dashed"
                                     onClick={() => add()}
-                                    style={{width: '60%'}}
+                                    style={{width: "60%"}}
                                     icon={<PlusOutlined/>}>
                                 Add product
                             </Button>
@@ -109,7 +117,7 @@ const CreatePackageForm = () => {
             </Form.List>
 
             <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={handling}>
                     Submit
                 </Button>
             </Form.Item>
