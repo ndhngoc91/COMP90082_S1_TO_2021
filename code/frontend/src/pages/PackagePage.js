@@ -23,14 +23,6 @@ const PackagePage = () => {
         setIsCreatePackageModalVisible(true);
     };
 
-    const handleOkForCreatePackageModal = () => {
-        setIsCreatePackageModalVisible(false);
-    };
-
-    const handleCancelForCreatePackageModal = () => {
-        setIsCreatePackageModalVisible(false);
-    };
-
     const showAddProductModal = () => {
         setIsAddProductModalVisible(true);
     };
@@ -87,7 +79,7 @@ const PackagePage = () => {
                                 </Row>
                                 <Table expandable={{
                                     expandedRowRender: record => (
-                                        <p style={{ margin: 0 }}>{record.description}</p>
+                                        <p style={{margin: 0}}>{record.description}</p>
                                     ),
                                     rowExpandable: record => record.name !== "Not Expandable"
                                 }} dataSource={packages} rowKey="id">
@@ -120,8 +112,7 @@ const PackagePage = () => {
                 <PageFooter/>
             </Layout>
             <Modal title="Register a package " visible={isCreatePackageModalVisible}
-                   onOk={handleOkForCreatePackageModal} closable={false}
-                   onCancel={handleCancelForCreatePackageModal}>
+                   footer={null} closable={false}>
                 <CreatePackageForm/>
             </Modal>
             <Modal title="Add a product " visible={isAddProductModalVisible}

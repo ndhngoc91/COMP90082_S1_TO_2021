@@ -19,6 +19,7 @@ import CategoryPage from "./pages/CategoryPage";
 import "antd/dist/antd.css";
 import "./index.css";
 import {createStore, StoreContext} from "./stores";
+import CreatePackageForm from "./components/PackageForms/CreatePackageForm";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -39,6 +40,7 @@ createStore().then(store => {
                         <Route path="/productCategories/:id" exact component={CategoryPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
+                        <Route path="/test" exact component={CreatePackageForm}/>
                     </Switch>
                 </BrowserRouter>
             </div>
