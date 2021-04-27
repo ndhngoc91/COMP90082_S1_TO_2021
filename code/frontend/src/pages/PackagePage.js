@@ -6,9 +6,9 @@ import PackageSideMenu from "../components/PackageSideMenu/PackageSideMenu";
 import PageFooter from "../components/PageFooter/PageFooter";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import BigCalendar from "../components/BigCalendar/BigCalendar";
 import CreatePackageForm from "../components/PackageForms/CreatePackageForm";
 import AddProductForm from "../components/PackageForms/AddProductForm";
+import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
 
 const {Column} = Table;
 const {Content, Sider} = Layout;
@@ -112,7 +112,7 @@ const PackagePage = () => {
                                 </Table>
                             </Route>
                             <Route exact path={`${path}/calendar`}>
-                                <BigCalendar/>
+                                <GanttTimeline/>
                             </Route>
                         </Switch>
                     </Content>
