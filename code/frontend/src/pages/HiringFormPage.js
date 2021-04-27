@@ -2,14 +2,15 @@ import React from 'react'
 import HiringForm from '../components/HiringForm';
 import styled from 'styled-components';
 
-const HiringFormPage = () => {
+const HiringFormPage = (props) => {
+    //console.log(props.location.state);
     return (
         <Page>
             <div style={{height: "100%", width: "100%"}}>
                 <PageHeader>
                     Customer Hiring Basket
                 </PageHeader>
-                <HiringForm/>
+                <HiringForm selectedCustomer = {props.location.state}/>
             </div>
         </Page>
     );

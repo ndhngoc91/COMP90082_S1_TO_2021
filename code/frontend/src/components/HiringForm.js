@@ -26,6 +26,8 @@ const mainContact = {
     'weight': '60'
 }
 
+
+
 const allUsers = [
     {
         'title': 'Mr.',
@@ -67,7 +69,9 @@ const keyFormatter = key => {
     return formattedKey[0].toUpperCase() + formattedKey.substr(1);
 };
 
-const HiringForm = () => {
+
+
+const HiringForm = (props) => {
     const [form] = Form.useForm();
     const [isAddingUser, setIsAddingUser] = useState(false);
     const [isSearchUser, setIsSearchUser] = useState(false);
@@ -209,8 +213,8 @@ const HiringForm = () => {
                 </Row>
                 <Divider>Main Contact Information</Divider>
                 <Row gutter={gutterInfo} justify="space-around">
-                    {
-                        mainContactInfoHtml(mainContact)
+                    {props.selectedCustomer === undefined? mainContactInfoHtml(mainContact):
+                    mainContactInfoHtml(props.selectedCustomer)  
                     }
                 </Row>
                 <EquipmentTable />

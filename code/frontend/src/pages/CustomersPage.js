@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { Col, Layout, Spin, Row, Table, Typography, Input } from "antd";
+import React, {useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+import { Col, Layout, Spin, Row, Table, Typography, Input, Radio, Button} from "antd";
 import PageFooter from "../components/PageFooter/PageFooter";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import { useCustomers } from "../hooks/CustomerHooks";
@@ -61,12 +62,29 @@ const CustomersPage = () => {
             title: "Nationality",
             dataIndex: "nationality_code",
         },
-        {
-            title: "Add to Hiring List",
-            render: () => <a>Add</a>,
-        }
+        // {
+        //     title: "Add to Hiring List",
+        //     render: () => <a href="/hiringForm"> Add</a>,
+        // }
 
     ];
+
+    const [selectedCustomer, setSelectedCustomer] = useState("");
+
+
+    const rowSelection = {
+        // onChange: (selectedRowKeys, selectedRows) => {
+        //   console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        // },
+        onSelect: (record, selected, selectedRows) => {
+          //console.log(selectedRows[0]);
+          setSelectedCustomer(selectedRows[0]);
+        },
+        type: "radio",
+      };
+
+    
+
 
     const pagination = {
         position: ["bottom"],
@@ -109,10 +127,18 @@ const CustomersPage = () => {
                                 bordered
                                 showHeader
                                 pagination={pagination}
+                                rowSelection = {rowSelection}
                             />
                         }
+                        <Row>
+                        <Link to={{
+                            pathname: '/hiringForm',
+                            state: selectedCustomer
+                            }}>Add</Link>
+                        </Row>
                     </Col>
                 </Row>
+                
             </Content>
             <PageFooter />
         </Layout>
