@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import CreatePage from "./pages/CreatePage";
 import ChooseCustomerPage from "./pages/ChooseCustomerPage";
 import ProductListPage from "./pages/ProductListPage";
+import CustomersPage from "./pages/CustomersPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
@@ -37,6 +38,7 @@ createStore().then(store => {
                         <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
                         <Route path="/productCategories/:id" exact component={CategoryPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
+                        <Route path="/customers" exact component={CustomersPage}/>
                     </Switch>
                 </BrowserRouter>
             </div>
