@@ -38,10 +38,10 @@ CREATE TABLE `addresses` (
   `deliveryCountryName` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `deliveryCountryCodeISO2` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `deliveryCountryCodeISO3` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `customer_id` bigint DEFAULT NULL,
+  `customerId` bigint DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `customer_id` (`customer_id`),
-  CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE
+  KEY `customerId` (`customerId`),
+  CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`customerId`) REFERENCES `customers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -192,14 +192,14 @@ DROP TABLE IF EXISTS `model_metadata`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `model_metadata` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `product_id` bigint DEFAULT NULL,
-  `product_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `meta_json_string` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `productId` bigint DEFAULT NULL,
+  `productCode` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `metaJsonString` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `meta_product_fk1` (`product_id`),
-  KEY `meta_product_fk2` (`product_code`),
-  CONSTRAINT `meta_product_fk1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `meta_product_fk2` FOREIGN KEY (`product_code`) REFERENCES `products` (`productCode`) ON DELETE SET NULL ON UPDATE SET NULL
+  KEY `meta_product_fk1` (`productId`),
+  KEY `meta_product_fk2` (`productCode`),
+  CONSTRAINT `meta_product_fk1` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `meta_product_fk2` FOREIGN KEY (`productCode`) REFERENCES `products` (`productCode`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -282,14 +282,14 @@ CREATE TABLE `orders` (
   `organizationId` bigint NOT NULL,
   `billStatus` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `createdOnDate` datetime DEFAULT NULL,
-  `customer_id` bigint DEFAULT NULL,
+  `customerId` bigint DEFAULT NULL,
   `startDate` datetime DEFAULT NULL,
   `endDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `organizationId` (`organizationId`) USING BTREE,
-  KEY `customer_id` (`customer_id`),
+  KEY `customerId` (`customerId`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`organizationId`) REFERENCES `organizations` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`customerId`) REFERENCES `customers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -355,7 +355,7 @@ CREATE TABLE `packages` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `description` text,
-  `what_is_included` text,
+  `whatIsIncluded` text,
   `available` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
