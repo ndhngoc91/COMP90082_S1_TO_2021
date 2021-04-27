@@ -1,6 +1,6 @@
 import React from "react";
 import ImageViewer from "../components/ImageViewer";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../components/NavigationBar/NavigationBar";
 import ModelMetadata from "../components/ModelMetadata";
 import {
     Layout,
@@ -19,6 +19,7 @@ import {ShoppingCartOutlined} from "@ant-design/icons";
 import {useProductInfo, useProductMetaData} from "../hooks/ProductHooks";
 import {useHistory, useParams} from "react-router-dom";
 import {useStores} from "../stores";
+import PageFooter from "../components/PageFooter/PageFooter";
 
 const {Content, Footer} = Layout;
 const {TabPane} = Tabs;
@@ -163,7 +164,7 @@ const ProductDetailsPage = () => {
                         </Card>
                     </Content>
                 </div>
-                <Footer style={{textAlign: "center"}}>SQUIZZ ©2020 Created by SQ-Wombat and SQ-Koala</Footer>
+                <PageFooter/>
             </Layout>
         );
     }
