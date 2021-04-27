@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Layout, Table, Space, Input, Select, Row, Col, Button, Modal} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {usePackages} from "../hooks/PackageHooks";
+import {useHandleFilterPackages} from "../hooks/PackageHooks";
 import PackageSideMenu from "../components/PackageSideMenu/PackageSideMenu";
 import PageFooter from "../components/PageFooter/PageFooter";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
@@ -15,32 +15,26 @@ const {Option} = Select;
 const {Column} = Table;
 
 const PackagePage = () => {
+    const {path} = useRouteMatch();
+
+    const [query, setQuery] = useState("");
     const [isCreatePackageModalVisible, setIsCreatePackageModalVisible] = useState(false);
     const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
 
-    const showCreatePackageModal = () => {
-        setIsCreatePackageModalVisible(true);
+    const [handleFilterPackages, {packages, filtering}] = useHandleFilterPackages();
+
+    useEffect(() => {
+        handleFilterPackages();
+    }, []);
+
+    const onSearch = (queryValue) => {
+        setQuery(queryValue);
+        handleFilterPackages(queryValue);
     };
 
-    const hideCreatePackageModal = () => {
-        setIsCreatePackageModalVisible(false);
+    const onSelectProductType = () => {
+        handleFilterPackages(query);
     };
-
-    const showAddProductModal = () => {
-        setIsAddProductModalVisible(true);
-    };
-
-    const handleOkForAddProductModal = () => {
-        setIsAddProductModalVisible(false);
-    };
-
-    const handleCancelForAddProductModal = () => {
-        setIsAddProductModalVisible(false);
-    };
-
-    const [packages] = usePackages();
-
-    const {path} = useRouteMatch();
 
     return (
         <>
@@ -55,22 +49,26 @@ const PackagePage = () => {
                             <Route exact path={`${path}`}>
                                 <Row style={{margin: "2em 0"}} gutter={{lg: 32}}>
                                     <Col lg={12}>
-                                        <Search
-                                            placeholder="Search for packages"
-                                            allowClear
-                                            enterButton="Search"
-                                            size="large"
-                                        />
+                                        <Search placeholder="Search for packages"
+                                                allowClear
+                                                enterButton="Search"
+                                                size="large"
+                                                onSearch={onSearch}
+                                                loading={filtering}/>
                                     </Col>
                                     <Col>
-                                        <Select defaultValue="Product Group 1" size="large">
+                                        <Select defaultValue="Product Group 1" size="large"
+                                                onSelect={onSelectProductType}>
                                             <Option value="Product Group 1">Product Group 1</Option>
                                             <Option value="Product Group 2">Product Group 2</Option>
                                             <Option value="Product Group 3">Product Group 3</Option>
                                         </Select>
                                     </Col>
                                     <Col>
-                                        <Button size="large" onClick={showCreatePackageModal}>Create</Button>
+                                        <Button size="large"
+                                                onClick={() => setIsCreatePackageModalVisible(true)}>
+                                            Create
+                                        </Button>
                                     </Col>
                                 </Row>
                                 <Table expandable={{
@@ -90,11 +88,15 @@ const PackagePage = () => {
                                                     <a>Edit</a>
                                                 </Space>
                                             }}/>
-                                    <Column title="Add Product"
+                                    <Column title="Add"
                                             key="action"
                                             render={() => (
                                                 <Space size="middle">
-                                                    <a onClick={showAddProductModal}>Add Product</a>
+                                                    <a onClick={() => {
+                                                        setIsAddProductModalVisible(true);
+                                                    }}>
+                                                        Add
+                                                    </a>
                                                 </Space>
                                             )}/>
                                 </Table>
@@ -108,12 +110,17 @@ const PackagePage = () => {
                 <PageFooter/>
             </Layout>
             <Modal title="Register a package " visible={isCreatePackageModalVisible}
-                   footer={null} closable={false} onCancel={hideCreatePackageModal}>
+                   footer={null} closable={false}
+                   onCancel={() => {
+                       setIsCreatePackageModalVisible(false);
+                   }}>
                 <CreatePackageForm/>
             </Modal>
             <Modal title="Add a product " visible={isAddProductModalVisible}
-                   onOk={handleOkForAddProductModal} closable={false}
-                   onCancel={handleCancelForAddProductModal}>
+                   footer={null} closable={false}
+                   onCancel={() => {
+                       setIsAddProductModalVisible(false);
+                   }}>
                 <AddProductForm/>
             </Modal>
         </>

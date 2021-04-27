@@ -21,6 +21,27 @@ export const usePackages = () => {
     return [packages, {loading}];
 };
 
+export const useHandleFilterPackages = () => {
+    const [packages, setPackages] = useState([]);
+    const [filtering, setFiltering] = useState(false);
+
+    const filterItems = useCallback((query) => {
+        setFiltering(true);
+        const url = query ? "http://localhost:8000/packages/filter" : "http://localhost:8000/packages";
+        const params = query ? {query: query} : {};
+        axios.get(url, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
+            params: params
+        }).then((response) => {
+            setPackages(response.data);
+        }).finally(() => {
+            setFiltering(false);
+        });
+    }, [])
+
+    return [filterItems, {packages, filtering}];
+};
+
 export const useHandleAddPackage = () => {
     const [handling, setHandling] = useState(false);
 
