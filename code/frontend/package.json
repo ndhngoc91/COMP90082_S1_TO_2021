@@ -68,7 +68,8 @@
     "styled-icons": "^10.2.1",
     "three": "^0.120.1",
     "underscore": "^1.13.1",
-    "url-loader": "^4.1.0"
+    "url-loader": "^4.1.0",
+    "yarn": "^1.22.10"
   },
   "jest": {
     "moduleFileExtensions": [
