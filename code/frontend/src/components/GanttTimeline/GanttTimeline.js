@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import TimeLine from "react-gantt-timeline";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const GanttTimeline = () => {
     const [data, setData] = useState([

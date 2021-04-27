@@ -5,15 +5,14 @@ import {usePackages} from "../hooks/PackageHooks";
 import PackageSideMenu from "../components/PackageSideMenu/PackageSideMenu";
 import PageFooter from "../components/PageFooter/PageFooter";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import CreatePackageForm from "../components/PackageForms/CreatePackageForm";
 import AddProductForm from "../components/PackageForms/AddProductForm";
 import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
 
-const {Column} = Table;
 const {Content, Sider} = Layout;
 const {Search} = Input;
 const {Option} = Select;
+const {Column} = Table;
 
 const PackagePage = () => {
     const [isCreatePackageModalVisible, setIsCreatePackageModalVisible] = useState(false);
@@ -64,17 +63,10 @@ const PackagePage = () => {
                                         />
                                     </Col>
                                     <Col>
-                                        <Select defaultValue="Group 1" style={{width: 120}} size="large">
-                                            <Option value="group1">Group 1</Option>
-                                            <Option value="group2">Group 2</Option>
-                                            <Option value="group3">Group 3</Option>
-                                        </Select>
-                                    </Col>
-                                    <Col>
-                                        <Select defaultValue="Group 1" size="large">
-                                            <Option value="group1">Group 1</Option>
-                                            <Option value="group2">Group 2</Option>
-                                            <Option value="group3">Group 3</Option>
+                                        <Select defaultValue="Product Group 1" size="large">
+                                            <Option value="Product Group 1">Product Group 1</Option>
+                                            <Option value="Product Group 2">Product Group 2</Option>
+                                            <Option value="Product Group 3">Product Group 3</Option>
                                         </Select>
                                     </Col>
                                     <Col>
