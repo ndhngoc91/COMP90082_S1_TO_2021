@@ -1,7 +1,5 @@
 from sqlalchemy import create_engine
-
 from sqlalchemy.ext.declarative import declarative_base
-
 from sqlalchemy.orm import sessionmaker
 
 import os
@@ -32,14 +30,13 @@ SUPPLIER_ORG_ID = "11EAF2251136B090BB69B6800B5BCB6D"
 
 HOST = "localhost:3306"
 USER = "root"
-PASSWORD = "rootpasswordgiven"
+PASSWORD = "0000"
 DB_NAME = "squizz_app"
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
 
 
