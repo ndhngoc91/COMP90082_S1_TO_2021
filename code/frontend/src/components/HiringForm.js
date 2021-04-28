@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Form, Button, Row, Col, Input, Divider
 } from "antd";
@@ -61,6 +61,7 @@ const allUsers = [
     }
 ]
 
+
 const gutterInfo = { xs: 8, sm: 16, md: 24, lg: 32 }
 
 const keyFormatter = key => {
@@ -69,51 +70,19 @@ const keyFormatter = key => {
     return formattedKey[0].toUpperCase() + formattedKey.substr(1);
 };
 
-
-
 const HiringForm = (props) => {
     const [form] = Form.useForm();
     const [isAddingUser, setIsAddingUser] = useState(false);
-    const [isSearchUser, setIsSearchUser] = useState(false);
-    const [isCreateUser, setIsCreateUser] = useState(false);
+    const [isSearchingUser, setIsSearchingUser] = useState(false);
+    const [isCreatingUser, setIsCreatingUser] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [hiringCustomers, setHiringCustomers] = useState([mainContact]);
+    // first customer defaults to the main contact
+    const [hiringCustomers, setHiringCustomers] = useState([props.selectedCustomer ? props.selectedCustomer : mainContact]);
     const [createSuccess, setCreateSuccess] = useState(false);
 
-    const mainContactInfoHtml = userData => {
-        let cols = [];
-        Object.entries(userData).forEach(([key, value], index) => {
-            const formattedKey = keyFormatter(key);
-            cols.push(
-                <Col key={index} className="gutter-row" span={6}>
-                    <Form.Item
-                        initialValue={value}
-                        label={`${formattedKey}`}
-                        name={`${key}`}
-                        id={uniqueId()}
-                        style={{fontSize: "16px"}}>
-                        <Input />
-                    </Form.Item>
-                </Col>
-            )
-        });
-
-        cols.push(
-            <Col key="equipment-button" className="gutter-row" span={6} offset={18}>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined/>}
-                    size="large"
-                    className="add-equipment-form-button"
-                    onClick={_ => console.log('1')}
-                >
-                    Add an equipment
-                </Button>
-            </Col>
-        )
-
-        return cols;
-    };
+    useEffect(() => {
+        console.log(form.getFieldsValue(true));
+    });
 
     const showAddCustomerModal = _ => setIsModalVisible(true);
     const setAddCustomer = _ => setIsAddingUser(true);
@@ -126,20 +95,16 @@ const HiringForm = (props) => {
     };
 
     const addHiringCustomers = _ => {
-        setHiringCustomers(hiringCustomers => {
-            hiringCustomers.push({
-                'title': 'Mr.',
-                'firstName': 'Test',
-                'lastName': 'User',
-                'dateOfBirth': '1900-01-01',
-                'phoneNumber': '012345678',
-                'email': 'abc@def.com',
-                'height': '183',
-                'weight': '60'
-            });
-            return hiringCustomers;
-        });
-        console.log(hiringCustomers);
+        setHiringCustomers([...hiringCustomers, {
+            'title': 'Mr.',
+            'firstName': 'Test',
+            'lastName': 'User',
+            'dateOfBirth': '1900-01-01',
+            'phoneNumber': '012345678',
+            'email': 'abc@def.com',
+            'height': '183',
+            'weight': '60'
+        }]);
     };
 
     if (createSuccess) {
@@ -183,14 +148,12 @@ const HiringForm = (props) => {
         return null;
     };
 
-    const accompanyingCustomerHtml = _ => {
-        if (hiringCustomers.length > 1) {
-            console.log('customer added');
-            return hiringCustomers.slice(1).map(customerInfo => HiringUserEditSection(customerInfo));
-        }
-        // console.log('customer didnt add');
-        return null;
-    }
+    const customerSectionHtml = _ => hiringCustomers.map((userData, index) => (
+        <HiringUserEditSection
+            key={index}
+            userData={userData}
+            userIndex={index} />
+    ));
 
     return (
         <Form style={{width: "100%"}}
@@ -211,16 +174,9 @@ const HiringForm = (props) => {
                         */
                     }
                 </Row>
-                <Divider>Main Contact Information</Divider>
-                <Row gutter={gutterInfo} justify="space-around">
-                    {props.selectedCustomer === undefined? mainContactInfoHtml(mainContact):
-                    mainContactInfoHtml(props.selectedCustomer)  
-                    }
-                </Row>
-                <EquipmentTable />
-                <Divider>Accompanying Customers</Divider>
+                
                 {
-                    accompanyingCustomerHtml()
+                    customerSectionHtml()
                 }
                 <div className="add-customer-section" style={{'textAlign': 'center'}}>
                     
