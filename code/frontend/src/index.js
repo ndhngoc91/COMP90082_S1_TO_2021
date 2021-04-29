@@ -15,6 +15,7 @@ import PackagePage from "./pages/PackagePage";
 import CheckOutPage from "./pages/CheckOutPage";
 import HiringFormPage from './pages/HiringFormPage';
 import HiringPaymentResultPage from './pages/HiringPaymentResultPage';
+import CustomerHiringPage from './pages/CustomerHiringPage';
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -42,6 +43,7 @@ createStore().then(store => {
                     <Route path="/hiringForm" exact component={HiringFormPage}/>
                     <Route path="/hiringPaymentResult" exact component={HiringPaymentResultPage}/>
                     <Route path="/customers" exact component={CustomersPage}/>
+                    <Route path="/customerHiringForm" exact component={CustomerHiringPage}/>
                 </div>
             </BrowserRouter>
         </StoreContext.Provider>,
