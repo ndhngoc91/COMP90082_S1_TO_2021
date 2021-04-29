@@ -3,6 +3,8 @@ from app.model.customer import Customer
 from app.model.address import Address
 
 # Hardcoded for now
+from app import schemas
+
 customer_codes = {
     'ALLUNEED',
     'THETASMANIANGIFTWR',
@@ -88,3 +90,8 @@ def get_one_address(customer_id, address_id):
 
 def update_address(address):
     SR().update(address)
+
+
+def create_new_customer(customer):
+    SR().insert(customer)
+
