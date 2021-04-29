@@ -9,11 +9,19 @@ from app.routers import orders
 from app.routers import products
 from app.routers import squizz
 
+tags_metadata = [
+    {
+        "name": "Customers",
+        "description": "Operations with customers, including the **customer information** and **customer address**.",
+    },
+]
+
 app = FastAPI(
     title="Retail / Hire Web App",
     description="This is the backend of Retail / Hire Web App for Rocky Valley," \
                 " based on Squizz eCommerce Platform.",
-    version="1.0.0"
+    version="1.0.0",
+    openapi_tags=tags_metadata,
 )
 
 origins = [
