@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends
-from starlette import status
-
 from app import schemas
 from app.model.address import Address
+from app.model.customer import Customer
 from app.oauth2 import get_current_user
 from app.service import customer_service
 from app.service.product_service import restore_prices as sync_products_prices
+from fastapi import APIRouter, Depends
+from starlette import status
 
 router = APIRouter(
     prefix="/customers",
@@ -26,9 +26,11 @@ def switch_customer(customer_info: schemas.Customer, current_user: schemas.Token
     return {"message": "Switch customer successfully"}
 
 
-@router.post("")
-def create_customer():
-    return "create_customer"
+@router.post("", status_code=status.HTTP_201_CREATED)
+def create_customer(customer_info: schemas.Customer):
+    new_customer = Customer(customer_info.dict())
+    customer_service.create_new_customer(new_customer)
+    return new_customer
 
 
 @router.get("/{customer_id}")
