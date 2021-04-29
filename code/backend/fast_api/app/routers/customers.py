@@ -35,17 +35,25 @@ def create_customer(customer_info: schemas.Customer):
 
 @router.get("/{customer_id}")
 def get_customer(customer_id: int):
-    return f"get_customer {customer_id}"
+    customer = customer_service.get_one_customer(customer_id)
+    return customer
 
 
-@router.put("/{customer_id}")
-def update_customer(customer_id: int):
-    return f"update_customer {customer_id}"
+@router.put("/{customer_id}", status_code=status.HTTP_202_ACCEPTED)
+def update_customer(customer_id: int, customer_info: schemas.Customer):
+    customer = customer_service.get_one_customer(customer_id)
+    for key, value in customer_info:
+        if key in customer.__dict__:
+            customer.__dict__[key] = value
+
+    customer_service.update_customer(customer)
+    return customer
 
 
 @router.delete("/{customer_id}")
 def delete_customer(customer_id: int):
-    return f"del_customer {customer_id}"
+    customer_service.delete_customer(customer_id)
+    return {"message": f"Customer {customer_id} deleted"}
 
 
 @router.get("/{customer_id}/addresses")
