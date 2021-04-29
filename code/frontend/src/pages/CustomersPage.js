@@ -61,30 +61,19 @@ const CustomersPage = () => {
         {
             title: "Nationality",
             dataIndex: "nationality_code",
-        },
-        // {
-        //     title: "Add to Hiring List",
-        //     render: () => <a href="/hiringForm"> Add</a>,
-        // }
-
+        }
     ];
 
     const [selectedCustomer, setSelectedCustomer] = useState("");
 
 
     const rowSelection = {
-        // onChange: (selectedRowKeys, selectedRows) => {
-        //   console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        // },
+    
         onSelect: (record, selected, selectedRows) => {
-          //console.log(selectedRows[0]);
           setSelectedCustomer(selectedRows[0]);
         },
         type: "radio",
       };
-
-    
-
 
     const pagination = {
         position: ["bottom"],
@@ -105,8 +94,13 @@ const CustomersPage = () => {
                 <Row justify="center">
                     <Col span={18}>
                         <Row>
-                            <Col span={20}>
+                            <Col span={16}>
                                 <Title level={4}>Customer List</Title>
+                            </Col>
+                            <Col span={4}>
+                                <Link style={{color: "white", backgroundColor:"#1890ff", padding: 4}} 
+                                to={{ pathname: '/hiringForm', state: selectedCustomer}}>
+                                    Add to Hiring Form</Link>
                             </Col>
                             <Col span={4}>
                                 <Search
@@ -130,12 +124,6 @@ const CustomersPage = () => {
                                 rowSelection = {rowSelection}
                             />
                         }
-                        <Row>
-                        <Link to={{
-                            pathname: '/hiringForm',
-                            state: selectedCustomer
-                            }}>Add</Link>
-                        </Row>
                     </Col>
                 </Row>
                 
