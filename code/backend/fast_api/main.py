@@ -9,7 +9,12 @@ from app.routers import orders
 from app.routers import products
 from app.routers import squizz
 
-app = FastAPI()
+app = FastAPI(
+    title="Retail / Hire Web App",
+    description="This is the backend of Retail / Hire Web App for Rocky Valley," \
+                " based on Squizz eCommerce Platform.",
+    version="1.0.0"
+)
 
 origins = [
     "http://localhost",
