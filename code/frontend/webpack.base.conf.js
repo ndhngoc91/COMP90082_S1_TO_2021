@@ -33,7 +33,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(png|jpg|gif|jpeg)$/,
+                test: /\.(svg|png|jpg|gif|jpeg)$/,
                 use: [{
                     loader: 'url-loader',
                     // loader: 'file-loader',
@@ -51,7 +51,7 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
             '/api/*': {
-                target: 'http://localhost:5000', // Might need to change this for production
+                target: 'http://localhost:8000', // Might need to change this for production
                 changeOrigin: false,             // Also might need to change this to false
                 secure: false
             }

@@ -19,10 +19,21 @@ def list_customers():
     return [customer.__dict__ for customer in all_customers]
 
 
+@router.post("/search")
+async def search_customers(req: Request):
+    req = await req.json()
+    customers = customer_service.search_customers(req["query"], req["page_id"])
+
+    customers["items"] = [
+        customer.__dict__ for customer in customers["items"]]
+    return customers
+
+
 @router.post("/switch-customer")
 def switch_customer(customer_info: schemas.Customer, current_user: schemas.TokenData = Depends(get_current_user)):
     customer = customer_service.get_one_customer(customer_info.customer_id)
-    sync_products_prices(org_id=current_user.org_id, customer_code=customer.customer_code)
+    sync_products_prices(org_id=current_user.org_id,
+                         customer_code=customer.customer_code)
     return {"message": "Switch customer successfully"}
 
 

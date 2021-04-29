@@ -46,3 +46,10 @@ class TokenData(BaseModel):
     username: Optional[str] = None
     org_id: Optional[str] = None
     session_id: Optional[str] = None
+
+
+class Package(BaseModel):
+    name: str
+    description: str
+    what_is_included: str
+    available: str

@@ -1,4 +1,4 @@
-import {Form, Input, Button, Card} from "antd";
+import {Form, Input, Button, Card, Switch} from "antd";
 import {UserOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined} from "@ant-design/icons";
 import React, {useState} from "react";
 import {useHandleLogin} from "../hooks/AuthHooks";
@@ -7,6 +7,7 @@ import {useHistory} from "react-router-dom";
 const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isStaff, setIsStaff] = useState(true);
     const [handleLogin, {handling}] = useHandleLogin();
 
     const history = useHistory();
@@ -17,7 +18,7 @@ const LoginForm = () => {
             <Form className="login-form"
                   initialValues={{remember: true}}
                   onFinish={() => {
-                      handleLogin(username, password, () => {
+                      handleLogin(username, password, isStaff, () => {
                           history.push("/choose")
                       });
                   }}>
@@ -30,7 +31,6 @@ const LoginForm = () => {
                     <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                            placeholder="Username"/>
                 </Form.Item>
-
                 <Form.Item name="password"
                            value={password}
                            onChange={(e) => {
@@ -42,9 +42,17 @@ const LoginForm = () => {
                                     placeholder="Password"
                                     iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}/>
                 </Form.Item>
+                <Form.Item label={"Login as Staff"}>
+                    <Switch defaultChecked={isStaff} onChange={checked => setIsStaff(checked)}/>
+                </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" block="true" loading={handling}>
                         Log in
+                    </Button>
+                </Form.Item>
+                <Form.Item>
+                    <Button type="link" block href="/create">
+                        Register
                     </Button>
                 </Form.Item>
             </Form>

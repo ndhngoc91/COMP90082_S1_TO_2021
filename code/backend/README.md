@@ -50,9 +50,10 @@ Listed below are the requirements to run the application:
 We recommend using [Visual Studio Code](https://code.visualstudio.com/download) or [PyCharm](https://www.jetbrains.com/pycharm/) for development.
 
 ## Technologies Used
-* [Python 3.8](https://www.python.org/)
-* [Flask](https://flask.palletsprojects.com/) for our backend framework
+* [Python 3.8](https://www.python.org/) as the programming language
+* [FastAPI](https://fastapi.tiangolo.com/) for our backend framework
 * [PyMySQL](https://pymysql.readthedocs.io/en/latest/) for a Python MySQL client library
+* [Pytest](https://docs.pytest.org/en/6.2.x/) for testing
 
 ## AWS Deployment Guide
 This repository includes a deployment guide and a Docker Compose file for deploying the entire application (including the frontend client and database) on AWS. These files can be found [here](./deployment).
@@ -61,7 +62,23 @@ This repository includes a deployment guide and a Docker Compose file for deploy
 There are two ways to deploy the backend and database, either locally or in production. You can run the backend by either setting up a virtual environment or using Docker.
 
 ### Using a Virtual Environment
- 1. Set up a virtual environment
+
+#### Set up local database and its connection
+
+1. Install MySQL Workbench and MySQL Server
+     If you don't know how to do this, watch this [tutorial](https://www.youtube.com/watch?v=u96rVINbAUI)
+
+2. Setup the database
+. Run the script `FinalSqlDump.sql` in `backend/db/data` in MySQL Workbench to create the database and populate the tables
+
+3. Modify database username & password fields in these files: 
+`fast_api/database.py`
+`fast_api/config.py`
+to make sure the backend can link to your local database
+
+#### Install the dependencies (Windows)
+
+1. Set up a virtual environment
     ```
     $ python -m venv venv
     $ venv\Scripts\activate.bat
@@ -69,33 +86,26 @@ There are two ways to deploy the backend and database, either locally or in prod
     ```
     **Note:** These commands are for Windows. They are similar for Mac or Linux
 
-2. Install MySQL Workbench and MySQL Server
-  If you don't know how to do this, watch this [tutorial](https://www.youtube.com/watch?v=u96rVINbAUI)
+#### Install the dependencies (Mac / Linux)
 
-3. Run the script `FinalSqlDump.sql` in `backend/db/data` in MySQL Workbench to create the database and populate the tables
+1. Install dependencies:
+```
+pip install fastapi
+pip install uvicorn
+pip install pipenv
+```
 
-4. Modify SQL Server credentials in lines 22-25 in `app/config.py`
-    ```
-    HOST = ...               # MySQL Hostname (e.g. 'localhost')
-    USER = ...               # MySQL Username
-    PASSWORD = ...           # MySQL Password
-    DB_NAME = "squizz_app"
-    ```
-5. Start the Flask server
-    ```
-    $ python -m flask run
-    ```
+2. Create an virtual environment
 
-### Using Docker
-1. Create an image for the backend
-    ```bash
-    $ docker build -t squizz/flask-backend:latest .
-    ```
+```
+source venv/bin/activate
+pipenv install -r requirements.txt
+```
 
-2. Run the backend container
-    ```bash
-    $ docker run -p 5000:5000 --name flask-backend squizz/flask-backend:latest
-    ```
+3. To activate the virtual environment, run `pipenv shell`.
+
+4. To deactivate the virtual environment, run `deactivate`.
+
 
 ## Unit Testing
 The unit tests are written in Python using [pytest](https://docs.pytest.org/en/stable/).
