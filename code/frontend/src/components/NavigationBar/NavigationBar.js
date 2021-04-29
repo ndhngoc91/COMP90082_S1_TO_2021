@@ -46,9 +46,12 @@ const NavigationBar = observer(({defaultSelected}) => {
                     Order History
                 </Menu.Item>
                 <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
+
+
                 {isStaff &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
                 <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
+                <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/center">Account</Menu.Item>
                 <Menu.Item className={rightItemCls} icon={<UserSwitchOutlined/>} key="/choose">
                     Switch account
                 </Menu.Item>
