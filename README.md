@@ -39,5 +39,9 @@ To deploy the source code on your local side, please read *deployment/Local_Depl
     ├── LICENSE
     └── README.md
     
-  ## LICENSE
+## Deployment guide
+  
+Documented here: [Local Deployment Guide](https://github.com/ndhngoc91/COMP90082_S1_TO_2021/blob/master/deployment/Local%20Deployment%20Guide.pdf)
+  
+## LICENSE
   [MIT](LICENSE)
