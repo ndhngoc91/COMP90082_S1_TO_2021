@@ -33,7 +33,7 @@ USER = "nfqoaztiebxtaw"
 PASSWORD = "872076871ca883a2367b76442cef0e2d1d25008d25ff4363304e97fae586ed76"
 DB_NAME = "de6qd51uaj5lt3"
 
-SQLALCHEMY_DATABASE_URL = "postgres://nfqoaztiebxtaw:872076871ca883a2367b76442cef0e2d1d25008d25ff4363304e97fae586ed76@ec2-54-224-120-186.compute-1.amazonaws.com:5432/de6qd51uaj5lt3"# f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"
+SQLALCHEMY_DATABASE_URL = "postgresql://nfqoaztiebxtaw:872076871ca883a2367b76442cef0e2d1d25008d25ff4363304e97fae586ed76@ec2-54-224-120-186.compute-1.amazonaws.com:5432/de6qd51uaj5lt3"# f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
