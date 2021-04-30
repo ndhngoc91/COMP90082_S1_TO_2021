@@ -45,7 +45,8 @@ class DatabaseBase:
             values: a list of values for the query
             commit: indicates whether to commit after execution
         """
-        while not self.connection.open:
+        # while not self.connection.open:
+        while self.connection.closed:
             self.connection.ping(reconnect=True)
             logger.info("Reconnecting to the database")
         try:

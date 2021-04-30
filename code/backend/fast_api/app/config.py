@@ -19,7 +19,7 @@ API_ORG_KEY = "3a62ea5aa2d8845a72dd030369dd571d5123567f70fa76b5bc3bcdf103e3307cc
 SUPPLIER_ORG_ID = "11EAF2251136B090BB69B6800B5BCB6D"
 
 # MySQL Environment Variables
-HOST = "ec2-54-224-120-186.compute-1.amazonaws.com:5432"
+HOST = "ec2-54-224-120-186.compute-1.amazonaws.com"
 USER = "nfqoaztiebxtaw"
 PASSWORD = "872076871ca883a2367b76442cef0e2d1d25008d25ff4363304e97fae586ed76"
 DB_NAME = "de6qd51uaj5lt3"
