@@ -10,11 +10,7 @@ TBC
 
 ## Project 3
 
-The prototypes were designed with **Figma**. 
-
-To access, register for a Figma account and visit this link: [Figma project page](https://www.figma.com/file/PVHSxmtcFDIzTyn5Zurz5e/Rocky-Valley-Workflow?node-id=0%3A1) 
-
-Alternatively, refer to the PDF version of the prototypes in this directory
+The prototypes were designed with hand sketches.
 
 ### File 1: Project 3 Workflow.jpeg
 
