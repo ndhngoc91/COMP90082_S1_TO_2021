@@ -22,7 +22,6 @@ packaging==20.4
 pluggy==0.13.1
 py==1.9.0
 pycparser==2.20
-PyMySQL==0.10.0
 pyparsing==2.4.7
 pytest==6.0.1
 redis==3.5.3
