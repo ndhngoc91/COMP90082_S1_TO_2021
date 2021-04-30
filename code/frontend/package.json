@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --open --config webpack.dev.conf.js",
     "build": "webpack --config webpack.prod.conf.js && webpack --mode production --config webpack.server.conf.js",
     "test": "jest",
-    "express": "node ./dist/server.js"
+    "express": "npm run build & node --max_old_space_size=2560 ./dist/server.js"
   },
   "author": "Minghao YU",
   "license": "ISC",
