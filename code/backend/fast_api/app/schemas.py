@@ -5,6 +5,14 @@ from pydantic import BaseModel
 
 class Customer(BaseModel):
     customer_id: int
+    customer_code: str
+    title: str
+    first_name: str
+    last_name: str
+    phone: int
+    email: str
+    nationality_code: str
+    organization_desc: str
 
 
 class Product(BaseModel):

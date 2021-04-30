@@ -30,7 +30,7 @@ SUPPLIER_ORG_ID = "11EAF2251136B090BB69B6800B5BCB6D"
 
 HOST = "localhost:3306"
 USER = "root"
-PASSWORD = "rootpasswordgiven"
+PASSWORD = "656607"
 DB_NAME = "squizz_app"
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"

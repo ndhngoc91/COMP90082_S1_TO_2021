@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, Request
-from starlette import status
-
 from app import schemas
 from app.model.address import Address
+from app.model.customer import Customer
 from app.oauth2 import get_current_user
 from app.service import customer_service
 from app.service.product_service import restore_prices as sync_products_prices
+from fastapi import APIRouter, Depends, Request
+from starlette import status
 
 router = APIRouter(
     prefix="/customers",
@@ -37,24 +37,34 @@ def switch_customer(customer_info: schemas.Customer, current_user: schemas.Token
     return {"message": "Switch customer successfully"}
 
 
-@router.post("")
-def create_customer():
-    return "create_customer"
+@router.post("", status_code=status.HTTP_201_CREATED)
+def create_customer(customer_info: schemas.Customer):
+    new_customer = Customer(customer_info.dict())
+    customer_service.create_new_customer(new_customer)
+    return new_customer
 
 
 @router.get("/{customer_id}")
 def get_customer(customer_id: int):
-    return f"get_customer {customer_id}"
+    customer = customer_service.get_one_customer(customer_id)
+    return customer
 
 
-@router.put("/{customer_id}")
-def update_customer(customer_id: int):
-    return f"update_customer {customer_id}"
+@router.put("/{customer_id}", status_code=status.HTTP_202_ACCEPTED)
+def update_customer(customer_id: int, customer_info: schemas.Customer):
+    customer = customer_service.get_one_customer(customer_id)
+    for key, value in customer_info:
+        if key in customer.__dict__:
+            customer.__dict__[key] = value
+
+    customer_service.update_customer(customer)
+    return customer
 
 
 @router.delete("/{customer_id}")
 def delete_customer(customer_id: int):
-    return f"del_customer {customer_id}"
+    customer_service.delete_customer(customer_id)
+    return {"message": f"Customer {customer_id} deleted"}
 
 
 @router.get("/{customer_id}/addresses")
