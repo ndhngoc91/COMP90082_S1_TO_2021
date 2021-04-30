@@ -1,4 +1,9 @@
 # COMP90082_S1_TO_2021
+COMP90082_S1_TO_2021 is a subject project that is developed by 15 students from the University of Melbourne for Rocky Valley Bikes & Snow Sports collaborating with Squizz which is a universally connected commerce platform that allows people and organisations to connect, automate and trade, while seamlessly collaborating through trusted relationships.
+
+At Rocky Valley we have plenty of activities to make your holiday fun. From Ski hire, including cross country, back country, downhill and snowboards in winter to bike hire, golf clubs and kayaks in summer. We also stock a large range of cycing...more
+
+
 
 ## User Story Tracking
 
