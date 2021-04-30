@@ -1,7 +1,7 @@
 # COMP90082_S1_TO_2021
 COMP90082_S1_TO_2021 is a subject project that is developed by 15 students from the University of Melbourne for Rocky Valley Bikes & Snow Sports collaborating with Squizz which is a universally connected commerce platform that allows people and organisations to connect, automate and trade, while seamlessly collaborating through trusted relationships.
 
-At Rocky Valley we have plenty of activities to make your holiday fun. From Ski hire, including cross country, back country, downhill and snowboards in winter to bike hire, golf clubs and kayaks in summer. We also stock a large range of cycing...more
+At Rocky Valley we have plenty of activities to make your holiday fun. From Ski hire, including cross country, back country, downhill and snowboards in winter to bike hire, golf clubs and kayaks in summer. We also stock a large range of cycing ...
 
 
 
@@ -15,7 +15,7 @@ At Rocky Valley we have plenty of activities to make your holiday fun. From Ski 
 | 3.2           |[feature-package-management](https://github.com/ndhngoc91/COMP90082_S1_TO_2021/tree/feature-package-management)|Package management page including features such as search, pagination, add a new package, edit an existing package         |
 | 3.3           |[feature-calendar](https://github.com/ndhngoc91/COMP90082_S1_TO_2021/tree/feature-package-management)|Calendar view showing the availability of every package on the system (waiting to integrate with 2.4)         |
 
-To run the source code, please read *deployment/Local_Deployment_Guide.pdf*
+To deploy the source code on your local side, please read *deployment/Local_Deployment_Guide.pdf*
 
 
 ## Folder structure
