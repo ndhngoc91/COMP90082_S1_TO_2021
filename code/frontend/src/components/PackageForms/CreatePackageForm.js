@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {
     Form,
     Input,
@@ -6,6 +6,7 @@ import {
     notification
 } from "antd";
 import {MinusCircleOutlined, PlusOutlined, CheckSquareOutlined} from "@ant-design/icons";
+import {useHandleAddPackage} from "../../hooks/PackageHooks";
 
 const layout = {
     labelCol: {span: 6},
@@ -23,25 +24,25 @@ const formItemLayoutWithOutLabel = {
     wrapperCol: {offset: 6, span: 16}
 };
 
-const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}) => {
+const CreatePackageForm = () => {
     const [form] = Form.useForm();
 
-    useEffect(() => {
-        form.setFieldsValue(fieldValues);
-    }, [fieldValues]);
+    const [handleAddPackage, {handling}] = useHandleAddPackage();
+
+    const onFinish = values => {
+        form.resetFields();
+        handleAddPackage(values, () => {
+            notification.open({
+                message: "Added a package successfullly!",
+                description: "Added a package successfullly!",
+                icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
+                duration: 2
+            });
+        });
+    };
 
     return (
-        <Form form={form} {...layout} name="basic" onFinish={values => {
-            onFinish(values);
-            if (clearFormAfterFinishing) {
-                form.resetFields();
-            }
-        }}>
-            <Form.Item label="Id"
-                       name="id"
-                       hidden>
-                <Input/>
-            </Form.Item>
+        <Form form={form} {...layout} name="basic" initialValues={{remember: true}} onFinish={onFinish}>
             <Form.Item label="Name"
                        name="name"
                        hasFeedback
@@ -116,7 +117,7 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
             </Form.List>
 
             <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit" loading={finishing}>
+                <Button type="primary" htmlType="submit" loading={handling}>
                     Submit
                 </Button>
             </Form.Item>
@@ -124,4 +125,4 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
     );
 };
 
-export default PackageForm;
+export default CreatePackageForm;

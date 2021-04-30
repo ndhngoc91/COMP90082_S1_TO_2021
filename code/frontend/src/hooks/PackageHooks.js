@@ -69,32 +69,3 @@ export const useHandleAddPackage = () => {
 
     return [handleAddPackage, {handling}];
 };
-
-export const useHandleEditPackage = () => {
-    const [handling, setHandling] = useState(false);
-
-    const handleEditPackage = useCallback(({id, name, description, products, available}, success, failure) => {
-        setHandling(true);
-        axios.put(`http://127.0.0.1:8000/packages/${id}`, {
-            name: name,
-            description: description,
-            what_is_included: products.join("-"),
-            available: available
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
-        }).then(response => {
-            if (response.status === 202) {
-                success();
-            } else {
-                failure();
-            }
-        }).catch(err => {
-            console.log(err);
-            failure();
-        }).finally(() => {
-            setHandling(false);
-        });
-    }, []);
-
-    return [handleEditPackage, {handling}];
-};

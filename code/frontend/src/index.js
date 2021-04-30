@@ -13,7 +13,6 @@ import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
 import PackagePage from "./pages/PackagePage";
 import CheckOutPage from "./pages/CheckOutPage";
-import CenterPage from "./pages/CenterPage";
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -40,7 +39,6 @@ createStore().then(store => {
                         <Route path="/productCategories/:id" exact component={CategoryPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
-                        <Route path="/center" component={CenterPage}/>
                     </Switch>
                 </BrowserRouter>
             </div>

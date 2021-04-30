@@ -50,11 +50,6 @@ const LoginForm = () => {
                         Log in
                     </Button>
                 </Form.Item>
-                <Form.Item>
-                    <Button type="link" block href="/create">
-                        Register
-                    </Button>
-                </Form.Item>
             </Form>
         </Card>
     );
