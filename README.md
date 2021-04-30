@@ -1,6 +1,6 @@
 # COMP90082_S1_TO_2021
 
-### User Story Tracking
+## User Story Tracking
 
 | User Story ID | Branch | Comment |
 |---------------|--------|---------|
@@ -14,16 +14,21 @@ To run the source code, please read deployment/Local_Deployment_Guide.pdf
 
 
 
-### A typical top-level directory layout
+## A typical top-level directory layout
 
     .
     ├── code                                        # Code
     │   ├── backend                                 # Backend Code (FastAPI)
+    |       ├── tests                               # Unit tests for the backend
+    │       └── ...                                 # ...
     │   └── frontend                                # Frontend Code (ReactJS)
+    |       ├── __mock__                            # Mock functions for unit tests
+    |       ├── __test__                            # Unit tests for the frontend
+    │       └── ...                                 # ...
     ├── db_migration_scripts                        # MySQL migration scripts to import the database
     ├── deployment                                  # Deployment Guide (Local & Auto)
     │   ├── scripts                                 # Scripts to deploy (planning to do in week 10)
-    │   ├── CICD Pipeline(planning to do).pdf       # The CI/CD pipeline we're implementing (it's expected to be completed by week 10)
+    │   ├── CICD Pipeline(planning to do).pdf       # The CI/CD pipeline we're implementing
     ├── diagrams                                    # Documents about the product architecutre
     ├── documents                                   # All other relevant docs
     ├── prototypes                                  # All the prototypes created for the application
