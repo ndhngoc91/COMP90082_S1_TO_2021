@@ -33,7 +33,7 @@ class DatabaseBase:
             dbname=config.DB_NAME
         )
 
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         # self.connection.get_autocommit()
 
     def run_query(self, query: str, values: list, commit: bool = False):

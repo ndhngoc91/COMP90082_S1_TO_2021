@@ -380,7 +380,8 @@ class ProductResource(DatabaseBase):
         if page is None:
             paging_str = ''
         else:
-            paging_str = f'LIMIT {(page - 1) * page_size}, {page_size}'
+            # paging_str = f'LIMIT {(page - 1) * page_size}, {page_size}'
+            paging_str = f'OFFSET {(page - 1) * page_size} LIMIT {page_size}'
             if category_id is not None:
                 count_query = f'SELECT COUNT(DISTINCT productId) as count FROM categoryproducts\
                                 WHERE categoryId = {category_id}'
