@@ -30,6 +30,7 @@ To deploy the source code on your local side, please read *deployment/Local_Depl
     |       ├── __test__                            # Unit tests for the frontend
     │       └── ...                                 # ...
     ├── db_migration_scripts                        # MySQL migration scripts to import the database
+    ├── demo_screenshots                            # Some demo screenshots
     ├── deployment                                  # Deployment Guide (Local & Auto)
     │   ├── scripts                                 # Scripts to deploy (planning to do in week 10)
     │   ├── CICD Pipeline(planning to do).pdf       # The CI/CD pipeline we're implementing
