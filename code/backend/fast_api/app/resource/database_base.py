@@ -1,5 +1,6 @@
 import logging
 import pymysql
+import psycopg2
 from app import config
 
 logger = logging.getLogger(__name__)
@@ -15,15 +16,22 @@ class DatabaseBase:
 
     def __init__(self):
         # Establish a connection to the database
-        self.connection = pymysql.connect(host=config.HOST,
-                                          user=config.USER,
-                                          password=config.PASSWORD,
-                                          db=config.DB_NAME,
-                                          charset='utf8mb4',
-                                          cursorclass=pymysql.cursors.DictCursor,
-                                          autocommit=False,
-                                          read_timeout=None,
-                                          write_timeout=None)
+        # self.connection = pymysql.connect(host=config.HOST,
+        #                                   user=config.USER,
+        #                                   password=config.PASSWORD,
+        #                                   db=config.DB_NAME,
+        #                                   charset='utf8mb4',
+        #                                   cursorclass=pymysql.cursors.DictCursor,
+        #                                   autocommit=False,
+        #                                   read_timeout=None,
+        #                                   write_timeout=None)
+
+        self.connection = psycopg2.connect(
+            host=config.HOST,
+            user=config.USER,
+            password=config.PASSWORD,
+            dbname=config.DB_NAME
+        )
 
         self.cursor = self.connection.cursor()
         # self.connection.get_autocommit()
