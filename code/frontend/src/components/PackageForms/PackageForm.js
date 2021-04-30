@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     Form,
     Input,
@@ -6,7 +6,6 @@ import {
     notification
 } from "antd";
 import {MinusCircleOutlined, PlusOutlined, CheckSquareOutlined} from "@ant-design/icons";
-import {useHandleAddPackage} from "../../hooks/PackageHooks";
 
 const layout = {
     labelCol: {span: 6},
@@ -24,25 +23,25 @@ const formItemLayoutWithOutLabel = {
     wrapperCol: {offset: 6, span: 16}
 };
 
-const CreatePackageForm = () => {
+const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}) => {
     const [form] = Form.useForm();
 
-    const [handleAddPackage, {handling}] = useHandleAddPackage();
-
-    const onFinish = values => {
-        form.resetFields();
-        handleAddPackage(values, () => {
-            notification.open({
-                message: "Added a package successfullly!",
-                description: "Added a package successfullly!",
-                icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
-                duration: 2
-            });
-        });
-    };
+    useEffect(() => {
+        form.setFieldsValue(fieldValues);
+    }, [fieldValues]);
 
     return (
-        <Form form={form} {...layout} name="basic" initialValues={{remember: true}} onFinish={onFinish}>
+        <Form form={form} {...layout} name="basic" onFinish={values => {
+            onFinish(values);
+            if (clearFormAfterFinishing) {
+                form.resetFields();
+            }
+        }}>
+            <Form.Item label="Id"
+                       name="id"
+                       hidden>
+                <Input/>
+            </Form.Item>
             <Form.Item label="Name"
                        name="name"
                        hasFeedback
@@ -117,7 +116,7 @@ const CreatePackageForm = () => {
             </Form.List>
 
             <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit" loading={handling}>
+                <Button type="primary" htmlType="submit" loading={finishing}>
                     Submit
                 </Button>
             </Form.Item>
@@ -125,4 +124,4 @@ const CreatePackageForm = () => {
     );
 };
 
-export default CreatePackageForm;
+export default PackageForm;

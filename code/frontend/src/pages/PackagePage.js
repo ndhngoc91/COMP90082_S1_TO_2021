@@ -5,9 +5,10 @@ import {useHandleFilterPackages} from "../hooks/PackageHooks";
 import PackageSideMenu from "../components/PackageSideMenu/PackageSideMenu";
 import PageFooter from "../components/PageFooter/PageFooter";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
-import CreatePackageForm from "../components/PackageForms/CreatePackageForm";
-import AddProductForm from "../components/PackageForms/AddProductForm";
+import AddPackageForm from "../components/PackageForms/AddPackageForm";
+import EditPackageForm from "../components/PackageForms/EditPackageForm";
 import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
+import {EditOutlined} from "@ant-design/icons";
 
 const {Content, Sider} = Layout;
 const {Search} = Input;
@@ -18,8 +19,9 @@ const PackagePage = () => {
     const {path} = useRouteMatch();
 
     const [query, setQuery] = useState("");
-    const [isCreatePackageModalVisible, setIsCreatePackageModalVisible] = useState(false);
-    const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
+    const [isAddPackageModelVisible, setIsAddPackageModelVisible] = useState(false);
+    const [isEditPackageVisible, setIsEditPackageModelVisible] = useState(false);
+    const [editFormFieldValues, setEditFormFieldValues] = useState({});
 
     const [handleFilterPackages, {packages, filtering}] = useHandleFilterPackages();
 
@@ -66,7 +68,7 @@ const PackagePage = () => {
                                     </Col>
                                     <Col>
                                         <Button size="large"
-                                                onClick={() => setIsCreatePackageModalVisible(true)}>
+                                                onClick={() => setIsAddPackageModelVisible(true)}>
                                             Create
                                         </Button>
                                     </Col>
@@ -77,28 +79,24 @@ const PackagePage = () => {
                                     ),
                                     rowExpandable: record => record.name !== "Not Expandable"
                                 }} dataSource={packages} rowKey="id">
-                                    <Column title="Name" dataIndex="name" key="name"/>
+                                    <Column title="Name" dataIndex="name" key="name" width="25%"/>
                                     <Column title="What Is Included" dataIndex="what_is_included"
-                                            key="what_is_included"/>
-                                    <Column title="Available" dataIndex="available" key="available"/>
-                                    <Column title="Edit"
-                                            key="action"
-                                            render={() => {
+                                            key="what_is_included" width="35%"/>
+                                    <Column title="Available" dataIndex="available" key="available" width="35%"/>
+                                    <Column title="Edit" key="action" width="5%"
+                                            render={values => {
                                                 return <Space size="middle">
-                                                    <a>Edit</a>
+                                                    <Button icon={<EditOutlined/>} type="default"
+                                                            onClick={() => {
+                                                                console.log(values);
+                                                                values.products = values.what_is_included.split("-");
+                                                                setEditFormFieldValues(values);
+                                                                setIsEditPackageModelVisible(true);
+                                                            }}>
+                                                        <span>Edit</span>
+                                                    </Button>
                                                 </Space>
                                             }}/>
-                                    <Column title="Add"
-                                            key="action"
-                                            render={() => (
-                                                <Space size="middle">
-                                                    <a onClick={() => {
-                                                        setIsAddProductModalVisible(true);
-                                                    }}>
-                                                        Add
-                                                    </a>
-                                                </Space>
-                                            )}/>
                                 </Table>
                             </Route>
                             <Route exact path={`${path}/calendar`}>
@@ -109,19 +107,19 @@ const PackagePage = () => {
                 </Layout>
                 <PageFooter/>
             </Layout>
-            <Modal title="Register a package " visible={isCreatePackageModalVisible}
+            <Modal title="Register a package " visible={isAddPackageModelVisible}
                    footer={null} closable={false}
                    onCancel={() => {
-                       setIsCreatePackageModalVisible(false);
+                       setIsAddPackageModelVisible(false);
                    }}>
-                <CreatePackageForm/>
+                <AddPackageForm/>
             </Modal>
-            <Modal title="Add a product " visible={isAddProductModalVisible}
+            <Modal title="Edit a package" visible={isEditPackageVisible}
                    footer={null} closable={false}
                    onCancel={() => {
-                       setIsAddProductModalVisible(false);
+                       setIsEditPackageModelVisible(false);
                    }}>
-                <AddProductForm/>
+                <EditPackageForm fieldValues={editFormFieldValues}/>
             </Modal>
         </>
 
