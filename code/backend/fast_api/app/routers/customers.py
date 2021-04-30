@@ -4,7 +4,7 @@ from app.model.customer import Customer
 from app.oauth2 import get_current_user
 from app.service import customer_service
 from app.service.product_service import restore_prices as sync_products_prices
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from starlette import status
 
 router = APIRouter(
