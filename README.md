@@ -37,6 +37,7 @@ To deploy the source code on your local side, please read *deployment/Local_Depl
     ├── diagrams                                    # Documents about the product architecutre
     ├── documents                                   # All other relevant docs
     ├── prototypes                                  # All the prototypes created for the application
+    ├── test                                        # Test plans for the product
     ├── LICENSE
     └── README.md
     
