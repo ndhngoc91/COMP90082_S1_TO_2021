@@ -3,12 +3,12 @@ import requests
 import time
 from typing import Tuple, Optional
 
-from api.model.customer import Customer
-from api.model.order_detail import OrderDetail
-from api.model.organization import Organization
-from api.model.product import Product
-from api.model.category import Category
-from api.model.price import Price
+from app.api.model.customer import Customer
+from app.api.model.order_detail import OrderDetail
+from app.api.model.organization import Organization
+from app.api.model.product import Product
+from app.api.model.category import Category
+from app.api.model.price import Price
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

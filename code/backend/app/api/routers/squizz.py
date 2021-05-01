@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Request
 
-from api import schemas
-from api.oauth2 import get_current_user
-from api.service import product_service
+from app.api import schemas
+from app.api.oauth2 import get_current_user
+from app.api.service import product_service
 
 router = APIRouter(
     prefix="/squizz",

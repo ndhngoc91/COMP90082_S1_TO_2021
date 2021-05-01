@@ -1,12 +1,12 @@
 from fastapi import HTTPException
 from starlette import status
 
-from api import token
-from api.resource.session_resource import SessionResource
-from api.resource.user_resource import UserResource
+from app.api import token
+from app.api.resource.session_resource import SessionResource
+from app.api.resource.user_resource import UserResource
 import logging
 
-from api.util import auth_util
+from app.api.util import auth_util
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

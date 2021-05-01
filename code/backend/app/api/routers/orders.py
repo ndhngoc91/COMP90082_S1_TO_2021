@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from starlette import status
 
-from api import schemas
-from api.oauth2 import get_current_user
-from api.service import order_service
+from app.api import schemas
+from app.api.oauth2 import get_current_user
+from app.api.service import order_service
 
 router = APIRouter(
     prefix="/orders",

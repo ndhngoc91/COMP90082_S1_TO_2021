@@ -3,8 +3,8 @@ from typing import Optional
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 
-from api.database import get_db, engine
-from api.repository import package
+from app.api.database import get_db, engine
+from app.api.repository import package
 from .. import models, schemas
 
 models.Base.metadata.create_all(bind=engine)

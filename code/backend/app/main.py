@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routers import auth
-from api.routers import categories
-from api.routers import customer_codes
-from api.routers import customers
-from api.routers import orders
-from api.routers import packages
-from api.routers import products
-from api.routers import squizz
+# from app.api.routers import auth
+# from app.api.routers import categories
+# from app.api.routers import customer_codes
+# from app.api.routers import customers
+# from app.api.routers import orders
+# from app.api.routers import packages
+# from app.api.routers import products
+# from app.api.routers import squizz
 
 tags_metadata = [
     {
@@ -39,11 +39,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(categories.router)
-app.include_router(customer_codes.router)
-app.include_router(customers.router)
-app.include_router(orders.router)
-app.include_router(packages.router)
-app.include_router(products.router)
-app.include_router(squizz.router)
+# app.include_router(auth.router)
+# app.include_router(categories.router)
+# app.include_router(customer_codes.router)
+# app.include_router(customers.router)
+# app.include_router(orders.router)
+# app.include_router(packages.router)
+# app.include_router(products.router)
+# app.include_router(squizz.router)

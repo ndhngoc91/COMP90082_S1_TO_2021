@@ -1,13 +1,13 @@
-from api.model.cate_prod import CateProd
-from api.model.category import Category
-from api.model.price import Price
-from api.resource.simple_model_resource import SimpleModelResource
-from api.model.product import Product
-from api.resource.product_resource import ProductResource
-from api.resource.user_resource import UserResource
-from api.resource.model_metadata_resource import ModelMetadataResource
-from api.util import auth_util
-from api.resource.image_resource import ImageResource
+from app.api.model.cate_prod import CateProd
+from app.api.model.category import Category
+from app.api.model.price import Price
+from app.api.resource.simple_model_resource import SimpleModelResource
+from app.api.model.product import Product
+from app.api.resource.product_resource import ProductResource
+from app.api.resource.user_resource import UserResource
+from app.api.resource.model_metadata_resource import ModelMetadataResource
+from app.api.util import auth_util
+from app.api.resource.image_resource import ImageResource
 import json
 import logging
 

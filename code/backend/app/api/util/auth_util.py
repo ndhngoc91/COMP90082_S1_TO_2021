@@ -1,5 +1,5 @@
-from api import config, schemas
-from api.service.squizz_gateway_service import SquizzGatewayService
+from app.api import config, schemas
+from app.api.service.squizz_gateway_service import SquizzGatewayService
 
 
 def build_connection(org_id: str):

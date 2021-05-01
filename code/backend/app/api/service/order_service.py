@@ -1,15 +1,15 @@
-from api.exception.exceptions import SquizzException
-from api.model.order import Order
-from api.model.organization import Organization
-from api.model.address import Address
-from api.model.customer import Customer
-from api.model.order_detail import OrderDetail
-from api.model.product import Product
-from api.model.session import Session
-from api.util import auth_util
-from api.resource.order_resource import OrderResource
-from api.resource.simple_model_resource import SimpleModelResource
-from api.resource.product_resource import ProductResource
+from app.api.exception.exceptions import SquizzException
+from app.api.model.order import Order
+from app.api.model.organization import Organization
+from app.api.model.address import Address
+from app.api.model.customer import Customer
+from app.api.model.order_detail import OrderDetail
+from app.api.model.product import Product
+from app.api.model.session import Session
+from app.api.util import auth_util
+from app.api.resource.order_resource import OrderResource
+from app.api.resource.simple_model_resource import SimpleModelResource
+from app.api.resource.product_resource import ProductResource
 
 
 def get_order_history(session_id) -> dict:

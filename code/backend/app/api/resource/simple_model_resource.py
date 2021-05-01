@@ -2,8 +2,8 @@ import logging
 
 import math
 from pymysql import IntegrityError
-from api.resource.database_base import DatabaseBase
-from api.exception.exceptions import *
+from app.api.resource.database_base import DatabaseBase
+from app.api.exception.exceptions import *
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

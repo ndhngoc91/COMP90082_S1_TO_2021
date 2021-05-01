@@ -2,13 +2,13 @@ import logging
 from collections import defaultdict
 
 import math
-from api import config
-from api.exception.exceptions import OtherException, PaginationError
-from api.resource.database_base import DatabaseBase
-from api.resource.simple_model_resource import SimpleModelResource as SR
-from api.model.price import Price
-from api.model.product import Product
-from api.model.image import Image
+from app.api import config
+from app.api.exception.exceptions import OtherException, PaginationError
+from app.api.resource.database_base import DatabaseBase
+from app.api.resource.simple_model_resource import SimpleModelResource as SR
+from app.api.model.price import Price
+from app.api.model.product import Product
+from app.api.model.image import Image
 from typing import List
 
 logger = logging.getLogger(__name__)

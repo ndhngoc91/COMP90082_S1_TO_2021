@@ -1,12 +1,12 @@
 import logging
 import datetime
-from api.model.address import Address
-from api.model.customer import Customer
-from api.model.organization import Organization
-from api.resource.database_base import DatabaseBase
-from api.resource.simple_model_resource import SimpleModelResource as SR
-from api.model.order import Order
-from api.model.order_detail import OrderDetail
+from app.api.model.address import Address
+from app.api.model.customer import Customer
+from app.api.model.organization import Organization
+from app.api.resource.database_base import DatabaseBase
+from app.api.resource.simple_model_resource import SimpleModelResource as SR
+from app.api.model.order import Order
+from app.api.model.order_detail import OrderDetail
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

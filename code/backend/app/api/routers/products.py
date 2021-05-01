@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import APIRouter
 
-from api.service import product_service
+from app.api.service import product_service
 
 router = APIRouter(
     prefix="/products",

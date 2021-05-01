@@ -1,4 +1,4 @@
-from api.model.model import Model
+from app.api.model.model import Model
 
 
 class Category(Model):

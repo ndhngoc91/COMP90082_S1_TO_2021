@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import APIRouter
 
-from api.service import customer_service
+from app.api.service import customer_service
 
 router = APIRouter(
     prefix="/customer-codes",

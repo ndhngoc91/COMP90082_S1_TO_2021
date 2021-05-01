@@ -1,6 +1,6 @@
 import logging
-from api.model.customer import Customer
-from api.resource.simple_model_resource import SimpleModelResource
+from app.api.model.customer import Customer
+from app.api.resource.simple_model_resource import SimpleModelResource
 import math
 
 logger = logging.getLogger(__name__)

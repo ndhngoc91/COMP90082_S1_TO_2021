@@ -1,10 +1,10 @@
-from api.resource.simple_model_resource import SimpleModelResource as SR
-from api.resource.customer_resource import CustomerResource
-from api.model.customer import Customer
-from api.model.address import Address
+from app.api.resource.simple_model_resource import SimpleModelResource as SR
+from app.api.resource.customer_resource import CustomerResource
+from app.api.model.customer import Customer
+from app.api.model.address import Address
 
 # Hardcoded for now
-from api import schemas
+from app.api import schemas
 
 customer_codes = {
     'ALLUNEED',

@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
-from api import models, schemas
+from app.api import models, schemas
 
 
 def get_all(db: Session):

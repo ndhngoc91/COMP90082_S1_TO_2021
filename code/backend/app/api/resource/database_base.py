@@ -1,6 +1,6 @@
 import logging
 import pymysql
-from api import config
+from app.api import config
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

@@ -1,9 +1,9 @@
-from api import schemas
-from api.model.address import Address
-from api.model.customer import Customer
-from api.oauth2 import get_current_user
-from api.service import customer_service
-from api.service.product_service import restore_prices as sync_products_prices
+from app.api import schemas
+from app.api.model.address import Address
+from app.api.model.customer import Customer
+from app.api.oauth2 import get_current_user
+from app.api.service import customer_service
+from app.api.service.product_service import restore_prices as sync_products_prices
 from fastapi import APIRouter, Depends, Request
 from starlette import status
 
