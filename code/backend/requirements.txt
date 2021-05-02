@@ -1,12 +1,14 @@
 requests==2.25.1
 werkzeug==1.0.1
 pytest==6.2.3
-fastapi
+fastapi~=0.63.0
 uvicorn[standard]
 SQLAlchemy==1.4.12
 typing==3.7.4.3
-pydantic
+pydantic~=1.8.1
 python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
-pymysql
+pymysql~=1.0.2
+starlette~=0.13.8
+jose~=1.0.0
