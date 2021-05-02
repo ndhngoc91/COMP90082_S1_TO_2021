@@ -15,7 +15,7 @@ def test_app():
 # you DO NOT need to modify these configs. The test cases are currently running with your local database
 TEST_HOST = "localhost:3306"
 TEST_USER = "root"
-TEST_PASSWORD = "rootpasswordgiven"
+TEST_PASSWORD = "86963279"
 TEST_DB_NAME = "squizz_app"
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{TEST_USER}:{TEST_PASSWORD}@{TEST_HOST}/{TEST_DB_NAME}"

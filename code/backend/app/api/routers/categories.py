@@ -1,23 +1,21 @@
 from fastapi import APIRouter
-
-from app.api.service import product_service
+from app.api.service import category_service
 
 router = APIRouter(
-    prefix="/categories",
-    tags=["Categories"]
+  prefix="/categories",
+  tags=["Categories"]
 )
 
 
 @router.get("")
-def list_categories():
-    parents, children = product_service.list_all_categories()
-    categories = []
-    for category in parents:
-        p_cate_dict = category.__dict__
-        if category.keyCategoryID not in children:
-            p_cate_dict['Children'] = []
-        else:
-            p_cate_dict['Children'] = [child.__dict__ for child in children[category.keyCategoryID]]
-        categories.append(p_cate_dict)
+def list_categories(query: str = None):
+  categories = category_service.get_all_categories(query)
 
-    return categories
+  return categories
+
+
+@router.post("")
+async def list_category_details(days: int, category_id: int):
+  details = category_service.list_category_details(days, category_id)
+
+  return details

@@ -532,6 +532,297 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'user1','pbkdf2:sha256:150000$yIG2rYDn$6a2a2ea2679c6d4f697899b1daeed251db794a400b7574af4f1ef065530b5544',1),(2,'user2s','pbkdf2:sha256:150000$Bo1mhoFA$4c3cebd8696a885d5e02c813a1ef1d09e25b0d42ce2ba639cd781e485f7ef3e1',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `agegroup`
+--
+
+DROP TABLE IF EXISTS `agegroup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `agegroup` (
+  `idagegroup` int NOT NULL,
+  `agegroupcol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idagegroup`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `agegroup`
+--
+
+LOCK TABLES `agegroup` WRITE;
+/*!40000 ALTER TABLE `agegroup` DISABLE KEYS */;
+INSERT INTO `agegroup` VALUES (1,'Child Under6'),(2,'Child 6 - 14'),(3,'Adult'),(4,'All ages');
+/*!40000 ALTER TABLE `agegroup` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `idcategory` int NOT NULL,
+  `categorycol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idcategory`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category`
+--
+
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+insert into category(idcategory,categorycol) values
+(1,'Ski packages'),(2,'Ski/board & bindings (own boots)'),(3,'Ski/Snowboard boots only'),(4,'Snowboard package');
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extra`
+--
+
+DROP TABLE IF EXISTS `extra`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extra` (
+  `idextra` int NOT NULL,
+  `extracol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idextra`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extra`
+--
+
+LOCK TABLES `extra` WRITE;
+/*!40000 ALTER TABLE `extra` DISABLE KEYS */;
+insert into extra(idextra,extracol) values
+(1,'item1'),(2,'item2'),(3,'item3'),(4,'item4'),(5,'item5'),(6,'item6'),(7,'item7'),(8,'item8');
+/*!40000 ALTER TABLE `extra` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extraprice`
+--
+
+DROP TABLE IF EXISTS `extraprice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extraprice` (
+  `idextra` int NOT NULL,
+  `daynumber` int NOT NULL,
+  `extraprice` float DEFAULT '0',
+  PRIMARY KEY (`daynumber`,`idextra`),
+  KEY `fk_extraprice_extra1_idx` (`idextra`),
+  CONSTRAINT `fk_extraprice_extra1` FOREIGN KEY (`idextra`) REFERENCES `extra` (`idextra`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extraprice`
+--
+
+LOCK TABLES `extraprice` WRITE;
+/*!40000 ALTER TABLE `extraprice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extraprice` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `package`
+--
+
+DROP TABLE IF EXISTS `package`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `package` (
+  `idpackage` int NOT NULL,
+  `idcategory` int NOT NULL,
+  `idskilllevel` int NOT NULL,
+  `idagegroup` int NOT NULL,
+  `packagename` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
+  `sellcode` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idpackage`),
+  UNIQUE KEY `idpackage_UNIQUE` (`idpackage`),
+  KEY `fk_table2_category1_idx` (`idcategory`),
+  KEY `fk_table2_skilllevel1_idx` (`idskilllevel`),
+  KEY `fk_table2_agegroup` (`idagegroup`),
+  CONSTRAINT `fk_table2_agegroup` FOREIGN KEY (`idagegroup`) REFERENCES `agegroup` (`idagegroup`),
+  CONSTRAINT `fk_table2_category1` FOREIGN KEY (`idcategory`) REFERENCES `category` (`idcategory`),
+  CONSTRAINT `fk_table2_skilllevel1` FOREIGN KEY (`idskilllevel`) REFERENCES `skilllevel` (`idskilllevel`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `package`
+--
+
+LOCK TABLES `package` WRITE;
+/*!40000 ALTER TABLE `package` DISABLE KEYS */;
+insert into package(idpackage,idcategory,idskilllevel,idagegroup,packagename,description,sellcode) values
+(1,1,1,3,'Beginner Package - Adult','description1','sellcode1'),
+(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','description2','sellcode2'),
+(3,1,1,1,'Beginner Package - Child Under 6 yrs','description3','sellcode3'),
+(4,1,2,4,'Intermediate Package','description4','sellcode4'),
+(5,1,3,4,'Performance Package','description5','sellcode5'),
+(6,2,1,3,'Beginner - Adult','description6','sellcode6'),
+(7,2,1,2,'Beginner - Child 6 -14yrs','description7','sellcode7'),
+(8,2,1,1,'Beginner - Child U6','description8','sellcode8'),
+(9,2,2,4,'Intermediate Ski Only','description9','sellcode9'),
+(10,2,3,4,'Performance Ski Only','description10','sellcode10'),
+(11,3,1,3,'Beginner - Adult','description11','sellcode11'),
+(12,3,1,2,'Beginner - child 6 - 14yrs','description12','sellcode12'),
+(13,3,1,1,'Beginner - Child Under 6yrs','description13','sellcode13'),
+(14,3,2,4,'Intermediate Boot','description14','sellcode14'),
+(15,3,3,4,'Back Country Touring Boot','description15','sellcode15'),
+(16,4,1,3,'Beginner Package - Adult','description16','sellcode16'),
+(17,4,1,2,'Beginner Child 6-14yrs','description17','sellcode17');
+/*!40000 ALTER TABLE `package` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `package_type`
+--
+
+DROP TABLE IF EXISTS `package_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `package_type` (
+  `idpackage` int NOT NULL,
+  `idtype` int NOT NULL,
+  PRIMARY KEY (`idpackage`,`idtype`),
+  KEY `fk_package_has_type_type1_idx` (`idtype`),
+  KEY `fk_package_has_type_package1_idx` (`idpackage`),
+  CONSTRAINT `fk_package_has_type_package1` FOREIGN KEY (`idpackage`) REFERENCES `package` (`idpackage`),
+  CONSTRAINT `fk_package_has_type_type1` FOREIGN KEY (`idtype`) REFERENCES `type` (`idtype`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `package_type`
+--
+
+LOCK TABLES `package_type` WRITE;
+/*!40000 ALTER TABLE `package_type` DISABLE KEYS */;
+insert into package_type(idpackage,idtype) values
+(1,1),(1,2),(1,3),(1,4),
+(2,1),(2,2),
+(3,1),(3,2),
+(4,1),
+(5,1),(5,6),
+(6,1),(6,5),(6,2),(6,6),
+(7,1),(7,5),(7,2),
+(8,1),(8,5),(8,2),
+(9,1),(9,5),
+(10,1),(10,6),
+(11,1),(11,5),(11,2),
+(12,1),(12,5),(12,2),
+(13,1),(13,5),(13,2),
+(14,1),
+(15,6),
+(16,5),
+(17,5);
+/*!40000 ALTER TABLE `package_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `price`
+--
+
+DROP TABLE IF EXISTS `price`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `price` (
+  `idpackage` int NOT NULL,
+  `daynumber` int NOT NULL,
+  `price` float DEFAULT '0',
+  PRIMARY KEY (`idpackage`,`daynumber`),
+  KEY `fk_price_package1_idx` (`idpackage`),
+  CONSTRAINT `fk_price_package1` FOREIGN KEY (`idpackage`) REFERENCES `package` (`idpackage`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `price`
+--
+
+LOCK TABLES `price` WRITE;
+/*!40000 ALTER TABLE `price` DISABLE KEYS */;
+insert into price(idpackage,daynumber,price) values
+(1,1,50),(1,2,85),(1,3,100),(1,4,115),(1,5,125),(1,6,130),(1,7,135),
+(2,1,50),(2,2,85),(2,3,100),(2,4,115),(2,5,125),(2,6,130),(2,7,135),
+(3,1,93),(3,2,17),(3,3,74),(3,4,37),(3,5,52),(3,6,96),(3,7,7),
+(4,1,39),(4,2,2),(4,3,79),(4,4,5),(4,5,71),(4,6,47),(4,7,72),
+(5,1,19),(5,2,42),(5,3,77),(5,4,45),(5,5,73),(5,6,23),(5,7,71),
+(6,1,70),(6,2,73),(6,3,81),(6,4,13),(6,5,26),(6,6,22),(6,7,35),
+(7,1,89),(7,2,16),(7,3,71),(7,4,19),(7,5,44),(7,6,97),(7,7,83),
+(8,1,8),(8,2,1),(8,3,37),(8,4,96),(8,5,58),(8,6,86),(8,7,16),
+(9,1,59),(9,2,72),(9,3,53),(9,4,54),(9,5,90),(9,6,19),(9,7,89),
+(10,1,15),(10,2,64),(10,3,41),(10,4,94),(10,5,95),(10,6,85),(10,7,64),
+(11,1,31),(11,2,25),(11,3,6),(11,4,75),(11,5,3),(11,6,11),(11,7,46),
+(12,1,99),(12,2,80),(12,3,34),(12,4,28),(12,5,30),(12,6,98),(12,7,81),
+(13,1,31),(13,2,77),(13,3,76),(13,4,77),(13,5,91),(13,6,3),(13,7,63),
+(14,1,68),(14,2,33),(14,3,53),(14,4,13),(14,5,88),(14,6,3),(14,7,21),
+(15,1,43),(15,2,67),(15,3,28),(15,4,42),(15,5,48),(15,6,71),(15,7,34),
+(16,1,99),(16,2,54),(16,3,23),(16,4,67),(16,5,92),(16,6,29),(16,7,90),
+(17,1,15),(17,2,30),(17,3,60),(17,4,80),(17,5,90),(17,6,92),(17,7,68);
+/*!40000 ALTER TABLE `price` ENABLE KEYS */;
+UNLOCK TABLES;
+--
+-- Table structure for table `skilllevel`
+--
+
+DROP TABLE IF EXISTS `skilllevel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `skilllevel` (
+  `idskilllevel` int NOT NULL,
+  `skilllevelcol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idskilllevel`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `skilllevel`
+--
+
+LOCK TABLES `skilllevel` WRITE;
+/*!40000 ALTER TABLE `skilllevel` DISABLE KEYS */;
+INSERT INTO `skilllevel` VALUES (1,'Beginner'),(2,'Intermediate'),(3,'Performance');
+/*!40000 ALTER TABLE `skilllevel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `type`
+--
+
+DROP TABLE IF EXISTS `type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `type` (
+  `idtype` int NOT NULL,
+  `typecol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idtype`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `type`
+--
+
+LOCK TABLES `type` WRITE;
+/*!40000 ALTER TABLE `type` DISABLE KEYS */;
+insert into type(idtype,typecol) values
+(1,'Downhill'),(2,'XC Classic'),(3,'BC Touring'),(4,'XC Skate'),(5,'Backcountry Touring'),(6,'Snowboard');
+/*!40000 ALTER TABLE `type` ENABLE KEYS */;
+UNLOCK TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
