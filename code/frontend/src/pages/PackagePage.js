@@ -9,6 +9,8 @@ import AddPackageForm from "../components/PackageForms/AddPackageForm";
 import EditPackageForm from "../components/PackageForms/EditPackageForm";
 import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
 import {EditOutlined} from "@ant-design/icons";
+import {useCategories} from "../hooks/CategoryHooks";
+import {useSkillLevels} from "../hooks/SkillLevelHooks";
 
 const {Content, Sider} = Layout;
 const {Search} = Input;
@@ -22,6 +24,9 @@ const PackagePage = () => {
     const [isAddPackageModelVisible, setIsAddPackageModelVisible] = useState(false);
     const [isEditPackageVisible, setIsEditPackageModelVisible] = useState(false);
     const [editFormFieldValues, setEditFormFieldValues] = useState({});
+
+    const categories = useCategories();
+    const skillLevels = useSkillLevels();
 
     const [handleFilterPackages, {packages, filtering}] = useHandleFilterPackages();
 
@@ -49,7 +54,7 @@ const PackagePage = () => {
                     <Content>
                         <Switch>
                             <Route exact path={`${path}`}>
-                                <Row style={{margin: "2em 0"}} gutter={{lg: 32}}>
+                                <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>
                                     <Col lg={12}>
                                         <Search placeholder="Search for packages"
                                                 allowClear
@@ -58,12 +63,24 @@ const PackagePage = () => {
                                                 onSearch={onSearch}
                                                 loading={filtering}/>
                                     </Col>
-                                    <Col>
-                                        <Select defaultValue="Product Group 1" size="large"
-                                                onSelect={onSelectProductType}>
-                                            <Option value="Product Group 1">Product Group 1</Option>
-                                            <Option value="Product Group 2">Product Group 2</Option>
-                                            <Option value="Product Group 3">Product Group 3</Option>
+                                    <Col lg={4}>
+                                        <Select defaultValue="Select Category" size="large"
+                                                onSelect={onSelectProductType} style={{width: "100%"}}>
+                                            {categories.map(category => {
+                                                return (
+                                                    <Option value={category.id}>{category.name}</Option>
+                                                );
+                                            })}
+                                        </Select>
+                                    </Col>
+                                    <Col lg={4}>
+                                        <Select defaultValue="Select Skill Level" size="large"
+                                                onSelect={onSelectProductType} style={{width: "100%"}}>
+                                            {skillLevels.map(skillLevel => {
+                                                return (
+                                                    <Option value={skillLevel.id}>{skillLevel.name}</Option>
+                                                );
+                                            })}
                                         </Select>
                                     </Col>
                                     <Col>
@@ -79,10 +96,8 @@ const PackagePage = () => {
                                     ),
                                     rowExpandable: record => record.name !== "Not Expandable"
                                 }} dataSource={packages} rowKey="id">
-                                    <Column title="Name" dataIndex="name" key="name" width="25%"/>
-                                    <Column title="What Is Included" dataIndex="what_is_included"
-                                            key="what_is_included" width="35%"/>
-                                    <Column title="Available" dataIndex="available" key="available" width="35%"/>
+                                    <Column title="Name" dataIndex="name" key="name" width="50%"/>
+                                    <Column title="Sell Code" dataIndex="sellcode" key="available" width="45%"/>
                                     <Column title="Edit" key="action" width="5%"
                                             render={values => {
                                                 return <Space size="middle">

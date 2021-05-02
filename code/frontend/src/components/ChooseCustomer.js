@@ -42,10 +42,8 @@ const ChooseCustomer = () => {
 
         // update product with new customerid
         setLoading(true);
-        axios.post("http://localhost:8000/customers/switch-customer", {
-            customer_id: customerId,
-        }, {
-            headers: {"Authorization": `Bearer ${accessToken}`},
+        axios.post(`http://localhost:8000/customers/switch-customer?customer_id=${customerId}`, {}, {
+            headers: {"Authorization": `Bearer ${accessToken}`}
         }).then(res => {
             console.log(res.data.message)
             setLoading(false);

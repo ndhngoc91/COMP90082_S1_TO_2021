@@ -1,18 +1,18 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export const useCategories = () => {
-    const [categories, setCategories] = useState([]);
+export const useSkillLevels = () => {
+    const [skillLevels, setSkillLevels] = useState([]);
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/categories", {
+        axios.get("http://127.0.0.1:8000/skill-levels", {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
             if (response.status === 200) {
-                setCategories(response.data);
+                setSkillLevels(response.data);
             }
         });
     }, []);
 
-    return categories;
+    return skillLevels;
 };
