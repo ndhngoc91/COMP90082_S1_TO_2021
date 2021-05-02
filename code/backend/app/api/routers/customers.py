@@ -19,8 +19,9 @@ def get_all_customers(db: Session = Depends(get_db)):
 
 
 @router.post("/switch-customer")
-def switch_customer(customer_info: schemas.Customer, current_user: schemas.TokenData = Depends(get_current_user)):
-    customer = customer_service.get_one_customer(customer_info.customer_id)
+def switch_customer(customer_id: int, db: Session = Depends(get_db),
+                    current_user: schemas.TokenData = Depends(get_current_user)):
+    customer = customer_service.get_one_customer(customer_id=customer_id, db=db)
     sync_products_prices(org_id=current_user.org_id, customer_code=customer.customer_code)
     return {"message": "Switch customer successfully"}
 
