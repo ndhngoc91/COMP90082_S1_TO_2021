@@ -18,6 +18,7 @@ import {
 } from "@ant-design/icons";
 
 import rockyValleyBanner from "../assets/banner-internal.svg";
+import rockyValleyLogo from "../assets/rocky_valley.svg";
 
 const {Content} = Layout;
 const {Text, Title} = Typography;
@@ -38,17 +39,13 @@ const HomePage = () => {
 
     return (
         <Layout style={{minHeight: "100vh"}}>
-            {/* Top navigation bar */}
             <NavigationBar defaultSelected="/"/>
-            {/* Content body */}
             <Content style={{background: "#D8D8D5"}}>
                 <Row style={{background: "#fff"}}>
                     <Image src={rockyValleyBanner} width={"100%"} preview={false}/>
                 </Row>
-                {/* HolySAS brand title and description */}
-                <div style={{textAlign: "center", marginTop: "0vh", backgroundColor: "white", padding: "3em 0"}}>
-
-                    <Title style={{fontSize: "3.5rem", marginBottom: "5vh"}} level={1}>Rocky Valley</Title>
+                <div style={{textAlign: "center", marginTop: "0vh", backgroundColor: "white", padding: "2em 0"}}>
+                    <Image src={rockyValleyLogo} preview={false} width={"700px"}/>
 
                     <Row justify="center">
                         <Col span={16}>
@@ -79,8 +76,6 @@ const HomePage = () => {
                             </Text>
                         </Col>
                     </Row>
-
-                    {/* Button links */}
                     <div style={{marginTop: "10vh"}}>
                         <Button type="primary"
                                 size="large"
