@@ -37,7 +37,9 @@ const NavigationBar = observer(({defaultSelected}) => {
         <Header style={{width: "100%", padding: 0}}>
             <Menu onClick={handleClick} style={{backgroundColor: "#D8D8D5"}} mode="horizontal"
                   defaultSelectedKeys={[defaultSelected]}>
-                <div className={leftItemCls}>
+                <div className={leftItemCls} onClick={() => {
+                    history.push("/");
+                }}>
                     <Image className={logoCls} src={rockyValleyLogo} preview={false}/>
                 </div>
                 <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
