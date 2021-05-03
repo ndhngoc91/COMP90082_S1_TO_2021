@@ -9,6 +9,7 @@ import AddPackageForm from "../components/PackageForms/AddPackageForm";
 import EditPackageForm from "../components/PackageForms/EditPackageForm";
 import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
 import {EditOutlined} from "@ant-design/icons";
+import {useAgeGroups} from "../hooks/AgeGroupHooks";
 import {useCategories} from "../hooks/CategoryHooks";
 import {useSkillLevels} from "../hooks/SkillLevelHooks";
 
@@ -21,10 +22,15 @@ const PackagePage = () => {
     const {path} = useRouteMatch();
 
     const [query, setQuery] = useState("");
+    const [selectedAgeGroupId, setSelectedAgeGroupId] = useState(-1);
+    const [selectedCategoryId, setSelectedCategoryId] = useState(-1);
+    const [selectedSkillLevelId, setSelectedSkillLevelId] = useState(-1);
+
     const [isAddPackageModelVisible, setIsAddPackageModelVisible] = useState(false);
     const [isEditPackageVisible, setIsEditPackageModelVisible] = useState(false);
     const [editFormFieldValues, setEditFormFieldValues] = useState({});
 
+    const ageGroups = useAgeGroups();
     const categories = useCategories();
     const skillLevels = useSkillLevels();
 
@@ -36,12 +42,35 @@ const PackagePage = () => {
 
     const onSearch = (queryValue) => {
         setQuery(queryValue);
-        handleFilterPackages(queryValue);
     };
 
-    const onSelectProductType = () => {
-        handleFilterPackages(query);
+    const onSelectCategory = (selectedCategoryId) => {
+        setSelectedCategoryId(selectedCategoryId);
     };
+
+    const onSelectSkillLevel = (selectedSkillLevelId) => {
+        setSelectedSkillLevelId(selectedSkillLevelId);
+    };
+
+    const onSelectAgeGroup = (selectedAgeGroupId) => {
+        setSelectedAgeGroupId(selectedAgeGroupId);
+    };
+
+    useEffect(() => {
+        const filterParams = {
+            query: query
+        };
+        if (selectedCategoryId > 0) {
+            filterParams.category_id = selectedCategoryId;
+        }
+        if (selectedSkillLevelId > 0) {
+            filterParams.skill_level_id = selectedSkillLevelId;
+        }
+        if (selectedAgeGroupId > 0) {
+            filterParams.age_group_id = selectedAgeGroupId;
+        }
+        handleFilterPackages(filterParams);
+    }, [query, selectedAgeGroupId, selectedCategoryId, selectedSkillLevelId]);
 
     return (
         <>
@@ -55,7 +84,7 @@ const PackagePage = () => {
                         <Switch>
                             <Route exact path={`${path}`}>
                                 <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>
-                                    <Col lg={12}>
+                                    <Col lg={8}>
                                         <Search placeholder="Search for packages"
                                                 allowClear
                                                 enterButton="Search"
@@ -64,24 +93,50 @@ const PackagePage = () => {
                                                 loading={filtering}/>
                                     </Col>
                                     <Col lg={4}>
-                                        <Select defaultValue="Select Category" size="large"
-                                                onSelect={onSelectProductType} style={{width: "100%"}}>
-                                            {categories.map(category => {
+                                        <Select defaultValue={-1} size="large" value={selectedCategoryId}
+                                                onSelect={onSelectCategory} style={{width: "100%"}}>
+                                            <Option key={0} value={-1}>Select Category</Option>
+                                            {categories.map((category, index) => {
                                                 return (
-                                                    <Option value={category.id}>{category.name}</Option>
+                                                    <Option key={index} value={category.id}>{category.name}</Option>
                                                 );
                                             })}
                                         </Select>
                                     </Col>
                                     <Col lg={4}>
-                                        <Select defaultValue="Select Skill Level" size="large"
-                                                onSelect={onSelectProductType} style={{width: "100%"}}>
-                                            {skillLevels.map(skillLevel => {
+                                        <Select defaultValue={-1} size="large"
+                                                value={selectedSkillLevelId}
+                                                onSelect={onSelectSkillLevel} style={{width: "100%"}}>
+                                            <Option key={0} value={-1}>Select Skill Level</Option>
+                                            {skillLevels.map((skillLevel, index) => {
                                                 return (
-                                                    <Option value={skillLevel.id}>{skillLevel.name}</Option>
+                                                    <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
                                                 );
                                             })}
                                         </Select>
+                                    </Col>
+                                    <Col lg={4}>
+                                        <Select defaultValue={-1} size="large"
+                                                value={selectedAgeGroupId}
+                                                onSelect={onSelectAgeGroup} style={{width: "100%"}}>
+                                            <Option key={0} value={-1}>Select Age Group</Option>
+                                            {ageGroups.map((ageGroup, index) => {
+                                                return (
+                                                    <Option key={index} value={ageGroup.id}>{ageGroup.name}</Option>
+                                                );
+                                            })}
+                                        </Select>
+                                    </Col>
+                                    <Col>
+                                        <Button size="large"
+                                                onClick={() => {
+                                                    setQuery("");
+                                                    setSelectedCategoryId(-1);
+                                                    setSelectedSkillLevelId(-1);
+                                                    setSelectedAgeGroupId(-1);
+                                                }}>
+                                            Clear
+                                        </Button>
                                     </Col>
                                     <Col>
                                         <Button size="large"

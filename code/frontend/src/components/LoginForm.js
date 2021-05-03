@@ -19,7 +19,7 @@ const LoginForm = () => {
                   initialValues={{remember: true}}
                   onFinish={() => {
                       handleLogin(username, password, isStaff, () => {
-                          history.push("/choose")
+                          history.push("/")
                       });
                   }}>
                 <Form.Item name="username"

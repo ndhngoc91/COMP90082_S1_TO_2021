@@ -10,7 +10,7 @@ class AgeGroup(Base):
     __tablename__ = 'age_groups'
 
     id = Column(Integer, primary_key=True)
-    age_group = Column(String(45))
+    name = Column(String(45))
 
 
 class Category(Base):
@@ -126,7 +126,7 @@ class UserGroup(Base):
     group_id = Column(Integer, primary_key=True, unique=True)
     group_name = Column(String(50), nullable=False)
 
-    userss = relationship('User', secondary='user_group_pair')
+    users = relationship('User', secondary='user_user_group')
 
 
 class UserType(Base):
@@ -213,8 +213,8 @@ t_product_group_product = Table(
     Column('product_id', ForeignKey('products.id'), primary_key=True, nullable=False, index=True)
 )
 
-t_user_group_pair = Table(
-    'user_group_pair', metadata,
-    Column('users_id', ForeignKey('users.id'), primary_key=True, nullable=False, index=True),
-    Column('groups_of_user_id', ForeignKey('user_groups.group_id'), primary_key=True, nullable=False, index=True)
+t_user_user_group = Table(
+    'user_user_group', metadata,
+    Column('user_id', ForeignKey('users.id'), primary_key=True, nullable=False, index=True),
+    Column('user_group_id', ForeignKey('user_groups.group_id'), primary_key=True, nullable=False, index=True)
 )

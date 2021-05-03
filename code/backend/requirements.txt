@@ -10,5 +10,6 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
 pymysql~=1.0.2
-starlette~=0.13.8
+starlette==0.14.2
 jose~=1.0.0
+sqlacodegen
