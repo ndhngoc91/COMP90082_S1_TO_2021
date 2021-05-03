@@ -6,18 +6,21 @@ import {
     Col,
     Layout,
     Row,
-    Typography
+    Typography,
+    Image
 } from "antd";
 
 import {
-    CodepenOutlined,
     HistoryOutlined,
     ShoppingOutlined,
     ShopOutlined,
     UserSwitchOutlined
 } from "@ant-design/icons";
 
-const {Content, Footer} = Layout;
+import rockyValleyBanner from "../assets/banner-internal.svg";
+import rockyValleyLogo from "../assets/rocky_valley.svg";
+
+const {Content} = Layout;
 const {Text, Title} = Typography;
 
 import NavigationBar from "../components/NavigationBar/NavigationBar";
@@ -36,26 +39,25 @@ const HomePage = () => {
 
     return (
         <Layout style={{minHeight: "100vh"}}>
-            {/* Top navigation bar */}
             <NavigationBar defaultSelected="/"/>
+            <Content style={{background: "#D8D8D5"}}>
+                <Row style={{background: "#fff"}}>
+                    <Image src={rockyValleyBanner} width={"100%"} preview={false}/>
+                </Row>
+                <div style={{textAlign: "center", marginTop: "0vh", backgroundColor: "white", padding: "2em 0"}}>
+                    <Image src={rockyValleyLogo} preview={false} width={"700px"}/>
 
-            {/* Content body */}
-            <Content style={{padding: "80px 80px", background: " #fff", margin: "10vh 20vh", borderRadius: "1.25rem"}}>
-
-                {/* HolySAS brand title and description */}
-                <div style={{textAlign: "center", marginTop: "0vh"}}>
-                    <Title style={{fontSize: "3.5rem", marginBottom: "5vh"}} level={1}>HolySAS</Title>
                     <Row justify="center">
                         <Col span={16}>
                             <Title level={3} type="secondary ">
-                                Welcome to HolySAS, home of your favourite products.
-                                We offer the latest air management solutions from Holyoake,
-                                and your favourite wholesale products from PJ SAS.
+                                ONLINE CAFE ORDERING We now have online ordering at our cafe! Relaxed cafe offering
+                                locally roasted coffee, smoothies, and milkshakes. A tempting assortment of cakes and
+                                slices.
                             </Title>
                         </Col>
                     </Row>
 
-                    <Row style={{marginTop: "7.5vh"}} gutter={[24, 8]} justify="center">
+                    <Row style={{marginTop: "7.5vh"}} justify="center">
                         <Col span={8}>
                             <Title level={4}>
                                 <ShoppingOutlined/> Variety of Products
@@ -73,35 +75,20 @@ const HomePage = () => {
                                 View personalized customer-level pricing based on the selected customer
                             </Text>
                         </Col>
-                        <Col span={8}>
-                            <Title level={4}>
-                                <CodepenOutlined/> In-Browser 3D Models
-                            </Title>
-                            <Text type="secondary">
-                                Interact with and view the parameters of in-browser rendered 3D models, for Holyoake
-                                diffusers
-                            </Text>
-                        </Col>
                     </Row>
-
-                    {/* Button links */}
                     <div style={{marginTop: "10vh"}}>
-                        <Button
-                            type="primary"
-                            size="large"
-                            icon={<ShopOutlined/>}
-                            onClick={() => handleClickGetStarted()}
-                        >
-                            Get Started
+                        <Button type="primary"
+                                size="large"
+                                icon={<ShopOutlined/>}
+                                onClick={() => handleClickGetStarted()}>
+                            Order Online
                         </Button>
-                        <Button
-                            type="secondary"
-                            size="large"
-                            icon={<HistoryOutlined/>}
-                            style={{marginLeft: "1vw"}}
-                            onClick={() => handleClickViewOrders()}
-                        >
-                            View Orders
+                        <Button type="secondary"
+                                size="large"
+                                icon={<HistoryOutlined/>}
+                                style={{marginLeft: "1vw"}}
+                                onClick={() => handleClickViewOrders()}>
+                            Learn More
                         </Button>
                     </div>
                 </div>

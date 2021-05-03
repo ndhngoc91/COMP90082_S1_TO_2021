@@ -6,16 +6,17 @@ import {
     ShopOutlined,
     LogoutOutlined,
     ShoppingCartOutlined,
-    UserSwitchOutlined,
     ContainerOutlined,
-    CalendarOutlined
+    SettingOutlined,
+    AccountBookOutlined,
+    HomeOutlined
 } from "@ant-design/icons";
 import {useStores} from "../../stores";
-import rockyValleyLogo from "../../assets/rocky_valley.svg";
 import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 
 const {Header} = Layout;
+const {SubMenu} = Menu;
 
 const NavigationBar = observer(({defaultSelected}) => {
     const history = useHistory();
@@ -31,15 +32,14 @@ const NavigationBar = observer(({defaultSelected}) => {
         }
     }
 
-    const {logoCls, leftItemCls, rightItemCls} = useNavigationBarStyles();
+    const {leftItemCls, rightItemCls} = useNavigationBarStyles();
 
     return (
         <Header style={{width: "100%", padding: 0}}>
-            <Menu onClick={handleClick} style={{backgroundColor: "#D8D8D5"}} mode="horizontal"
+            <Menu onClick={handleClick} mode="horizontal"
+                  theme={"dark"}
                   defaultSelectedKeys={[defaultSelected]}>
-                <div className={leftItemCls}>
-                    <Image className={logoCls} src={rockyValleyLogo} preview={false}/>
-                </div>
+                <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
                 <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
                 <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
@@ -50,8 +50,10 @@ const NavigationBar = observer(({defaultSelected}) => {
 
                 {isStaff &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
-                <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
-                <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/center">Account</Menu.Item>
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title="User">
+                    <Menu.Item key="/center" icon={<AccountBookOutlined/>}>Account</Menu.Item>
+                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                </SubMenu>
             </Menu>
         </Header>
     );
