@@ -1,3 +1,6 @@
+from typing import Optional
+
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 from app.api import models, schemas
 from starlette import status
@@ -8,8 +11,21 @@ def get_all(db: Session):
     return db.query(models.Package).all()
 
 
-def filter_by_query(query: str, db: Session):
-    return db.query(models.Package).filter(models.Package.name.like(f"%{query}%")).all()
+def filter_by_query(query: Optional[str],
+                    category_id: Optional[int],
+                    skill_level_id: Optional[int],
+                    age_group_id: Optional[int],
+                    db: Session):
+    sql_query = db.query(models.Package)
+    if query is not None:
+        sql_query = sql_query.filter(models.Package.name.like(f"%{query}%"))
+    if category_id is not None:
+        sql_query = sql_query.filter(models.Package.category_id == category_id)
+    if skill_level_id is not None:
+        sql_query = sql_query.filter(models.Package.skill_level_id == skill_level_id)
+    if age_group_id is not None:
+        sql_query = sql_query.filter(models.Package.age_group_id == age_group_id)
+    return sql_query.all()
 
 
 def create(request: schemas.Package, db: Session):
