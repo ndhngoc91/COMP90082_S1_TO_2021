@@ -52,9 +52,6 @@ const NavigationBar = observer(({defaultSelected}) => {
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
                 <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
                 <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/center">Account</Menu.Item>
-                <Menu.Item className={rightItemCls} icon={<UserSwitchOutlined/>} key="/choose">
-                    Switch account
-                </Menu.Item>
             </Menu>
         </Header>
     );
