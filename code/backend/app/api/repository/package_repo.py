@@ -1,24 +1,41 @@
-from fastapi import HTTPException
-from sqlalchemy.orm import Session
-from starlette import status
+from typing import Optional
 
+from sqlalchemy import and_
+from sqlalchemy.orm import Session
 from app.api import models, schemas
+from starlette import status
+from fastapi import HTTPException
 
 
 def get_all(db: Session):
     return db.query(models.Package).all()
 
 
-def filter_packges(query: str, db: Session):
-    return db.query(models.Package).filter(models.Package.name.like(f"%{query}%")).all()
+def filter_by_query(query: Optional[str],
+                    category_id: Optional[int],
+                    skill_level_id: Optional[int],
+                    age_group_id: Optional[int],
+                    db: Session):
+    sql_query = db.query(models.Package)
+    if query is not None:
+        sql_query = sql_query.filter(models.Package.name.like(f"%{query}%"))
+    if category_id is not None:
+        sql_query = sql_query.filter(models.Package.category_id == category_id)
+    if skill_level_id is not None:
+        sql_query = sql_query.filter(models.Package.skill_level_id == skill_level_id)
+    if age_group_id is not None:
+        sql_query = sql_query.filter(models.Package.age_group_id == age_group_id)
+    return sql_query.all()
 
 
 def create(request: schemas.Package, db: Session):
     new_package = models.Package(
         name=request.name,
         description=request.description,
-        what_is_included=request.what_is_included,
-        available=request.available
+        sellcode=request.sellcode,
+        category_id=request.category_id,
+        age_group_id=request.age_group_id,
+        skill_level_id=request.skill_level_id
     )
     db.add(new_package)
     db.commit()

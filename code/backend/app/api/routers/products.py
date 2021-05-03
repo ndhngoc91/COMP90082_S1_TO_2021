@@ -1,8 +1,9 @@
 from typing import Optional
 
-from fastapi import APIRouter
-
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 from app.api.service import product_service
+from app.api.database import get_db
 
 router = APIRouter(
     prefix="/products",
@@ -11,27 +12,5 @@ router = APIRouter(
 
 
 @router.get("")
-def list_products_with_pagination(category_id: Optional[int] = None, page: Optional[int] = 1):
-    result = product_service.list_all_products(category_id, page)
-    result['items'] = [prod.basic_dict() for prod in result['items']]
-    return result
-
-
-@router.get("/barcode")
-def get_barcode_product(barcode: str):
-    return product_service.get_product_by_barcode(barcode)
-
-
-@router.get("/search")
-def search_products(identifier: str, identifier_type: str):
-    return product_service.search_products(identifier, identifier_type)
-
-
-@router.get("/{product_code}")
-def get_product_by_id(product_code: str):
-    return product_service.get_product_by_product_code(product_code)
-
-
-@router.get("/{product_code}/metadata/get")
-def get_metadata_by_product_code(product_code: str):
-    return product_service.get_metadata_by_product_code(product_code)
+def get_all_products(db: Session = Depends(get_db)):
+    return product_service.get_all(db=db)

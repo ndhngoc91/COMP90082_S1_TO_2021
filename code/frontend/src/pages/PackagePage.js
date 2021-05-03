@@ -9,6 +9,9 @@ import AddPackageForm from "../components/PackageForms/AddPackageForm";
 import EditPackageForm from "../components/PackageForms/EditPackageForm";
 import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
 import {EditOutlined} from "@ant-design/icons";
+import {useAgeGroups} from "../hooks/AgeGroupHooks";
+import {useCategories} from "../hooks/CategoryHooks";
+import {useSkillLevels} from "../hooks/SkillLevelHooks";
 
 const {Content, Sider} = Layout;
 const {Search} = Input;
@@ -19,9 +22,17 @@ const PackagePage = () => {
     const {path} = useRouteMatch();
 
     const [query, setQuery] = useState("");
+    const [selectedAgeGroupId, setSelectedAgeGroupId] = useState(-1);
+    const [selectedCategoryId, setSelectedCategoryId] = useState(-1);
+    const [selectedSkillLevelId, setSelectedSkillLevelId] = useState(-1);
+
     const [isAddPackageModelVisible, setIsAddPackageModelVisible] = useState(false);
     const [isEditPackageVisible, setIsEditPackageModelVisible] = useState(false);
     const [editFormFieldValues, setEditFormFieldValues] = useState({});
+
+    const ageGroups = useAgeGroups();
+    const categories = useCategories();
+    const skillLevels = useSkillLevels();
 
     const [handleFilterPackages, {packages, filtering}] = useHandleFilterPackages();
 
@@ -31,12 +42,35 @@ const PackagePage = () => {
 
     const onSearch = (queryValue) => {
         setQuery(queryValue);
-        handleFilterPackages(queryValue);
     };
 
-    const onSelectProductType = () => {
-        handleFilterPackages(query);
+    const onSelectCategory = (selectedCategoryId) => {
+        setSelectedCategoryId(selectedCategoryId);
     };
+
+    const onSelectSkillLevel = (selectedSkillLevelId) => {
+        setSelectedSkillLevelId(selectedSkillLevelId);
+    };
+
+    const onSelectAgeGroup = (selectedAgeGroupId) => {
+        setSelectedAgeGroupId(selectedAgeGroupId);
+    };
+
+    useEffect(() => {
+        const filterParams = {
+            query: query
+        };
+        if (selectedCategoryId > 0) {
+            filterParams.category_id = selectedCategoryId;
+        }
+        if (selectedSkillLevelId > 0) {
+            filterParams.skill_level_id = selectedSkillLevelId;
+        }
+        if (selectedAgeGroupId > 0) {
+            filterParams.age_group_id = selectedAgeGroupId;
+        }
+        handleFilterPackages(filterParams);
+    }, [query, selectedAgeGroupId, selectedCategoryId, selectedSkillLevelId]);
 
     return (
         <>
@@ -49,8 +83,8 @@ const PackagePage = () => {
                     <Content>
                         <Switch>
                             <Route exact path={`${path}`}>
-                                <Row style={{margin: "2em 0"}} gutter={{lg: 32}}>
-                                    <Col lg={12}>
+                                <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>
+                                    <Col lg={8}>
                                         <Search placeholder="Search for packages"
                                                 allowClear
                                                 enterButton="Search"
@@ -58,13 +92,51 @@ const PackagePage = () => {
                                                 onSearch={onSearch}
                                                 loading={filtering}/>
                                     </Col>
-                                    <Col>
-                                        <Select defaultValue="Product Group 1" size="large"
-                                                onSelect={onSelectProductType}>
-                                            <Option value="Product Group 1">Product Group 1</Option>
-                                            <Option value="Product Group 2">Product Group 2</Option>
-                                            <Option value="Product Group 3">Product Group 3</Option>
+                                    <Col lg={4}>
+                                        <Select defaultValue={-1} size="large" value={selectedCategoryId}
+                                                onSelect={onSelectCategory} style={{width: "100%"}}>
+                                            <Option key={0} value={-1}>Select Category</Option>
+                                            {categories.map((category, index) => {
+                                                return (
+                                                    <Option key={index} value={category.id}>{category.name}</Option>
+                                                );
+                                            })}
                                         </Select>
+                                    </Col>
+                                    <Col lg={4}>
+                                        <Select defaultValue={-1} size="large"
+                                                value={selectedSkillLevelId}
+                                                onSelect={onSelectSkillLevel} style={{width: "100%"}}>
+                                            <Option key={0} value={-1}>Select Skill Level</Option>
+                                            {skillLevels.map((skillLevel, index) => {
+                                                return (
+                                                    <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
+                                                );
+                                            })}
+                                        </Select>
+                                    </Col>
+                                    <Col lg={4}>
+                                        <Select defaultValue={-1} size="large"
+                                                value={selectedAgeGroupId}
+                                                onSelect={onSelectAgeGroup} style={{width: "100%"}}>
+                                            <Option key={0} value={-1}>Select Age Group</Option>
+                                            {ageGroups.map((ageGroup, index) => {
+                                                return (
+                                                    <Option key={index} value={ageGroup.id}>{ageGroup.name}</Option>
+                                                );
+                                            })}
+                                        </Select>
+                                    </Col>
+                                    <Col>
+                                        <Button size="large"
+                                                onClick={() => {
+                                                    setQuery("");
+                                                    setSelectedCategoryId(-1);
+                                                    setSelectedSkillLevelId(-1);
+                                                    setSelectedAgeGroupId(-1);
+                                                }}>
+                                            Clear
+                                        </Button>
                                     </Col>
                                     <Col>
                                         <Button size="large"
@@ -79,10 +151,8 @@ const PackagePage = () => {
                                     ),
                                     rowExpandable: record => record.name !== "Not Expandable"
                                 }} dataSource={packages} rowKey="id">
-                                    <Column title="Name" dataIndex="name" key="name" width="25%"/>
-                                    <Column title="What Is Included" dataIndex="what_is_included"
-                                            key="what_is_included" width="35%"/>
-                                    <Column title="Available" dataIndex="available" key="available" width="35%"/>
+                                    <Column title="Name" dataIndex="name" key="name" width="50%"/>
+                                    <Column title="Sell Code" dataIndex="sellcode" key="available" width="45%"/>
                                     <Column title="Edit" key="action" width="5%"
                                             render={values => {
                                                 return <Space size="middle">

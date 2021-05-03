@@ -1,6 +1,5 @@
 import pytest
 import json
-from app.api.repository import package
 
 
 @pytest.fixture(autouse=True, scope="function")
@@ -21,10 +20,12 @@ def teardown():
 @pytest.fixture()
 def sample_package():
     return json.dumps({
-        "name": "New Package",
-        "description": "New Package",
-        "what_is_included": "New Package",
-        "available": "New Package"
+        "name": "string",
+        "description": "string",
+        "sellcode": "string",
+        "category_id": 0,
+        "age_group_id": 0,
+        "skill_level_id": 0
     })
 
 
