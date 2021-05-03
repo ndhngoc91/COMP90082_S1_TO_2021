@@ -39,7 +39,7 @@ class CategoryResource(SimpleModelResource):
         category_dict_list = [] if category_dict_list is None else category_dict_list
 
         for category in category_dict_list:
-            category["image_url"] = "https://attachments.pjsas.com.au/products/images_small/65368.jpg"
+            category["image_url"] = "https://upload.wikimedia.org/wikipedia/commons/8/84/Ski_Famille_-_Family_Ski_Holidays.jpg"
         return [category for category in category_dict_list]
 
     def get_category_details(self, days, category_id):
