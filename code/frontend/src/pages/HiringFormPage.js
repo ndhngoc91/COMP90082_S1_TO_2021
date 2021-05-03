@@ -36,7 +36,7 @@ const HiringFormPage = (props) => {
 
     const steps = [
         {
-          title: 'Choose Dates',
+          title: 'Select Hiring Range',
           content:
           <div>
               <Col className="step1-content">
@@ -50,7 +50,7 @@ const HiringFormPage = (props) => {
                             setValue(val);
                             }} >
                     </RangePicker>
-                    { dates.length === 2 && dates[1] != null ? <Alert message={`Renting Period: ${dates[0].format("YYYY-MM-DD")} - ${dates[1].format("YYYY-MM-DD")} `}/>: 
+                    {  (dates != null && dates.length === 2 && dates[1] != null) ? <Alert message={`Renting Period: ${dates[0].format("YYYY-MM-DD")} - ${dates[1].format("YYYY-MM-DD")} `}/>: 
                     <Alert message={"Selected Dates Please"}></Alert> }
                 </Space>
              </Col>
@@ -58,11 +58,11 @@ const HiringFormPage = (props) => {
             
         },
         {
-          title: 'Second',
+          title: 'Select Package Category',
           content: <HiringForm selectedCustomer = {props.location.state}/>,
         },
         {
-          title: 'Last',
+          title: 'Add to Shopping Cart',
           content: 'Last-content',
         },
       ];
@@ -128,18 +128,3 @@ const HiringFormPage = (props) => {
 }
 
 export default HiringFormPage;
-
-const Page = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    -webkit-justify-content: center;
-    background: #f1f1f3; // this is the color of the background of the login page
-`
-const PageHeader = styled.div`
-    margin: 30px;
-    text-align: center;
-    font-size: 30px;
-`

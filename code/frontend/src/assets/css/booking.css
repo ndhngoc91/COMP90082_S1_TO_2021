@@ -15,6 +15,10 @@
     color: #1890ff;
     line-height: 2;
 }
+
+  .ant-steps-icon svg{
+    margin-top: 5px;
+  }
   
   .steps-action {
     margin-top: 24px;
