@@ -92,7 +92,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Ski packages'),(2,'Ski/board & bindings (own boots)'),(3,'Ski/Snowboard boots only'),(4,'Snowboard package');
+INSERT INTO `categories` VALUES (1,'Ski packages',null),(2,'Ski/board & bindings (own boots)',null),(3,'Ski/Snowboard boots only',null),(4,'Snowboard package',null);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,7 +312,7 @@ CREATE TABLE `package_types` (
 
 LOCK TABLES `package_types` WRITE;
 /*!40000 ALTER TABLE `package_types` DISABLE KEYS */;
-INSERT INTO `package_types` VALUES (1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1),(9,1),(10,1),(11,1),(12,1),(13,1),(14,1),(1,2),(2,2),(3,2),(6,2),(7,2),(8,2),(11,2),(12,2),(13,2),(1,3),(1,4),(6,5),(7,5),(8,5),(9,5),(11,5),(12,5),(13,5),(16,5),(17,5),(5,6),(6,6),(10,6),(15,6);
+INSERT INTO `package_types` VALUES (1,1,null),(2,1,null),(3,1,null),(4,1,null),(5,1,null),(6,1,null),(7,1,null),(8,1,null),(9,1,null),(10,1,null),(11,1,null),(12,1,null),(13,1,null),(14,1,null),(1,2,null),(2,2,null),(3,2,null),(6,2,null),(7,2,null),(8,2,null),(11,2,null),(12,2,null),(13,2,null),(1,3,null),(1,4,null),(6,5,null),(7,5,null),(8,5,null),(9,5,null),(11,5,null),(12,5,null),(13,5,null),(16,5,null),(17,5,null),(5,6,null),(6,6,null),(10,6,null),(15,6,null);
 /*!40000 ALTER TABLE `package_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -344,7 +344,7 @@ CREATE TABLE `packages` (
 
 LOCK TABLES `packages` WRITE;
 /*!40000 ALTER TABLE `packages` DISABLE KEYS */;
-INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','description1','sellcode1'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','description2','sellcode2'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','description3','sellcode3'),(4,1,2,4,'Intermediate Package','description4','sellcode4'),(5,1,3,4,'Performance Package','description5','sellcode5'),(6,2,1,3,'Beginner - Adult','description6','sellcode6'),(7,2,1,2,'Beginner - Child 6 -14yrs','description7','sellcode7'),(8,2,1,1,'Beginner - Child U6','description8','sellcode8'),(9,2,2,4,'Intermediate Ski Only','description9','sellcode9'),(10,2,3,4,'Performance Ski Only','description10','sellcode10'),(11,3,1,3,'Beginner - Adult','description11','sellcode11'),(12,3,1,2,'Beginner - child 6 - 14yrs','description12','sellcode12'),(13,3,1,1,'Beginner - Child Under 6yrs','description13','sellcode13'),(14,3,2,4,'Intermediate Boot','description14','sellcode14'),(15,3,3,4,'Back Country Touring Boot','description15','sellcode15'),(16,4,1,3,'Beginner Package - Adult','description16','sellcode16'),(17,4,1,2,'Beginner Child 6-14yrs','description17','sellcode17'),(20,0,0,0,'string','string','string');
+INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','description1'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','description2'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','description3'),(4,1,2,4,'Intermediate Package','description4'),(5,1,3,4,'Performance Package','description5'),(6,2,1,3,'Beginner - Adult','description6'),(7,2,1,2,'Beginner - Child 6 -14yrs','description7'),(8,2,1,1,'Beginner - Child U6','description8'),(9,2,2,4,'Intermediate Ski Only','description9'),(10,2,3,4,'Performance Ski Only','description10'),(11,3,1,3,'Beginner - Adult','description11'),(12,3,1,2,'Beginner - child 6 - 14yrs','description12'),(13,3,1,1,'Beginner - Child Under 6yrs','description13'),(14,3,2,4,'Intermediate Boot','description14'),(15,3,3,4,'Back Country Touring Boot','description15'),(16,4,1,3,'Beginner Package - Adult','description16'),(17,4,1,2,'Beginner Child 6-14yrs','description17'),(20,0,0,0,'string','string');
 /*!40000 ALTER TABLE `packages` ENABLE KEYS */;
 UNLOCK TABLES;
 
