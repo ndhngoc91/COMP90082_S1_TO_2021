@@ -2,31 +2,24 @@ import React, {useEffect, useState }  from 'react'
 import HiringForm from '../components/HiringForm';
 import styled from 'styled-components';
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import { DatePicker, Calendar, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image } from "antd";
+import { DatePicker, Calendar, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image, Table } from "antd";
 const { Content } = Layout;
 const { Step } = Steps;
 const { RangePicker } = DatePicker;
 import "../assets/css/booking.css";
 import moment from 'moment';
 import { useCategories } from "../hooks/CategoryHooks";
+import { handlePackages} from "../hooks/PackageHooks";
 
-const CheckboxGroup = Checkbox.Group;
 
 const HiringFormPage = (props) => {
     //console.log(props.location.state);
 
+
+    // 1. Select rent period
+
     const [dates, setDates] = useState([]);
-    const [rentPeriod, setRentPeriod] = useState("");
-
-
     const [value, setValue] = useState();
-    const [selectedCategories, setSelectedCatogories] = useState([]);
-
-
-    const categories = useCategories();
-    //console.log(selectedCategories.length);
-    
-
     const disabledDate = current => {
         if (!dates || dates.length === 0) {
           return false;
@@ -38,8 +31,9 @@ const HiringFormPage = (props) => {
         return tooEarly || tooLate || tooShort;
       };
 
-  
 
+    // 2. Select Category
+    const categories = useCategories();
     const categoryOnChange = (event, id) => {
         if (event.target.checked) {
             setSelectedCatogories(oldCategories => [...oldCategories, id]);
@@ -48,6 +42,57 @@ const HiringFormPage = (props) => {
         }
     }
 
+
+    // 3. Select Packages
+    const [
+        {packages, rentPeriod, selectedCategories, loading},
+        setRentPeriod,
+        setSelectedCatogories,
+        getPackages,
+        setLoading
+    ] = handlePackages();
+
+    useEffect(() => {
+        if (loading) {
+            getPackages();
+        }  
+    }, [loading])
+
+    const columns = [
+        { title: 'Package Name', dataIndex: 'name', key: 'name' },
+        { title: 'Price', dataIndex: 'price', key: 'price' },
+        {
+        title: 'Action',
+        dataIndex: '',
+        key: 'x',
+        render: () => <a>Delete</a>,
+        },
+    ];
+
+    const [typeQuantity, setTypeQuantity] = useState(0);
+
+
+    const extandTable = (record) => {
+        console.log(record);
+        const columns = [
+            {title: 'Package Type', dataIndex: 'name', key: 'package type'},
+            {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'}
+        ]
+
+        return ( 
+        <Col span={18} offset={4}>
+            <p>{record.description}</p>
+            <Table columns={columns} rowKey={(row) => row.id} pagination={false} dataSource={record.types}> </Table> 
+        </Col>
+    )};
+
+    
+
+    
+
+    
+   
+    // All steps content
     const steps = [
         {
           title: 'Select Hiring Range',
@@ -78,11 +123,10 @@ const HiringFormPage = (props) => {
           content: /*<HiringForm selectedCustomer = {props.location.state}/>*/
 
             <Row className="step1-content">
-                 {/*<CheckboxGroup options={categories.categorycol} onChange={selectCategories} />*/}
                 {categories.map(category => (
                     <Col span={6}>
                         <Image width={200} src={category.image_url}/>
-                        <Checkbox onChange={e => categoryOnChange(e, category.idcategory)}>{category.categorycol}</Checkbox>
+                        <Checkbox onChange={e => categoryOnChange(e, category.id)}>{category.name}</Checkbox>
                     </Col>
                 ))}
             </Row>
@@ -94,7 +138,21 @@ const HiringFormPage = (props) => {
         },
         {
             title: 'Select Package',
-            content: 'Select Package',
+            content: 
+            <Col span={24} className="step1-content">
+               
+                    {packages.length !== 0 ? 
+                    <Table  columns={columns} 
+                            rowKey={(row) => row.id}
+                            dataSource={packages}
+                            pagination={false}
+                            expandable={{ expandedRowRender: record => extandTable(record) }}>
+                    </Table>
+
+                    : "No Package Selected"}
+                
+            </Col>
+            
           },
         {
             title: 'Select Extras',
@@ -139,12 +197,26 @@ const HiringFormPage = (props) => {
                             {steps[current].content}
                         </div>
 
+                        {/* Each Page Button */}
                         <div className="steps-action">
-                            {current < steps.length - 1 && (
+                            {current === 0 && (
                             <Button type="primary" onClick={() => next()}>
                                 Next
                             </Button>
                             )}
+                            {current === 1 && (
+                            <Button type="primary" onClick={() => { setLoading(true);
+                                                                     next()}}>
+                                Next
+                            </Button>
+                            )}
+
+                            {(current === 2 || current === 3) && (
+                            <Button type="primary" onClick={() => next()}>
+                                Next
+                            </Button>
+                            )}
+
                             {current === steps.length - 1 && (
                             <Button type="primary" onClick={() => message.success('Processing complete!')}>
                                 Done
