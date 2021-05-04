@@ -81,6 +81,7 @@ DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
                               `id` int NOT NULL,
                               `name` varchar(45) DEFAULT NULL,
+                              `imgae_url` varchar(45) DEFAULT NULL,
                               PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -296,6 +297,7 @@ DROP TABLE IF EXISTS `package_types`;
 CREATE TABLE `package_types` (
                                  `package_id` int NOT NULL,
                                  `type_id` int NOT NULL,
+                                 `sellcode` varchar(45) DEFAULT NULL,
                                  PRIMARY KEY (`package_id`,`type_id`),
                                  KEY `fk_package_has_type_type1_idx` (`type_id`),
                                  KEY `fk_package_has_type_package1_idx` (`package_id`),
@@ -328,7 +330,6 @@ CREATE TABLE `packages` (
                             `age_group_id` int NOT NULL,
                             `name` varchar(45) DEFAULT NULL,
                             `description` varchar(45) DEFAULT NULL,
-                            `sellcode` varchar(45) DEFAULT NULL,
                             PRIMARY KEY (`id`),
                             UNIQUE KEY `idpackage_UNIQUE` (`id`),
                             KEY `fk_table2_category1_idx` (`category_id`),
