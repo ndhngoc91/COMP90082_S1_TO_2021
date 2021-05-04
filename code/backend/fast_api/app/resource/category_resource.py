@@ -75,7 +75,10 @@ class CategoryResource(SimpleModelResource):
                 [package_id, days],
                 False
             )
-            detail["price"] = price[0]["price"]
+            if price is None :
+                detail["price"] = 0
+            else:
+                detail["price"] = price[0]["price"]
 
             details.append(detail)
 
