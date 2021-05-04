@@ -1,0 +1,60 @@
+{/*ResetPwdPage CSS*/}
+html, body{
+    height: 100%;
+    width: 100%;
+}
+
+#root{
+    height: 100%;
+    width: 100%;
+}
+
+.reset {
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+h1{
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    text-align: left;
+    margin: 0 0px 0 15px;
+}
+
+.reset-content {
+    width: 25%;
+    height: 30%;
+    background-color: whitesmoke;
+    border: red;
+    margin: 120px auto;
+    padding: 20px 40px;
+}
+
+h2{
+    font-size: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.reset-form-button{
+    width: 30%;
+}
+
+.pwd{
+    width:300px;
+    text-align:right;
+}
+
+.pwd-input{
+    border-radius: 5px;
+}
+
+.confirm-pwd{
+    width:300px;
+    text-align:right;
+}
+
+.confirm-pwd-input{
+    border-radius: 5px;
+}

@@ -45,7 +45,7 @@ const ProductListPage = () => {
     };
 
     return (
-        <Layout style={{minHeight: "100vh"}}>
+        <Layout>
             <NavigationBar defaultSelected="/productList"/>
             <Layout>
                 <Sider width={256} className="site-layout-background">
