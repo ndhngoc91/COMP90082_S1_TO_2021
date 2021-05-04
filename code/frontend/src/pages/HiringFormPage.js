@@ -2,22 +2,30 @@ import React, {useEffect, useState }  from 'react'
 import HiringForm from '../components/HiringForm';
 import styled from 'styled-components';
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import { DatePicker, Calendar, Row, Col, Alert, Layout, Space, Steps, Button } from "antd";
+import { DatePicker, Calendar, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image } from "antd";
 const { Content } = Layout;
 const { Step } = Steps;
 const { RangePicker } = DatePicker;
 import "../assets/css/booking.css";
 import moment from 'moment';
+import { useCategories } from "../hooks/CategoryHooks";
 
+const CheckboxGroup = Checkbox.Group;
 
 const HiringFormPage = (props) => {
     //console.log(props.location.state);
 
     const [dates, setDates] = useState([]);
-    const [value, setValue] = useState();
-    
+    const [rentPeriod, setRentPeriod] = useState("");
 
-   
+
+    const [value, setValue] = useState();
+    const [selectedCategories, setSelectedCatogories] = useState([]);
+
+
+    const categories = useCategories();
+    //console.log(selectedCategories.length);
+    
 
     const disabledDate = current => {
         if (!dates || dates.length === 0) {
@@ -30,9 +38,15 @@ const HiringFormPage = (props) => {
         return tooEarly || tooLate || tooShort;
       };
 
-    
-    
+  
 
+    const categoryOnChange = (event, id) => {
+        if (event.target.checked) {
+            setSelectedCatogories(oldCategories => [...oldCategories, id]);
+        } else {
+            setSelectedCatogories(selectedCategories.filter(oldId => oldId !== id));
+        }
+    }
 
     const steps = [
         {
@@ -45,12 +59,14 @@ const HiringFormPage = (props) => {
                         disabledDate={disabledDate}
                         onCalendarChange={val => {
                             setDates(val);
-                            console.log(val);}}
+                            }}
                         onChange={val => {
                             setValue(val);
+                            setRentPeriod(val[1].diff(val[0], 'days'));
                             }} >
                     </RangePicker>
-                    {  (dates != null && dates.length === 2 && dates[1] != null) ? <Alert message={`Renting Period: ${dates[0].format("YYYY-MM-DD")} - ${dates[1].format("YYYY-MM-DD")} `}/>: 
+                    {  (dates[0] != null && dates.length === 2 && dates[1] != null) ? 
+                    <Alert message={`Renting Period: ${dates[0].format("YYYY-MM-DD")} - ${dates[1].format("YYYY-MM-DD")} `}/>: 
                     <Alert message={"Selected Dates Please"}></Alert> }
                 </Space>
              </Col>
@@ -58,12 +74,35 @@ const HiringFormPage = (props) => {
             
         },
         {
-          title: 'Select Package Category',
-          content: <HiringForm selectedCustomer = {props.location.state}/>,
+          title: 'Select Category',
+          content: /*<HiringForm selectedCustomer = {props.location.state}/>*/
+
+            <Row className="step1-content">
+                 {/*<CheckboxGroup options={categories.categorycol} onChange={selectCategories} />*/}
+                {categories.map(category => (
+                    <Col span={6}>
+                        <Image width={200} src={category.image_url}/>
+                        <Checkbox onChange={e => categoryOnChange(e, category.idcategory)}>{category.categorycol}</Checkbox>
+                    </Col>
+                ))}
+            </Row>
+
+           
+            
+          ,
+         
         },
         {
-          title: 'Add to Shopping Cart',
-          content: 'Last-content',
+            title: 'Select Package',
+            content: 'Select Package',
+          },
+        {
+            title: 'Select Extras',
+            content: 'Select Extra (Optional)',
+          },
+        {
+          title: 'Complete Package Information',
+          content: 'Complete Package Information]',
         },
       ];
    
