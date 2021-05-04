@@ -1,5 +1,4 @@
 import logging
-from app.resource.simple_model_resource import SimpleModelResource as SR
 from app.model.category import Category
 from app.resource.simple_model_resource import SimpleModelResource
 
@@ -28,7 +27,7 @@ class CategoryResource(SimpleModelResource):
 
         """
 
-        category_list = "SELECT * FROM category "
+        category_list = "SELECT * FROM categories "
 
         category_dict_list = self.run_query(
             category_list,
@@ -44,7 +43,7 @@ class CategoryResource(SimpleModelResource):
 
     def get_category_details(self, days, category_id):
         """
-        This method will return all details of category
+        This method will return all details of categories
 
         Args:
             days:
@@ -55,7 +54,7 @@ class CategoryResource(SimpleModelResource):
 
         """
 
-        query_packages = "SELECT * FROM package WHERE idcategory = %s"
+        query_packages = "SELECT * FROM packages WHERE category_id = %s"
         packages_dict_list = self.run_query(
             query_packages,
             [category_id],
@@ -66,10 +65,10 @@ class CategoryResource(SimpleModelResource):
         details = []
         for package in packages_dict_list:
             detail = package
-            package_id = package["idpackage"]
-            query_price = "SELECT price FROM price\
-                                WHERE idpackage = %s\
-                                AND daynumber = %s"
+            package_id = package["id"]
+            query_price = "SELECT price FROM price_levels\
+                                WHERE package_id = %s\
+                                AND number_of_days = %s"
             price = self.run_query(
                 query_price,
                 [package_id, days],

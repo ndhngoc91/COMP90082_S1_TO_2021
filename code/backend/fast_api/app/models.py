@@ -3,7 +3,7 @@ from app.database import Base
 
 
 class Package(Base):
-    __tablename__ = 'package'
+    __tablename__ = 'packages'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)

@@ -21,7 +21,7 @@ class Category(Model):
 
     @staticmethod
     def table_name():
-        return 'category'
+        return 'categories'
 
     @staticmethod
     def fields_mapping():
