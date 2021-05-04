@@ -38,6 +38,7 @@ class CategoryResource(SimpleModelResource):
         category_dict_list = [] if category_dict_list is None else category_dict_list
 
         for category in category_dict_list:
+            
             category["image_url"] = "https://upload.wikimedia.org/wikipedia/commons/8/84/Ski_Famille_-_Family_Ski_Holidays.jpg"
         return [category for category in category_dict_list]
 
@@ -69,6 +70,8 @@ class CategoryResource(SimpleModelResource):
             query_price = "SELECT price FROM price_levels\
                                 WHERE package_id = %s\
                                 AND number_of_days = %s"
+
+            
             price = self.run_query(
                 query_price,
                 [package_id, days],
@@ -79,6 +82,24 @@ class CategoryResource(SimpleModelResource):
             else:
                 detail["price"] = price[0]["price"]
 
+            query_type_id = "SELECT type_id FROM package_types WHERE package_id = %s"
+
+            type_ids_dict = self.run_query(
+                query_type_id,
+                [package_id],
+            )
+            type_ids_list = [] if type_ids_dict is None else [type_id["type_id"] for type_id in type_ids_dict]
+            query_types = "SELECT * FROM types WHERE id = %s"
+
+            types_list = []
+            for type_id in type_ids_list:
+                type_dict = self.run_query(
+                    query_types,
+                    [str(type_id)],
+                )
+                types = [] if type_dict is None else type_dict[0]
+                types_list.append(types)
+            detail["types"] = types_list
             details.append(detail)
 
         return details
