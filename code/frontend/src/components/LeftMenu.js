@@ -31,14 +31,9 @@ class LeftMenu extends React.Component{
                             friend
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="3" icon={<ContainerOutlined />}>
-                        <Link to='/center/din'>
-                            din
-                        </Link>
-                    </Menu.Item>
                     <Menu.Item key="4" icon={<MailOutlined />}>
-                        <Link to='/center/information'>
-                            information
+                        <Link to='/center/profile'>
+                            profile
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="5" icon={<AppstoreOutlined />}>
