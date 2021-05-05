@@ -13,7 +13,6 @@ import PackagePage from "./pages/PackagePage";
 import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
-import ResetPwdPage from "./pages/ResetPwdPage";
 import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
 
@@ -47,7 +46,6 @@ createStore().then(store => {
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
                         <Route path="/center" component={UserAccountPage}/>
-                        <Route path="/reset-password" exact component={ResetPwdPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
                     </Switch>

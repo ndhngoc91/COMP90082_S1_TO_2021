@@ -61,11 +61,6 @@ const LoginPage = () => {
                             <Form.Item>
                                 <Col>
                                     <Row justify="center">
-                                        <Link href="/reset-password">
-                                            Forgot your password?
-                                        </Link>
-                                    </Row>
-                                    <Row justify="center">
                                         <Text>
                                             <Text>Don't have an account? </Text>
                                             <Link href="/user-create" target="_blank">

@@ -26,23 +26,31 @@ const validateMessages = {
     },
 };
 
+
 const countryData = ["Australia", "Vietnam"];
 const stateData = {
     Australia: ["VIC", "NSW", "QLD", "ACT", "TAS", "SA", "WA", "NT"],
-    Vietnam: ["SOUTH", "CENTRAL", "NORTH"]
+    Vietnam: ["South", "Central", "North"]
 };
 const cityData = {
-    VIC: ["Melbourne", "Geelong", "Ballarat"],
-    NSW: ["Sydney"],
-    QLD: ["Brisbane"],
-    ACT: ["Canberra"],
-    TAS: ["Hobart"],
-    SA: ["Adelaide"],
-    WA: ["Perth"],
-    NT: ["Darwin"],
-    SOUTH: ["Saigon"],
-    CENTRAL: ["Hue"],
-    NORTH: ["Hanoi"]
+    Australia: {
+        VIC: ["Melbourne", "Geelong", "Ballarat"],
+        NSW: ["Sydney"],
+        QLD: ["Brisbane"],
+        ACT: ["Canberra"],
+        TAS: ["Hobart"],
+        SA: ["Adelaide"],
+        WA: ["Perth"],
+        NT: ["Darwin"],
+        South: ["Saigon"],
+        Central: ["Hue"],
+        North: ["Hanoi"]
+    },
+    Vietnam: {
+        South: ["Saigon"],
+        Central: ["Hue"],
+        North: ["Hanoi"]
+    }
 };
 
 const UserCreatePage = () => {
@@ -56,15 +64,27 @@ const UserCreatePage = () => {
     const [password, setPassword] = useState("1234sS");
     const [countries, setCountries] = useState(countryData)
     const [states, setStates] = useState(stateData[countryData[0]]);
-    const [cities, setCities] = useState(cityData[stateData[countryData[0]][0]]);
+    const [cities, setCities] = useState(cityData[countryData[0]][stateData[countryData[0]][0]]);
+    const [selectedCountry, setSelectedCountry] = useState(countryData[0]);
+    const [selectedState, setSelectedState] = useState(stateData[countryData[0]][0]);
+    const [selectedCity, setSelectedCity] = useState(cityData[countryData[0]][stateData[countryData[0]][0]][0]);
 
     const onCountryChange = value => {
         setStates(stateData[value]);
-        setCities(cityData[stateData[value][0]]);
+        setCities(cityData[value][stateData[value][0]]);
+        setSelectedCountry(value);
+        setSelectedState(stateData[value][0])
+        setSelectedCity(cityData[value][stateData[value][0]][0])
     };
 
     const onStateChange = value => {
-        setCities(cityData[value]);
+        setCities(cityData[selectedCountry][value]);
+        setSelectedState(value);
+        setSelectedCity(cityData[selectedCountry][value][0])
+    };
+
+    const onCityChange = value => {
+        setSelectedCity(value);
     };
 
     const onClick = () => {
@@ -242,26 +262,21 @@ const UserCreatePage = () => {
                             <Form.Item>
                                 <Row>
                                     <Col span={8}>
-                                        <Select defaultValue={countryData[0]}
-
-                                                onChange={onCountryChange}>
+                                        <Select value={selectedCountry} onChange={onCountryChange}>
                                             {countries.map(country => (
                                                 <Option key={country} value={country}>{country}</Option>
                                             ))}
                                         </Select>
                                     </Col>
                                     <Col span={8}>
-                                        <Select
-                                            value={states}
-                                            onChange={onStateChange}>
+                                        <Select value={selectedState} onChange={onStateChange}>
                                             {states.map(state => (
                                                 <Option key={state} value={state}>{state}</Option>
                                             ))}
                                         </Select>
                                     </Col>
                                     <Col span={8}>
-                                        <Select
-                                            value={cities}>
+                                        <Select value={selectedCity} onChange={onCityChange}>
                                             {cities.map(city => (
                                                 <Option key={city} value={city}>{city}</Option>
                                             ))}
