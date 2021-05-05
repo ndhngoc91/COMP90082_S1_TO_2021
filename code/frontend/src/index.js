@@ -12,7 +12,11 @@ import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
 import PackagePage from "./pages/PackagePage";
 import CheckOutPage from "./pages/CheckOutPage";
-import CenterPage from "./pages/CenterPage";
+import UserAccountPage from "./pages/UserAccountPage";
+import UserLoginPage from "./pages/UserLoginPage";
+import ResetPwdPage from "./pages/ResetPwdPage";
+import UserCreatePage from "./pages/UserCreatePage";
+import AdminCreatePage from "./pages/AdminCreatePage";
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -38,7 +42,12 @@ createStore().then(store => {
                         <Route path="/productCategories/:id" exact component={CategoryPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
-                        <Route path="/center" component={CenterPage}/>
+                        {/*new add*/}
+                        <Route path="/center" component={UserAccountPage}/>
+                        <Route path="/user-login" exact component={UserLoginPage}/>
+                        <Route path="/reset-password" exact component={ResetPwdPage}/>
+                        <Route path="/user-create" exact component={UserCreatePage}/>
+                        <Route path="/admin-create" exact component={AdminCreatePage}/>
                     </Switch>
                 </BrowserRouter>
             </div>

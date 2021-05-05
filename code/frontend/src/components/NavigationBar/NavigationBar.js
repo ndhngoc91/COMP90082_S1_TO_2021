@@ -26,7 +26,7 @@ const NavigationBar = observer(({defaultSelected}) => {
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
-            history.push("/login");
+            history.push("/user-login");
         } else if (key.startsWith("/")) {
             history.push(key)
         }
