@@ -14,6 +14,7 @@ import {
 import {useStores} from "../../stores";
 import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
+import {USER_ROLE} from "../../consts/UserRole";
 
 const {Header} = Layout;
 const {SubMenu} = Menu;
@@ -21,12 +22,12 @@ const {SubMenu} = Menu;
 const NavigationBar = observer(({defaultSelected}) => {
     const history = useHistory();
 
-    const {authStore: {isStaff, logout}} = useStores();
+    const {authStore: {userRole, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
-            history.push("/user-login");
+            history.push("/login");
         } else if (key.startsWith("/")) {
             history.push(key)
         }
@@ -48,7 +49,7 @@ const NavigationBar = observer(({defaultSelected}) => {
                 <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
 
 
-                {isStaff &&
+                {userRole === USER_ROLE.ADMIN &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title="User">
                     <Menu.Item key="/center" icon={<AccountBookOutlined/>}>Account</Menu.Item>
