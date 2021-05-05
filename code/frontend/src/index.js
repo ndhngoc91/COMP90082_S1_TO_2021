@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Route, BrowserRouter, Switch} from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import CreatePage from "./pages/CreatePage";
 import ProductListPage from "./pages/ProductListPage";
@@ -13,7 +12,7 @@ import OrderPage from "./pages/OrderPage";
 import PackagePage from "./pages/PackagePage";
 import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
-import UserLoginPage from "./pages/UserLoginPage";
+import LoginPage from "./pages/LoginPage";
 import ResetPwdPage from "./pages/ResetPwdPage";
 import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
@@ -23,6 +22,8 @@ import CategoryPage from "./pages/CategoryPage";
 import "antd/dist/antd.css";
 import "./index.css";
 import {createStore, StoreContext} from "./stores";
+import AuthRoute from "./navigation/AuthRole";
+import {USER_ROLE} from "./consts/UserRole";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -34,7 +35,9 @@ createStore().then(store => {
                         <Route path="/login" exact component={LoginPage}/>
                         <Route path="/history" exact component={HistoryPage}/>
                         <Route path="/order" exact component={OrderPage}/>
-                        <Route path="/package" component={PackagePage}/>
+                        <AuthRoute path="/package" Component={PackagePage} requiredRoles={[
+                            USER_ROLE.ADMIN
+                        ]}/>
                         <Route path="/create" exact component={CreatePage}/>
                         <Route path="/productList" exact component={ProductListPage}/>
                         <Route path="/products/:productCode*" exact component={ProductDetailsPage}/>
@@ -44,7 +47,6 @@ createStore().then(store => {
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
                         <Route path="/center" component={UserAccountPage}/>
-                        <Route path="/user-login" exact component={UserLoginPage}/>
                         <Route path="/reset-password" exact component={ResetPwdPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>

@@ -183,3 +183,7 @@ ul {
     cursor: not-allowed;
     opacity: 0.5;
 }
+
+.App {
+    background-image: linear-gradient(#2684D9, #0B4C87);
+}
