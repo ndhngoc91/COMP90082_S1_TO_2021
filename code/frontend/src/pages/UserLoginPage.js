@@ -18,7 +18,9 @@ const UserLoginPage = () => {
         <>
             <Row justify="center" align="middle" style={{minHeight: "100vh"}}>
                 <Col>
-                    <Image src={rockyValleyLogo} preview={false} width={"500px"}/>
+                    <Row justify="center">
+                        <Image src={rockyValleyLogo} preview={false} width={"400px"}/>
+                    </Row>
                     <Row justify="center">
                         <Title level={3}>Sign In</Title>
                     </Row>
