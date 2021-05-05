@@ -36,14 +36,14 @@ const validateMessages = {
 
 const AdminCreatePage = () => {
 
-    const [username, setUsername] = useState({data});
-    const [email, setEmail] = useState();
+    const [username, setUsername] = useState("user1");
+    const [email, setEmail] = useState("yuyue@student.unimelb.edu.au");
     const [age, setAge] = useState(0);
     const [phone, setPhone] = useState("0000000000");
-    const [marital, setMarital] = useState();
-    const [street, setStreet] = useState();
-    const [postcode, setPostcode] = useState();
-    const [password, setPassword] = useState("123");
+    const [marital, setMarital] = useState("unmarried");
+    const [street, setStreet] = useState("28 Bouverie St");
+    const [postcode, setPostcode] = useState(3053);
+    const [password, setPassword] = useState("1234sS");
 
     const residences = [
         {
@@ -102,6 +102,7 @@ const AdminCreatePage = () => {
 
     const onClick = () => {
         console.log({username},{email},{age},{phone},{marital},{street},{postcode},{password});
+        history.push("/user-login")
     }
 
     return (
@@ -427,7 +428,6 @@ const AdminCreatePage = () => {
                             <Button type="primary"
                                     htmlType="submit"
                                     className="login-form-button"
-                                    href="/user-login"
                                     onClick={onClick}
                             >
                                 Create
