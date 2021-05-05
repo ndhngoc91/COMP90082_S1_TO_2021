@@ -47,7 +47,11 @@ export const handlePackages = () => {
                     { headers: { "Content-Type": "application/JSON; charset=UTF-8" } }
                 ).then((response) => {
                     let packages = response.data;
+                    for (let i = 0; i < packages.length; i++) {
+                        packages[i].key = packages[i].package_id;
+                    }
                     setPackages(oldPcks => [...oldPcks, ...packages]);
+                    console.log(packages);
                 }).finally(() => {
                     setLoading(false);
                 })

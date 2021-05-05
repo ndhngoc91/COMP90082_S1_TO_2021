@@ -2,7 +2,7 @@ import React, {useEffect, useState }  from 'react'
 import HiringForm from '../components/HiringForm';
 import styled from 'styled-components';
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import { DatePicker, Calendar, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image, Table } from "antd";
+import { DatePicker, InputNumber, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image, Table, Radio } from "antd";
 const { Content } = Layout;
 const { Step } = Steps;
 const { RangePicker } = DatePicker;
@@ -10,6 +10,8 @@ import "../assets/css/booking.css";
 import moment from 'moment';
 import { useCategories } from "../hooks/CategoryHooks";
 import { handlePackages} from "../hooks/PackageHooks";
+import { RadiusBottomleftOutlined } from '@ant-design/icons';
+import { set } from 'mobx';
 
 
 const HiringFormPage = (props) => {
@@ -59,32 +61,81 @@ const HiringFormPage = (props) => {
     }, [loading])
 
     const columns = [
-        { title: 'Package Name', dataIndex: 'name', key: 'name' },
+        { title: 'Package Name', dataIndex: 'package_name', key: 'name' },
         { title: 'Price', dataIndex: 'price', key: 'price' },
-        {
-        title: 'Action',
-        dataIndex: '',
-        key: 'x',
-        render: () => <a>Delete</a>,
-        },
     ];
 
-    const [typeQuantity, setTypeQuantity] = useState(0);
+    const [typeQuantity, setTypeQuantity] = useState();
+    const [packagesItem, setPackageItem] = useState([]);
+
+
+    var changeQuantity = (quan, packageItem) => {
+
+        return packageItem = {'Name': packageItem.Name,'Type': packageItem.Type, 'Quantity': quan};
+
+    }
+
+
+    const onChange = (val, name, type) => {
+        var same = 0;
+
+        setPackageItem(oldPackages => {
+           
+            for (let i = 0; i < oldPackages.length; i ++){
+                if (oldPackages[i].Name === name && oldPackages[i].Type == type){
+                    oldPackages[i] = changeQuantity(val, oldPackages[i]);
+                    same = 1;
+                }
+            }
+
+            if (same === 0){
+                return [...oldPackages, {'Name': name, 'Type':type, 'Quantity':val}]
+            }else{
+                return oldPackages
+            }
+
+        }, []);
+    }
+
 
 
     const extandTable = (record) => {
-        console.log(record);
-        const columns = [
-            {title: 'Package Type', dataIndex: 'name', key: 'package type'},
-            {title: 'Quantity', dataIndex: 'quantity', key: 'quantity'}
-        ]
+        //console.log(record);
 
+        let types = record.types;
+        
         return ( 
         <Col span={18} offset={4}>
             <p>{record.description}</p>
-            <Table columns={columns} rowKey={(row) => row.id} pagination={false} dataSource={record.types}> </Table> 
+            {types.map(type => (
+            <Row>
+                <p>{type.type_name} </p>
+                <InputNumber min={0} max={10} defaultValue={0} 
+                             onChange={val => onChange(val, record.package_name, type.type_name)}></InputNumber>
+            </Row>
+             ))}
         </Col>
+
     )};
+
+
+    // 4
+    const columns2 = [
+        { title: 'Package Name', dataIndex: 'Name', key: 'name' },
+        { title: 'Type name', dataIndex: 'Type', key: 'price' },
+        {
+            title: 'Action',
+            dataIndex: 'operation',
+            render: (_, record) => (
+                console.log(record)
+              
+                  
+              ),
+          },
+    ];
+
+
+    
 
     
 
@@ -124,7 +175,7 @@ const HiringFormPage = (props) => {
 
             <Row className="step1-content">
                 {categories.map(category => (
-                    <Col span={6}>
+                    <Col key={category.id} span={6}>
                         <Image width={200} src={category.image_url}/>
                         <Checkbox onChange={e => categoryOnChange(e, category.id)}>{category.name}</Checkbox>
                     </Col>
@@ -140,27 +191,34 @@ const HiringFormPage = (props) => {
             title: 'Select Package',
             content: 
             <Col span={24} className="step1-content">
-               
                     {packages.length !== 0 ? 
                     <Table  columns={columns} 
-                            rowKey={(row) => row.id}
                             dataSource={packages}
                             pagination={false}
-                            expandable={{ expandedRowRender: record => extandTable(record) }}>
+                            expandable={{
+                                expandedRowRender: record => extandTable(record),
+                              }}>
                     </Table>
 
                     : "No Package Selected"}
                 
             </Col>
-            
+        
           },
-        {
-            title: 'Select Extras',
-            content: 'Select Extra (Optional)',
-          },
+       
         {
           title: 'Complete Package Information',
-          content: 'Complete Package Information]',
+          content: 
+            <Col span={24} className="step1-content">
+                    {packagesItem.length !== 0 ? 
+                    <Table  columns={columns2} 
+                            dataSource={packagesItem}
+                            pagination={false}>
+                    </Table>
+
+                    : "No Package Selected"}
+                
+            </Col>
         },
       ];
    
@@ -211,11 +269,12 @@ const HiringFormPage = (props) => {
                             </Button>
                             )}
 
-                            {(current === 2 || current === 3) && (
+                            {(current === 2) && (
                             <Button type="primary" onClick={() => next()}>
-                                Next
+                                Next2
                             </Button>
                             )}
+
 
                             {current === steps.length - 1 && (
                             <Button type="primary" onClick={() => message.success('Processing complete!')}>
