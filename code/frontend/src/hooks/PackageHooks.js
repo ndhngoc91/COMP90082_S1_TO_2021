@@ -37,7 +37,6 @@ export const handlePackages = () => {
     
     const getPackages = useCallback(() => {
 
-        console.log(loading);
         if (selectedCategories.length > 0 && loading){
 
             //setLoading(true);
@@ -51,7 +50,7 @@ export const handlePackages = () => {
                         packages[i].key = packages[i].package_id;
                     }
                     setPackages(oldPcks => [...oldPcks, ...packages]);
-                    console.log(packages);
+                    
                 }).finally(() => {
                     setLoading(false);
                 })

@@ -57,7 +57,7 @@ const HiringFormPage = (props) => {
     useEffect(() => {
         if (loading) {
             getPackages();
-        }  
+        }
     }, [loading])
 
     const columns = [
@@ -65,7 +65,6 @@ const HiringFormPage = (props) => {
         { title: 'Price', dataIndex: 'price', key: 'price' },
     ];
 
-    const [typeQuantity, setTypeQuantity] = useState();
     const [packagesItem, setPackageItem] = useState([]);
 
 
@@ -133,8 +132,14 @@ const HiringFormPage = (props) => {
     )};
 
 
-    // 4
+    // 4. Shopping Cart & Extras
+    
+    
+    const [loadingOrders, setLoadingOrders] = useState(false);
+
+
     const columns2 = [
+        { title: 'Package No.', dataIndex: 'key', key: 'no.' },
         { title: 'Package Name', dataIndex: 'Name', key: 'name' },
         { title: 'Type name', dataIndex: 'Type', key: 'price' },
         {
@@ -142,11 +147,52 @@ const HiringFormPage = (props) => {
             dataIndex: 'operation',
             render: (_, record) => (
                 <a>Delete</a>
-              
-                  
               ),
           },
     ];
+
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+       
+        if (loadingOrders){
+            
+            setOrders(generateOrder(packagesItem));
+            
+
+        }
+    }, [loadingOrders])
+
+
+
+    const generateOrder = (packagesItem) => {
+        console.log('length', packagesItem.length);
+        var n = 1;
+
+        var orders = [];
+      
+    
+        for (let i = 0; i < packagesItem.length; i++ ){
+            //console.log('quan', packagesItem[i].Quantity);
+            let p = packagesItem[i];
+            for (let j = 0; j < p.Quantity; j ++){
+                console.log(n);
+                orders[n - 1] = {'key': n, 'Name': p.Name, 'Type': p.Type};
+                n ++ ;
+            }    
+        }
+
+
+       
+
+        return orders;
+    };
+
+
+
+
+
+
 
 
     
@@ -225,12 +271,13 @@ const HiringFormPage = (props) => {
           content: 
             <Col span={24} className="step1-content">
                     {packagesItem.length !== 0 ? 
+                    
                     <Table  columns={columns2} 
-                            dataSource={packagesItem}
+                            dataSource={orders}
                             pagination={false}>
                     </Table>
 
-                    : "No Package Selected"}
+                    : "No Order"}
                 
             </Col>
         },
@@ -284,7 +331,8 @@ const HiringFormPage = (props) => {
                             )}
 
                             {(current === 2) && (
-                            <Button type="primary" onClick={() => next()}>
+                            <Button type="primary" onClick={() => { setLoadingOrders(true);
+                                                                    next()}}>
                                 Add to Shopping Cart
                             </Button>
                             )}
