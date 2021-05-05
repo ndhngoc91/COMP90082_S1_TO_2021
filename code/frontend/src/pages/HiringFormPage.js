@@ -104,16 +104,30 @@ const HiringFormPage = (props) => {
 
         let types = record.types;
         
+        for (var i = 0; i < types.length; i++){
+            types[i].key = types[i].type_id;
+        }
+
+        const columns = [
+            { title: 'Package Type', dataIndex: 'type_name', key: 'name' },
+            
+            {
+                title: 'Action',
+                dataIndex: 'operation',
+                render: (_, type) => (
+
+                    <InputNumber min={0} max={10} defaultValue={0} 
+                    onChange={val => onChange(val, record.package_name, type.type_name)}></InputNumber>
+
+                  ),
+              },
+        ];
+        
         return ( 
         <Col span={18} offset={4}>
             <p>{record.description}</p>
-            {types.map(type => (
-            <Row>
-                <p>{type.type_name} </p>
-                <InputNumber min={0} max={10} defaultValue={0} 
-                             onChange={val => onChange(val, record.package_name, type.type_name)}></InputNumber>
-            </Row>
-             ))}
+            <Table pagination={false} columns={columns} dataSource={types} expandable = {record => extandTable(record)}/>
+           
         </Col>
 
     )};
@@ -127,7 +141,7 @@ const HiringFormPage = (props) => {
             title: 'Action',
             dataIndex: 'operation',
             render: (_, record) => (
-                console.log(record)
+                <a>Delete</a>
               
                   
               ),
@@ -259,26 +273,26 @@ const HiringFormPage = (props) => {
                         <div className="steps-action">
                             {current === 0 && (
                             <Button type="primary" onClick={() => next()}>
-                                Next
+                                Select Category
                             </Button>
                             )}
                             {current === 1 && (
                             <Button type="primary" onClick={() => { setLoading(true);
                                                                      next()}}>
-                                Next
+                                Select Packages
                             </Button>
                             )}
 
                             {(current === 2) && (
                             <Button type="primary" onClick={() => next()}>
-                                Next2
+                                Add to Shopping Cart
                             </Button>
                             )}
 
 
                             {current === steps.length - 1 && (
                             <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                                Done
+                                Submit
                             </Button>
                             )}
                             {current > 0 && (
