@@ -8,7 +8,7 @@ export const useHandleLogin = () => {
 
     const {authStore} = useStores();
 
-    const handleLogin = useCallback((username, password, isStaff, success) => {
+    const handleLogin = useCallback(({username, password, signInAsStaff}, success) => {
         const formData = new FormData();
         formData.set("username", username);
         formData.set("password", password);
@@ -17,7 +17,7 @@ export const useHandleLogin = () => {
         }).then(response => {
             if (response.status === 200) {
                 const accessToken = response.data['access_token'];
-                authStore.login(username, accessToken, isStaff);
+                authStore.login(username, accessToken, signInAsStaff);
             }
             success();
         }).catch(e => {
