@@ -75,7 +75,7 @@ class CategoryResource(SimpleModelResource):
         details = []
 
         for package in packages_dict_list:
-            detail = package
+            detail = {}
             package_id = package["id"]
             package_name = package["name"]
             query_price = "SELECT price FROM price_levels\
@@ -87,6 +87,13 @@ class CategoryResource(SimpleModelResource):
                 [package_id, days],
                 False
             )
+
+            detail["package_id"] = package["id"]
+            detail["package_name"] = package["name"]
+            detail["skill_level_id"] = package["skill_level_id"]
+            detail["age_group_id"] = package["age_group_id"]
+            detail["description"] = package["description"]
+
             if price is None:
                 detail["price"] = 0
             else:
@@ -116,6 +123,7 @@ class CategoryResource(SimpleModelResource):
                 type_detail["category_name"] = category_name
                 type_detail["package_id"] = package_id
                 type_detail["package_name"] = package_name
+                type_detail["price"] = price[0]["price"]
                 all_type_details.append(type_detail)
 
             detail["types"] = all_type_details
