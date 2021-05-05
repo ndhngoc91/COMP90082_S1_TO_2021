@@ -37,16 +37,17 @@ h2{
     margin-bottom: 20px;
     text-align: center;
 }
+
 .reset-form-button{
-    width: 30%;
+    width: 50%;
 }
 
-.username{
+.user-name{
     width:300px;
     text-align:right;
 }
 
-.username-input{
+.user-name-input{
     border-radius: 5px;
     opacity: 0.5;
 }
@@ -58,6 +59,7 @@ h2{
 
 .pwd-input{
     border-radius: 5px;
+    opacity: 0.5;
 }
 
 .confirm-pwd{

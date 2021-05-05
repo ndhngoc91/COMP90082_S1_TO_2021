@@ -43,8 +43,7 @@ const ResetPwdPage = () => {
                     <Form.Item
                         name="username"
                         label="Username:"
-                        className="username"
-                        style={{width: "100%"}}
+                        className="user-name"
                         rules={[
                             {
                                 required: true,
@@ -67,7 +66,7 @@ const ResetPwdPage = () => {
                     >
                         <Input prefix={<UserOutlined className="site-form-item-icon" />}
                                placeholder="Enter username"
-                               className="username-input"
+                               className="user-name-input"
                         />
                     </Form.Item>
 
