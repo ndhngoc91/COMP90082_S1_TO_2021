@@ -19,7 +19,7 @@ async def list_category_details(days: int, category_id: int):
     return details
 
 
-@router.post("/extras")
+@router.get("/extras-{days}-{age_group_id}")
 async def list_extras(days: int, age_group_id: int):
     extra_details = category_service.list_extras_details(days, age_group_id)
     return extra_details
