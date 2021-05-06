@@ -127,6 +127,7 @@ class CategoryResource(SimpleModelResource):
                 all_type_details.append(type_detail)
 
             detail["types"] = all_type_details
+            detail["extras"] = self.get_extras_details(days,detail["age_group_id"])
 
             details.append(detail)
 
@@ -176,7 +177,7 @@ class CategoryResource(SimpleModelResource):
             details = {}
             details["extra_id"] = extra_ids[i]
             details["extra_name"] = extra_names[i]
-            details["extra_price"] = price_list[i]
+            details["extra_price"] = int(price_list[i])
             all_details.append(details)
 
         return all_details
