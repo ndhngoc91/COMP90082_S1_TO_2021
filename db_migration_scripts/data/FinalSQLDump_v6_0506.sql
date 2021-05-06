@@ -1,0 +1,1 @@
+SELECT * FROM squizz_app.trail_types;
