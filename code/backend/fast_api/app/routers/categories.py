@@ -18,7 +18,8 @@ async def list_category_details(days: int, category_id: int):
     details = category_service.list_category_details(days, category_id)
     return details
 
-@router.get("/extras")
-async def list_extras(days:int,):
-    customer_addresses = customer_service.list_customer_addresses(customer_id)
-    return [custom_address.__dict__ for custom_address in customer_addresses]
+
+@router.post("/extras")
+async def list_extras(days: int, age_group_id: int):
+    extra_details = category_service.list_extras_details(days, age_group_id)
+    return extra_details

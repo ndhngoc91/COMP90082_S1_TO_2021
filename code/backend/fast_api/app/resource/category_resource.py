@@ -23,8 +23,9 @@ class CategoryResource(SimpleModelResource):
         """
         This method will return all categories of records from the database
 
-        Args:
+        Args: None
 
+        Return: List of categories
         """
 
         category_list = "SELECT * FROM categories "
@@ -51,8 +52,7 @@ class CategoryResource(SimpleModelResource):
             category:
 
         return:
-            list of details
-
+            list of category details
         """
 
         # category_id & category_name
@@ -131,3 +131,52 @@ class CategoryResource(SimpleModelResource):
             details.append(detail)
 
         return details
+
+    def get_extras_details(self, days, age_group_id):
+        """
+        This method will return all details of extras based on chosen package
+
+        Args:
+            days:
+            age_group_id
+
+        return:
+            list of extras details
+        """
+        query_extra_name = "SELECT * FROM extra \
+                                WHERE age_group_id = %s"
+        extras_dict_list = self.run_query(
+            query_extra_name,
+            [age_group_id],
+            False
+        )
+        extras_list = [] if extras_dict_list is None else extras_dict_list
+        extra_ids = [extra["idextra"] for extra in extras_list]
+        extra_names = [extra["extracol"] for extra in extras_list]
+        price_list = []
+        for e_id in extra_ids:
+            query_price = "SELECT extraprice FROM extraprice\
+                                WHERE idextra = %s\
+                                AND daynumber = %s"
+            price_dict_list = self.run_query(
+                query_price,
+                [e_id, days],
+                False
+            )
+
+            if price_dict_list is None:
+                price = 0
+            else:
+                price = price_dict_list[0]["extraprice"]
+
+            price_list.append(price)
+
+        all_details = []
+        for i in range(len(extra_ids)):
+            details = {}
+            details["extra_id"] = extra_ids[i]
+            details["extra_name"] = extra_names[i]
+            details["extra_price"] = price_list[i]
+            all_details.append(details)
+
+        return all_details
