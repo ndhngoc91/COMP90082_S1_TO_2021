@@ -29,6 +29,9 @@ export const handlePackages = () => {
     const [selectedCategories, setSelectedCatogories] = useState([]);
     const [packages, setPackages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [extras, setExtras] = useState([]);
+    const [ageId, setAgeId] = useState([]);
+    const [loadingExtras, setloadingExtras] = useState(false);
 
     useEffect (() => {
         console.log(loading)
@@ -60,8 +63,29 @@ export const handlePackages = () => {
 
     },[rentPeriod, selectedCategories, loading]);
 
+    // const getExtras = useCallback(() => {
+
+        
+
+    //     axios.get(
+    //     `http://127.0.0.1:8000/categories/extras-${rentPeriod}-${ageId}`,
+    //         { headers: { "Content-Type": "application/JSON; charset=UTF-8" } }
+    //     ).then((response) => {
+    //         let extras = response.data;
+    //         for (let i = 0; i < extras.length; i++) {
+    //             extras[i].key = extras[i].extra_id;
+    //         }
+    //         setExtras(oldEx => [...oldEx, ...extras]);
+            
+    //     }).finally(() => {
+    //         setLoading(false);
+    //     })
+    
+    //      },[rentPeriod, ageId]);
+       
+
     return [{ packages, rentPeriod, selectedCategories, loading },
-              setRentPeriod,  setSelectedCatogories, getPackages, setLoading];
+              setRentPeriod, setSelectedCatogories, getPackages, setLoading ];
 };
 
 

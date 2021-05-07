@@ -2,7 +2,7 @@ import React, {useEffect, useState }  from 'react'
 import HiringForm from '../components/HiringForm';
 import styled from 'styled-components';
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import { DatePicker, InputNumber, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image, Table, Radio } from "antd";
+import { DatePicker, InputNumber, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image, Table, Form, Input, Select } from "antd";
 const { Content } = Layout;
 const { Step } = Steps;
 const { RangePicker } = DatePicker;
@@ -19,7 +19,6 @@ const HiringFormPage = (props) => {
 
 
     // 1. Select rent period
-
     const [dates, setDates] = useState([]);
     const [value, setValue] = useState();
     const disabledDate = current => {
@@ -47,7 +46,7 @@ const HiringFormPage = (props) => {
 
     // 3. Select Packages
     const [
-        {packages, rentPeriod, selectedCategories, loading},
+        {packages, rentPeriod, selectedCategories, loading },
         setRentPeriod,
         setSelectedCatogories,
         getPackages,
@@ -69,13 +68,11 @@ const HiringFormPage = (props) => {
 
 
     var changeQuantity = (quan, packageItem) => {
-
-        return packageItem = {'Name': packageItem.Name,'Type': packageItem.Type, 'Quantity': quan};
-
+        return packageItem = {'Name': packageItem.Name,'Type': packageItem.Type, 'Price': packageItem.Price, 'Age':packageItem.Age, 'Quantity': quan,  'Extras': packageItem.Extras};
     }
 
 
-    const onChange = (val, name, type) => {
+    const onChange = (val, name, type, price, age, extras) => {
         var same = 0;
 
         setPackageItem(oldPackages => {
@@ -88,18 +85,18 @@ const HiringFormPage = (props) => {
             }
 
             if (same === 0){
-                return [...oldPackages, {'Name': name, 'Type':type, 'Quantity':val}]
+                return [...oldPackages, {'Name': name, 'Type':type, 'Price': price, 'Age': age, 'Quantity':val, 'Extras': extras}]
             }else{
                 return oldPackages
             }
 
         }, []);
+
     }
 
 
 
     const extandTable = (record) => {
-        //console.log(record);
 
         let types = record.types;
         
@@ -116,7 +113,7 @@ const HiringFormPage = (props) => {
                 render: (_, type) => (
 
                     <InputNumber min={0} max={10} defaultValue={0} 
-                    onChange={val => onChange(val, record.package_name, type.type_name)}></InputNumber>
+                    onChange={val => onChange(val, record.package_name, type.type_name, record.price, record.age_group_id, record.extras)}></InputNumber>
 
                   ),
               },
@@ -126,65 +123,51 @@ const HiringFormPage = (props) => {
         <Col span={18} offset={4}>
             <p>{record.description}</p>
             <Table pagination={false} columns={columns} dataSource={types} expandable = {record => extandTable(record)}/>
-           
         </Col>
 
     )};
 
 
     // 4. Shopping Cart & Extras
-    
-    
     const [loadingOrders, setLoadingOrders] = useState(false);
-
 
     const columns2 = [
         { title: 'Package No.', dataIndex: 'key', key: 'no.' },
         { title: 'Package Name', dataIndex: 'Name', key: 'name' },
-        { title: 'Type name', dataIndex: 'Type', key: 'price' },
+        { title: 'Type name', dataIndex: 'Type', key: 'type' },
+        { title: 'Package Price', dataIndex: 'Package Price', key: 'price' },
+        { title: 'Age group', dataIndex: 'AgeGroup', key: 'age' },
         {
             title: 'Action',
             dataIndex: 'operation',
-            render: (_, record) => (
-                <a>Delete</a>
-              ),
+            render: (_, record) => {
+                return <a>Delete</a>
+                },
           },
     ];
 
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-       
         if (loadingOrders){
-            
-            setOrders(generateOrder(packagesItem));
-            
-
+            setOrders(generateOrder(packagesItem)); 
         }
     }, [loadingOrders])
 
 
 
+
     const generateOrder = (packagesItem) => {
-        console.log('length', packagesItem.length);
         var n = 1;
 
         var orders = [];
-      
-    
         for (let i = 0; i < packagesItem.length; i++ ){
-            //console.log('quan', packagesItem[i].Quantity);
             let p = packagesItem[i];
             for (let j = 0; j < p.Quantity; j ++){
-                console.log(n);
-                orders[n - 1] = {'key': n, 'Name': p.Name, 'Type': p.Type};
+                orders[n - 1] = {'key': n, 'Name': p.Name, 'Type': p.Type, 'Package Price': p.Price, 'AgeGroup': p.Age, 'Extras': p.Extras};
                 n ++ ;
             }    
         }
-
-
-       
-
         return orders;
     };
 
@@ -194,14 +177,103 @@ const HiringFormPage = (props) => {
 
 
 
+    const extandCart = (record) => {
 
-    
+        console.log(record);
+        const extrasCol = [
+            { title: 'Extra Name', dataIndex: 'extra_name', key: 'name' },
+            { title: 'Extra Price', dataIndex: 'extra_price', key: 'price' },
+        ];
 
-    
+        return (
 
-    
+        <Col span={18} offset={4}>
 
-    
+            <Form layout="vertical">
+                <Row>
+                    <Col span={10}>
+                        <Form.Item name="firstname" label="First Name"  required="true">
+                            <Input placeholder="Please input your first name" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="lastname" label="Last Name" required="true">
+                            <Input placeholder="Please input your last name" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col span={10}>
+                        <Form.Item name="dob" label="DOB" required="true">
+                            <DatePicker/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="skierlevel" label="Skier Level (Req for Snow Hire Only)">
+                            <Select placeholder="Select a option" defaultValue="|">
+                                <Option value="|"> Cautious | </Option>
+                                <Option value="||"> Moderate || </Option>
+                                <Option value="|||"> Aggressive ||| </Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col span={10}>
+                        <Form.Item name="height" label="Height - cm (Req for Snow Hire Only))">
+                            <Select placeholder="Select a option" defaultValue="|">
+                                <Option value="|"> less or equal 148cm </Option>
+                                <Option value="||"> 149 - 157 cm </Option>
+                                <Option value="|||"> 158 - 166 cm </Option>
+                                <Option value="|V"> 167 - 178 cm </Option>
+                                <Option value="V"> 179 - 194 cm </Option>
+                                <Option value="V|"> more than 195 cm </Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="weight" label="Weight - kg (Req for Snow Hire Only))">
+                            <Select placeholder="Select a option" defaultValue="1">
+                                <Option value="1"> 10-13kg </Option>
+                                <Option value="2"> 14-17kg </Option>
+                                <Option value="3"> 18-21kg </Option>
+                                <Option value="4"> 22-25kg </Option>
+                                <Option value="5"> 26-30kg </Option>
+                                <Option value="6"> 31-35kg </Option>
+                                <Option value="7"> 36-41kg </Option>
+                                <Option value="8"> 42-48kg </Option>
+                                <Option value="9"> 49-57kg </Option>
+                                <Option value="10"> 58-66kg </Option>
+                                <Option value="11"> 67-78kg </Option>
+                                <Option value="12"> 79-94kg </Option>
+                                <Option value="13"> 95+kg </Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={10}>
+                        <Form.Item name="shoesize " label="Shoe Size - US (Req for Snow Hire Only)">
+                            <Input placeholder="Please input your shoe size" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="tyresize" label="Tyre Size eg 215/65/15 (for Chain Hire)">
+                            <Input placeholder="Please input your tyre size" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                                
+            </Form> 
+            <Table dataSource={record.Extras} columns={extrasCol}/>
+        </Col>
+        
+    )}
+
+
+
    
     // All steps content
     const steps = [
@@ -241,11 +313,7 @@ const HiringFormPage = (props) => {
                     </Col>
                 ))}
             </Row>
-
-           
-            
-          ,
-         
+          ,         
         },
         {
             title: 'Select Package',
@@ -256,7 +324,7 @@ const HiringFormPage = (props) => {
                             dataSource={packages}
                             pagination={false}
                             expandable={{
-                                expandedRowRender: record => extandTable(record),
+                                expandedRowRender: record => extandTable(record)
                               }}>
                     </Table>
 
@@ -274,8 +342,15 @@ const HiringFormPage = (props) => {
                     
                     <Table  columns={columns2} 
                             dataSource={orders}
-                            pagination={false}>
+                            pagination={false}
+                            expandable={{
+                                expandedRowRender: record => extandCart(record)
+                              }}>
                     </Table>
+
+                    
+                    
+                    
 
                     : "No Order"}
                 
