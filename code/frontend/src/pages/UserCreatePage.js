@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import "../assets/css/userCreate.css";
+import {CityData, StateData} from "../consts/StateData";
 
 
 const {Link, Title} = Typography;
@@ -27,32 +28,6 @@ const validateMessages = {
 };
 
 
-const countryData = ["Australia", "Vietnam"];
-const stateData = {
-    Australia: ["VIC", "NSW", "QLD", "ACT", "TAS", "SA", "WA", "NT"],
-    Vietnam: ["South", "Central", "North"]
-};
-const cityData = {
-    Australia: {
-        VIC: ["Melbourne", "Geelong", "Ballarat"],
-        NSW: ["Sydney"],
-        QLD: ["Brisbane"],
-        ACT: ["Canberra"],
-        TAS: ["Hobart"],
-        SA: ["Adelaide"],
-        WA: ["Perth"],
-        NT: ["Darwin"],
-        South: ["Saigon"],
-        Central: ["Hue"],
-        North: ["Hanoi"]
-    },
-    Vietnam: {
-        South: ["Saigon"],
-        Central: ["Hue"],
-        North: ["Hanoi"]
-    }
-};
-
 const UserCreatePage = () => {
     const [username, setUsername] = useState("user1");
     const [email, setEmail] = useState("yuyue@student.unimelb.edu.au");
@@ -62,25 +37,14 @@ const UserCreatePage = () => {
     const [street, setStreet] = useState("28 Bouverie St");
     const [postcode, setPostcode] = useState(3053);
     const [password, setPassword] = useState("1234sS");
-    const [countries, setCountries] = useState(countryData)
-    const [states, setStates] = useState(stateData[countryData[0]]);
-    const [cities, setCities] = useState(cityData[countryData[0]][stateData[countryData[0]][0]]);
-    const [selectedCountry, setSelectedCountry] = useState(countryData[0]);
-    const [selectedState, setSelectedState] = useState(stateData[countryData[0]][0]);
-    const [selectedCity, setSelectedCity] = useState(cityData[countryData[0]][stateData[countryData[0]][0]][0]);
-
-    const onCountryChange = value => {
-        setStates(stateData[value]);
-        setCities(cityData[value][stateData[value][0]]);
-        setSelectedCountry(value);
-        setSelectedState(stateData[value][0])
-        setSelectedCity(cityData[value][stateData[value][0]][0])
-    };
+    const [cities, setCities] = useState(CityData[StateData[0]]);
+    const [selectedState, setSelectedState] = useState(StateData[0]);
+    const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
 
     const onStateChange = value => {
-        setCities(cityData[selectedCountry][value]);
+        setCities(CityData[value]);
         setSelectedState(value);
-        setSelectedCity(cityData[selectedCountry][value][0])
+        setSelectedCity(CityData[value][0])
     };
 
     const onCityChange = value => {
@@ -248,34 +212,21 @@ const UserCreatePage = () => {
                                                        message: "Street is required"
                                                    }
                                                ]}>
-                                        <Input
-                                            style={{width: "55%"}}
-                                            placeholder="Input street"
-                                            className="street"
-                                        />
+                                        <Input placeholder="Input street" className="street"/>
                                     </Form.Item>
-
-
                                 </Input.Group>
                             </Form.Item>
 
                             <Form.Item>
-                                <Row>
-                                    <Col span={8}>
-                                        <Select value={selectedCountry} onChange={onCountryChange}>
-                                            {countries.map(country => (
-                                                <Option key={country} value={country}>{country}</Option>
-                                            ))}
-                                        </Select>
-                                    </Col>
-                                    <Col span={8}>
+                                <Row gutter={16}>
+                                    <Col span={12}>
                                         <Select value={selectedState} onChange={onStateChange}>
-                                            {states.map(state => (
+                                            {StateData.map(state => (
                                                 <Option key={state} value={state}>{state}</Option>
                                             ))}
                                         </Select>
                                     </Col>
-                                    <Col span={8}>
+                                    <Col span={12}>
                                         <Select value={selectedCity} onChange={onCityChange}>
                                             {cities.map(city => (
                                                 <Option key={city} value={city}>{city}</Option>
@@ -283,10 +234,7 @@ const UserCreatePage = () => {
                                         </Select>
                                     </Col>
                                 </Row>
-
-
                             </Form.Item>
-
                             <Form.Item name={["user", "address", "Postcode"]}
                                        rules={[
                                            {
@@ -360,7 +308,7 @@ const UserCreatePage = () => {
                                            {
                                                validator: (_, value) =>
                                                    value ? Promise.resolve() : Promise.reject(new Error("Should accept agreement")),
-                                           },
+                                           }
                                        ]}>
                                 <Checkbox>
                                     I agree to <a href="">the term and conditions</a>
@@ -370,14 +318,13 @@ const UserCreatePage = () => {
                                 <Button type="primary"
                                         htmlType="submit"
                                         className="login-form-button"
-                                        onClick={onClick}
-                                >
+                                        onClick={onClick}>
                                     Create
                                 </Button>
                             </Form.Item>
                             <Form.Item className="redirect">
                                 Already have an account? &nbsp;
-                                <Link href="/user-login">
+                                <Link href="/login">
                                     Sign in
                                 </Link>
                             </Form.Item>
@@ -388,6 +335,6 @@ const UserCreatePage = () => {
             </Row>
         </>
     );
-}
+};
 
 export default UserCreatePage;

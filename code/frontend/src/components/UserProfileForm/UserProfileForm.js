@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
 import "antd/dist/antd.css"
 import {
-    GlobalOutlined, IdcardOutlined,
     MailOutlined,
-    MinusCircleOutlined, NodeCollapseOutlined,
+    MinusCircleOutlined,
     PhoneOutlined,
     PlusOutlined, TeamOutlined, UserOutlined
 } from "@ant-design/icons";
@@ -11,6 +10,7 @@ import {
     Button, Select, Form, Input, Row, Col, DatePicker, Rate, Tag, Image, Space
 } from "antd";
 import moment from "moment";
+import {StateData, CityData} from "../../consts/StateData";
 
 const {Option} = Select;
 
@@ -20,6 +20,9 @@ const UserProfileForm = () => {
     const [shoeSize, setShoeSize] = useState(0);
     const [skierAbility, setSkierAbility] = useState(0);
     const [din, setDin] = useState(0);
+    const [cities, setCities] = useState(CityData[StateData[0]]);
+    const [selectedState, setSelectedState] = useState(StateData[0]);
+    const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
     const [readOnly, setReadOnly] = useState(true);
 
     const [form] = Form.useForm();
@@ -27,6 +30,16 @@ const UserProfileForm = () => {
     useEffect(() => {
         setDin(height * 2 + weight * 3 + shoeSize * 4 + skierAbility * 5);
     }, [weight, height, shoeSize, skierAbility]);
+
+    const onStateChange = value => {
+        setCities(CityData[value]);
+        setSelectedState(value);
+        setSelectedCity(CityData[value][0])
+    };
+
+    const onCityChange = value => {
+        setSelectedCity(value);
+    };
 
     const onFinish = values => {
         console.log(form.isFieldsTouched());
@@ -56,9 +69,9 @@ const UserProfileForm = () => {
                           organization: "Melb Uni",
                           email: "hongngocn@unimelb.edu.au",
                           phoneNumber: "0434117998",
-                          region: "VIC",
-                          postcode: "3053",
-                          country: "Australia"
+                          state: "VIC",
+                          city: "Melbourne",
+                          postcode: "3053"
                       }}
                       form={form}
                       name="basic"
@@ -154,22 +167,26 @@ const UserProfileForm = () => {
                         </Col>
                     </Row>
                     <Row justify="space-between" gutter={16}>
-                        <Col span={8}>
-                            <Form.Item label="Region" name="region"
-                                       rules={[{required: true, message: "Please input your region!"}]}>
-                                <Input prefix={<GlobalOutlined/>} size="large" readOnly={readOnly}/>
+                        <Col span={12}>
+                            <Form.Item label="State" name="state" rules={[
+                                {required: true, message: "Please input your state!"}
+                            ]}>
+                                <Select value={selectedState} onChange={onStateChange} disabled={readOnly}>
+                                    {StateData.map(state => (
+                                        <Option key={state} value={state}>{state}</Option>
+                                    ))}
+                                </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
-                            <Form.Item label="Postcode" name="postcode"
-                                       rules={[{required: true, message: "Please input your postcode!"}]}>
-                                <Input prefix={<IdcardOutlined/>} size="large" readOnly={readOnly}/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={8}>
-                            <Form.Item label="Country" name="country"
-                                       rules={[{required: true, message: "Please input your country!"}]}>
-                                <Input prefix={<NodeCollapseOutlined/>} size="large" readOnly={readOnly}/>
+                        <Col span={12}>
+                            <Form.Item label="City" name="city" rules={[
+                                {required: true, message: "Please input your city!"}
+                            ]}>
+                                <Select value={selectedCity} onChange={onCityChange} disabled={readOnly}>
+                                    {cities.map(city => (
+                                        <Option key={city} value={city}>{city}</Option>
+                                    ))}
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>
