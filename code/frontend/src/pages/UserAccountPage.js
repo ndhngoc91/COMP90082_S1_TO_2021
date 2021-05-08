@@ -33,7 +33,6 @@ const UserAccountPage = () => {
                     </Content>
                 </Layout>
             </BrowserRouter>
-            <PageFooter/>
         </Layout>
     );
 }

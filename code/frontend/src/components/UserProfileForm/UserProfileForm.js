@@ -8,10 +8,9 @@ import {
     PlusOutlined, TeamOutlined, UserOutlined
 } from "@ant-design/icons";
 import {
-    Button,
-    Select,
-    Form, Input, Row, Col, DatePicker, Rate, Tag, Image, Space,
+    Button, Select, Form, Input, Row, Col, DatePicker, Rate, Tag, Image, Space
 } from "antd";
+import moment from "moment";
 
 const {Option} = Select;
 
@@ -21,16 +20,21 @@ const UserProfileForm = () => {
     const [shoeSize, setShoeSize] = useState(0);
     const [skierAbility, setSkierAbility] = useState(0);
     const [din, setDin] = useState(0);
+    const [readOnly, setReadOnly] = useState(true);
+
+    const [form] = Form.useForm();
 
     useEffect(() => {
         setDin(height * 2 + weight * 3 + shoeSize * 4 + skierAbility * 5);
     }, [weight, height, shoeSize, skierAbility]);
 
-    const onFinish = (values) => {
+    const onFinish = values => {
+        console.log(form.isFieldsTouched());
         console.log("Success:", values);
     };
 
-    const onFinishFailed = (errorInfo) => {
+    const onFinishFailed = errorInfo => {
+        console.log(form.isFieldsTouched())
         console.log("Failed:", errorInfo);
     };
 
@@ -40,6 +44,23 @@ const UserProfileForm = () => {
                 <Image width={200} style={{borderRadius: "50%"}} preview={false}
                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                 <Form style={{width: "1000px"}}
+                      initialValues={{
+                          firstName: "Ruby",
+                          lastName: "Nguyen",
+                          gender: "male",
+                          birthdate: moment('2015-06-06', 'YYYY-MM-DD'),
+                          height: 178,
+                          weight: 75,
+                          shoeSize: 3,
+                          skierAbility: 2,
+                          organization: "Melb Uni",
+                          email: "hongngocn@unimelb.edu.au",
+                          phoneNumber: "0434117998",
+                          region: "VIC",
+                          postcode: "3053",
+                          country: "Australia"
+                      }}
+                      form={form}
                       name="basic"
                       layout="vertical"
                       onFinish={onFinish}
@@ -48,19 +69,19 @@ const UserProfileForm = () => {
                         <Col span={8}>
                             <Form.Item label="First Name" name="firstName"
                                        rules={[{required: true, message: "Please input your first name!"}]}>
-                                <Input prefix={<UserOutlined/>} size="large"/>
+                                <Input prefix={<UserOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Last Name" name="lastName"
                                        rules={[{required: true, message: "Please input your last name!"}]}>
-                                <Input prefix={<TeamOutlined/>} size="large"/>
+                                <Input prefix={<TeamOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Gender" name="gender"
                                        rules={[{required: true, message: "Required"}]}>
-                                <Select placeholder="Gender" size="large">
+                                <Select placeholder="Gender" size="large" disabled={readOnly}>
                                     <Option value="male">Male</Option>
                                     <Option value="female">Female</Option>
                                     <Option value="others">Others</Option>
@@ -70,7 +91,7 @@ const UserProfileForm = () => {
                         <Col span={4}>
                             <Form.Item label="Birthdate" name="birthdate"
                                        rules={[{required: true, message: "Required"}]}>
-                                <DatePicker size="large"/>
+                                <DatePicker size="large" disabled={readOnly}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -78,28 +99,29 @@ const UserProfileForm = () => {
                         <Col span={4}>
                             <Form.Item label="Height (cm)" name="height"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Input type={"number"} size="large" value={height}
+                                <Input type={"number"} size="large" value={height} readOnly={readOnly}
                                        onChange={e => setHeight(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Weight (kg)" name="weight"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Input type={"number"} size="large" value={weight}
+                                <Input type={"number"} size="large" value={weight} readOnly={readOnly}
                                        onChange={e => setWeight(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Shoe Size" name="shoeSize"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Input type={"number"} size="large" value={shoeSize}
+                                <Input type={"number"} size="large" value={shoeSize} readOnly={readOnly}
                                        onChange={e => setShoeSize(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Skier Ability" name="skierAbility"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Rate value={skierAbility} onChange={value => setSkierAbility(value)}/>
+                                <Rate value={skierAbility} onChange={value => setSkierAbility(value)}
+                                      disabled={readOnly}/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
@@ -119,7 +141,7 @@ const UserProfileForm = () => {
                                            {required: true, message: "Please input your email!"},
                                            {type: "email", message: "Email is not valid!"}
                                        ]}>
-                                <Input prefix={<MailOutlined/>} size="large"/>
+                                <Input prefix={<MailOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -127,7 +149,7 @@ const UserProfileForm = () => {
                                        rules={[
                                            {required: true, message: "Please input your phone number!"}
                                        ]}>
-                                <Input prefix={<PhoneOutlined/>} size="large"/>
+                                <Input prefix={<PhoneOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -135,19 +157,19 @@ const UserProfileForm = () => {
                         <Col span={8}>
                             <Form.Item label="Region" name="region"
                                        rules={[{required: true, message: "Please input your region!"}]}>
-                                <Input prefix={<GlobalOutlined/>} size="large"/>
+                                <Input prefix={<GlobalOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Postcode" name="postcode"
                                        rules={[{required: true, message: "Please input your postcode!"}]}>
-                                <Input prefix={<IdcardOutlined/>} size="large"/>
+                                <Input prefix={<IdcardOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Country" name="country"
                                        rules={[{required: true, message: "Please input your country!"}]}>
-                                <Input prefix={<NodeCollapseOutlined/>} size="large"/>
+                                <Input prefix={<NodeCollapseOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -186,7 +208,8 @@ const UserProfileForm = () => {
                                             onClick={() => add()}
                                             style={{width: "60%"}}
                                             size="large"
-                                            icon={<PlusOutlined/>}>
+                                            icon={<PlusOutlined/>}
+                                            disabled={readOnly}>
                                         Add address line
                                     </Button>
                                     <Form.ErrorList errors={errors}/>
@@ -195,9 +218,19 @@ const UserProfileForm = () => {
                         )}
                     </Form.List>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" size="large">
-                            Submit
-                        </Button>
+                        {readOnly &&
+                        <Button type="primary" size="large" onClick={() => setReadOnly(false)}>
+                            Edit
+                        </Button>}
+                        {readOnly === false &&
+                        <Space>
+                            <Button type="primary" htmlType="submit" size="large">
+                                Submit
+                            </Button>
+                            <Button type="default" size="large" onClick={() => setReadOnly(true)}>
+                                Cancel
+                            </Button>
+                        </Space>}
                     </Form.Item>
                 </Form>
             </Space>
