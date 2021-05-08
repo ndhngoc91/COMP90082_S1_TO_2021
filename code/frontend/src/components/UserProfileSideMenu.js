@@ -19,12 +19,7 @@ const UserProfileSideMenu = () => {
                         Profile
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="1" icon={<PieChartOutlined/>}>
-                    <Link to="/profile/orders">
-                        Orders
-                    </Link>
-                </Menu.Item>
-                <Menu.Item key="2" icon={<DesktopOutlined/>}>
+                <Menu.Item key="1" icon={<DesktopOutlined/>}>
                     <Link to="/profile/user-groups">
                         User Groups
                     </Link>
