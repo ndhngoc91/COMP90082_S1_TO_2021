@@ -40,17 +40,25 @@ const NavigationBar = observer(({defaultSelected}) => {
             <Menu onClick={handleClick} mode="horizontal"
                   theme={"dark"}
                   defaultSelectedKeys={[defaultSelected]}>
-                <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
-                    Order History
-                </Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
-
-
+                {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
+                <>
+                    <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
+                </>}
+                {userRole === USER_ROLE.CUSTOMER &&
+                <>
+                    <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
+                        Order History
+                    </Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
+                </>}
                 {userRole === USER_ROLE.ADMIN &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
+                <>
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
+                        Package Management
+                    </Menu.Item>
+                </>}
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title="User">
                     <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>

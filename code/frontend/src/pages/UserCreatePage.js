@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
 import {
     Button, Col, Form, Image, Input, InputNumber, Row, Select, Typography
 } from "antd";
@@ -9,8 +8,8 @@ import {
     MailOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import "../assets/css/userCreate.css";
 import {CityData, StateData} from "../consts/StateData";
+import rockyValleyLogo from "../assets/rocky_valley.svg";
 
 
 const {Link, Title} = Typography;

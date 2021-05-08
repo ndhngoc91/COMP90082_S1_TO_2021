@@ -1,12 +1,10 @@
 import React from 'react';
-import rockyValleyLogo from "../assets/rocky_valley.svg";
-
-import '../assets/css/userLogin.css'
 import {Button, Form, Input, Row, Col, Image, Typography} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {useHandleLogin} from "../hooks/AuthHooks";
 import {useHistory} from "react-router-dom";
+import rockyValleyLogo from "../assets/rocky_valley.svg";
 
 const {Title, Text, Link} = Typography;
 

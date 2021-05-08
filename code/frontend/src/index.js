@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Route, BrowserRouter, Switch} from "react-router-dom";
+import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import CreatePage from "./pages/CreatePage";
 import ProductListPage from "./pages/ProductListPage";
 import CustomersPage from "./pages/CustomersPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
@@ -34,10 +33,9 @@ createStore().then(store => {
                         <Route path="/login" exact component={LoginPage}/>
                         <Route path="/history" exact component={HistoryPage}/>
                         <Route path="/order" exact component={OrderPage}/>
-                        <AuthRoute path="/package" Component={PackagePage} requiredRoles={[
+                        <AuthRoute path="/package-management" Component={PackagePage} requiredRoles={[
                             USER_ROLE.ADMIN
                         ]}/>
-                        <Route path="/create" exact component={CreatePage}/>
                         <Route path="/productList" exact component={ProductListPage}/>
                         <Route path="/products/:productCode*" exact component={ProductDetailsPage}/>
                         <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
@@ -48,6 +46,7 @@ createStore().then(store => {
                         <Route path="/profile" component={UserAccountPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
+                        <Route exact path="*" render={() => <Redirect to="/"/>}/>
                     </Switch>
                 </BrowserRouter>
             </div>

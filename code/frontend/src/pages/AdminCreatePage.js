@@ -1,8 +1,5 @@
 import {Option} from "antd/es/mentions";
-
-{/*UserCreatePage CSS*/}
 import React, {useState} from 'react';
-import rockyValleyLogo from "../assets/rocky_valley.svg";
 import {
     Button,
     Card,
@@ -18,9 +15,7 @@ import {
     MailOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import '../assets/css/userCreate.css';
-
-const Item = Form.Item;
+import rockyValleyLogo from "../assets/rocky_valley.svg";
 
 const validateMessages = {
     required: '${label} is required!',
