@@ -1,6 +1,12 @@
 import React, {useEffect, useState} from "react";
 import "antd/dist/antd.css"
-import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import {
+    GlobalOutlined, IdcardOutlined,
+    MailOutlined,
+    MinusCircleOutlined, NodeCollapseOutlined,
+    PhoneOutlined,
+    PlusOutlined, TeamOutlined, UserOutlined
+} from "@ant-design/icons";
 import {
     Button,
     Select,
@@ -42,13 +48,13 @@ const UserProfileForm = () => {
                         <Col span={8}>
                             <Form.Item label="First Name" name="firstName"
                                        rules={[{required: true, message: "Please input your first name!"}]}>
-                                <Input size="large"/>
+                                <Input prefix={<UserOutlined/>} size="large"/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Last Name" name="lastName"
                                        rules={[{required: true, message: "Please input your last name!"}]}>
-                                <Input size="large"/>
+                                <Input prefix={<TeamOutlined/>} size="large"/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
@@ -113,7 +119,7 @@ const UserProfileForm = () => {
                                            {required: true, message: "Please input your email!"},
                                            {type: "email", message: "Email is not valid!"}
                                        ]}>
-                                <Input size="large"/>
+                                <Input prefix={<MailOutlined/>} size="large"/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -121,7 +127,7 @@ const UserProfileForm = () => {
                                        rules={[
                                            {required: true, message: "Please input your phone number!"}
                                        ]}>
-                                <Input size="large"/>
+                                <Input prefix={<PhoneOutlined/>} size="large"/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -129,19 +135,19 @@ const UserProfileForm = () => {
                         <Col span={8}>
                             <Form.Item label="Region" name="region"
                                        rules={[{required: true, message: "Please input your region!"}]}>
-                                <Input size="large"/>
+                                <Input prefix={<GlobalOutlined/>} size="large"/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Postcode" name="postcode"
                                        rules={[{required: true, message: "Please input your postcode!"}]}>
-                                <Input size="large"/>
+                                <Input prefix={<IdcardOutlined/>} size="large"/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Country" name="country"
                                        rules={[{required: true, message: "Please input your country!"}]}>
-                                <Input size="large"/>
+                                <Input prefix={<NodeCollapseOutlined/>} size="large"/>
                             </Form.Item>
                         </Col>
                     </Row>

@@ -21,37 +21,36 @@ import {
 } from "@ant-design/icons";
 
 
+const {Panel} = Collapse;
 
-const { Panel } = Collapse;
+const {Option} = Select;
 
-const { Option } = Select;
-
-const DescriptionItem = ({ title, content }) => (
+const DescriptionItem = ({title, content}) => (
     <div className="site-description-item-profile-wrapper">
-        <p className="site-description-item-profile-p-label">{title}:  {content}</p>
+        <p className="site-description-item-profile-p-label">{title}: {content}</p>
     </div>
 );
 
-export default class FriendList extends React.Component{
-    state ={
+export default class UserGroupList extends React.Component {
+    state = {
         modelVisible: 0,
-        drawVisible:false,
-        group_member:[],
+        drawVisible: false,
+        group_member: [],
         //这个数据之后通过axios异步访问url获取
-        group:[
+        group: [
             {
                 id: '1',
                 name: 'group name 1',
                 members: [
                     {
                         uid: '1',
-                        user_name:'A1',
-                        intro:'aaaaa'
+                        user_name: 'A1',
+                        intro: 'aaaaa'
                     },
                     {
                         uid: '2',
-                        user_name:'A2',
-                        intro:'bbbbb'
+                        user_name: 'A2',
+                        intro: 'bbbbb'
                     },
 
                 ],
@@ -62,13 +61,13 @@ export default class FriendList extends React.Component{
                 members: [
                     {
                         uid: '3',
-                        user_name:'A3',
-                        intro:'cccc'
+                        user_name: 'A3',
+                        intro: 'cccc'
                     },
                     {
                         uid: '4',
-                        user_name:'A4',
-                        intro:'ddddd'
+                        user_name: 'A4',
+                        intro: 'ddddd'
                     },
                 ],
             },
@@ -77,34 +76,33 @@ export default class FriendList extends React.Component{
 
 
     // close the window
-    handleCancel = () =>{
+    handleCancel = () => {
         this.setState({
             modelVisible: 0
         })
     }
 
     // add friend and close the window
-    addFriend = () =>{
+    addFriend = () => {
         this.setState({
             modelVisible: 0
         })
     }
 
-    addFriendGroup = () =>{
+    addFriendGroup = () => {
         this.setState({
             modelVisible: 0
         })
     }
 
 
-
-    showAddFriend = () =>{
+    showAddFriend = () => {
         this.setState({
             modelVisible: 1
         })
     }
 
-    showAddGroup = () =>{
+    showAddGroup = () => {
         this.setState({
             modelVisible: 2
         })
@@ -113,7 +111,7 @@ export default class FriendList extends React.Component{
     showDrawer = (item) => {
         this.setState({
             drawVisible: true,
-            group_member:item
+            group_member: item
         });
     };
 
@@ -124,19 +122,18 @@ export default class FriendList extends React.Component{
     };
 
 
-
     render() {
         const title = " Friend"
         const groups = this.state.group
         const group_member = this.state.group_member
-        const FriendButton =(
+        const FriendButton = (
             <div>
-                <Button type = 'primary' onClick={()=>this.showAddFriend()}>
-                    <PlusOutlined />
+                <Button type='primary' onClick={() => this.showAddFriend()}>
+                    <PlusOutlined/>
                     Add Friend
                 </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button type = "primary" onClick={()=>this.showAddGroup()}>
-                    <PlusOutlined />
+                <Button type="primary" onClick={() => this.showAddGroup()}>
+                    <PlusOutlined/>
                     Add Group
                 </Button>
             </div>
@@ -147,8 +144,8 @@ export default class FriendList extends React.Component{
                 <Card title={title} extra={FriendButton}>
                     <Collapse accordion>
                         {
-                            groups.map((group) =>{
-                                return(
+                            groups.map((group) => {
+                                return (
                                     <Panel header={group.name} key={group.id}>
                                         <List
                                             dataSource={group.members}
@@ -158,14 +155,15 @@ export default class FriendList extends React.Component{
                                                 <List.Item
                                                     key={item.uid}
                                                     actions={[
-                                                        <a onClick={()=>this.showDrawer(item)} key={`a-${item.id}`}>
+                                                        <a onClick={() => this.showDrawer(item)} key={`a-${item.id}`}>
                                                             View Profile
                                                         </a>,
                                                     ]}
                                                 >
                                                     <List.Item.Meta
                                                         avatar={
-                                                            <Avatar src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
+                                                            <Avatar
+                                                                src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"/>
                                                         }
                                                         title={item.user_name}
                                                         description={item.intro}
@@ -182,29 +180,30 @@ export default class FriendList extends React.Component{
                 </Card>
 
                 {/*add friend*/}
-                <Modal title="Add friend" visible={this.state.modelVisible===1} onOk={this.addFriend} onCancel={this.handleCancel} centered>
+                <Modal title="Add friend" visible={this.state.modelVisible === 1} onOk={this.addFriend}
+                       onCancel={this.handleCancel} centered>
 
                     <Form>
                         <Form.Item
                             label="Username"
                             name="username"
-                            rules={[{ required: true, message: 'Please input the username!' }]}
+                            rules={[{required: true, message: 'Please input the username!'}]}
                         >
-                            <Input placeholder="enter username" />
+                            <Input placeholder="enter username"/>
                         </Form.Item>
                         <Form.Item
                             label="Group"
                             name="group"
-                            rules={[{ required: true }]}
+                            rules={[{required: true}]}
                         >
                             <Select
                                 showSearch
-                                style={{ width: 200 }}
+                                style={{width: 200}}
                                 placeholder="Choose one group"
                                 optionFilterProp="children">
                                 {
-                                    groups.map((group)=>{
-                                        return(<Option value={group.id} >{group.name}</Option>)
+                                    groups.map((group) => {
+                                        return (<Option value={group.id}>{group.name}</Option>)
                                     })
 
                                 }
@@ -214,14 +213,15 @@ export default class FriendList extends React.Component{
                 </Modal>
 
                 {/*add group*/}
-                <Modal title="Add group" visible={this.state.modelVisible===2} onOk={this.addFriendGroup} onCancel={this.handleCancel} centered>
+                <Modal title="Add group" visible={this.state.modelVisible === 2} onOk={this.addFriendGroup}
+                       onCancel={this.handleCancel} centered>
                     <Form>
                         <Form.Item
                             label="Group"
                             name="Group"
-                            rules={[{ required: true, message: 'Please input the group name!' }]}
+                            rules={[{required: true, message: 'Please input the group name!'}]}
                         >
-                            <Input placeholder="enter group name" />
+                            <Input placeholder="enter group name"/>
                         </Form.Item>
                     </Form>
                 </Modal>
@@ -233,13 +233,13 @@ export default class FriendList extends React.Component{
                     onClose={this.onClose}
                     visible={this.state.drawVisible}
                 >
-                    <p className="site-description-item-profile-p" style={{ marginBottom: 24 }}>
+                    <p className="site-description-item-profile-p" style={{marginBottom: 24}}>
                         User Profile
                     </p>
                     <p className="site-description-item-profile-p">Personal</p>
                     <Row>
                         <Col span={12}>
-                            <DescriptionItem title="Full Name" content={group_member.user_name} />
+                            <DescriptionItem title="Full Name" content={group_member.user_name}/>
                         </Col>
                     </Row>
                     <Row>
@@ -250,7 +250,7 @@ export default class FriendList extends React.Component{
                             />
                         </Col>
                     </Row>
-                    <Divider />
+                    <Divider/>
                 </Drawer>
             </div>
         )//end return

@@ -1,32 +1,34 @@
-import {Layout} from 'antd';
+import {Layout} from "antd";
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch, useRouteMatch} from "react-router-dom";
 import UserProfileSideMenu from "../components/UserProfileSideMenu";
-import Navigator from "../components/NavigationBar/NavigationBar";
-import Order from "../components/Order/Order";
-import Friend from "../components/Friend/Friend";
+import NavigatorBar from "../components/NavigationBar/NavigationBar";
 import PageFooter from "../components/PageFooter/PageFooter";
 import UserProfileForm from "../components/UserProfileForm/UserProfileForm";
+import UserGroupList from "../components/UserGroupList/UserGroupList";
+import OrderList from "../components/OrderList/OrderList";
 
 
 const {Header, Sider, Content} = Layout;
 
 const UserAccountPage = () => {
+    const {path} = useRouteMatch();
+
     return (
-        <Layout style={{minHeight: '100vh'}}>
+        <Layout style={{minHeight: "100vh"}}>
             <Header>
-                <Navigator defaultSelected='/center'/>
+                <NavigatorBar/>
             </Header>
             <BrowserRouter>
                 <Layout>
-                    <Sider style={{backgroundColor: '#FFFFFF'}}>
+                    <Sider style={{backgroundColor: "#FFFFFF"}}>
                         <UserProfileSideMenu/>
                     </Sider>
-                    <Content style={{padding: "1em", backgroundColor: '#FFFFFF'}}>
+                    <Content style={{padding: "1em", backgroundColor: "#FFFFFF"}}>
                         <Switch>
-                            <Route path='/center/order' component={Order}/>
-                            <Route path='/center/friend' component={Friend}/>
-                            <Route path='/center/profile' component={UserProfileForm}/>
+                            <Route path={`${path}`} exact component={UserProfileForm}/>
+                            <Route path={`${path}/orders`} component={OrderList}/>
+                            <Route path={`${path}/user-groups`} component={UserGroupList}/>
                         </Switch>
                     </Content>
                 </Layout>
