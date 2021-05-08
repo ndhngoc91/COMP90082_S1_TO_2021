@@ -6,21 +6,23 @@ import {
     ShopOutlined,
     LogoutOutlined,
     ShoppingCartOutlined,
-    UserSwitchOutlined,
     ContainerOutlined,
-    CalendarOutlined
+    SettingOutlined,
+    AccountBookOutlined,
+    HomeOutlined, LoginOutlined
 } from "@ant-design/icons";
 import {useStores} from "../../stores";
-import rockyValleyLogo from "../../assets/rocky_valley.svg";
 import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
+import {USER_ROLE} from "../../consts/UserRole";
 
 const {Header} = Layout;
+const {SubMenu} = Menu;
 
 const NavigationBar = observer(({defaultSelected}) => {
     const history = useHistory();
 
-    const {authStore: {isStaff, logout}} = useStores();
+    const {authStore: {userRole, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
@@ -31,27 +33,43 @@ const NavigationBar = observer(({defaultSelected}) => {
         }
     }
 
-    const {logoCls, leftItemCls, rightItemCls} = useNavigationBarStyles();
+    const {leftItemCls, rightItemCls} = useNavigationBarStyles();
 
     return (
         <Header style={{width: "100%", padding: 0}}>
-            <Menu onClick={handleClick} style={{backgroundColor: "#D8D8D5"}} mode="horizontal"
+            <Menu onClick={handleClick} mode="horizontal"
+                  theme={"dark"}
                   defaultSelectedKeys={[defaultSelected]}>
-                <div className={leftItemCls}>
-                    <Image className={logoCls} src={rockyValleyLogo} preview={false}/>
-                </div>
-                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
-                    Order History
-                </Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
-                {isStaff &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
-                <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
-                <Menu.Item className={rightItemCls} icon={<UserSwitchOutlined/>} key="/choose">
-                    Switch account
-                </Menu.Item>
+                {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
+                <>
+                    <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
+                </>}
+                {userRole === USER_ROLE.CUSTOMER &&
+                <>
+                    <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
+                        Order History
+                    </Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
+                </>}
+                {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
+                    Calendar
+                </Menu.Item>}
+                {userRole === USER_ROLE.ADMIN &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
+                    Package Management
+                </Menu.Item>}
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title="User">
+                    {userRole === USER_ROLE.GUEST ?
+                        <Menu.Item key="/login" icon={<LoginOutlined/>}>Login</Menu.Item> :
+                        <>
+                            <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
+                            <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                        </>}
+
+                </SubMenu>
             </Menu>
         </Header>
     );
