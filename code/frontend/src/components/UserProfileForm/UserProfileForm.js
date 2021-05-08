@@ -168,7 +168,9 @@ const UserProfileForm = () => {
                     </Row>
                     <Row justify="space-between" gutter={16}>
                         <Col span={12}>
-                            <Form.Item label="State" name="state">
+                            <Form.Item label="State" name="state" rules={[
+                                {required: true, message: "Please input your state!"}
+                            ]}>
                                 <Select value={selectedState} onChange={onStateChange} disabled={readOnly}>
                                     {StateData.map(state => (
                                         <Option key={state} value={state}>{state}</Option>
@@ -177,7 +179,9 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item label="City" name="city">
+                            <Form.Item label="City" name="city" rules={[
+                                {required: true, message: "Please input your city!"}
+                            ]}>
                                 <Select value={selectedCity} onChange={onCityChange} disabled={readOnly}>
                                     {cities.map(city => (
                                         <Option key={city} value={city}>{city}</Option>

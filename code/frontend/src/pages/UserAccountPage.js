@@ -30,6 +30,6 @@ const UserAccountPage = () => {
             </BrowserRouter>
         </Layout>
     );
-}
+};
 
 export default UserAccountPage

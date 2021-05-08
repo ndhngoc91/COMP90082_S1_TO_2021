@@ -318,8 +318,7 @@ const UserCreatePage = () => {
                                 <Button type="primary"
                                         htmlType="submit"
                                         className="login-form-button"
-                                        onClick={onClick}
-                                >
+                                        onClick={onClick}>
                                     Create
                                 </Button>
                             </Form.Item>
@@ -336,6 +335,6 @@ const UserCreatePage = () => {
             </Row>
         </>
     );
-}
+};
 
 export default UserCreatePage;
