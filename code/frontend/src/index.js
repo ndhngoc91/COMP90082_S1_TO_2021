@@ -8,7 +8,8 @@ import ProductDetailsPage from "./pages/ProductDetailsPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
-import PackagePage from "./pages/PackagePage";
+import CalendarPage from "./pages/CalendarPage";
+import PackageManagementPage from "./pages/PackageManagementPage";
 import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
@@ -31,9 +32,17 @@ createStore().then(store => {
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
                         <Route path="/login" exact component={LoginPage}/>
-                        <Route path="/history" exact component={HistoryPage}/>
-                        <Route path="/order" exact component={OrderPage}/>
-                        <AuthRoute path="/package-management" Component={PackagePage} requiredRoles={[
+                        <Route path="/history" exact component={HistoryPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER
+                        ]}/>
+                        <Route path="/order" exact component={OrderPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER
+                        ]}/>
+                        <AuthRoute path="/calendar" exact Component={CalendarPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.ADMIN
+                        ]}/>
+                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.ADMIN
                         ]}/>
                         <Route path="/productList" exact component={ProductListPage}/>

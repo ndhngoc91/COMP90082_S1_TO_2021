@@ -9,7 +9,7 @@ import {
     ContainerOutlined,
     SettingOutlined,
     AccountBookOutlined,
-    HomeOutlined
+    HomeOutlined, LoginOutlined
 } from "@ant-design/icons";
 import {useStores} from "../../stores";
 import {useNavigationBarStyles} from "./styles";
@@ -53,15 +53,22 @@ const NavigationBar = observer(({defaultSelected}) => {
                     </Menu.Item>
                     <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
                 </>}
+                {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
+                    Calendar
+                </Menu.Item>}
                 {userRole === USER_ROLE.ADMIN &&
-                <>
-                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
-                        Package Management
-                    </Menu.Item>
-                </>}
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
+                    Package Management
+                </Menu.Item>}
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title="User">
-                    <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
-                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                    {userRole === USER_ROLE.GUEST ?
+                        <Menu.Item key="/login" icon={<LoginOutlined/>}>Login</Menu.Item> :
+                        <>
+                            <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
+                            <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                        </>}
+
                 </SubMenu>
             </Menu>
         </Header>
