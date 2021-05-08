@@ -1,10 +1,37 @@
-html,body{
+html, body {
     margin: 0;
     height: 100%;
     width: 100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-ul{
+body::-webkit-scrollbar {
+    background-color: #fff;
+    width: 16px;
+}
+
+/* background of the scrollbar except button or resizer */
+body::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+
+/* scrollbar itself */
+body::-webkit-scrollbar-thumb {
+    background-color: #babac0;
+    border-radius: 16px;
+    border: 4px solid #fff;
+}
+
+/* set button(top and bottom of the scrollbar) */
+body::-webkit-scrollbar-button {
+    display: none;
+}
+
+ul {
     list-style-type: none;
     padding: 0;
 }
@@ -24,6 +51,7 @@ ul{
     width: 100%;
     height: 100%;
 }
+
 .time-line-container {
     display: flex;
     flex-direction: column;
@@ -40,6 +68,7 @@ ul{
     border-radius: 10px;
     box-shadow: 2px 2px silver;
 }
+
 .itemRenderer {
     display: flex;
     flex-direction: row;
@@ -58,11 +87,13 @@ ul{
 .itemRenderer:hover {
     background-color: rgb(219, 223, 230);
 }
+
 .itemImage {
     flex: 1 0 40px;
     border-radius: 30px;
     width: 40px;
 }
+
 .itemTitleContainer {
     flex: 1 1 auto;
     display: flex;
@@ -76,6 +107,7 @@ ul{
     font-size: 14px;
     align-self: center;
 }
+
 .itemContent {
     color: silver;
     font-size: 10px;
@@ -106,6 +138,7 @@ ul{
     justify-self: flex-end;
     margin: 0 20px;
 }
+
 .mode-container-item {
     flex: 0 0 auto;
     width: 80px;
@@ -146,9 +179,11 @@ ul{
     cursor: pointer;
     transition: all 0.3s;
 }
+
 .dynamic-delete-button:hover {
     color: #777;
 }
+
 .dynamic-delete-button[disabled] {
     cursor: not-allowed;
     opacity: 0.5;

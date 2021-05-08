@@ -14,7 +14,7 @@ const Logout = ({className, children}) => {
         }).then((response) => {
             console.log(response);
             sessionStorage.removeItem('user')
-            history.push("/login");
+            history.push("/user-login");
         }).catch((error) => {
             console.log(error)
         });

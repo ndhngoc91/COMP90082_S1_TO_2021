@@ -8,7 +8,9 @@ export const useCategories = () => {
         axios.get("http://127.0.0.1:8000/categories", {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
-            setCategories(response.data);
+            if (response.status === 200) {
+                setCategories(response.data);
+            }
         });
     }, []);
 
