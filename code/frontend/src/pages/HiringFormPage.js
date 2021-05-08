@@ -141,7 +141,7 @@ const HiringFormPage = (props) => {
             title: 'Action',
             dataIndex: 'operation',
             render: (_, record) => {
-                return <a>Delete</a>
+                return <Button onClick={e => console.log(e.target)}>Delete</Button>
                 },
           },
     ];
@@ -185,6 +185,31 @@ const HiringFormPage = (props) => {
             { title: 'Extra Price', dataIndex: 'extra_price', key: 'price' },
         ];
 
+        const extra = record.Extras;
+
+
+        for (var i = 0; i < extra.length; i++){
+            extra[i].key = extra[i].extra_id;
+        }
+
+
+        const [firstName, setFirstName] = useState('');
+        const [lastName, setLastName] = useState('');
+
+        const [customerInfo, setCustomerInfo] = useState({
+                'firstName': firstName, 'lastName': lastName, 'dob':'', 'skierLevel':'', 
+                'height':'', 'weight':'', 'shoeSize':'', 'tyreSize':'' });
+
+        record.customerInfo = customerInfo;
+
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            },
+            hideSelectAll: true
+
+          };
+
         return (
 
         <Col span={18} offset={4}>
@@ -193,10 +218,12 @@ const HiringFormPage = (props) => {
                 <Row>
                     <Col span={10}>
                         <Form.Item name="firstname" label="First Name"  required="true">
-                            <Input placeholder="Please input your first name" />
+                            <Input placeholder="Please input your first name" onChange={e => {(
+                                                                        setFirstName(e.target.value),
+                                                                        console.log(e.target.value) )}} />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={10} offset={2}>
                         <Form.Item name="lastname" label="Last Name" required="true">
                             <Input placeholder="Please input your last name" />
                         </Form.Item>
@@ -209,12 +236,12 @@ const HiringFormPage = (props) => {
                             <DatePicker/>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={10} offset={2}>
                         <Form.Item name="skierlevel" label="Skier Level (Req for Snow Hire Only)">
-                            <Select placeholder="Select a option" defaultValue="|">
-                                <Option value="|"> Cautious | </Option>
-                                <Option value="||"> Moderate || </Option>
-                                <Option value="|||"> Aggressive ||| </Option>
+                            <Select placeholder="Select a option" initialvalues="|">
+                                <Select.Option value="|"> Cautious | </Select.Option>
+                                <Select.Option value="||"> Moderate || </Select.Option>
+                                <Select.Option value="|||"> Aggressive ||| </Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -223,32 +250,32 @@ const HiringFormPage = (props) => {
                 <Row>
                     <Col span={10}>
                         <Form.Item name="height" label="Height - cm (Req for Snow Hire Only))">
-                            <Select placeholder="Select a option" defaultValue="|">
-                                <Option value="|"> less or equal 148cm </Option>
-                                <Option value="||"> 149 - 157 cm </Option>
-                                <Option value="|||"> 158 - 166 cm </Option>
-                                <Option value="|V"> 167 - 178 cm </Option>
-                                <Option value="V"> 179 - 194 cm </Option>
-                                <Option value="V|"> more than 195 cm </Option>
+                            <Select placeholder="Select a option" initialvalues="|">
+                                <Select.Option value="|"> less or equal 148cm </Select.Option>
+                                <Select.Option value="||"> 149 - 157 cm </Select.Option>
+                                <Select.Option value="|||"> 158 - 166 cm </Select.Option>
+                                <Select.Option value="|V"> 167 - 178 cm </Select.Option>
+                                <Select.Option value="V"> 179 - 194 cm </Select.Option>
+                                <Select.Option value="V|"> more than 195 cm </Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={10} offset={2}>
                         <Form.Item name="weight" label="Weight - kg (Req for Snow Hire Only))">
-                            <Select placeholder="Select a option" defaultValue="1">
-                                <Option value="1"> 10-13kg </Option>
-                                <Option value="2"> 14-17kg </Option>
-                                <Option value="3"> 18-21kg </Option>
-                                <Option value="4"> 22-25kg </Option>
-                                <Option value="5"> 26-30kg </Option>
-                                <Option value="6"> 31-35kg </Option>
-                                <Option value="7"> 36-41kg </Option>
-                                <Option value="8"> 42-48kg </Option>
-                                <Option value="9"> 49-57kg </Option>
-                                <Option value="10"> 58-66kg </Option>
-                                <Option value="11"> 67-78kg </Option>
-                                <Option value="12"> 79-94kg </Option>
-                                <Option value="13"> 95+kg </Option>
+                            <Select placeholder="Select a option" initialvalues="1">
+                                <Select.Option value="1"> 10-13kg </Select.Option>
+                                <Select.Option value="2"> 14-17kg </Select.Option>
+                                <Select.Option value="3"> 18-21kg </Select.Option>
+                                <Select.Option value="4"> 22-25kg </Select.Option>
+                                <Select.Option value="5"> 26-30kg </Select.Option>
+                                <Select.Option value="6"> 31-35kg </Select.Option>
+                                <Select.Option value="7"> 36-41kg </Select.Option>
+                                <Select.Option value="8"> 42-48kg </Select.Option>
+                                <Select.Option value="9"> 49-57kg </Select.Option>
+                                <Select.Option value="10"> 58-66kg </Select.Option>
+                                <Select.Option value="11"> 67-78kg </Select.Option>
+                                <Select.Option value="12"> 79-94kg </Select.Option>
+                                <Select.Option value="13"> 95+kg </Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -259,7 +286,7 @@ const HiringFormPage = (props) => {
                             <Input placeholder="Please input your shoe size" />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={10} offset={2}>
                         <Form.Item name="tyresize" label="Tyre Size eg 215/65/15 (for Chain Hire)">
                             <Input placeholder="Please input your tyre size" />
                         </Form.Item>
@@ -267,7 +294,7 @@ const HiringFormPage = (props) => {
                 </Row>
                                 
             </Form> 
-            <Table dataSource={record.Extras} columns={extrasCol}/>
+            <Table dataSource={extra} rowSelection={rowSelection} columns={extrasCol} pagination={false}/>
         </Col>
         
     )}
@@ -347,10 +374,6 @@ const HiringFormPage = (props) => {
                                 expandedRowRender: record => extandCart(record)
                               }}>
                     </Table>
-
-                    
-                    
-                    
 
                     : "No Order"}
                 
