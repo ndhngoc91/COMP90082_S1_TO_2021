@@ -6,21 +6,21 @@ const GanttTimeline = () => {
     const [data, setData] = useState([
         {
             id: "1968fadb-0253-4e4a-2e07-f0ce63979e1f",
-            name: "Package 0",
+            name: "Task 0",
             start: new Date("Sat Apr 24 2021 19:34:59 GMT+1000 (Australian Eastern Standard Time)"),
             end: new Date("Fri Apr 30 2021 19:34:59 GMT+1000 (Australian Eastern Standard Time)"),
             color: "violet"
         },
         {
             id: "3f979d3f-2f2c-4618-9081-a83143af5ba4",
-            name: "Product 1",
+            name: "Task 1",
             start: new Date("Tue Apr 27 2021 00:00:00 GMT+1000 (Australian Eastern Standard Time)"),
             end: new Date("Fri May 07 2021 00:00:00 GMT+1000 (Australian Eastern Standard Time)"),
             color: "blue"
         },
         {
             id: "33821c1a-b2b5-4002-ff6a-2b16bb2a4e15",
-            name: "Product 2",
+            name: "Task 2",
             start: new Date("Tue Apr 27 2021 00:00:00 GMT+1000 (Australian Eastern Standard Time)"),
             end: new Date("Tue Apr 27 2021 03:00:00 GMT+1000 (Australian Eastern Standard Time)"),
             color: "green"

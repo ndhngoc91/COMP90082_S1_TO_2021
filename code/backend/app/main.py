@@ -1,29 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routers import auth
-from app.api.routers import age_groups
-from app.api.routers import categories
-from app.api.routers import customers
-from app.api.routers import orders
-from app.api.routers import packages
-from app.api.routers import products
-from app.api.routers import skill_levels
-from app.api.routers import squizz
+from app.routers import auth
+from app.routers import categories
+from app.routers import customer_codes
+from app.routers import customers
+from app.routers import orders
+from app.routers import packages
+from app.routers import products
+from app.routers import squizz
 
-tags_metadata = [
-    {
-        "name": "Customers",
-        "description": "Operations with customers, including the **customer information** and **customer address**.",
-    },
-]
-
-app = FastAPI(
-    title="Retail / Hire Web App",
-    description="This is the backend of Retail / Hire Web App for Rocky Valley, based on Squizz eCommerce Platform.",
-    version="1.0.0",
-    openapi_tags=tags_metadata,
-)
+app = FastAPI()
 
 origins = [
     "http://localhost",
@@ -40,11 +27,10 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
-app.include_router(age_groups.router)
 app.include_router(categories.router)
+app.include_router(customer_codes.router)
 app.include_router(customers.router)
 app.include_router(orders.router)
 app.include_router(packages.router)
 app.include_router(products.router)
-app.include_router(skill_levels.router)
 app.include_router(squizz.router)

@@ -1,18 +1,10 @@
-import datetime
 from typing import Optional, List
 
 from pydantic import BaseModel
 
 
 class Customer(BaseModel):
-    customer_code: str
-    title: str
-    first_name: str
-    last_name: str
-    phone: int
-    email: str
-    organization_desc: str
-    nationality_code: str
+    customer_id: int
 
 
 class Product(BaseModel):
@@ -51,14 +43,5 @@ class TokenData(BaseModel):
 class Package(BaseModel):
     name: str
     description: str
-    sellcode: str
-    category_id: int
-    age_group_id: int
-    skill_level_id: int
-
-
-class Session(BaseModel):
-    session_id: str
-    date: datetime.datetime
-    user_id: int
-    organization_id: int
+    what_is_included: str
+    available: str

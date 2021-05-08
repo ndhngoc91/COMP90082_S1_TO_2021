@@ -58,5 +58,5 @@ def put(package_id: int, request: schemas.Package, db: Session):
     if not package_to_update.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {package_id} not found")
 
-    package_to_update.update(dict(request))
+    package_to_update.update(request)
     db.commit()
