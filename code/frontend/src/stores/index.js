@@ -15,9 +15,9 @@ export const createStore = async () => {
     const authStore = new AuthStore();
     const cartStore = new CartStore();
     const customerStore = new CustomerStore();
-    await hydrate("auth", authStore);
-    await hydrate("cart", cartStore);
-    await hydrate("customer", customerStore);
+    await hydrate("rv_auth", authStore);
+    await hydrate("rv_cart", cartStore);
+    await hydrate("rv_customer", customerStore);
 
     return {
         addressStore: addressStore,

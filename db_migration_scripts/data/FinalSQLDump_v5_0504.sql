@@ -147,7 +147,17 @@ CREATE TABLE `extra` (
 
 LOCK TABLES `extra` WRITE;
 /*!40000 ALTER TABLE `extra` DISABLE KEYS */;
-INSERT INTO `extra` VALUES (1,'item1'),(2,'item2'),(3,'item3'),(4,'item4'),(5,'item5'),(6,'item6'),(7,'item7'),(8,'item8');
+INSERT INTO `extra` VALUES 
+(1,'Pants or Parka Adult'),
+(2,'Pants and Parka Adult'),
+(3,'Pants or Parka U14'),
+(4,'Pants and Parka U14'),
+(5,'Pants or Parka U6'),
+(6,'Pants and Parka/suit U6'),
+(7,'Apres Boots Adults'),
+(8,'Apres Boots U14'),
+(9,'Helmet Adults'),
+(10,'Helmet U14');
 /*!40000 ALTER TABLE `extra` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,6 +184,17 @@ CREATE TABLE `extraprice` (
 
 LOCK TABLES `extraprice` WRITE;
 /*!40000 ALTER TABLE `extraprice` DISABLE KEYS */;
+INSERT INTO `extraprice` VALUES 
+(1,1,20),(1,2,30),(1,3,35),(1,4,40),(1,5,45),(1,6,50),(1,7,55),
+(2,1,30),(2,2,40),(2,3,45),(2,4,50),(2,5,55),(2,6,60),(2,7,65),
+(3,1,18),(3,2,23),(3,3,27),(3,4,31),(3,5,35),(3,6,39),(3,7,43),
+(4,1,24),(4,2,34),(4,3,39),(4,4,44),(4,5,49),(4,6,53),(4,7,57),
+(5,1,14),(5,2,19),(5,3,23),(5,4,27),(5,5,31),(5,6,35),(5,7,39),
+(6,1,18),(6,2,23),(6,3,27),(6,4,31),(6,5,35),(6,6,39),(6,7,43),
+(7,1,10),(7,2,15),(7,3,20),(7,4,25),(7,5,30),(7,6,35),(7,7,35),
+(8,1,8),(8,2,12),(8,3,15),(8,4,17),(8,5,19),(8,6,21),(8,7,23),
+(9,1,10),(9,2,15),(9,3,20),(9,4,23),(9,5,26),(9,6,29),(9,7,31),
+(10,1,0),(10,2,0),(10,3,0),(10,4,0),(10,5,0),(10,6,0),(10,7,0);
 /*!40000 ALTER TABLE `extraprice` ENABLE KEYS */;
 UNLOCK TABLES;
 
