@@ -1,42 +1,39 @@
 import {Layout} from 'antd';
 import React from "react";
-import {BrowserRouter, Redirect, Route, Switch, withRouter} from "react-router-dom";
-import LeftMenu from "../components/LeftMenu";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import UserProfileSideMenu from "../components/UserProfileSideMenu";
 import Navigator from "../components/NavigationBar/NavigationBar";
 import Order from "../components/Order/Order";
 import Friend from "../components/Friend/Friend";
-import Information from "../components/Information/Information";
 import PageFooter from "../components/PageFooter/PageFooter";
+import UserProfileForm from "../components/UserProfileForm/UserProfileForm";
 
 
-const {Header, Footer, Sider, Content} = Layout;
+const {Header, Sider, Content} = Layout;
 
-class UserAccountPage extends React.Component {
-
-    render() {
-        return (
-            <Layout style={{minHeight: '100vh'}}>
-                <Header>
-                    <Navigator defaultSelected='/center'/>
-                </Header>
-                <BrowserRouter>
-                    <Layout>
-                        <Sider style={{backgroundColor: '#FFFFFF'}}>
-                            <LeftMenu/>
-                        </Sider>
-                        <Content style={{backgroundColor: '#FFFFFF'}}>
-                            <Switch>
-                                <Route path='/center/order' component={Order}/>
-                                <Route path='/center/friend' component={Friend}/>
-                                <Route path='/center/profile' component={Information}/>
-                            </Switch>
-                        </Content>
-                    </Layout>
-                </BrowserRouter>
-                <PageFooter/>
-            </Layout>
-        )//end return
-    }
+const UserAccountPage = () => {
+    return (
+        <Layout style={{minHeight: '100vh'}}>
+            <Header>
+                <Navigator defaultSelected='/center'/>
+            </Header>
+            <BrowserRouter>
+                <Layout>
+                    <Sider style={{backgroundColor: '#FFFFFF'}}>
+                        <UserProfileSideMenu/>
+                    </Sider>
+                    <Content style={{padding: "1em", backgroundColor: '#FFFFFF'}}>
+                        <Switch>
+                            <Route path='/center/order' component={Order}/>
+                            <Route path='/center/friend' component={Friend}/>
+                            <Route path='/center/profile' component={UserProfileForm}/>
+                        </Switch>
+                    </Content>
+                </Layout>
+            </BrowserRouter>
+            <PageFooter/>
+        </Layout>
+    );
 }
 
 export default UserAccountPage
