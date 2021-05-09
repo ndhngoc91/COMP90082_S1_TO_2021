@@ -16,7 +16,14 @@ def filter_by_query(query: Optional[str],
                     skill_level_id: Optional[int],
                     age_group_id: Optional[int],
                     db: Session):
-    sql_query = db.query(models.Package)
+    sql_query = db.query(models.Package.id, models.Package.name,
+                         models.AgeGroup.name.label("age_group"),
+                         models.Category.name.label("category"),
+                         models.SkillLevel.name.label("skill_level"),
+                         models.Package.description)
+    sql_query = sql_query.join(models.AgeGroup)
+    sql_query = sql_query.join(models.Category)
+    sql_query = sql_query.join(models.SkillLevel)
     if query is not None:
         sql_query = sql_query.filter(models.Package.name.like(f"%{query}%"))
     if category_id is not None:
