@@ -2,7 +2,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 from app.api import models, schemas
-from app.api.repository import package_repo
+from app.api.repository import package_repo, product_group_repo
 
 
 def get_all(db: Session):
