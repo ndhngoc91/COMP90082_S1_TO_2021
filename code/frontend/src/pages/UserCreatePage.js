@@ -1,16 +1,19 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import rockyValleyLogo from "../assets/rocky_valley.svg";
 import {
-    Button, Col, Form, Image, Input, InputNumber, Row, Select, Typography
+    Button, Col, DatePicker, Form, Image, Input, InputNumber, notification, Row, Select, Typography
 } from "antd";
 import {
     LockOutlined,
     UserOutlined,
-    MailOutlined
+    MailOutlined, PhoneOutlined, CheckSquareOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {CityData, StateData} from "../consts/StateData";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
-
+import moment from "moment";
+import {useUserNames} from "../hooks/UserNameHooks";
+import {useEmails} from "../hooks/EmailHooks";
+import {useHandleAddAccount} from "../hooks/CustomerHooks";
 
 const {Link, Title} = Typography;
 const {Option} = Select;
@@ -28,17 +31,26 @@ const validateMessages = {
 
 
 const UserCreatePage = () => {
+    const [usertype, setUsertype] = useState(0);
     const [username, setUsername] = useState("user1");
-    const [email, setEmail] = useState("yuyue@student.unimelb.edu.au");
-    const [age, setAge] = useState(0);
+    const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
+    const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
     const [phone, setPhone] = useState("0000000000");
-    const [marital, setMarital] = useState("unmarried");
-    const [street, setStreet] = useState("28 Bouverie St");
-    const [postcode, setPostcode] = useState(3053);
+    const [gender, setGender] = useState("male");
+    const [address, setAddress] = useState("28 Bouverie St");
+    const [postcode, setPostcode] = useState("3053");
     const [password, setPassword] = useState("1234sS");
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
+    const [clearFormAfterFinishing, setClearFormAfterFinishing] = useState(false);
+
+    const [handleAddUser, {handling}] = useHandleAddAccount();
+
+    const userNames = useUserNames();
+    const emails = useEmails();
+
+    const [form] = Form.useForm();
 
     const onStateChange = value => {
         setCities(CityData[value]);
@@ -50,24 +62,34 @@ const UserCreatePage = () => {
         setSelectedCity(value);
     };
 
-    const onClick = () => {
-        console.log({username}, {email}, {age}, {phone}, {marital}, {street}, {postcode}, {password});
-        history.push("/user-login")
-    }
+    const onFinish = values => {
+        //console.log(form.isFieldsTouched());
+        onFinish(values);
+        setClearFormAfterFinishing(true);
+        handleAddUser(values, () => {
+            notification.open({
+                message: "Added a customer successfullly!",
+                description: "Added a customer successfullly!",
+                icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
+                duration: 2
+            });
+        });
+        const newRecord = [values,usertype];
+        console.log("Success:", usertype);
+        if (clearFormAfterFinishing) {
+            form.resetFields();
+        }
+    };
 
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-            >
-                <Option value="61">+61</Option>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        </Form.Item>
-    );
+    const onFinishFailed = errorInfo => {
+        console.log(form.isFieldsTouched())
+        console.log("Failed:", errorInfo);
+    };
+
+    const onClick = () => {
+        console.log({username}, {email}, {birthdate}, {phone}, {gender}, {street: address}, {postcode}, {password});
+        setUsertype(2);
+    }
 
     return (
         <>
@@ -82,28 +104,69 @@ const UserCreatePage = () => {
                     <Row justify="center">
                         <Form name="register"
                               style={{width: "600px"}}
+                              form={form}
+                              onFinish={onFinish}
+                              onFinishFailed={onFinishFailed}
                               initialValues={{
-                                  prefix: "61",
+                                  usertype: 2,
+                                  username: "user1",
+                                  gender: "male",
+                                  birthdate: moment('2015-06-06', 'YYYY-MM-DD'),
+                                  email: "xxxx@unimelb.edu.au",
+                                  phoneNumber: "04xxxxxxxx",
+                                  region: "VIC",
+                                  city: "Melbourne",
+                                  postcode: "3053"
                               }}
                               validateMessages={validateMessages}>
-                            <Form.Item name={["user", "name"]}
+
+                            <Form.Item label="UserType"
+                                       name="usertype"
+                                       value={usertype}
+                                       hidden>
+                                <Input/>
+                            </Form.Item>
+
+                            <Form.Item name="username"
                                        rules={[
                                            {
                                                required: true,
                                                message: "Please input your Username!",
                                            },
+                                           ({
+                                               validator(_, value) {
+                                                   if (value.length > 4) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× Must have at least 5 characters'));
+                                               },
+                                           }),
+                                           {/*
+                                           ({
+                                               validator(_, value) {
+                                                   const exist_user = userNames.includes(value);
+                                                   if (exist_user) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× User name exists'));
+                                               },
+                                           }),
+                                           */}
+
                                        ]}
                                        value={username}
                                        onChange={(event) => {
                                            setUsername(event.target.value);
-                                       }}>
+                                       }}
+
+                            >
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
                                        className="name"
                                 />
                             </Form.Item>
 
-                            <Form.Item name={["user", "email"]}
+                            <Form.Item name="email"
                                        rules={[
                                            {
                                                type: "email",
@@ -112,6 +175,18 @@ const UserCreatePage = () => {
                                                required: true,
                                                message: "Please input your E-mail!",
                                            },
+                                           {/*
+                                           ({
+                                               validator(_, value) {
+                                                   const exist_email = emails.includes(value);
+                                                   if (exist_email) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× Email exists'));
+                                               },
+                                           }),
+                                           */}
+
                                        ]}
                                        value={email}
                                        onChange={(event) => {
@@ -124,42 +199,30 @@ const UserCreatePage = () => {
                                 />
                             </Form.Item>
 
-                            <Form.Item name={["user", "age"]}
+                            <Form.Item name="birthdate"
                                        rules={[
                                            {
-                                               type: "number",
-                                               min: 0,
-                                               max: 130,
-                                           },
-                                           {
                                                required: true,
-                                               message: "Please input your age!",
+                                               message: "Please choose birthdate!",
                                            },
                                        ]}
-                                       value={age}
+                                       value={birthdate}
                                        onChange={(event) => {
-                                           setAge(event.target.value);
+                                           setBirthdate(event.target.value);
                                        }}>
-                                <InputNumber
-                                    placeholder="Enter your age"
-                                    className="Age"
+                                <DatePicker
+                                    placeholder="Choose your birthdate"
                                     style={{
                                         width: "100%",
                                     }}
                                 />
                             </Form.Item>
-                            <Form.Item name={["user", "phone"]}
+
+                            <Form.Item name="phoneNumber"
                                        rules={[
-                                           {
-                                               type: "number",
-                                               message: "Please input 10 numbers",
-                                           },
                                            {
                                                required: true,
                                                message: "Please input your phone number!",
-                                           }, {
-                                               len: 10,
-                                               message: "Please input 10 numbers",
                                            }
                                        ]}
                                        value={phone}
@@ -167,7 +230,7 @@ const UserCreatePage = () => {
                                            setPhone(event.target.value);
                                        }}>
                                 <Input
-                                    addonBefore={prefixSelector}
+                                    prefix={<PhoneOutlined/>}
                                     className="Phone"
                                     placeholder="Enter your phone number"
                                     style={{
@@ -175,43 +238,47 @@ const UserCreatePage = () => {
                                     }}
                                 />
                             </Form.Item>
-                            <Form.Item name={["user", "marital"]}
+
+                            <Form.Item name="gender"
                                        rules={[
                                            {
                                                required: true,
-                                               message: "Please choose marital status!",
+                                               message: "Please choose gender!",
                                            },
                                        ]}
-                                       value={marital}
-                                       onChange={(event) => {
-                                           setMarital(event.target.value);
+                                       value={gender}
+                                       onChange={(value) => {
+                                           setGender(value);
                                        }}>
-                                <Select className="Marital"
-                                        placeholder="Choose your marital status"
-                                        style={{
-                                            width: "100%",
-                                        }}>
-                                    <Option value="unmarried">unmarried</Option>
-                                    <Option value="married">married</Option>
-                                    <Option value="Prefer not to say">no idea</Option>
+                                <Select
+                                    placeholder="Choose gender"
+                                    style={{
+                                        width: "100%",
+                                    }}
+                                >
+                                    <Option value="male">Male</Option>
+                                    <Option value="female">Female</Option>
+                                    <Option value="others">Others</Option>
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item name={["user", "address"]}>
+                            <Form.Item name="totalAddress"
+                                       value={{address}+{postcode}}
+                            >
                                 <Input.Group compact>
-                                    <Form.Item name={["user", "address", "street"]}
+                                    <Form.Item name="address"
                                                noStyle
-                                               value={street}
+                                               value={address}
                                                onChange={(event) => {
-                                                   setStreet(event.target.value);
+                                                   setAddress(event.target.value);
                                                }}
                                                rules={[
                                                    {
                                                        required: true,
-                                                       message: "Street is required"
+                                                       message: "Please input address"
                                                    }
                                                ]}>
-                                        <Input placeholder="Input street" className="street"/>
+                                        <Input placeholder="Input address" className="street"/>
                                     </Form.Item>
                                 </Input.Group>
                             </Form.Item>
@@ -219,25 +286,54 @@ const UserCreatePage = () => {
                             <Form.Item>
                                 <Row gutter={16}>
                                     <Col span={12}>
-                                        <Select value={selectedState} onChange={onStateChange}>
-                                            {StateData.map(state => (
-                                                <Option key={state} value={state}>{state}</Option>
-                                            ))}
-                                        </Select>
+                                        <Form.Item name="region"
+                                                   rules={[
+                                                       {
+                                                           required: true,
+                                                           message: "Please choose state!",
+                                                       },
+                                                   ]}
+                                                   value={selectedState}
+                                                   onChange={(value) => {
+                                                       setSelectedState(value);
+                                                   }}
+                                        >
+                                            <Select
+                                                onChange={onStateChange}
+                                            >
+                                                {StateData.map(state => (
+                                                    <Option key={state} value={state}>{state}</Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
                                     </Col>
                                     <Col span={12}>
-                                        <Select value={selectedCity} onChange={onCityChange}>
-                                            {cities.map(city => (
-                                                <Option key={city} value={city}>{city}</Option>
-                                            ))}
-                                        </Select>
+                                        <Form.Item name="city"
+                                                   rules={[
+                                                       {
+                                                           required: true,
+                                                           message: "Please choose state!",
+                                                       },
+                                                   ]}
+                                                   value={selectedCity}
+                                                   onChange={(value) => {
+                                                       setSelectedCity(value);
+                                                   }}
+                                        >
+                                            <Select
+                                                onChange={onCityChange}
+                                            >
+                                                {cities.map(city => (
+                                                    <Option key={city} value={city}>{city}</Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
                                     </Col>
                                 </Row>
                             </Form.Item>
-                            <Form.Item name={["user", "address", "Postcode"]}
+                            <Form.Item name="postcode"
                                        rules={[
                                            {
-                                               type: "number",
                                                required: true,
                                                message: "Postcode is required"
                                            }
@@ -252,17 +348,55 @@ const UserCreatePage = () => {
                             <Form.Item name="password"
                                        rules={[
                                            {
-                                               pattern: new RegExp(/^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$).{6,10}$/, "g"),
-                                               message: "The length is between 6 and 10 characters!" +
-                                                   "At least one number and uppercase and lowercase letters!",
-                                           },
-                                           {
                                                required: true,
-                                               message: "Please input your password!",
+                                               message: "× Please input your password!",
                                            },
+                                           ({
+                                               validator(_, value) {
+                                                   if (value.length > 5) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× Must have at least 6 characters'));
+                                               },
+                                           }),
+                                           ({
+                                               validator(_, value) {
+                                                   if (value.length < 16) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× Must have at most 15 characters'));
+                                               },
+                                           }),
+                                           ({
+                                               validator(_, value) {
+                                                   const reg1 = /[0-9]/;
+                                                   if (reg1.test(value)) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× Must have at least 1 number'));
+                                               },
+                                           }),
+                                           ({
+                                               validator(_, value) {
+                                                   const reg2 = /[a-z]/;
+                                                   if (reg2.test(value)) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× Must have at least 1 lower letter'));
+                                               },
+                                           }),
+                                           ({
+                                               validator(_, value) {
+                                                   const reg3 = /[A-Z]/;
+                                                   if (reg3.test(value)) {
+                                                       return Promise.resolve();
+                                                   }
+                                                   return Promise.reject(new Error('× Must have at least 1 capital letter'));
+                                               },
+                                           }),
                                            {
                                                whitespace: true,
-                                               message: "No white space!",
+                                               message: "× No white space!",
                                            },
                                        ]}
                                        hasFeedback
@@ -317,7 +451,8 @@ const UserCreatePage = () => {
                                 <Button type="primary"
                                         htmlType="submit"
                                         className="login-form-button"
-                                        onClick={onClick}>
+                                        loading={handling}
+                                        onClick={() => setUsertype(2)}>
                                     Create
                                 </Button>
                             </Form.Item>

@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import {useHistory} from "react-router-dom"
-import {Layout, Menu, Image} from "antd";
+import {Layout, Menu, Image, Modal} from "antd";
 import {
     HistoryOutlined,
     ShopOutlined,
@@ -9,20 +9,22 @@ import {
     ContainerOutlined,
     SettingOutlined,
     AccountBookOutlined,
-    HomeOutlined, LoginOutlined
+    HomeOutlined, LoginOutlined, UsergroupAddOutlined, UserAddOutlined
 } from "@ant-design/icons";
 import {useStores} from "../../stores";
 import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import {USER_ROLE} from "../../consts/UserRole";
+import LoginPage from "../../pages/LoginPage";
 
 const {Header} = Layout;
 const {SubMenu} = Menu;
 
 const NavigationBar = observer(({defaultSelected}) => {
     const history = useHistory();
+    const [isLoginModelVisible, setIsLoginModelVisible] = useState(false);
 
-    const {authStore: {userRole, logout}} = useStores();
+    const {authStore: {username,userRole, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
@@ -57,20 +59,59 @@ const NavigationBar = observer(({defaultSelected}) => {
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
                     Calendar
                 </Menu.Item>}
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
+                    Package Management
+                </Menu.Item>
                 {userRole === USER_ROLE.ADMIN &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
                     Package Management
                 </Menu.Item>}
-                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title="User">
-                    {userRole === USER_ROLE.GUEST ?
-                        <Menu.Item key="/login" icon={<LoginOutlined/>}>Login</Menu.Item> :
+                {userRole === USER_ROLE.GUEST &&
+                    <>
+                        <Menu.Item key="login"
+                                   className={rightItemCls}
+                                   onClick={() => setIsLoginModelVisible(true)}
+                                   icon={<LoginOutlined/>}
+                        >
+                            Login
+                        </Menu.Item>
+                        <Menu.Item className={rightItemCls} key="/user-create" icon={<UserAddOutlined/>}>
+                            Register
+                        </Menu.Item>
+                    </>
+                }
+
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
+                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                    <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
+                    <Menu.Item key="/users" icon={<UsergroupAddOutlined/>}>Users List</Menu.Item>
+                    <Menu.Item key="/admin-profile" icon={<AccountBookOutlined/>}>Admin Profile</Menu.Item>
+                </SubMenu>
+
+                {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
+                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                    {userRole === USER_ROLE.CUSTOMER &&
                         <>
                             <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
-                            <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
-                        </>}
-
+                        </>
+                    }
+                    {userRole === USER_ROLE.ADMIN &&
+                    <>
+                        <Menu.Item key="/users" icon={<UsergroupAddOutlined/>}>Users List</Menu.Item>
+                        <Menu.Item key="/admin-profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
+                    </>
+                    }
                 </SubMenu>
+                }
             </Menu>
+            <Modal title="Login " visible={isLoginModelVisible}
+                   footer={null} closable={false}
+                   onCancel={() => {
+                       setIsLoginModelVisible(false);
+                   }}>
+                <LoginPage/>
+            </Modal>
         </Header>
     );
 });

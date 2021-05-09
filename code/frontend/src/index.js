@@ -15,6 +15,8 @@ import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
 import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
+import AdminUserListPage from "./pages/AdminUserListPage";
+import AdminAccountPage from "./pages/AdminAccountPage";
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -42,9 +44,10 @@ createStore().then(store => {
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.ADMIN
                         ]}/>
-                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
+                        <Route path="/package-management" exact component={PackageManagementPage}/>
+                        {/*<AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.ADMIN
-                        ]}/>
+                        ]}/>*/}
                         <Route path="/productList" exact component={ProductListPage}/>
                         <Route path="/products/:productCode*" exact component={ProductDetailsPage}/>
                         <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
@@ -52,6 +55,8 @@ createStore().then(store => {
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
+                        <Route path="/users" component={AdminUserListPage}/>
+                        <Route path="/admin-profile" component={AdminAccountPage}/>
                         <Route path="/profile" component={UserAccountPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
