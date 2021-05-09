@@ -38,11 +38,10 @@ const NavigationBar = observer(({defaultSelected}) => {
     return (
         <Header style={{width: "100%", padding: 0}}>
             <Menu onClick={handleClick} mode="horizontal"
-                  theme={"dark"}
-                  defaultSelectedKeys={[defaultSelected]}>
+                  theme={"dark"} defaultSelectedKeys={[defaultSelected]}>
+                <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
                 <>
-                    <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                     <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
                     <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
                 </>}
@@ -53,6 +52,10 @@ const NavigationBar = observer(({defaultSelected}) => {
                     </Menu.Item>
                     <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
                 </>}
+                {userRole === USER_ROLE.ADMIN &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
+                    Booking Management
+                </Menu.Item>}
                 {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
                     Calendar

@@ -9,6 +9,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
 import CalendarPage from "./pages/CalendarPage";
+import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
 import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
@@ -37,6 +38,9 @@ createStore().then(store => {
                         ]}/>
                         <Route path="/order" exact component={OrderPage} requiredRoles={[
                             USER_ROLE.CUSTOMER
+                        ]}/>
+                        <AuthRoute path="/booking-management" exact Component={BookingManagementPage} requiredRoles={[
+                            USER_ROLE.ADMIN
                         ]}/>
                         <AuthRoute path="/calendar" exact Component={CalendarPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
