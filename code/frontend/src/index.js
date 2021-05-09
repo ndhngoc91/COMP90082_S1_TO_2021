@@ -17,6 +17,7 @@ import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
 import AdminUserListPage from "./pages/AdminUserListPage";
 import AdminAccountPage from "./pages/AdminAccountPage";
+import AdminListPage from "./pages/AdminListPage";
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -60,6 +61,7 @@ createStore().then(store => {
                         <Route path="/profile" component={UserAccountPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
+                        <Route path="/admins" exact component={AdminListPage}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>
                     </Switch>
                 </BrowserRouter>

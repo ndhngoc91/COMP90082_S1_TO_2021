@@ -1,19 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {Col, Layout, Spin, Row, Table, Typography, Input, Space, Button, Modal} from "antd";
-import PageFooter from "../components/PageFooter/PageFooter";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import { useCustomers } from "../hooks/CustomerHooks";
 import {DeleteRowOutlined, EditOutlined} from "@ant-design/icons";
-import EditUserForm from "../components/AdminUserList/EditUserForm";
-import AddUserForm from "../components/AdminUserList/AddUserForm";
-import DeleteUserForm from "../components/AdminUserList/DeleteUserForm";
+import EditAdminForm from "../components/AdminList/EditAdminForm";
+import AddAdminForm from "../components/AdminList/AddAdminForm";
+import DeleteAdminForm from "../components/AdminList/DeleteAdminForm";
 const { Content } = Layout;
 const { Title } = Typography;
 const { Search } = Input;
 const {Column} = Table;
 
 
-const AdminUserListPage = () => {
+const AdminListPage = () => {
     const [
         getCustomers,
         setPageCurrent,
@@ -96,7 +95,7 @@ const AdminUserListPage = () => {
                     <Col span={18}>
                         <Row>
                             <Col span={20}>
-                                <Title level={4}>Customer List</Title>
+                                <Title level={4}>Admin List</Title>
                             </Col>
                             <Col span={4}>
                                 <Search
@@ -181,24 +180,24 @@ const AdminUserListPage = () => {
                    onCancel={() => {
                        setIsAddUserModelVisible(false);
                    }}>
-                <AddUserForm/>
+                <AddAdminForm/>
             </Modal>
             <Modal title="Edit a user" visible={isEditUserVisible}
                    footer={null} closable={false}
                    onCancel={() => {
                        setIsEditUserModelVisible(false);
                    }}>
-                <EditUserForm fieldValues={editFormFieldValues}/>
+                <EditAdminForm fieldValues={editFormFieldValues}/>
             </Modal>
             <Modal title="Delete a user" visible={isDeleteUserVisible}
                    footer={null} closable={false}
                    onCancel={() => {
                        setIsDeleteUserModelVisible(false);
                    }}>
-                <DeleteUserForm fieldValues={deleteFormFieldValues}/>
+                <DeleteAdminForm fieldValues={deleteFormFieldValues}/>
             </Modal>
         </Layout>
     );
 }
 
-export default AdminUserListPage;
+export default AdminListPage;

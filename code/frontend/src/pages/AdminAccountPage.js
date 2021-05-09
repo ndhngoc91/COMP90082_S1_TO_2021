@@ -81,8 +81,8 @@ const AdminAccountPage = () => {
                 </Row>
                 <Form style={{width: "1000px"}}
                       initialValues={{
-                          userType: 1,
-                          //userName: "Admin1",
+                          userType: {userRole},//1,
+                          userName: {username},//"Admin1",
                           firstName: "Ruby",
                           lastName: "Nguyen",
                           gender: "male",
