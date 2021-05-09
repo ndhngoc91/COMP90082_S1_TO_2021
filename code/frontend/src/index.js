@@ -52,7 +52,7 @@ createStore().then(store => {
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
-                        <Route path="/profile" component={UserAccountPage}/>
+                        <Route path="/profile" exact component={UserAccountPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>
