@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+  # MySQL
+  mysqldb:
+    container_name: "mysqldb"
+    build: ./db_migration_scripts/
+    restart: always
+    tty: true
+    environment:
+      MYSQL_DATABASE: "squizz_app"
+      # MYSQL_USER: user
+      # MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: "4r#$$#o7d&LYU^W&5b4"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_migration_scripts/data:/docker-entrypoint-initdb.d
+      - ./db_migration_scripts/MySQLConf/:/etc/mysql/conf.d
+      - ./log/mysql:/var/log/mysql
+    networks:
+      - local-net
+
+  # Backend - FastAPI
+  backend:
+    links:
+      - mysqldb
+    container_name: "backend"
+    build: ./code/backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./code/backend:/usr/src/server
+    networks:
+      - local-net
+
+networks:
+  local-net:
+    driver: bridge
