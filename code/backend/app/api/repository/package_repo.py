@@ -1,10 +1,10 @@
 from typing import Optional
-
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
-from app.api import models, schemas
 from starlette import status
 from fastapi import HTTPException
+from app.api import models, schemas
+from app.api.repository import product_group_repo
 
 
 def get_all(db: Session):
@@ -39,11 +39,13 @@ def create(request: schemas.Package, db: Session):
     new_package = models.Package(
         name=request.name,
         description=request.description,
-        sellcode=request.sellcode,
         category_id=request.category_id,
         age_group_id=request.age_group_id,
         skill_level_id=request.skill_level_id
     )
+    product_groups = product_group_repo.get_by_ids(ids=request.product_group_ids, db=db)
+    for product_group in product_groups:
+        new_package.product_groups.append(product_group)
     db.add(new_package)
     db.commit()
     db.refresh(new_package)

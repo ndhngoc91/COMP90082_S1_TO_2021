@@ -9,6 +9,7 @@ import {MinusCircleOutlined, PlusOutlined, CheckSquareOutlined} from "@ant-desig
 import {useAgeGroups} from "../../hooks/AgeGroupHooks";
 import {useCategories} from "../../hooks/CategoryHooks";
 import {useSkillLevels} from "../../hooks/SkillLevelHooks";
+import {useProductGroups} from "../../hooks/ProductGroupHooks";
 
 const {Option} = Select;
 
@@ -34,6 +35,7 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
     const ageGroups = useAgeGroups();
     const categories = useCategories();
     const skillLevels = useSkillLevels();
+    const productGroups = useProductGroups();
 
     useEffect(() => {
         form.setFieldsValue(fieldValues);
@@ -55,9 +57,8 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                        name="name"
                        hasFeedback
                        rules={[{required: true, message: "Please input the product name!"}]}>
-                <Input/>
+                <Input placeholder="Name"/>
             </Form.Item>
-
             <Form.Item label="Description"
                        name="description"
                        hasFeedback
@@ -66,11 +67,10 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                                 autoSize={{minRows: 3, maxRows: 5}}/>
             </Form.Item>
             <Form.Item label="Age Group"
-                       name="age_group"
+                       name="age_group_id"
                        hasFeedback
                        rules={[{required: true, message: "Required!"}]}>
-                <Select defaultValue={-1}>
-                    <Option key={0} value={-1}>Select Age Group</Option>
+                <Select placeholder="Select Age Group">
                     {ageGroups.map((ageGroup, index) => {
                         return (
                             <Option key={index} value={ageGroup.id}>{ageGroup.name}</Option>
@@ -79,11 +79,10 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                 </Select>
             </Form.Item>
             <Form.Item label="Category"
-                       name="category"
+                       name="category_id"
                        hasFeedback
                        rules={[{required: true, message: "Required!"}]}>
-                <Select defaultValue={-1}>
-                    <Option key={0} value={-1}>Select Category</Option>
+                <Select placeholder="Select Category">
                     {categories.map((category, index) => {
                         return (
                             <Option key={index} value={category.id}>{category.name}</Option>
@@ -92,11 +91,10 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                 </Select>
             </Form.Item>
             <Form.Item label="Skill Level"
-                       name="skill_level"
+                       name="skill_level_id"
                        hasFeedback
                        rules={[{required: true, message: "Required!"}]}>
-                <Select defaultValue={-1}>
-                    <Option key={0} value={-1}>Select Skill Level</Option>
+                <Select placeholder="Select Skill Level">
                     {skillLevels.map((skillLevel, index) => {
                         return (
                             <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
@@ -104,7 +102,7 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                     })}
                 </Select>
             </Form.Item>
-            <Form.List name="product_groups"
+            <Form.List name="product_group_ids"
                        rules={[
                            {
                                validator: async (_, names) => {
@@ -123,15 +121,15 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                                       key={field.key}>
                                 <Form.Item {...field}
                                            validateTrigger={["onChange", "onBlur"]}
-                                           rules={[
-                                               {
-                                                   required: true,
-                                                   whitespace: true,
-                                                   message: "Please input product's id or delete this field.",
-                                               },
-                                           ]}
+                                           rules={[{required: true, message: "Required!"}]}
                                            noStyle>
-                                    <Input placeholder="Product Group Id" style={{width: "60%"}}/>
+                                    <Select placeholder="Select Product Group" style={{width: "60%"}}>
+                                        {productGroups.map((productGroup, index) => {
+                                            return (
+                                                <Option key={index} value={productGroup.id}>{productGroup.name}</Option>
+                                            );
+                                        })}
+                                    </Select>
                                 </Form.Item>
                                 {fields.length > 1 ? (
                                     <MinusCircleOutlined
