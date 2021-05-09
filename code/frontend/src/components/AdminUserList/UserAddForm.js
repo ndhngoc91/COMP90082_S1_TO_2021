@@ -12,7 +12,7 @@ import {
     UserOutlined,
     MailOutlined,
     PhoneOutlined,
-    LockOutlined
+    LockOutlined, TeamOutlined
 } from "@ant-design/icons";
 import {CityData, StateData} from "../../consts/StateData";
 import Checkbox from "antd/es/checkbox/Checkbox";
@@ -32,6 +32,8 @@ const UserAddForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
 
     const [usertype, setUsertype] = useState(0);
     const [username, setUsername] = useState("user1");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
     const [phone, setPhone] = useState("0000000000");
@@ -110,6 +112,40 @@ const UserAddForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                         <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                placeholder="Enter username"
                                className="name"
+                        />
+                    </Form.Item>
+
+                    <Form.Item name="firstName"
+                               value={firstName}
+                               onChange={(event) => {
+                                   setFirstName(event.target.value);
+                               }}
+                               rules={[
+                                   {
+                                       required: true,
+                                       message: "Please input your first name!"
+                                   }
+                               ]}
+                    >
+                        <Input prefix={<UserOutlined/>}
+                               placeholder="Please input your first name!"
+                        />
+                    </Form.Item>
+
+                    <Form.Item name="lastName"
+                               value={lastName}
+                               onChange={(event) => {
+                                   setLastName(event.target.value);
+                               }}
+                               rules={[
+                                   {
+                                       required: true,
+                                       message: "Please input your last name!"
+                                   }
+                               ]}
+                    >
+                        <Input prefix={<TeamOutlined/>}
+                               placeholder="Please input your last name!"
                         />
                     </Form.Item>
 

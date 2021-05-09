@@ -9,7 +9,7 @@ import {
     UserOutlined,
     MailOutlined,
     PhoneOutlined,
-    LockOutlined
+    LockOutlined, TeamOutlined
 } from "@ant-design/icons";
 import {CityData, StateData} from "../../consts/StateData";
 import moment from "moment";
@@ -30,6 +30,8 @@ const AdminForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFinis
 
     const [usertype, setUsertype] = useState(0);
     const [username, setUsername] = useState("user1");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
     const [phone, setPhone] = useState("0000000000");
@@ -112,6 +114,42 @@ const AdminForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFinis
                            placeholder="Enter username"
                            className="name"
                            readOnly={readOnly}
+                    />
+                </Form.Item>
+
+                <Form.Item name="firstName"
+                           value={firstName}
+                           onChange={(event) => {
+                               setFirstName(event.target.value);
+                           }}
+                           rules={[
+                               {
+                                   required: true,
+                                   message: "Please input your first name!"
+                               }
+                           ]}
+                >
+                    <Input prefix={<UserOutlined/>}
+                           readOnly={readOnly}
+                           placeholder="Please input your first name!"
+                    />
+                </Form.Item>
+
+                <Form.Item name="lastName"
+                           value={lastName}
+                           onChange={(event) => {
+                               setLastName(event.target.value);
+                           }}
+                           rules={[
+                               {
+                                   required: true,
+                                   message: "Please input your last name!"
+                               }
+                           ]}
+                >
+                    <Input prefix={<TeamOutlined/>}
+                           readOnly={readOnly}
+                           placeholder="Please input your last name!"
                     />
                 </Form.Item>
 
@@ -296,7 +334,8 @@ const AdminForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFinis
                             <Input placeholder="Input postcode" className="postcode" readOnly={readOnly}/>
                         </Form.Item>
 
-                        <Form.Item name="password"
+                        {/*
+                                                <Form.Item name="password"
                                    rules={[
                                        {
                                            required: true,
@@ -362,6 +401,7 @@ const AdminForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFinis
                                 readOnly={readOnly}
                             />
                         </Form.Item>
+                        */}
                     </>
                 }
 

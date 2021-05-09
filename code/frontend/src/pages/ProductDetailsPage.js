@@ -1,5 +1,4 @@
 import React from "react";
-import ImageViewer from "../components/ImageViewer";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import ModelMetadata from "../components/ModelMetadata";
 import {
@@ -99,7 +98,7 @@ const ProductDetailsPage = () => {
 
                             <Row gutter={[16, 16]}>
                                 <Col flex={9}>
-                                    <ImageViewer height={500} width={600} imageList={productInfo.imageList}/>
+                                    <div>Image Viewer (deprecated)</div>
                                 </Col>
                                 <Col flex={3}>
                                     <div style={{backgroundColor: "whiteSmoke", borderRadius: "5%"}}>

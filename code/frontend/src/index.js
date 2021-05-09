@@ -9,6 +9,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
 import CalendarPage from "./pages/CalendarPage";
+import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
 import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
@@ -20,7 +21,6 @@ import AdminAccountPage from "./pages/AdminAccountPage";
 import AdminListPage from "./pages/AdminListPage";
 
 // CSS
-import CategoryPage from "./pages/CategoryPage";
 import "antd/dist/antd.css";
 import "./index.css";
 import {createStore, StoreContext} from "./stores";
@@ -41,6 +41,9 @@ createStore().then(store => {
                         <Route path="/order" exact component={OrderPage} requiredRoles={[
                             USER_ROLE.CUSTOMER
                         ]}/>
+                        <AuthRoute path="/booking-management" exact Component={BookingManagementPage} requiredRoles={[
+                            USER_ROLE.ADMIN
+                        ]}/>
                         <AuthRoute path="/calendar" exact Component={CalendarPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.ADMIN
@@ -52,13 +55,16 @@ createStore().then(store => {
                         <Route path="/productList" exact component={ProductListPage}/>
                         <Route path="/products/:productCode*" exact component={ProductDetailsPage}/>
                         <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
-                        <Route path="/productCategories/:id" exact component={CategoryPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
+<<<<<<< HEAD
                         <Route path="/users" component={AdminUserListPage}/>
                         <Route path="/admin-profile" component={AdminAccountPage}/>
                         <Route path="/profile" component={UserAccountPage}/>
+=======
+                        <Route path="/profile" exact component={UserAccountPage}/>
+>>>>>>> a7b8bf9d306a283bbbf87cc72b342c09dec3a403
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
                         <Route path="/admins" exact component={AdminListPage}/>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {notification} from "antd";
 import {CheckSquareOutlined} from "@ant-design/icons";
 import {useHandleAddAccount} from "../../hooks/CustomerHooks";
@@ -6,6 +6,7 @@ import AdminAddForm from "./AdminAddForm";
 
 const AddAdminForm = () => {
     const [handleAddAccount, {handling}] = useHandleAddAccount();
+    const [query,setQuery] = useState("add");
 
     const onFinish = values => {
         handleAddAccount(values, () => {
@@ -18,7 +19,7 @@ const AddAdminForm = () => {
         });
     };
 
-    return <AdminAddForm onFinish={onFinish} finishing={handling} clearFormAfterFinishing/>;
+    return <AdminAddForm onFinish={onFinish} finishing={handling} query={query} clearFormAfterFinishing />;
 };
 
 export default AddAdminForm;

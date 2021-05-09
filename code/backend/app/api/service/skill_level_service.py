@@ -1,7 +1,6 @@
-from app.api.repository import skill_level_repo
 from sqlalchemy.orm import Session
-
 from app.api import models, schemas
+from app.api.repository import skill_level_repo
 
 
 def get_all(db: Session):
