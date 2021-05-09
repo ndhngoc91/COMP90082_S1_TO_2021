@@ -11,11 +11,11 @@ services:
       MYSQL_DATABASE: "squizz_app"
       # MYSQL_USER: user
       # MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: "4r#$$#o7d&LYU^W&5b4"
+      MYSQL_ROOT_PASSWORD: "rootpasswordgiven"
     ports:
       - "3306:3306"
     volumes:
-      - ./db_migration_scripts/data:/docker-entrypoint-initdb.d
+      - ./db_migration_scripts/deploydata:/docker-entrypoint-initdb.d
       - ./db_migration_scripts/MySQLConf/:/etc/mysql/conf.d
       - ./log/mysql:/var/log/mysql
     networks:
@@ -33,6 +33,14 @@ services:
       - ./code/backend:/usr/src/server
     networks:
       - local-net
+
+  # frontend:
+  #   links:
+  #     - backend
+  #   container_name: : "frontend"
+  #   build: ./code/frontend
+  #   ports:
+  #     -
 
 networks:
   local-net:
