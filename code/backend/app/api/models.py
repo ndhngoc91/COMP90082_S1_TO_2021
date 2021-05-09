@@ -1,5 +1,5 @@
 from sqlalchemy import BigInteger, Column, DECIMAL, DateTime, Enum, Float, ForeignKey, Integer, String, Table, Text, \
-    text
+    text, BOOLEAN
 from sqlalchemy.orm import relationship
 from app.api.database import Base
 
@@ -18,6 +18,7 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(45))
+    image_url = Column(String(45))
 
 
 class Customer(Base):
@@ -72,28 +73,12 @@ class Organization(Base):
     supplier_organization_id = Column(String(80))
 
 
-class Package(Base):
-    __tablename__ = 'packages'
-
-    id = Column(Integer, primary_key=True, unique=True)
-    category_id = Column(Integer, nullable=False, index=True)
-    skill_level_id = Column(Integer, nullable=False, index=True)
-    age_group_id = Column(Integer, nullable=False, index=True)
-    name = Column(String(45))
-    description = Column(String(45))
-    sellcode = Column(String(45))
-
-    types = relationship('Type', secondary='package_types')
-
-
 class ProductGroup(Base):
     __tablename__ = 'product_groups'
 
     id = Column(Integer, primary_key=True, unique=True)
     name = Column(String(100), nullable=False)
     description = Column(String(80), nullable=False)
-
-    products = relationship('Product', secondary='product_group_product')
 
 
 class Session(Base):
@@ -113,8 +98,8 @@ class SkillLevel(Base):
     name = Column(String(45))
 
 
-class Type(Base):
-    __tablename__ = 'types'
+class TrailType(Base):
+    __tablename__ = 'trail_types'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(45))
@@ -152,34 +137,36 @@ t_order_receipts = Table(
     Column('receipt', String(45))
 )
 
-t_package_types = Table(
-    'package_types', metadata,
-    Column('package_id', ForeignKey('packages.id'), primary_key=True, nullable=False, index=True),
-    Column('type_id', ForeignKey('types.id'), primary_key=True, nullable=False, index=True)
-)
 
+class Package(Base):
+    __tablename__ = 'packages'
 
-class PriceLevel(Base):
-    __tablename__ = 'price_levels'
+    id = Column(Integer, primary_key=True, unique=True)
+    category_id = Column(ForeignKey('categories.id'), nullable=False, index=True)
+    skill_level_id = Column(ForeignKey('skill_levels.id'), nullable=False, index=True)
+    age_group_id = Column(ForeignKey('age_groups.id'), nullable=False, index=True)
+    name = Column(String(45))
+    description = Column(String(45))
 
-    package_id = Column(ForeignKey('packages.id'), primary_key=True, nullable=False, index=True)
-    number_of_days = Column(Integer, primary_key=True, nullable=False)
-    price = Column(Float, server_default=text("'0'"))
-
-    package = relationship('Package')
+    age_group = relationship('AgeGroup')
+    category = relationship('Category')
+    skill_level = relationship('SkillLevel')
+    product_groups = relationship('ProductGroup', secondary='package_product_group')
 
 
 class Product(Base):
     __tablename__ = 'products'
 
     id = Column(Integer, primary_key=True, unique=True)
-    name = Column(String(50))
-    idpackage = Column(ForeignKey('packages.id'), nullable=False, index=True, server_default=text("'1'"))
+    model = Column(String(50))
+    idpackage = Column(Integer, nullable=False, index=True, server_default=text("'1'"))
     description = Column(Text)
     price = Column(DECIMAL(10, 2), nullable=False)
-    items_id = Column(Integer)
+    is_available = Column(BOOLEAN, server_default=text("'1'"))
+    setting = Column(Text)
+    group_id = Column(ForeignKey('product_groups.id', ondelete='CASCADE', onupdate='CASCADE'), index=True)
 
-    package = relationship('Package')
+    group = relationship('ProductGroup')
 
 
 class User(Base):
@@ -207,11 +194,33 @@ class Address(User):
     order_id = Column(Integer, index=True)
 
 
-t_product_group_product = Table(
-    'product_group_product', metadata,
-    Column('group_id', ForeignKey('product_groups.id'), primary_key=True, nullable=False, index=True),
-    Column('product_id', ForeignKey('products.id'), primary_key=True, nullable=False, index=True)
+t_package_product_group = Table(
+    'package_product_group', metadata,
+    Column('package_id', ForeignKey('packages.id'), primary_key=True, nullable=False),
+    Column('product_group_id', ForeignKey('product_groups.id'), primary_key=True, nullable=False, index=True)
 )
+
+
+class PackageTtypesPair(Base):
+    __tablename__ = 'package_ttypes_pair'
+
+    package_id = Column(ForeignKey('packages.id'), primary_key=True, nullable=False, index=True)
+    trail_type_id = Column(ForeignKey('trail_types.id'), primary_key=True, nullable=False, index=True)
+    sellcode = Column(String(45))
+
+    package = relationship('Package')
+    trail_type = relationship('TrailType')
+
+
+class PriceLevel(Base):
+    __tablename__ = 'price_levels'
+
+    package_id = Column(ForeignKey('packages.id'), primary_key=True, nullable=False, index=True)
+    number_of_days = Column(Integer, primary_key=True, nullable=False)
+    price = Column(Float, server_default=text("'0'"))
+
+    package = relationship('Package')
+
 
 t_user_user_group = Table(
     'user_user_group', metadata,
