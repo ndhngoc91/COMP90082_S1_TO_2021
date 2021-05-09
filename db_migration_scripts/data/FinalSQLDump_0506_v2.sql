@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 8.0.23, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `squizz_app` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `squizz_app`;
+-- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: squizz_app
+-- Host: localhost    Database: squizz_app
 -- ------------------------------------------------------
--- Server version	8.0.23
+-- Server version	8.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -79,7 +81,7 @@ DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int NOT NULL,
   `name` varchar(45) DEFAULT NULL,
-  `imgae_url` varchar(45) DEFAULT NULL,
+  `image_url` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -333,7 +335,10 @@ CREATE TABLE `packages` (
   UNIQUE KEY `idpackage_UNIQUE` (`id`),
   KEY `fk_table2_category1_idx` (`category_id`),
   KEY `fk_table2_skilllevel1_idx` (`skill_level_id`),
-  KEY `fk_table2_agegroup` (`age_group_id`)
+  KEY `fk_table2_agegroup` (`age_group_id`),
+  CONSTRAINT `fk_packages_agegroups` FOREIGN KEY (`age_group_id`) REFERENCES `age_groups` (`id`),
+  CONSTRAINT `fk_packages_categories` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  CONSTRAINT `fk_packages_skilllevels` FOREIGN KEY (`skill_level_id`) REFERENCES `skill_levels` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -343,7 +348,7 @@ CREATE TABLE `packages` (
 
 LOCK TABLES `packages` WRITE;
 /*!40000 ALTER TABLE `packages` DISABLE KEYS */;
-INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','description1'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','description2'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','description3'),(4,1,2,4,'Intermediate Package','description4'),(5,1,3,4,'Performance Package','description5'),(6,2,1,3,'Beginner - Adult','description6'),(7,2,1,2,'Beginner - Child 6 -14yrs','description7'),(8,2,1,1,'Beginner - Child U6','description8'),(9,2,2,4,'Intermediate Ski Only','description9'),(10,2,3,4,'Performance Ski Only','description10'),(11,3,1,3,'Beginner - Adult','description11'),(12,3,1,2,'Beginner - child 6 - 14yrs','description12'),(13,3,1,1,'Beginner - Child Under 6yrs','description13'),(14,3,2,4,'Intermediate Boot','description14'),(15,3,3,4,'Back Country Touring Boot','description15'),(16,4,1,3,'Beginner Package - Adult','description16'),(17,4,1,2,'Beginner Child 6-14yrs','description17'),(20,0,0,0,'string','string');
+INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','description1'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','description2'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','description3'),(4,1,2,4,'Intermediate Package','description4'),(5,1,3,4,'Performance Package','description5'),(6,2,1,3,'Beginner - Adult','description6'),(7,2,1,2,'Beginner - Child 6 -14yrs','description7'),(8,2,1,1,'Beginner - Child U6','description8'),(9,2,2,4,'Intermediate Ski Only','description9'),(10,2,3,4,'Performance Ski Only','description10'),(11,3,1,3,'Beginner - Adult','description11'),(12,3,1,2,'Beginner - child 6 - 14yrs','description12'),(13,3,1,1,'Beginner - Child Under 6yrs','description13'),(14,3,2,4,'Intermediate Boot','description14'),(15,3,3,4,'Back Country Touring Boot','description15'),(16,4,1,3,'Beginner Package - Adult','description16'),(17,4,1,2,'Beginner Child 6-14yrs','description17');
 /*!40000 ALTER TABLE `packages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -657,4 +662,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-09 16:18:14
+-- Dump completed on 2021-05-09 19:42:20
