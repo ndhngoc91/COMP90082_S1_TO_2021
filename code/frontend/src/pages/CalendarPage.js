@@ -1,13 +1,12 @@
 import React from "react";
 import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {Layout} from "antd";
+import {Calendar, Badge, Checkbox, Layout, Row, Col, DatePicker, Space, Typography, Divider, Select} from "antd";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
-const {Content} = Layout;
-
-import {Calendar, Badge} from 'antd';
+const {Content, Sider} = Layout;
+const {Title} = Typography;
 
 const getListData = (value) => {
     let listData;
@@ -71,12 +70,53 @@ const monthCellRender = (value) => {
     ) : null;
 };
 
+const options = [
+    {label: 'All', value: 'All'},
+    {label: 'Ski', value: 'Ski'},
+    {label: 'Poles', value: 'Poles'},
+    {label: 'Snowboard', value: 'Snowboard'},
+    {label: 'Helmet', value: 'Helmet'},
+    {label: 'Suit', value: 'Suit'},
+    {label: 'Jacket', value: 'Jacket'},
+    {label: 'Pants', value: 'Pants'},
+    {label: 'Boots', value: 'Boots'}
+];
+
+
 const CalendarPage = () => {
     const {authStore: {userRole}} = useStores();
 
     return <Layout style={{minHeight: "100vh"}}>
         <NavigationBar defaultSelected="/package"/>
         <Layout style={{height: "100%"}}>
+            <Sider style={{backgroundColor: "white", padding: "20px"}} width={300}>
+                <Title level={3}>Filter</Title>
+                <Divider/>
+                <Space direction="vertical" size={20}>
+                    <Row justify="start">
+                        <DatePicker placeholder="Start date" size="large"/>
+                    </Row>
+                    <Row justify="start">
+                        <DatePicker placeholder="End date" size="large"/>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Title level={5}>Type</Title>
+                            <Checkbox.Group options={options} defaultValue={['Pear']}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Title level={5}>Availability</Title>
+                            <Select defaultValue={2} style={{width: "200px"}}>
+                                <Select.Option value={0}>Available</Select.Option>
+                                <Select.Option value={1}>Not available</Select.Option>
+                                <Select.Option value={2}>Any</Select.Option>
+                            </Select>
+                        </Col>
+                    </Row>
+                </Space>
+            </Sider>
             <Content>
                 {userRole === USER_ROLE.ADMIN &&
                 <GanttTimeline/>}
