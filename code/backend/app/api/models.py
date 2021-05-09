@@ -192,9 +192,10 @@ class User(Base):
     weight = Column(DECIMAL(5, 2))
     foot_size = Column(DECIMAL(3, 1))
     organization_id = Column(ForeignKey('organizations.id'), index=True)
-    user_type_id = Column(Integer, index=True)
+    user_type_id = Column(ForeignKey('user_types.id'), index=True)
 
     organization = relationship('Organization')
+    user_type = relationship('UserType')
 
 
 class Address(User):

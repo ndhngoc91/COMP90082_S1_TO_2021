@@ -2,6 +2,7 @@ import datetime
 from typing import Optional, List
 
 from pydantic import BaseModel
+from pydantic.schema import date
 
 
 class Customer(BaseModel):
@@ -62,3 +63,30 @@ class Session(BaseModel):
     date: datetime.datetime
     user_id: int
     organization_id: int
+
+
+class User(BaseModel):
+    username: str
+    email: str
+    birthday: date
+    phone_number: str
+    martial_status: str
+    street: str
+    state: str
+    city: str
+    postcode: int
+
+
+class UserCreate(User):
+    password: str
+
+
+class UserProfile(User):
+    height: float
+    weight: float
+    shoe_size: float
+    skier_ability: float
+    DIN: str
+    organization: str
+
+
