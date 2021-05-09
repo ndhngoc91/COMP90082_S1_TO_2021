@@ -102,7 +102,7 @@ const AdminAccountPage = () => {
                         <Col span={8}>
                             <Form.Item label="UserType"
                                        name="userType"
-                                       value={userRole}
+                                       value={userType}
                                        hidden>
                                 <Input/>
                             </Form.Item>

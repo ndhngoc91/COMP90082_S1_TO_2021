@@ -401,7 +401,7 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                                     </Button>
                                 </Col>
                                 <Col lg={6}>
-                                    <Button type="default" size="large" onClick={() => setReadOnly(true)}>
+                                    <Button type="default" size="large" onClick={() => setIsDeleteModelVisible(false)}>
                                         No
                                     </Button>
                                 </Col>
