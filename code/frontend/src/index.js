@@ -16,6 +16,9 @@ import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
 import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
+import AdminUserListPage from "./pages/AdminUserListPage";
+import AdminAccountPage from "./pages/AdminAccountPage";
+import AdminListPage from "./pages/AdminListPage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -45,18 +48,26 @@ createStore().then(store => {
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.ADMIN
                         ]}/>
-                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
+                        <Route path="/package-management" exact component={PackageManagementPage}/>
+                        {/*<AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.ADMIN
-                        ]}/>
+                        ]}/>*/}
                         <Route path="/productList" exact component={ProductListPage}/>
                         <Route path="/products/:productCode*" exact component={ProductDetailsPage}/>
                         <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
+<<<<<<< HEAD
+                        <Route path="/users" component={AdminUserListPage}/>
+                        <Route path="/admin-profile" component={AdminAccountPage}/>
+                        <Route path="/profile" component={UserAccountPage}/>
+=======
                         <Route path="/profile" exact component={UserAccountPage}/>
+>>>>>>> a7b8bf9d306a283bbbf87cc72b342c09dec3a403
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
+                        <Route path="/admins" exact component={AdminListPage}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>
                     </Switch>
                 </BrowserRouter>
