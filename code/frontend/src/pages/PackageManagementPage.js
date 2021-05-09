@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Layout, Table, Space, Input, Select, Row, Col, Button, Modal} from "antd";
+import {Layout, Table, Space, Input, Select, Row, Col, Button, Modal, Tag} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleFilterPackages} from "../hooks/PackageHooks";
 import AddPackageForm from "../components/PackageForms/AddPackageForm";
@@ -82,6 +82,18 @@ const PackageManagementPage = () => {
                                         loading={filtering}/>
                             </Col>
                             <Col lg={4}>
+                                <Select defaultValue={-1} size="large"
+                                        value={selectedAgeGroupId}
+                                        onSelect={onSelectAgeGroup} style={{width: "100%"}}>
+                                    <Option key={0} value={-1}>Select Age Group</Option>
+                                    {ageGroups.map((ageGroup, index) => {
+                                        return (
+                                            <Option key={index} value={ageGroup.id}>{ageGroup.name}</Option>
+                                        );
+                                    })}
+                                </Select>
+                            </Col>
+                            <Col lg={4}>
                                 <Select defaultValue={-1} size="large" value={selectedCategoryId}
                                         onSelect={onSelectCategory} style={{width: "100%"}}>
                                     <Option key={0} value={-1}>Select Category</Option>
@@ -100,18 +112,6 @@ const PackageManagementPage = () => {
                                     {skillLevels.map((skillLevel, index) => {
                                         return (
                                             <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
-                                        );
-                                    })}
-                                </Select>
-                            </Col>
-                            <Col lg={4}>
-                                <Select defaultValue={-1} size="large"
-                                        value={selectedAgeGroupId}
-                                        onSelect={onSelectAgeGroup} style={{width: "100%"}}>
-                                    <Option key={0} value={-1}>Select Age Group</Option>
-                                    {ageGroups.map((ageGroup, index) => {
-                                        return (
-                                            <Option key={index} value={ageGroup.id}>{ageGroup.name}</Option>
                                         );
                                     })}
                                 </Select>
@@ -141,7 +141,12 @@ const PackageManagementPage = () => {
                             rowExpandable: record => record.name !== "Not Expandable"
                         }} dataSource={packages} rowKey="id">
                             <Column title="Name" dataIndex="name" key="name" width="50%"/>
-                            <Column title="Sell Code" dataIndex="sellcode" key="available" width="45%"/>
+                            <Column title="Age Group" dataIndex="age_group" key="age_group" width="15%"
+                                    render={value => <Tag style={{fontSize: "1em"}} color="green">{value}</Tag>}/>
+                            <Column title="Category" dataIndex="category" key="category" width="15%"
+                                    render={value => <Tag style={{fontSize: "1em"}} color="blue">{value}</Tag>}/>
+                            <Column title="Skill Level" dataIndex="skill_level" key="skill_level" width="15%"
+                                    render={value => <Tag style={{fontSize: "1em"}} color="geekblue">{value}</Tag>}/>/>
                             <Column title="Edit" key="action" width="5%"
                                     render={values => {
                                         return <Space size="middle">

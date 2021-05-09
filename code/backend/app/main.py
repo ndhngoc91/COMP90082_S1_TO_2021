@@ -7,6 +7,7 @@ from app.api.routers import categories
 from app.api.routers import customers
 from app.api.routers import orders
 from app.api.routers import packages
+from app.api.routers import product_groups
 from app.api.routers import products
 from app.api.routers import skill_levels
 from app.api.routers import squizz
@@ -45,6 +46,7 @@ app.include_router(categories.router)
 app.include_router(customers.router)
 app.include_router(orders.router)
 app.include_router(packages.router)
+app.include_router(product_groups.router)
 app.include_router(products.router)
 app.include_router(skill_levels.router)
 app.include_router(squizz.router)

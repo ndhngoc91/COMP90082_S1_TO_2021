@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
 import modelIcon from "../assets/3dmodel.png";
-import ThreeDModelPresenter from "./3DModel/ThreeDModelPresenter";
 import {
     RotateLeftOutlined,
     ZoomInOutlined,
@@ -80,9 +79,9 @@ const ShortCartProduct = ({product, onQuantityChange, onRemove}) => {
         if (modelURL) {
             setPresenter(null);
             setShowModal(true);
-            setTimeout(() => {
-                setPresenter(<ThreeDModelPresenter modelUrl={modelURL}/>);
-            }, 1000);
+            // setTimeout(() => {
+            //     setPresenter(<ThreeDModelPresenter modelUrl={modelURL}/>);
+            // }, 1000);
         }
     };
 

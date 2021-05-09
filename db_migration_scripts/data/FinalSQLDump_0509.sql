@@ -25,15 +25,15 @@ DROP TABLE IF EXISTS `addresses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `addresses` (
-                             `user_id` int NOT NULL,
-                             `country_code` varchar(10) NOT NULL,
-                             `post_code` varchar(10) NOT NULL,
-                             `address` text NOT NULL,
-                             `order_id` int DEFAULT NULL,
-                             PRIMARY KEY (`user_id`),
-                             KEY `fk_addresses_orders1_idx` (`order_id`),
-                             KEY `fk_addresses_users1_idx1` (`user_id`),
-                             CONSTRAINT `fk_addresses_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  `user_id` int NOT NULL,
+  `country_code` varchar(10) NOT NULL,
+  `post_code` varchar(10) NOT NULL,
+  `address` text NOT NULL,
+  `order_id` int DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `fk_addresses_orders1_idx` (`order_id`),
+  KEY `fk_addresses_users1_idx1` (`user_id`),
+  CONSTRAINT `fk_addresses_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,9 +55,9 @@ DROP TABLE IF EXISTS `age_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `age_groups` (
-                              `id` int NOT NULL,
-                              `age_group` varchar(45) DEFAULT NULL,
-                              PRIMARY KEY (`id`)
+  `id` int NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -79,9 +79,10 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
-                              `id` int NOT NULL,
-                              `name` varchar(45) DEFAULT NULL,
-                              PRIMARY KEY (`id`)
+  `id` int NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `image_url` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -91,7 +92,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Ski packages'),(2,'Ski/board & bindings (own boots)'),(3,'Ski/Snowboard boots only'),(4,'Snowboard package');
+INSERT INTO `categories` VALUES (1,'Ski packages',NULL),(2,'Ski/board & bindings (own boots)',NULL),(3,'Ski/Snowboard boots only',NULL),(4,'Snowboard package',NULL);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,16 +104,16 @@ DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customers` (
-                             `id` int NOT NULL AUTO_INCREMENT,
-                             `customer_code` varchar(45) DEFAULT NULL,
-                             `title` varchar(45) DEFAULT NULL,
-                             `first_name` varchar(45) DEFAULT NULL,
-                             `last_name` varchar(45) DEFAULT NULL,
-                             `phone` varchar(45) DEFAULT NULL,
-                             `email` varchar(45) DEFAULT NULL,
-                             `organization_desc` varchar(45) DEFAULT NULL,
-                             `nationality_code` varchar(45) DEFAULT NULL,
-                             PRIMARY KEY (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `customer_code` varchar(45) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `organization_desc` varchar(45) DEFAULT NULL,
+  `nationality_code` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -134,9 +135,9 @@ DROP TABLE IF EXISTS `extra`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `extra` (
-                         `idextra` int NOT NULL,
-                         `extracol` varchar(45) DEFAULT NULL,
-                         PRIMARY KEY (`idextra`)
+  `idextra` int NOT NULL,
+  `extracol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idextra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -146,7 +147,7 @@ CREATE TABLE `extra` (
 
 LOCK TABLES `extra` WRITE;
 /*!40000 ALTER TABLE `extra` DISABLE KEYS */;
-INSERT INTO `extra` VALUES (1,'item1'),(2,'item2'),(3,'item3'),(4,'item4'),(5,'item5'),(6,'item6'),(7,'item7'),(8,'item8');
+INSERT INTO `extra` VALUES (1,'Pants or Parka Adult'),(2,'Pants and Parka Adult'),(3,'Pants or Parka U14'),(4,'Pants and Parka U14'),(5,'Pants or Parka U6'),(6,'Pants and Parka/suit U6'),(7,'Apres Boots Adults'),(8,'Apres Boots U14'),(9,'Helmet Adults'),(10,'Helmet U14');
 /*!40000 ALTER TABLE `extra` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,12 +159,12 @@ DROP TABLE IF EXISTS `extraprice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `extraprice` (
-                              `idextra` int NOT NULL,
-                              `daynumber` int NOT NULL,
-                              `extraprice` float DEFAULT '0',
-                              PRIMARY KEY (`daynumber`,`idextra`),
-                              KEY `fk_extraprice_extra1_idx` (`idextra`),
-                              CONSTRAINT `fk_extraprice_extra1` FOREIGN KEY (`idextra`) REFERENCES `extra` (`idextra`)
+  `idextra` int NOT NULL,
+  `daynumber` int NOT NULL,
+  `extraprice` float DEFAULT '0',
+  PRIMARY KEY (`daynumber`,`idextra`),
+  KEY `fk_extraprice_extra1_idx` (`idextra`),
+  CONSTRAINT `fk_extraprice_extra1` FOREIGN KEY (`idextra`) REFERENCES `extra` (`idextra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -173,6 +174,7 @@ CREATE TABLE `extraprice` (
 
 LOCK TABLES `extraprice` WRITE;
 /*!40000 ALTER TABLE `extraprice` DISABLE KEYS */;
+INSERT INTO `extraprice` VALUES (1,1,20),(2,1,30),(3,1,18),(4,1,24),(5,1,14),(6,1,18),(7,1,10),(8,1,8),(9,1,10),(10,1,0),(1,2,30),(2,2,40),(3,2,23),(4,2,34),(5,2,19),(6,2,23),(7,2,15),(8,2,12),(9,2,15),(10,2,0),(1,3,35),(2,3,45),(3,3,27),(4,3,39),(5,3,23),(6,3,27),(7,3,20),(8,3,15),(9,3,20),(10,3,0),(1,4,40),(2,4,50),(3,4,31),(4,4,44),(5,4,27),(6,4,31),(7,4,25),(8,4,17),(9,4,23),(10,4,0),(1,5,45),(2,5,55),(3,5,35),(4,5,49),(5,5,31),(6,5,35),(7,5,30),(8,5,19),(9,5,26),(10,5,0),(1,6,50),(2,6,60),(3,6,39),(4,6,53),(5,6,35),(6,6,39),(7,6,35),(8,6,21),(9,6,29),(10,6,0),(1,7,55),(2,7,65),(3,7,43),(4,7,57),(5,7,39),(6,7,43),(7,7,35),(8,7,23),(9,7,31),(10,7,0);
 /*!40000 ALTER TABLE `extraprice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,10 +186,10 @@ DROP TABLE IF EXISTS `order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
-                                 `order_id` int NOT NULL,
-                                 `item_id` varchar(45) DEFAULT NULL,
-                                 PRIMARY KEY (`order_id`),
-                                 KEY `orderId` (`order_id`) USING BTREE
+  `order_id` int NOT NULL,
+  `item_id` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `orderId` (`order_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -209,10 +211,10 @@ DROP TABLE IF EXISTS `order_receipts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_receipts` (
-                                  `orders_id` int NOT NULL,
-                                  `receipt` varchar(45) DEFAULT NULL,
-                                  KEY `fk_orderreceipts_orders1_idx` (`orders_id`),
-                                  CONSTRAINT `fk_orderreceipts_orders1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`)
+  `orders_id` int NOT NULL,
+  `receipt` varchar(45) DEFAULT NULL,
+  KEY `fk_orderreceipts_orders1_idx` (`orders_id`),
+  CONSTRAINT `fk_orderreceipts_orders1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -233,17 +235,17 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
-                          `id` int NOT NULL AUTO_INCREMENT,
-                          `user_id` int NOT NULL,
-                          `start_date` datetime DEFAULT NULL,
-                          `end_date` datetime DEFAULT NULL,
-                          `description` text,
-                          `package_id` int NOT NULL,
-                          `is_drop_ship` enum('Y','N') NOT NULL DEFAULT 'N',
-                          `is_pending` enum('Y','N') NOT NULL DEFAULT 'N',
-                          PRIMARY KEY (`id`) USING BTREE,
-                          KEY `fk_orders_users1_idx` (`user_id`),
-                          KEY `fk_orders_package1_idx` (`package_id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `description` text,
+  `package_id` int NOT NULL,
+  `is_drop_ship` enum('Y','N') NOT NULL DEFAULT 'N',
+  `is_pending` enum('Y','N') NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `fk_orders_users1_idx` (`user_id`),
+  KEY `fk_orders_package1_idx` (`package_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -265,14 +267,14 @@ DROP TABLE IF EXISTS `organizations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `organizations` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
-                                 `organization_id` varchar(80) NOT NULL,
-                                 `api_organization_key` text,
-                                 `api_organization_password` varchar(80) DEFAULT NULL,
-                                 `account_code` varchar(60) DEFAULT NULL,
-                                 `supplier_organization_id` varchar(80) DEFAULT NULL,
-                                 PRIMARY KEY (`id`),
-                                 UNIQUE KEY `id_UNIQUE` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `organization_id` varchar(80) NOT NULL,
+  `api_organization_key` text,
+  `api_organization_password` varchar(80) DEFAULT NULL,
+  `account_code` varchar(60) DEFAULT NULL,
+  `supplier_organization_id` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -287,31 +289,32 @@ INSERT INTO `organizations` VALUES (1,'11EA64D91C6E8F70A23EB6800B5BCB6D','3a62ea
 UNLOCK TABLES;
 
 --
--- Table structure for table `package_types`
+-- Table structure for table `package_ttypes_pair`
 --
 
-DROP TABLE IF EXISTS `package_types`;
+DROP TABLE IF EXISTS `package_ttypes_pair`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `package_types` (
-                                 `package_id` int NOT NULL,
-                                 `type_id` int NOT NULL,
-                                 PRIMARY KEY (`package_id`,`type_id`),
-                                 KEY `fk_package_has_type_type1_idx` (`type_id`),
-                                 KEY `fk_package_has_type_package1_idx` (`package_id`),
-                                 CONSTRAINT `fk_package_has_type_package1` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`),
-                                 CONSTRAINT `fk_package_has_type_type1` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`)
+CREATE TABLE `package_ttypes_pair` (
+  `package_id` int NOT NULL,
+  `trail_type_id` int NOT NULL,
+  `sellcode` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`package_id`,`trail_type_id`),
+  KEY `fk_package_has_type_type1_idx` (`trail_type_id`),
+  KEY `fk_package_has_type_package1_idx` (`package_id`),
+  CONSTRAINT `fk_package_has_type_package1` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`),
+  CONSTRAINT `fk_package_has_type_type1` FOREIGN KEY (`trail_type_id`) REFERENCES `trail_types` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `package_types`
+-- Dumping data for table `package_ttypes_pair`
 --
 
-LOCK TABLES `package_types` WRITE;
-/*!40000 ALTER TABLE `package_types` DISABLE KEYS */;
-INSERT INTO `package_types` VALUES (1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1),(9,1),(10,1),(11,1),(12,1),(13,1),(14,1),(1,2),(2,2),(3,2),(6,2),(7,2),(8,2),(11,2),(12,2),(13,2),(1,3),(1,4),(6,5),(7,5),(8,5),(9,5),(11,5),(12,5),(13,5),(16,5),(17,5),(5,6),(6,6),(10,6),(15,6);
-/*!40000 ALTER TABLE `package_types` ENABLE KEYS */;
+LOCK TABLES `package_ttypes_pair` WRITE;
+/*!40000 ALTER TABLE `package_ttypes_pair` DISABLE KEYS */;
+INSERT INTO `package_ttypes_pair` VALUES (1,1,NULL),(1,2,NULL),(1,3,NULL),(1,4,NULL),(2,1,NULL),(2,2,NULL),(3,1,NULL),(3,2,NULL),(4,1,NULL),(5,1,NULL),(5,6,NULL),(6,1,NULL),(6,2,NULL),(6,5,NULL),(6,6,NULL),(7,1,NULL),(7,2,NULL),(7,5,NULL),(8,1,NULL),(8,2,NULL),(8,5,NULL),(9,1,NULL),(9,5,NULL),(10,1,NULL),(10,6,NULL),(11,1,NULL),(11,2,NULL),(11,5,NULL),(12,1,NULL),(12,2,NULL),(12,5,NULL),(13,1,NULL),(13,2,NULL),(13,5,NULL),(14,1,NULL),(15,6,NULL),(16,5,NULL),(17,5,NULL);
+/*!40000 ALTER TABLE `package_ttypes_pair` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -322,19 +325,21 @@ DROP TABLE IF EXISTS `packages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `packages` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `category_id` int NOT NULL,
-                            `skill_level_id` int NOT NULL,
-                            `age_group_id` int NOT NULL,
-                            `name` varchar(45) DEFAULT NULL,
-                            `description` varchar(45) DEFAULT NULL,
-                            `sellcode` varchar(45) DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            UNIQUE KEY `idpackage_UNIQUE` (`id`),
-                            KEY `fk_table2_category1_idx` (`category_id`),
-                            KEY `fk_table2_skilllevel1_idx` (`skill_level_id`),
-                            KEY `fk_table2_agegroup` (`age_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int NOT NULL,
+  `skill_level_id` int NOT NULL,
+  `age_group_id` int NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idpackage_UNIQUE` (`id`),
+  KEY `fk_table2_category1_idx` (`category_id`),
+  KEY `fk_table2_skilllevel1_idx` (`skill_level_id`),
+  KEY `fk_table2_agegroup` (`age_group_id`),
+  CONSTRAINT `fk_packages_agegroups` FOREIGN KEY (`age_group_id`) REFERENCES `age_groups` (`id`),
+  CONSTRAINT `fk_packages_categories` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  CONSTRAINT `fk_packages_skilllevels` FOREIGN KEY (`skill_level_id`) REFERENCES `skill_levels` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -343,7 +348,7 @@ CREATE TABLE `packages` (
 
 LOCK TABLES `packages` WRITE;
 /*!40000 ALTER TABLE `packages` DISABLE KEYS */;
-INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','description1','sellcode1'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','description2','sellcode2'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','description3','sellcode3'),(4,1,2,4,'Intermediate Package','description4','sellcode4'),(5,1,3,4,'Performance Package','description5','sellcode5'),(6,2,1,3,'Beginner - Adult','description6','sellcode6'),(7,2,1,2,'Beginner - Child 6 -14yrs','description7','sellcode7'),(8,2,1,1,'Beginner - Child U6','description8','sellcode8'),(9,2,2,4,'Intermediate Ski Only','description9','sellcode9'),(10,2,3,4,'Performance Ski Only','description10','sellcode10'),(11,3,1,3,'Beginner - Adult','description11','sellcode11'),(12,3,1,2,'Beginner - child 6 - 14yrs','description12','sellcode12'),(13,3,1,1,'Beginner - Child Under 6yrs','description13','sellcode13'),(14,3,2,4,'Intermediate Boot','description14','sellcode14'),(15,3,3,4,'Back Country Touring Boot','description15','sellcode15'),(16,4,1,3,'Beginner Package - Adult','description16','sellcode16'),(17,4,1,2,'Beginner Child 6-14yrs','description17','sellcode17'),(20,0,0,0,'string','string','string');
+INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','description1'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','description2'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','description3'),(4,1,2,4,'Intermediate Package','description4'),(5,1,3,4,'Performance Package','description5'),(6,2,1,3,'Beginner - Adult','description6'),(7,2,1,2,'Beginner - Child 6 -14yrs','description7'),(8,2,1,1,'Beginner - Child U6','description8'),(9,2,2,4,'Intermediate Ski Only','description9'),(10,2,3,4,'Performance Ski Only','description10'),(11,3,1,3,'Beginner - Adult','description11'),(12,3,1,2,'Beginner - child 6 - 14yrs','description12'),(13,3,1,1,'Beginner - Child Under 6yrs','description13'),(14,3,2,4,'Intermediate Boot','description14'),(15,3,3,4,'Back Country Touring Boot','description15'),(16,4,1,3,'Beginner Package - Adult','description16'),(17,4,1,2,'Beginner Child 6-14yrs','description17');
 /*!40000 ALTER TABLE `packages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,12 +360,12 @@ DROP TABLE IF EXISTS `price_levels`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `price_levels` (
-                                `package_id` int NOT NULL,
-                                `number_of_days` int NOT NULL,
-                                `price` float DEFAULT '0',
-                                PRIMARY KEY (`package_id`,`number_of_days`),
-                                KEY `fk_price_package1_idx` (`package_id`),
-                                CONSTRAINT `fk_price_package1` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`)
+  `package_id` int NOT NULL,
+  `number_of_days` int NOT NULL,
+  `price` float DEFAULT '0',
+  PRIMARY KEY (`package_id`,`number_of_days`),
+  KEY `fk_price_package1_idx` (`package_id`),
+  CONSTRAINT `fk_price_package1` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -375,34 +380,6 @@ INSERT INTO `price_levels` VALUES (1,1,50),(1,2,85),(1,3,100),(1,4,115),(1,5,125
 UNLOCK TABLES;
 
 --
--- Table structure for table `product_group_product`
---
-
-DROP TABLE IF EXISTS `product_group_product`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product_group_product` (
-                                         `group_id` int NOT NULL,
-                                         `product_id` int NOT NULL,
-                                         PRIMARY KEY (`group_id`,`product_id`),
-                                         KEY `fk_product_group_pair_group_of_product1_idx` (`group_id`),
-                                         KEY `fk_product_group_pair_products1_idx` (`product_id`),
-                                         CONSTRAINT `fk_group_of_product1` FOREIGN KEY (`group_id`) REFERENCES `product_groups` (`id`),
-                                         CONSTRAINT `fk_product1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `product_group_product`
---
-
-LOCK TABLES `product_group_product` WRITE;
-/*!40000 ALTER TABLE `product_group_product` DISABLE KEYS */;
-INSERT INTO `product_group_product` VALUES (1,2);
-/*!40000 ALTER TABLE `product_group_product` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `product_groups`
 --
 
@@ -410,12 +387,12 @@ DROP TABLE IF EXISTS `product_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_groups` (
-                                  `id` int NOT NULL AUTO_INCREMENT,
-                                  `name` varchar(100) NOT NULL,
-                                  `description` varchar(80) NOT NULL,
-                                  PRIMARY KEY (`id`),
-                                  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -424,8 +401,35 @@ CREATE TABLE `product_groups` (
 
 LOCK TABLES `product_groups` WRITE;
 /*!40000 ALTER TABLE `product_groups` DISABLE KEYS */;
-INSERT INTO `product_groups` VALUES (1,'Bike equipment','hadlebar, helmet, gloves'),(2,'Ski equipment','boots, poles, helmet');
+INSERT INTO `product_groups` VALUES (1,'helmet','something'),(2,'pole','something'),(12,'walkingboots','something'),(13,'jacket','something'),(14,'pants','something'),(15,'skiboard','something'),(16,'glove','something');
 /*!40000 ALTER TABLE `product_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product_package_pair`
+--
+
+DROP TABLE IF EXISTS `product_package_pair`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product_package_pair` (
+  `product_id` int NOT NULL,
+  `package_id` int NOT NULL,
+  PRIMARY KEY (`product_id`,`package_id`),
+  KEY `fk_package_id_idx` (`package_id`),
+  CONSTRAINT `fk_package_id` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_package_pair`
+--
+
+LOCK TABLES `product_package_pair` WRITE;
+/*!40000 ALTER TABLE `product_package_pair` DISABLE KEYS */;
+INSERT INTO `product_package_pair` VALUES (1,2),(3,4),(2,5),(4,5),(3,6),(4,8),(3,10),(5,11),(5,12),(5,13);
+/*!40000 ALTER TABLE `product_package_pair` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -436,17 +440,20 @@ DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `name` varchar(50) DEFAULT NULL,
-                            `idpackage` int NOT NULL DEFAULT '1',
-                            `description` text,
-                            `price` decimal(10,2) NOT NULL,
-                            `items_id` int DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            UNIQUE KEY `id_UNIQUE` (`id`),
-                            KEY `fk_products_package1_idx` (`idpackage`),
-                            CONSTRAINT `fk_products_package1` FOREIGN KEY (`idpackage`) REFERENCES `packages` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=499151 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `model` varchar(50) DEFAULT NULL,
+  `idpackage` int NOT NULL DEFAULT '1',
+  `description` text,
+  `price` decimal(10,2) NOT NULL,
+  `is_available` tinyint(1) DEFAULT '1',
+  `setting` text,
+  `group_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_products_package1_idx` (`idpackage`),
+  KEY `group_id_idx` (`group_id`),
+  CONSTRAINT `groups_id` FOREIGN KEY (`group_id`) REFERENCES `product_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -455,7 +462,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'helmet',0,'250.00',0.00,NULL),(2,'helmet',0,'350.00',0.00,NULL),(3,'glove',0,'80.00',0.00,5),(499150,'handlebar',0,'90.00',3.00,5);
+INSERT INTO `products` VALUES (1,'helmetP1',0,'something',250.00,1,'{\"size\":\"M\", \"skill_level\":\"DH\" }',1),(2,'helmetP2',0,'something',350.00,1,'{\"size\":\"L\", \"skill_level\":\"XC\" }',1),(3,'gloveG3',0,'something',0.00,1,'{\"size\":\"S\", \"brand\":\"fox\", \"width\":\"52\", \"skill_level\":\"DH\" }',16),(4,'Accelerator',0,'something',30.00,1,'{}',15),(5,'poleQ1',1,'something',40.00,1,'{}',2),(6,'poleQ2',1,'something',50.00,1,'{}',2),(7,'poleQ3',1,'something',100.00,1,'{}',2),(8,'gloveG4',1,'something',100.00,1,'{\"size\":\"M\", \"brand\":\"fox\", \"width\":\"52\", \"skill_level\":\"DH\" }',16),(10,'jacket',1,'something',80.00,1,'{\"size\":\"M\", \"length\":\"292\" }',13),(11,'skiboard',1,'something',110.00,1,'{\"brand\":\"fox\", \"length\":\"158\"}',15);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -467,15 +474,15 @@ DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessions` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `session_id` varchar(100) NOT NULL,
-                            `date` datetime NOT NULL,
-                            `user_id` int NOT NULL,
-                            `organization_id` int NOT NULL,
-                            PRIMARY KEY (`id`),
-                            UNIQUE KEY `id_UNIQUE` (`id`),
-                            KEY `userId` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(100) NOT NULL,
+  `date` datetime NOT NULL,
+  `user_id` int NOT NULL,
+  `organization_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `userId` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -484,7 +491,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES (63,'868A09D4D61EC60F6DE75F09DCDFDD0F','2021-05-02 15:43:07',1,1),(64,'CB67B42623A1D67195CF9D86C43AA3EF','2021-05-02 15:53:17',1,1),(65,'4478461D6F30B3682F664E00BAE7988F','2021-05-02 16:39:28',1,1),(66,'EDEF6DA6CACC59DCED967C868537A133','2021-05-03 00:20:21',1,1);
+INSERT INTO `sessions` VALUES (63,'868A09D4D61EC60F6DE75F09DCDFDD0F','2021-05-02 15:43:07',1,1),(64,'CB67B42623A1D67195CF9D86C43AA3EF','2021-05-02 15:53:17',1,1),(65,'4478461D6F30B3682F664E00BAE7988F','2021-05-02 16:39:28',1,1),(66,'EDEF6DA6CACC59DCED967C868537A133','2021-05-03 00:20:21',1,1),(67,'234F3E4D019A5198A0680CDD0F518A6E','2021-05-03 02:13:15',1,1),(68,'2561ED95753271688D4A50CA025918C6','2021-05-03 02:17:11',1,1);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -496,9 +503,9 @@ DROP TABLE IF EXISTS `skill_levels`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `skill_levels` (
-                                `id` int NOT NULL,
-                                `name` varchar(45) DEFAULT NULL,
-                                PRIMARY KEY (`id`)
+  `id` int NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -513,27 +520,27 @@ INSERT INTO `skill_levels` VALUES (1,'Beginner'),(2,'Intermediate'),(3,'Performa
 UNLOCK TABLES;
 
 --
--- Table structure for table `types`
+-- Table structure for table `trail_types`
 --
 
-DROP TABLE IF EXISTS `types`;
+DROP TABLE IF EXISTS `trail_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `types` (
-                         `id` int NOT NULL,
-                         `name` varchar(45) DEFAULT NULL,
-                         PRIMARY KEY (`id`)
+CREATE TABLE `trail_types` (
+  `id` int NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `types`
+-- Dumping data for table `trail_types`
 --
 
-LOCK TABLES `types` WRITE;
-/*!40000 ALTER TABLE `types` DISABLE KEYS */;
-INSERT INTO `types` VALUES (1,'Downhill'),(2,'XC Classic'),(3,'BC Touring'),(4,'XC Skate'),(5,'Backcountry Touring'),(6,'Snowboard');
-/*!40000 ALTER TABLE `types` ENABLE KEYS */;
+LOCK TABLES `trail_types` WRITE;
+/*!40000 ALTER TABLE `trail_types` DISABLE KEYS */;
+INSERT INTO `trail_types` VALUES (1,'Downhill'),(2,'XC Classic'),(3,'BC Touring'),(4,'XC Skate'),(5,'Backcountry Touring'),(6,'Snowboard');
+/*!40000 ALTER TABLE `trail_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -544,10 +551,10 @@ DROP TABLE IF EXISTS `user_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_groups` (
-                               `group_id` int NOT NULL AUTO_INCREMENT,
-                               `group_name` varchar(50) NOT NULL,
-                               PRIMARY KEY (`group_id`),
-                               UNIQUE KEY `group_id_UNIQUE` (`group_id`)
+  `group_id` int NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`group_id`),
+  UNIQUE KEY `group_id_UNIQUE` (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -569,10 +576,10 @@ DROP TABLE IF EXISTS `user_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_types` (
-                              `id` int NOT NULL AUTO_INCREMENT,
-                              `type` varchar(10) NOT NULL,
-                              PRIMARY KEY (`id`),
-                              UNIQUE KEY `id_UNIQUE` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -594,13 +601,13 @@ DROP TABLE IF EXISTS `user_user_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_user_group` (
-                                   `user_id` int NOT NULL,
-                                   `user_group_id` int NOT NULL,
-                                   PRIMARY KEY (`user_id`,`user_group_id`),
-                                   KEY `fk_user_group_users1_idx` (`user_id`),
-                                   KEY `fk_user_group_groups1_idx` (`user_group_id`),
-                                   CONSTRAINT `fk_user_group_groups1` FOREIGN KEY (`user_group_id`) REFERENCES `user_groups` (`group_id`),
-                                   CONSTRAINT `fk_user_group_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  `user_id` int NOT NULL,
+  `user_group_id` int NOT NULL,
+  PRIMARY KEY (`user_id`,`user_group_id`),
+  KEY `fk_user_group_users1_idx` (`user_id`),
+  KEY `fk_user_group_groups1_idx` (`user_group_id`),
+  CONSTRAINT `fk_user_group_groups1` FOREIGN KEY (`user_group_id`) REFERENCES `user_groups` (`group_id`),
+  CONSTRAINT `fk_user_group_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -621,18 +628,18 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-                         `id` int NOT NULL AUTO_INCREMENT,
-                         `username` varchar(60) NOT NULL,
-                         `password` varchar(255) NOT NULL,
-                         `height` decimal(5,2) DEFAULT NULL,
-                         `weight` decimal(5,2) DEFAULT NULL,
-                         `foot_size` decimal(3,1) DEFAULT NULL,
-                         `organization_id` int DEFAULT NULL,
-                         `user_type_id` int DEFAULT NULL,
-                         PRIMARY KEY (`id`),
-                         KEY `organizationId` (`organization_id`) USING BTREE,
-                         KEY `fk_users_user_type1_idx` (`user_type_id`),
-                         CONSTRAINT `fk_users_organizations` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(60) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `height` decimal(5,2) DEFAULT NULL,
+  `weight` decimal(5,2) DEFAULT NULL,
+  `foot_size` decimal(3,1) DEFAULT NULL,
+  `organization_id` int DEFAULT NULL,
+  `user_type_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `organizationId` (`organization_id`) USING BTREE,
+  KEY `fk_users_user_type1_idx` (`user_type_id`),
+  CONSTRAINT `fk_users_organizations` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -655,4 +662,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-03  1:19:57
+-- Dump completed on 2021-05-09 20:31:19
