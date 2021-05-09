@@ -38,5 +38,6 @@ export class AuthStore {
         this.username = "";
         this.accessToken = "";
         this.authenticated = false;
+        this.userRole = USER_ROLE.GUEST;
     }
 }

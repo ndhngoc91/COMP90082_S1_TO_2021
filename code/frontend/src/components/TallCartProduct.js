@@ -21,7 +21,6 @@ import {
 
 const {Title, Text} = Typography;
 import ModelMetadata from "./ModelMetadata";
-import ThreeDModelPresenter from "./3DModel/ThreeDModelPresenter";
 
 const TallCartProduct = ({product, onQuantityChange, onRemove}) => {
     const [subtotal, setSubtotal] = useState(product.price);

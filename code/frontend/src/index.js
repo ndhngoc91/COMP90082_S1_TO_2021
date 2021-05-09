@@ -1,23 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Route, BrowserRouter, Switch} from "react-router-dom";
+import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import CreatePage from "./pages/CreatePage";
 import ProductListPage from "./pages/ProductListPage";
 import CustomersPage from "./pages/CustomersPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
 import OrderPage from "./pages/OrderPage";
-import PackagePage from "./pages/PackagePage";
+import CalendarPage from "./pages/CalendarPage";
+import BookingManagementPage from "./pages/BookingManagementPage";
+import PackageManagementPage from "./pages/PackageManagementPage";
 import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
 import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
+import AdminUserListPage from "./pages/AdminUserListPage";
+import AdminAccountPage from "./pages/AdminAccountPage";
+import AdminListPage from "./pages/AdminListPage";
 
 // CSS
-import CategoryPage from "./pages/CategoryPage";
 import "antd/dist/antd.css";
 import "./index.css";
 import {createStore, StoreContext} from "./stores";
@@ -32,22 +35,40 @@ createStore().then(store => {
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
                         <Route path="/login" exact component={LoginPage}/>
-                        <Route path="/history" exact component={HistoryPage}/>
-                        <Route path="/order" exact component={OrderPage}/>
-                        <AuthRoute path="/package" Component={PackagePage} requiredRoles={[
+                        <Route path="/history" exact component={HistoryPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER
+                        ]}/>
+                        <Route path="/order" exact component={OrderPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER
+                        ]}/>
+                        <AuthRoute path="/booking-management" exact Component={BookingManagementPage} requiredRoles={[
                             USER_ROLE.ADMIN
                         ]}/>
-                        <Route path="/create" exact component={CreatePage}/>
+                        <AuthRoute path="/calendar" exact Component={CalendarPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.ADMIN
+                        ]}/>
+                        <Route path="/package-management" exact component={PackageManagementPage}/>
+                        {/*<AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
+                            USER_ROLE.ADMIN
+                        ]}/>*/}
                         <Route path="/productList" exact component={ProductListPage}/>
                         <Route path="/products/:productCode*" exact component={ProductDetailsPage}/>
                         <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
-                        <Route path="/productCategories/:id" exact component={CategoryPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
+<<<<<<< HEAD
+                        <Route path="/users" component={AdminUserListPage}/>
+                        <Route path="/admin-profile" component={AdminAccountPage}/>
                         <Route path="/profile" component={UserAccountPage}/>
+=======
+                        <Route path="/profile" exact component={UserAccountPage}/>
+>>>>>>> a7b8bf9d306a283bbbf87cc72b342c09dec3a403
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
+                        <Route path="/admins" exact component={AdminListPage}/>
+                        <Route exact path="*" render={() => <Redirect to="/"/>}/>
                     </Switch>
                 </BrowserRouter>
             </div>

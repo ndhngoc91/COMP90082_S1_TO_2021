@@ -51,10 +51,10 @@ class TokenData(BaseModel):
 class Package(BaseModel):
     name: str
     description: str
-    sellcode: str
-    category_id: int
     age_group_id: int
+    category_id: int
     skill_level_id: int
+    product_group_ids: List[int]
 
 
 class Session(BaseModel):
