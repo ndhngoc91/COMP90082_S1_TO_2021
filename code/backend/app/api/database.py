@@ -24,12 +24,12 @@ SUPPLIER_ORG_ID = "11EAF2251136B090BB69B6800B5BCB6D"
 
 
 # This HOST is for local deployment (the old way)
-# HOST = "localhost:3306"
+HOST = "localhost:3306"
 
 # This HOST is for Docker
-HOST = "mysqldb"
+# HOST = "mysqldb"
 USER = "root"
-PASSWORD = "YOURPASSWORDHERE"
+PASSWORD = "rootpasswordgiven"
 DB_NAME = "squizz_app"
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"

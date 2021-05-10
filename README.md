@@ -44,6 +44,22 @@ To deploy the source code on your local side, please read *deployment/Local_Depl
 ## Deployment guide
   
 Documented here: [Local Deployment Guide](https://github.com/ndhngoc91/COMP90082_S1_TO_2021/blob/master/deployment/Local%20Deployment%20Guide.pdf)
-  
+
+(NEW) Docker Deployment Guide (for Backend and MySQL-DB now, Frontend will come later):
+
+1. Stop your local MySQL server (it will occupied port 3306 and the MySQL inside Docker won't be able to use that port)
+2. Go to <pre>code/backend/app/api</pre> make sure inside database.py the HOST is <pre>HOST="mysqldb"</pre>
+(in case you want local deployment, change it back to "localhost:3306")
+3. The database .sql schema file inside <pre>db_migration_scripts/deploydata/</pre> will be import and use, so throw the version you want to use inside (remember only 1 file/version at a time)
+4. Make sure you are in the "COMP90082_S1_TO_2021" folder/directory (or in the same folder with the docker-compose.yml file).
+
+5. Run this command
+
+        docker-compose up -d --build
+   and voila
+
+IMPORTANT: Everytime you make change to the code, remember to "DELETE" the current Container/Image and then re-run step 5 again. This can be done easily with Docker Desktop, Go to "Containers/Apps" and hit the "Trash Bin icon" to delete it (will cost a few secs).
+
+Then, to run Frontend, using the good ol' "yarn install" and "yarn start" - I will update docker for Front-end later, it was really slow at the moment to install all the dependencies.
 ## LICENSE
   [MIT](LICENSE)
