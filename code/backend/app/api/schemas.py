@@ -77,6 +77,7 @@ class User(BaseModel):
     state: str
     city: str
     postcode: str
+    user_type_id: int
 
 
 class UserCreate(User):
