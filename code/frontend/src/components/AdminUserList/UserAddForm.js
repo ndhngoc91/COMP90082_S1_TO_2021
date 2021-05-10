@@ -331,6 +331,10 @@ const UserAddForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                                        required: true,
                                        message: "× Please input your password!",
                                    },
+                                   {
+                                       pattern: /^[a-zA-Z0-9]+$/,
+                                       message: "× Only contains numbers and letters",
+                                   },
                                    ({
                                        validator(_, value) {
                                            if (value.length > 5) {

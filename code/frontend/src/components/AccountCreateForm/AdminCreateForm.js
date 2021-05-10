@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
+import React, {useState} from "react";
 import {
     Button, Col, Form, Image, Input, message as antdMessage, Row, Select, Typography
 } from "antd";
@@ -9,8 +8,8 @@ import {
     MailOutlined,
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {useUserNames} from "../hooks/UserNameHooks";
-import {useEmails} from "../hooks/EmailHooks";
+import {useUserNames} from "../../hooks/UserNameHooks";
+import {useEmails} from "../../hooks/EmailHooks";
 import {Redirect} from "react-router-dom";
 import Axios from "axios";
 
@@ -30,7 +29,7 @@ const validateMessages = {
 };
 
 
-const AdminCreatePage = () => {
+const AdminCreateForm = () => {
     const [usertype, setUsertype] = useState(0);
     const [username, setUsername] = useState("admin1");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
@@ -139,10 +138,7 @@ const AdminCreatePage = () => {
             <Row justify="center" align="middle" style={{minHeight: "100vh"}}>
                 <Col>
                     <Row justify="center">
-                        <Image src={rockyValleyLogo} preview={false} width={"400px"}/>
-                    </Row>
-                    <Row justify="center">
-                        <Title level={3}>Register</Title>
+                        <Title level={3}>Admin Register</Title>
                     </Row>
                     <Row justify="center">
                         <Form name="register"
@@ -341,12 +337,6 @@ const AdminCreatePage = () => {
                                     Create
                                 </Button>
                             </Form.Item>
-                            <Form.Item className="redirect">
-                                Already have an account? &nbsp;
-                                <Link href="/login">
-                                    Sign in
-                                </Link>
-                            </Form.Item>
 
                         </Form>
                     </Row>
@@ -356,4 +346,4 @@ const AdminCreatePage = () => {
     );
 };
 
-export default AdminCreatePage;
+export default AdminCreateForm;
