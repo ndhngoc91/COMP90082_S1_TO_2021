@@ -1,5 +1,5 @@
 from sqlalchemy import BigInteger, Column, DECIMAL, DateTime, Enum, Float, ForeignKey, Integer, String, Table, Text, \
-    text
+    text, DATE
 from sqlalchemy.orm import relationship
 from app.api.database import Base
 
@@ -125,8 +125,10 @@ class UserGroup(Base):
 
     group_id = Column(Integer, primary_key=True, unique=True)
     group_name = Column(String(50), nullable=False)
+    users = Column(String(255))
+    user_id = ForeignKey('users.id', index=True)
 
-    users = relationship('User', secondary='user_user_group')
+    user = relationship('User')
 
 
 class UserType(Base):
@@ -191,6 +193,14 @@ class User(Base):
     height = Column(DECIMAL(5, 2))
     weight = Column(DECIMAL(5, 2))
     foot_size = Column(DECIMAL(3, 1))
+    first_name = Column(String(127))
+    last_name = Column(String(127))
+    gender = Column(String(45))
+    birthday = Column(DATE)
+    phone = Column(String(20))
+    email = Column(String(255))
+    skier_ability = Column(Integer)
+    din = Column(DECIMAL(5, 2))
     organization_id = Column(ForeignKey('organizations.id'), index=True)
     user_type_id = Column(ForeignKey('user_types.id'), index=True)
 
@@ -198,14 +208,19 @@ class User(Base):
     user_type = relationship('UserType')
 
 
-class Address(User):
+class Address(Base):
     __tablename__ = 'addresses'
 
-    user_id = Column(ForeignKey('users.id'), primary_key=True, index=True)
-    country_code = Column(String(10), nullable=False)
-    post_code = Column(String(10), nullable=False)
-    address = Column(Text, nullable=False)
-    order_id = Column(Integer, index=True)
+    id = Column(id, primary_key=True,  unique=True, nullable=False, index=True,)
+    state = Column(String(80))
+    city = Column(String(80))
+    postcode = Column(String(45))
+    address = Column(Text)
+    user_id = Column(ForeignKey('users.id'), nullable=False, index=True)
+    order_id = Column(ForeignKey('orders.id'), index=True)
+
+    user = relationship('User')
+    order = relationship('Order')
 
 
 t_product_group_product = Table(
@@ -214,8 +229,4 @@ t_product_group_product = Table(
     Column('product_id', ForeignKey('products.id'), primary_key=True, nullable=False, index=True)
 )
 
-t_user_user_group = Table(
-    'user_user_group', metadata,
-    Column('user_id', ForeignKey('users.id'), primary_key=True, nullable=False, index=True),
-    Column('user_group_id', ForeignKey('user_groups.group_id'), primary_key=True, nullable=False, index=True)
-)
+

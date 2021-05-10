@@ -13,4 +13,4 @@ def authenticate(username: str, password: str, db: Session):
 
 
 def create_user(request: schemas.UserCreate, db: Session):
-    new_user = modelsgi
+    new_user = models
