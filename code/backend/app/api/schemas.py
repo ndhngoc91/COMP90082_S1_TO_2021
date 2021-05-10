@@ -69,24 +69,34 @@ class User(BaseModel):
     username: str
     email: str
     birthday: date
-    phone_number: str
-    martial_status: str
-    street: str
+    phone: str
+    gender: str
+    first_name: str
+    last_name: str
+    address_line: str
     state: str
     city: str
-    postcode: int
+    postcode: str
 
 
 class UserCreate(User):
     password: str
 
 
+class AddressCreate(BaseModel):
+    address_line: str
+    state: str
+    city: str
+    postcode: str
+    user_id: int
+
+
 class UserProfile(User):
-    height: float
-    weight: float
-    shoe_size: float
-    skier_ability: float
-    DIN: str
+    height: str
+    weight: str
+    shoe_size: str
+    skier_ability: int
+    din: str
     organization: str
 
 

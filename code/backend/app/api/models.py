@@ -120,15 +120,15 @@ class Type(Base):
     name = Column(String(45))
 
 
-class UserGroup(Base):
-    __tablename__ = 'user_groups'
-
-    group_id = Column(Integer, primary_key=True, unique=True)
-    group_name = Column(String(50), nullable=False)
-    users = Column(String(255))
-    user_id = ForeignKey('users.id', index=True)
-
-    user = relationship('User')
+# class UserGroup(Base):
+#     __tablename__ = 'user_groups'
+#
+#     group_id = Column(Integer, primary_key=True, unique=True)
+#     group_name = Column(String(50), nullable=False)
+#     users = Column(String(255))
+#     user_id = ForeignKey('users.id', index=True)
+#
+#     user = relationship('User')
 
 
 class UserType(Base):
@@ -206,20 +206,22 @@ class User(Base):
 
     organization = relationship('Organization')
     user_type = relationship('UserType')
+    address = relationship('Address')
+    # user_group = relationship('UserGroup')
 
 
 class Address(Base):
     __tablename__ = 'addresses'
 
-    id = Column(id, primary_key=True,  unique=True, nullable=False, index=True,)
+    id = Column(Integer, primary_key=True,  unique=True, nullable=False, index=True,)
     state = Column(String(80))
     city = Column(String(80))
     postcode = Column(String(45))
-    address = Column(Text)
+    address_line = Column(Text)
     user_id = Column(ForeignKey('users.id'), nullable=False, index=True)
     order_id = Column(ForeignKey('orders.id'), index=True)
 
-    user = relationship('User')
+    # user = relationship('User')
     order = relationship('Order')
 
 
