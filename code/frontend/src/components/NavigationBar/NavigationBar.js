@@ -91,7 +91,6 @@ const NavigationBar = observer(({defaultSelected}) => {
                     }
                     {userRole === USER_ROLE.ADMIN &&
                     <>
-                        <Menu.Item key="/users" icon={<UsergroupAddOutlined/>}>Users List</Menu.Item>
                         <Menu.Item key="/admin-profile" icon={<ContainerOutlined/>}>User Management</Menu.Item>
                     </>
                     }
