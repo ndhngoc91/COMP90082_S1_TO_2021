@@ -31,8 +31,8 @@ const validateMessages = {
 
 
 const AdminCreatePage = () => {
-    const [usertype, setUsertype] = useState(0);
-    const [username, setUsername] = useState("admin1");
+    const [userType, setUserType] = useState(0);
+    const [userName, setUserName] = useState("admin1");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [password, setPassword] = useState("1234sS");
     const [errorMessage, setErrorMessage] = useState("");
@@ -119,7 +119,7 @@ const AdminCreatePage = () => {
 
     const onFinish = values => {
         console.log(form.isFieldsTouched());
-        const newRecord = [values,usertype];
+        const newRecord = [values,userType];
         console.log("Success:", newRecord);
     };
 
@@ -128,11 +128,13 @@ const AdminCreatePage = () => {
         console.log("Failed:", errorInfo);
     };
 
+    /*
     const checkUsers = (value) => {
         if (userNames.includes(value)){
             return
         }
     }
+    * */
 
     return (
         <>
@@ -158,12 +160,12 @@ const AdminCreatePage = () => {
                               }}
                               validateMessages={validateMessages}>
                             <Form.Item label="UserType"
-                                       name="usertype"
-                                       value={usertype}
+                                       name="userType"
+                                       value={userType}
                                        hidden>
                                 <Input/>
                             </Form.Item>
-                            <Form.Item name="username"
+                            <Form.Item name="userName"
                                        rules={[
                                            {
                                                required: true,
@@ -187,9 +189,9 @@ const AdminCreatePage = () => {
                                                },
                                            }),
                                        ]}
-                                       value={username}
+                                       value={userName}
                                        onChange={(event) => {
-                                           setUsername(event.target.value);
+                                           setUserName(event.target.value);
                                        }}>
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
@@ -337,7 +339,7 @@ const AdminCreatePage = () => {
                                 <Button type="primary"
                                         htmlType="submit"
                                         className="login-form-button"
-                                        onClick={() => setUsertype(1)}>
+                                        onClick={() => setUserType(1)}>
                                     Create
                                 </Button>
                             </Form.Item>

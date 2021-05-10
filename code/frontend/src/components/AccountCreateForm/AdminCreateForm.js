@@ -30,8 +30,8 @@ const validateMessages = {
 
 
 const AdminCreateForm = () => {
-    const [usertype, setUsertype] = useState(0);
-    const [username, setUsername] = useState("admin1");
+    const [userType, setUserType] = useState(0);
+    const [userName, setUserName] = useState("admin1");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [password, setPassword] = useState("1234sS");
     const [errorMessage, setErrorMessage] = useState("");
@@ -128,7 +128,7 @@ const AdminCreateForm = () => {
                 duration: 2
             });
         });
-        const newRecord = [values,usertype];
+        const newRecord = [values,userType];
         console.log("Success:", newRecord);
     };
 
@@ -166,12 +166,12 @@ const AdminCreateForm = () => {
                               }}
                               validateMessages={validateMessages}>
                             <Form.Item label="UserType"
-                                       name="usertype"
-                                       value={usertype}
+                                       name="userType"
+                                       value={userType}
                                        hidden>
                                 <Input/>
                             </Form.Item>
-                            <Form.Item name="username"
+                            <Form.Item name="userName"
                                        rules={[
                                            {
                                                required: true,
@@ -195,9 +195,9 @@ const AdminCreateForm = () => {
                                                },
                                            }),
                                        ]}
-                                       value={username}
+                                       value={userName}
                                        onChange={(event) => {
-                                           setUsername(event.target.value);
+                                           setUserName(event.target.value);
                                        }}>
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
@@ -346,7 +346,7 @@ const AdminCreateForm = () => {
                                         htmlType="submit"
                                         className="login-form-button"
                                         loading={handling}
-                                        onClick={() => setUsertype(1)}>
+                                        onClick={() => setUserType(1)}>
                                     Create
                                 </Button>
                             </Form.Item>

@@ -31,14 +31,14 @@ const validateMessages = {
 
 
 const UserCreatePage = () => {
-    const [usertype, setUsertype] = useState(0);
-    const [username, setUsername] = useState("user1");
-    const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
+    const [userType, setUserType] = useState(0);
+    //const [userName, setUserName] = useState("user1");
+    //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
-    const [phone, setPhone] = useState("0000000000");
-    const [gender, setGender] = useState("male");
-    const [address, setAddress] = useState("28 Bouverie St");
-    const [postcode, setPostcode] = useState("3053");
+    //const [phone, setPhone] = useState("0000000000");
+    //const [gender, setGender] = useState("male");
+    //const [address, setAddress] = useState("28 Bouverie St");
+    //const [postcode, setPostcode] = useState("3053");
     const [password, setPassword] = useState("1234sS");
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
@@ -63,8 +63,9 @@ const UserCreatePage = () => {
     };
 
     const onFinish = values => {
-        //console.log(form.isFieldsTouched());
-        onFinish(values);
+        console.log(form.isFieldsTouched());
+        console.log(values);
+        //onFinish(values);
         setClearFormAfterFinishing(true);
         handleAddUser(values, () => {
             notification.open({
@@ -74,8 +75,8 @@ const UserCreatePage = () => {
                 duration: 2
             });
         });
-        const newRecord = [values,usertype];
-        console.log("Success:", usertype);
+        const newRecord = [values,userType];
+        console.log("Success:", userType);
         if (clearFormAfterFinishing) {
             form.resetFields();
         }
@@ -87,8 +88,8 @@ const UserCreatePage = () => {
     };
 
     const onClick = () => {
-        console.log({username}, {email}, {birthdate}, {phone}, {gender}, {street: address}, {postcode}, {password});
-        setUsertype(2);
+        //console.log({username: userName}, {email}, {birthdate}, {phone}, {gender}, {street: address}, {postcode}, {password});
+        setUserType(2);
     }
 
     return (
@@ -108,26 +109,25 @@ const UserCreatePage = () => {
                               onFinish={onFinish}
                               onFinishFailed={onFinishFailed}
                               initialValues={{
-                                  usertype: 2,
-                                  username: "user1",
+                                  userType: 2,
+                                  userName: "user1",
                                   gender: "male",
                                   birthdate: moment('2015-06-06', 'YYYY-MM-DD'),
                                   email: "xxxx@unimelb.edu.au",
                                   phoneNumber: "04xxxxxxxx",
-                                  region: "VIC",
+                                  state: "VIC",
                                   city: "Melbourne",
                                   postcode: "3053"
                               }}
                               validateMessages={validateMessages}>
 
-                            <Form.Item label="UserType"
-                                       name="usertype"
-                                       value={usertype}
+                            <Form.Item name="userType"
+                                       value={userType}
                                        hidden>
                                 <Input/>
                             </Form.Item>
 
-                            <Form.Item name="username"
+                            <Form.Item name="userName"
                                        rules={[
                                            {
                                                required: true,
@@ -154,15 +154,15 @@ const UserCreatePage = () => {
                                            */}
 
                                        ]}
-                                       value={username}
+                                       /*
+                                       value={userName}
                                        onChange={(event) => {
-                                           setUsername(event.target.value);
+                                           setUserName(event.target.value);
                                        }}
-
+                                       * */
                             >
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
-                                       className="name"
                                 />
                             </Form.Item>
 
@@ -188,14 +188,16 @@ const UserCreatePage = () => {
                                            */}
 
                                        ]}
+                                       /*
                                        value={email}
                                        onChange={(event) => {
                                            setEmail(event.target.value);
-                                       }}>
+                                       }}
+                                       * */
+                                       >
                                 <Input
                                     prefix={<MailOutlined className="site-form-item-icon"/>}
                                     placeholder="Your email address"
-                                    className="email"
                                 />
                             </Form.Item>
 
@@ -209,7 +211,8 @@ const UserCreatePage = () => {
                                        value={birthdate}
                                        onChange={(event) => {
                                            setBirthdate(event.target.value);
-                                       }}>
+                                       }}
+                                       >
                                 <DatePicker
                                     placeholder="Choose your birthdate"
                                     style={{
@@ -225,13 +228,15 @@ const UserCreatePage = () => {
                                                message: "Please input your phone number!",
                                            }
                                        ]}
+                                       /*
                                        value={phone}
                                        onChange={(event) => {
                                            setPhone(event.target.value);
-                                       }}>
+                                       }}
+                                       * */
+                                       >
                                 <Input
                                     prefix={<PhoneOutlined/>}
-                                    className="Phone"
                                     placeholder="Enter your phone number"
                                     style={{
                                         width: "100%",
@@ -246,10 +251,13 @@ const UserCreatePage = () => {
                                                message: "Please choose gender!",
                                            },
                                        ]}
+                                       /*
                                        value={gender}
                                        onChange={(value) => {
                                            setGender(value);
-                                       }}>
+                                       }}
+                                       * */
+                                       >
                                 <Select
                                     placeholder="Choose gender"
                                     style={{
@@ -263,22 +271,23 @@ const UserCreatePage = () => {
                             </Form.Item>
 
                             <Form.Item name="totalAddress"
-                                       value={{address}+{postcode}}
                             >
                                 <Input.Group compact>
                                     <Form.Item name="address"
                                                noStyle
+                                               /*
                                                value={address}
                                                onChange={(event) => {
                                                    setAddress(event.target.value);
                                                }}
+                                               * */
                                                rules={[
                                                    {
                                                        required: true,
                                                        message: "Please input address"
                                                    }
                                                ]}>
-                                        <Input placeholder="Input address" className="street"/>
+                                        <Input placeholder="Input address"/>
                                     </Form.Item>
                                 </Input.Group>
                             </Form.Item>
@@ -286,7 +295,7 @@ const UserCreatePage = () => {
                             <Form.Item>
                                 <Row gutter={16}>
                                     <Col span={12}>
-                                        <Form.Item name="region"
+                                        <Form.Item name="state"
                                                    rules={[
                                                        {
                                                            required: true,
@@ -338,11 +347,14 @@ const UserCreatePage = () => {
                                                message: "Postcode is required"
                                            }
                                        ]}
+                                       /*
                                        value={postcode}
                                        onChange={(event) => {
                                            setPostcode(event.target.value);
-                                       }}>
-                                <Input placeholder="Input postcode" className="postcode"/>
+                                       }}
+                                       * */
+                                       >
+                                <Input placeholder="Input postcode"/>
                             </Form.Item>
 
                             <Form.Item name="password"
@@ -411,7 +423,6 @@ const UserCreatePage = () => {
                                 <Input.Password
                                     prefix={<LockOutlined className="site-form-item-icon"/>}
                                     placeholder="Create password"
-                                    className="password"
                                 />
                             </Form.Item>
 
@@ -435,7 +446,6 @@ const UserCreatePage = () => {
                                 <Input.Password
                                     prefix={<LockOutlined className="site-form-item-icon"/>}
                                     placeholder="Confirm password"
-                                    className="confirm-password"
                                 />
                             </Form.Item>
                             <Form.Item name="agreement"
@@ -456,7 +466,7 @@ const UserCreatePage = () => {
                                         htmlType="submit"
                                         className="login-form-button"
                                         loading={handling}
-                                        onClick={() => setUsertype(2)}>
+                                        onClick={() => setUserType(2)}>
                                     Create
                                 </Button>
                             </Form.Item>

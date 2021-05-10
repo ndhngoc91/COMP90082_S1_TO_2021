@@ -15,7 +15,7 @@ const UserList = () => {
         if(i<50){
             data.push({
                 key: i,
-                username: 'Screem',
+                userName: 'Screem',
                 firstName: 'iOS',
                 lastName: 'Jack',
                 gender:"female",
@@ -25,7 +25,7 @@ const UserList = () => {
         }else{
             data.push({
                 key: i,
-                username: 'Screem',
+                userName: 'Screem',
                 firstName: 'iOS',
                 lastName: 'Jack',
                 gender:'male',
@@ -37,8 +37,8 @@ const UserList = () => {
     const columns = [
         {
             title:"User Name",
-            dataIndex:"username",
-            key:"username",
+            dataIndex:"userName",
+            key:"userName",
             width:"15%",
         },
         {
