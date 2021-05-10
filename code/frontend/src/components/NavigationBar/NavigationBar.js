@@ -112,4 +112,3 @@ const NavigationBar = observer(({defaultSelected}) => {
 });
 
 export default NavigationBar;
-
