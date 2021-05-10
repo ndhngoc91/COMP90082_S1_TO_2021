@@ -83,6 +83,15 @@ class UserCreate(User):
     password: str
 
 
+class Admin(BaseModel):
+    username: str
+    email: str
+
+
+class AdminCreate(Admin):
+    password: str
+
+
 class UserProfile(User):
     height: str
     weight: str

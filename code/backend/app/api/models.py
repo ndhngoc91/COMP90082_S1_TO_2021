@@ -105,13 +105,14 @@ class TrailType(Base):
     name = Column(String(45))
 
 
-class UserGroup(Base):
-    __tablename__ = 'user_groups'
-
-    group_id = Column(Integer, primary_key=True, unique=True)
-    group_name = Column(String(50), nullable=False)
-    users = Column(String(255))
-    user_id = ForeignKey('users.id', index=True)
+# sqlalchemy.exc.NoForeignKeysError
+# class UserGroup(Base):
+#     __tablename__ = 'user_groups'
+#
+#     group_id = Column(Integer, primary_key=True, unique=True)
+#     group_name = Column(String(50), nullable=False)
+#     users = Column(String(255))
+#     user_id = ForeignKey('users.id', index=True)
 
 
 class UserType(Base):
@@ -173,7 +174,7 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(60), nullable=False)
+    username = Column(String(60), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
     height = Column(DECIMAL(5, 2))
     weight = Column(DECIMAL(5, 2))
@@ -183,7 +184,7 @@ class User(Base):
     gender = Column(String(45))
     birthday = Column(DATE)
     phone = Column(String(20))
-    email = Column(String(255))
+    email = Column(String(255), unique=True)
     skier_ability = Column(Integer)
     din = Column(DECIMAL(5, 2))
     organization_id = Column(ForeignKey('organizations.id'), index=True)
@@ -192,7 +193,7 @@ class User(Base):
     organization = relationship('Organization')
     user_type = relationship('UserType')
     address = relationship('Address')
-    user_group = relationship('UserGroup')
+    # user_group = relationship('UserGroup')
 
 
 class Address(Base):
@@ -206,7 +207,6 @@ class Address(Base):
     user_id = Column(ForeignKey('users.id'), nullable=False, index=True)
     order_id = Column(ForeignKey('orders.id'), index=True)
 
-    # user = relationship('User')
     order = relationship('Order')
 
 
