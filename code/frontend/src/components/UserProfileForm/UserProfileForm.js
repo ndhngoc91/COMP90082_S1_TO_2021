@@ -166,6 +166,7 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                     </Row>
+                    {/*
                     <Row justify="space-between" gutter={16}>
                         <Col span={12}>
                             <Form.Item label="State" name="state" rules={[
@@ -190,6 +191,7 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                     </Row>
+                    */}
                     <Form.List name="addressLines"
                                rules={[
                                    {
@@ -211,68 +213,98 @@ const UserProfileForm = () => {
                                     <Form.Item label={key === 0 ? "Addresses" : ""}
                                                required={false}
                                                key={key}>
-                                        <Form.Item{...field}
-                                                  name = {[name,'address']}
-                                                  fieldKey={[fieldKey, 'address']}
-                                                  validateTrigger={["onChange", "onBlur"]}
-                                                  rules={[
-                                                      {
-                                                          required: true,
-                                                          whitespace: true,
-                                                          message: "Please input address or delete this field.",
-                                                      }
-                                                  ]}
-                                                  noStyle>
-                                            <Input size="large" placeholder="Address line" style={{width: "55%"}}/>
-                                        </Form.Item>
-                                        <Form.Item{...field}
-                                                  name = {[name,'state']}
-                                                  fieldKey={[fieldKey, 'state']}
-                                                  validateTrigger={["onChange", "onBlur"]}
-                                                  rules={[
-                                                      {
-                                                          required: true,
-                                                          message: "Please select your state!"
-                                                      }
-                                                  ]}
-                                                  noStyle>
-                                            <Select
-                                                value={selectedState}
-                                                onChange={onStateChange}
-                                                disabled={readOnly}
-                                                size="large"
-                                                placeholder="State" style={{width: "15%"}}
-                                            >
-                                                {StateData.map(state => (
-                                                    <Option key={state} value={state}>{state}</Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
-                                        <Form.Item{...field}
-                                                  name = {[name,'city']}
-                                                  fieldKey={[fieldKey, 'city']}
-                                                  validateTrigger={["onChange", "onBlur"]}
-                                                  rules={[
-                                                      {
-                                                          required: true,
-                                                          whitespace: true,
-                                                          message: "Please select city.",
-                                                      }
-                                                  ]}
-                                                  noStyle>
-                                            <Select
-                                                value={selectedCity}
-                                                onChange={onCityChange}
-                                                disabled={readOnly}
-                                                size="large"
-                                                placeholder="City"
-                                                style={{width: "15%"}}
-                                            >
-                                                {cities.map(city => (
-                                                    <Option key={city} value={city}>{city}</Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
+                                        <Row justify="space-between" gutter={16}>
+                                            <Col span={12}>
+                                                <Form.Item{...field}
+                                                          name = {[name,'address']}
+                                                          fieldKey={[fieldKey, 'address']}
+                                                          validateTrigger={["onChange", "onBlur"]}
+                                                          rules={[
+                                                              {
+                                                                  required: true,
+                                                                  whitespace: true,
+                                                                  message: "Please input address or delete this field.",
+                                                              }
+                                                          ]}
+                                                          noStyle>
+                                                    <Input size="large"
+                                                           placeholder="Address line"
+                                                           readOnly={readOnly}
+                                                    />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={4}>
+                                                <Form.Item{...field}
+                                                          name = {[name,'state']}
+                                                          fieldKey={[fieldKey, 'state']}
+                                                          validateTrigger={["onChange", "onBlur"]}
+                                                          rules={[
+                                                              {
+                                                                  required: true,
+                                                                  message: "Please select your state!"
+                                                              }
+                                                          ]}
+                                                          noStyle>
+                                                    <Select
+                                                        value={selectedState}
+                                                        onChange={onStateChange}
+                                                        disabled={readOnly}
+                                                        size="large"
+                                                        placeholder="State"
+                                                    >
+                                                        {StateData.map(state => (
+                                                            <Option key={state} value={state}>{state}</Option>
+                                                        ))}
+                                                    </Select>
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={4}>
+                                                <Form.Item{...field}
+                                                          name = {[name,'city']}
+                                                          fieldKey={[fieldKey, 'city']}
+                                                          validateTrigger={["onChange", "onBlur"]}
+                                                          rules={[
+                                                              {
+                                                                  required: true,
+                                                                  whitespace: true,
+                                                                  message: "Please select city.",
+                                                              }
+                                                          ]}
+                                                          noStyle>
+                                                    <Select
+                                                        value={selectedCity}
+                                                        onChange={onCityChange}
+                                                        disabled={readOnly}
+                                                        size="large"
+                                                        placeholder="City"
+                                                    >
+                                                        {cities.map(city => (
+                                                            <Option key={city} value={city}>{city}</Option>
+                                                        ))}
+                                                    </Select>
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={4}>
+                                                <Form.Item{...field}
+                                                          name = {[name,'postcode']}
+                                                          fieldKey={[fieldKey, 'postcode']}
+                                                          validateTrigger={["onChange", "onBlur"]}
+                                                          rules={[
+                                                              {
+                                                                  required: true,
+                                                                  message: "Please input postcode!"
+                                                              }
+                                                          ]}
+                                                          noStyle>
+                                                    <Input
+                                                        disabled={readOnly}
+                                                        size="large"
+                                                        placeholder="Postcode"
+                                                    >
+                                                    </Input>
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
                                         {fields.length > 1 ? (
                                             <MinusCircleOutlined
                                                 className="dynamic-delete-button"

@@ -16,7 +16,7 @@ import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
 import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
-import AdminUserListPage from "./pages/AdminUserListPage";
+import UserList from "./components/UserList/UserList";
 import UserManagePage from "./pages/UserManagePage";
 
 // CSS
@@ -56,7 +56,7 @@ createStore().then(store => {
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
-                        <Route path="/users" component={AdminUserListPage}/>
+                        <Route path="/users" component={UserList}/>
                         <Route path="/admin-profile" component={UserManagePage}/>
                         <Route path="/profile" component={UserAccountPage}/>
                         <Route path="/profile" exact component={UserAccountPage}/>

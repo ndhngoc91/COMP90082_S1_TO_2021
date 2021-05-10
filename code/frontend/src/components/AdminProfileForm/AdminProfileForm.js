@@ -12,7 +12,6 @@ import {
 import moment from "moment";
 import {StateData, CityData} from "../../consts/StateData";
 import {USER_ROLE} from "../../consts/UserRole";
-import {useHandleEditAccount} from "../../hooks/CustomerHooks";
 import {useStores} from "../../stores";
 
 const {Option} = Select;
@@ -27,19 +26,17 @@ const AdminProfilePage = () => {
     const [birthDate, setBirthDate] = useState(moment("",'YYYY-MM-DD'));
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
-    const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
+    const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]][0]);
     const [readOnly, setReadOnly] = useState(true);
 
-    const [handleEditAccount, {handling}] = useHandleEditAccount();
     const {authStore: {username,userRole}} = useStores();
 
     const [form] = Form.useForm();
 
-
     const onStateChange = value => {
         setCities(CityData[value]);
-        setSelectedState(value);
         setSelectedCity(CityData[value][0])
+        setSelectedState(value);
     };
 
     const onCityChange = value => {
@@ -49,14 +46,7 @@ const AdminProfilePage = () => {
     const onFinish = values => {
         console.log(form.isFieldsTouched());
         console.log("Success:", values);
-        handleEditAccount(values, () => {
-            notification.open({
-                message: "Edited a user successfullly!",
-                description: "Edited a user successfullly!",
-                icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
-                duration: 2
-            });
-        });
+
     };
 
     const onFinishFailed = errorInfo => {
@@ -179,16 +169,39 @@ const AdminProfilePage = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Form.Item name="addressLines"
-                               rules={[
-                                   {required: true, message: "Please input your address lines!"}
-                               ]}>
-                        <Input size="large"
-                               placeholder="Address line"
-                               style={{width: "100%"}}
-                               disabled={readOnly}
-                        />
-                    </Form.Item>
+
+                    <Row justify="space-between" gutter={16}>
+                        <Col span={18}>
+                            <Form.Item name="addressLines"
+                                       label="Address"
+                                       rules={[
+                                           {required: true, message: "Please input your address lines!"}
+                                       ]}>
+                                <Input size="large"
+                                       placeholder="Address line"
+                                       disabled={readOnly}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                label="Postcode"
+                                name = 'postcode'
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input postcode!"
+                                    }
+                                ]}>
+                                <Input
+                                    disabled={readOnly}
+                                    size="large"
+                                    placeholder="Postcode"
+                                >
+                                </Input>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                     <Form.Item>
                         {readOnly &&
                         <Button type="primary" size="large" onClick={() => setReadOnly(false)}>
@@ -196,7 +209,7 @@ const AdminProfilePage = () => {
                         </Button>}
                         {readOnly === false &&
                         <Space>
-                            <Button type="primary" htmlType="submit" size="large" loading={handling}>
+                            <Button type="primary" htmlType="submit" size="large" >
                                 Submit
                             </Button>
                             <Button type="default" size="large" onClick={() => setReadOnly(true)}>

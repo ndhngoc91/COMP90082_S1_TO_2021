@@ -92,33 +92,3 @@ export const useHandleEditAccount = () => {
     return [handleEditAccount, {handling}];
 };
 
-export const useHandleDeleteAccount = () => {
-    const [handling, setHandling] = useState(false);
-
-    const handleDeleteAccount = useCallback((id, name, description) => {
-        setHandling(true);
-        //TODO: get url
-        axios.put(`http://127.0.0.1:8000/packages/${id}`, {
-            name: name,
-            description: description,
-            what_is_included: products.join("-"),
-            available: available
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
-        }).then(response => {
-            if (response.status === 202) {
-                name();
-            } else {
-                description();
-            }
-        }).catch(err => {
-            console.log(err);
-            description();
-        }).finally(() => {
-            setHandling(false);
-        });
-    }, []);
-
-    return [handleDeleteAccount, {handling}];
-};
-

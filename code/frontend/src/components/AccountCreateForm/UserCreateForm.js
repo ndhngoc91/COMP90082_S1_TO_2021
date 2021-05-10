@@ -1,21 +1,21 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
-    Button, Col, Form, Image, Input, message as antdMessage, notification, Row, Select, Typography
+    Button, Col, DatePicker, Form, Image, Input,  notification, Row, Select, Typography
 } from "antd";
 import {
     LockOutlined,
     UserOutlined,
-    MailOutlined, CheckSquareOutlined,
+    MailOutlined, PhoneOutlined, CheckSquareOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
+import {CityData, StateData} from "../../consts/StateData";
+import moment from "moment";
 import {useUserNames} from "../../hooks/UserNameHooks";
 import {useEmails} from "../../hooks/EmailHooks";
-import {Redirect} from "react-router-dom";
-import Axios from "axios";
 import {useHandleAddAccount} from "../../hooks/CustomerHooks";
 
-
 const {Link, Title} = Typography;
+const {Option} = Select;
 
 const validateMessages = {
     required: "${label} is required!",
@@ -29,98 +29,43 @@ const validateMessages = {
 };
 
 
-const AdminCreateForm = () => {
+const UserCreateForm = () => {
     const [usertype, setUsertype] = useState(0);
-    const [username, setUsername] = useState("admin1");
+    const [username, setUsername] = useState("user1");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
+    const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
+    const [phone, setPhone] = useState("0000000000");
+    const [gender, setGender] = useState("male");
+    const [address, setAddress] = useState("28 Bouverie St");
+    const [postcode, setPostcode] = useState("3053");
     const [password, setPassword] = useState("1234sS");
-    const [errorMessage, setErrorMessage] = useState("");
-    const [createSuccess, setCreateSuccess] = useState("");
+    const [cities, setCities] = useState(CityData[StateData[0]]);
+    const [selectedState, setSelectedState] = useState(StateData[0]);
+    const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
+    const [clearFormAfterFinishing, setClearFormAfterFinishing] = useState(false);
 
-    const [handleAddAccount, {handling}] = useHandleAddAccount();
+    const [handleAddUser, {handling}] = useHandleAddAccount();
 
     const userNames = useUserNames();
     const emails = useEmails();
 
     const [form] = Form.useForm();
 
-    /*
-    // Read user name from API
-    useEffect(() => {
-        Axios({
-                method: "get",
-                url: "http://127.0.0.1:8000/customer-codes",
-                headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-                params: {"used": false}
-            }
-        ).then((response) => {
-            setUserNameList(response.data);
-        })
-    }, []);
+    const onStateChange = value => {
+        setCities(CityData[value]);
+        setSelectedState(value);
+        setSelectedCity(CityData[value][0])
+    };
 
-    // Read email from API
-    useEffect(() => {
-        Axios({
-                method: "get",
-                url: "http://127.0.0.1:8000/customer-codes",
-                headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-                params: {"used": false}
-            }
-        ).then((response) => {
-            setEmailList(response.data);
-        })
-    }, []);
-
-    //Handles submission about creating a new customer
-    const _handleSubmit = () => {
-        Axios({
-            method: "post",
-            url: "api/customers",
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-            data: {
-                "customer": {
-                    "usertype": usertype,
-                    "username": username,
-                    "email": email,
-                    "password": password
-                }
-            }
-        }).then((response) => {
-            console.log("Create Admin Success!");
-            console.log(response);
-            let {customer} = response.data;
-            console.log("Create Admin ID:" + customer.id);
-            setCreateSuccess(true);
-        }).catch((e) => {
-            console.log(e)
-            setErrorMessage(e.response.data.message);
-            antdMessage.info(errorMessage);
-        });
-    }
-
-    // Redirect to home page if create success
-    if (createSuccess) {
-        return <Redirect to={{pathname: "/"}}/>
-    }else{
-        return <Redirect to={{pathname: "/admin-create"}}/>
-    }
-
-    // Read existing user Name list information into the drop down list
-    const userNameChildren = [];
-    for (let i = 0; i < userNameList.length; i++) {
-        userNameChildren.push({userNameList[i]});
-    }
-
-    // Read existing email list information into the drop down list
-    const emailChildren = [];
-    for (let i = 0; i < userNameList.length; i++) {
-        emailChildren.push({emailList[i]});
-    }
-    * */
+    const onCityChange = value => {
+        setSelectedCity(value);
+    };
 
     const onFinish = values => {
-        console.log(form.isFieldsTouched());
-        handleAddAccount(values, () => {
+        //console.log(form.isFieldsTouched());
+        onFinish(values);
+        setClearFormAfterFinishing(true);
+        handleAddUser(values, () => {
             notification.open({
                 message: "Added a customer successfullly!",
                 description: "Added a customer successfullly!",
@@ -129,7 +74,10 @@ const AdminCreateForm = () => {
             });
         });
         const newRecord = [values,usertype];
-        console.log("Success:", newRecord);
+        console.log("Success:", usertype);
+        if (clearFormAfterFinishing) {
+            form.resetFields();
+        }
     };
 
     const onFinishFailed = errorInfo => {
@@ -137,40 +85,38 @@ const AdminCreateForm = () => {
         console.log("Failed:", errorInfo);
     };
 
-    /*
-    const checkUsers = (value) => {
-        if (userNames.includes(value)){
-            return
-        }
-    }
-    * */
-
     return (
         <>
             <Row justify="center" align="middle" style={{minHeight: "100vh"}}>
                 <Col>
                     <Row justify="center">
-                        <Title level={3}>Admin Register</Title>
+                        <Title level={3}>Customer Register</Title>
                     </Row>
                     <Row justify="center">
                         <Form name="register"
                               style={{width: "600px"}}
                               form={form}
-                            //onFinish={_handleSubmit}
                               onFinish={onFinish}
                               onFinishFailed={onFinishFailed}
                               initialValues={{
-                                  usertype: 1,
-                                  username: "admin1",
+                                  usertype: 2,
+                                  username: "user1",
+                                  gender: "male",
+                                  birthdate: moment('2015-06-06', 'YYYY-MM-DD'),
                                   email: "xxxx@unimelb.edu.au",
+                                  phoneNumber: "04xxxxxxxx",
+                                  region: "VIC",
+                                  city: "Melbourne",
+                                  postcode: "3053"
                               }}
                               validateMessages={validateMessages}>
-                            <Form.Item label="UserType"
-                                       name="usertype"
+
+                            <Form.Item name="usertype"
                                        value={usertype}
                                        hidden>
                                 <Input/>
                             </Form.Item>
+
                             <Form.Item name="username"
                                        rules={[
                                            {
@@ -185,6 +131,7 @@ const AdminCreateForm = () => {
                                                    return Promise.reject(new Error('× Must have at least 5 characters'));
                                                },
                                            }),
+                                           {/*
                                            ({
                                                validator(_, value) {
                                                    const exist_user = userNames.includes(value);
@@ -194,11 +141,15 @@ const AdminCreateForm = () => {
                                                    return Promise.reject(new Error('× User name exists'));
                                                },
                                            }),
+                                           */}
+
                                        ]}
                                        value={username}
                                        onChange={(event) => {
                                            setUsername(event.target.value);
-                                       }}>
+                                       }}
+
+                            >
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
                                        className="name"
@@ -214,6 +165,7 @@ const AdminCreateForm = () => {
                                                required: true,
                                                message: "Please input your E-mail!",
                                            },
+                                           {/*
                                            ({
                                                validator(_, value) {
                                                    const exist_email = emails.includes(value);
@@ -223,6 +175,8 @@ const AdminCreateForm = () => {
                                                    return Promise.reject(new Error('× Email exists'));
                                                },
                                            }),
+                                           */}
+
                                        ]}
                                        value={email}
                                        onChange={(event) => {
@@ -233,6 +187,152 @@ const AdminCreateForm = () => {
                                     placeholder="Your email address"
                                     className="email"
                                 />
+                            </Form.Item>
+
+                            <Form.Item name="birthdate"
+                                       rules={[
+                                           {
+                                               required: true,
+                                               message: "Please choose birthdate!",
+                                           },
+                                       ]}
+                                       value={birthdate}
+                                       onChange={(event) => {
+                                           setBirthdate(event.target.value);
+                                       }}>
+                                <DatePicker
+                                    placeholder="Choose your birthdate"
+                                    style={{
+                                        width: "100%",
+                                    }}
+                                />
+                            </Form.Item>
+
+                            <Form.Item name="phoneNumber"
+                                       rules={[
+                                           {
+                                               required: true,
+                                               message: "Please input your phone number!",
+                                           }
+                                       ]}
+                                       value={phone}
+                                       onChange={(event) => {
+                                           setPhone(event.target.value);
+                                       }}>
+                                <Input
+                                    prefix={<PhoneOutlined/>}
+                                    className="Phone"
+                                    placeholder="Enter your phone number"
+                                    style={{
+                                        width: "100%",
+                                    }}
+                                />
+                            </Form.Item>
+
+                            <Form.Item name="gender"
+                                       rules={[
+                                           {
+                                               required: true,
+                                               message: "Please choose gender!",
+                                           },
+                                       ]}
+                                       value={gender}
+                                       onChange={(value) => {
+                                           setGender(value);
+                                       }}>
+                                <Select
+                                    placeholder="Choose gender"
+                                    style={{
+                                        width: "100%",
+                                    }}
+                                >
+                                    <Option value="male">Male</Option>
+                                    <Option value="female">Female</Option>
+                                    <Option value="others">Others</Option>
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item name="totalAddress"
+                                       value={{address}+{postcode}}
+                            >
+                                <Input.Group compact>
+                                    <Form.Item name="address"
+                                               noStyle
+                                               value={address}
+                                               onChange={(event) => {
+                                                   setAddress(event.target.value);
+                                               }}
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: "Please input address"
+                                                   }
+                                               ]}>
+                                        <Input placeholder="Input address" className="street"/>
+                                    </Form.Item>
+                                </Input.Group>
+                            </Form.Item>
+
+                            <Form.Item>
+                                <Row gutter={16}>
+                                    <Col span={12}>
+                                        <Form.Item name="region"
+                                                   rules={[
+                                                       {
+                                                           required: true,
+                                                           message: "Please choose state!",
+                                                       },
+                                                   ]}
+                                                   value={selectedState}
+                                                   onChange={(value) => {
+                                                       setSelectedState(value);
+                                                   }}
+                                        >
+                                            <Select
+                                                onChange={onStateChange}
+                                            >
+                                                {StateData.map(state => (
+                                                    <Option key={state} value={state}>{state}</Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={12}>
+                                        <Form.Item name="city"
+                                                   rules={[
+                                                       {
+                                                           required: true,
+                                                           message: "Please choose state!",
+                                                       },
+                                                   ]}
+                                                   value={selectedCity}
+                                                   onChange={(value) => {
+                                                       setSelectedCity(value);
+                                                   }}
+                                        >
+                                            <Select
+                                                onChange={onCityChange}
+                                            >
+                                                {cities.map(city => (
+                                                    <Option key={city} value={city}>{city}</Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </Form.Item>
+                            <Form.Item name="postcode"
+                                       rules={[
+                                           {
+                                               required: true,
+                                               message: "Postcode is required"
+                                           }
+                                       ]}
+                                       value={postcode}
+                                       onChange={(event) => {
+                                           setPostcode(event.target.value);
+                                       }}>
+                                <Input placeholder="Input postcode" className="postcode"/>
                             </Form.Item>
 
                             <Form.Item name="password"
@@ -346,7 +446,7 @@ const AdminCreateForm = () => {
                                         htmlType="submit"
                                         className="login-form-button"
                                         loading={handling}
-                                        onClick={() => setUsertype(1)}>
+                                        onClick={() => setUsertype(2)}>
                                     Create
                                 </Button>
                             </Form.Item>
@@ -359,4 +459,4 @@ const AdminCreateForm = () => {
     );
 };
 
-export default AdminCreateForm;
+export default UserCreateForm;
