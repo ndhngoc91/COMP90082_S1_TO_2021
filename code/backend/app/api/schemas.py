@@ -83,14 +83,6 @@ class UserCreate(User):
     password: str
 
 
-class AddressCreate(BaseModel):
-    address_line: str
-    state: str
-    city: str
-    postcode: str
-    user_id: int
-
-
 class UserProfile(User):
     height: str
     weight: str
