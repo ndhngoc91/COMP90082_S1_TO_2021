@@ -20,7 +20,6 @@ import {
 
 const {Title, Text} = Typography;
 import ModelMetadata from "./ModelMetadata";
-import ThreeDModelPresenter from "./3DModel/ThreeDModelPresenter";
 import {useHistory} from "react-router-dom";
 import {useStores} from "../stores";
 
@@ -84,7 +83,7 @@ const HistoryProduct = ({product}) => {
                 return (
                     <Col span={18}>
                         <div style={{height: 300}}>
-                            <ThreeDModelPresenter modelUrl={model.threeDModelLocation}/>
+                            3D Presenter (deprecated)
                         </div>
                     </Col>
                 )
