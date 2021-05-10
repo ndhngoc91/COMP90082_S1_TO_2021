@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.8"
 
 services:
   # MySQL
@@ -9,8 +9,6 @@ services:
     tty: true
     environment:
       MYSQL_DATABASE: "squizz_app"
-      # MYSQL_USER: user
-      # MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: "rootpasswordgiven"
     ports:
       - "3306:3306"
@@ -28,19 +26,24 @@ services:
     container_name: "backend"
     build: ./code/backend
     ports:
-      - "3000:3000"
+      - "8000:8000"
     volumes:
-      - ./code/backend:/usr/src/server
+      - ./code/backend:/usr/src/backend
     networks:
       - local-net
 
   # frontend:
   #   links:
   #     - backend
-  #   container_name: : "frontend"
+  #   container_name: "frontend"
   #   build: ./code/frontend
   #   ports:
-  #     -
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./code/frontend:/usr/src/frontend
+  #     - /usr/src/frontend/node
+  #   networks:
+  #     - local-net
 
 networks:
   local-net:
