@@ -18,7 +18,7 @@ const EditPackageForm = ({fieldValues}) => {
         });
     };
 
-    return <PackageForm fieldValues={fieldValues} onFinish={onFinish} finishing={handling}/>;
+    return <PackageForm fieldValues={fieldValues} onFinish={onFinish} finishing={handling} updateProductGroups={false}/>;
 };
 
 export default EditPackageForm;
