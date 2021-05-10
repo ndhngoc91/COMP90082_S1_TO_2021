@@ -1,5 +1,5 @@
 # Set base Node.js image
-FROM node:lts
+FROM node:lts-alpine
 
 # Set working directory
 WORKDIR /usr/src/frontend
@@ -8,9 +8,11 @@ COPY package*.json ./
 
 RUN yarn install
 
-COPY . ./
+COPY . .
 
-RUN yarn start
+RUN yarn run build
+
+# RUN yarn start
 
 
 # # Set base Nginx image
