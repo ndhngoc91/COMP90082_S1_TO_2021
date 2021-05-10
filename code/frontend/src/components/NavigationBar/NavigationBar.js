@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom"
-import {Layout, Menu, Image, Modal} from "antd";
+import {Layout, Menu, Modal} from "antd";
 import {
     HistoryOutlined,
     ShopOutlined,
@@ -62,9 +62,6 @@ const NavigationBar = observer(({defaultSelected}) => {
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
                     Calendar
                 </Menu.Item>}
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
-                    Package Management
-                </Menu.Item>
                 {userRole === USER_ROLE.ADMIN &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
                     Package Management
@@ -83,15 +80,6 @@ const NavigationBar = observer(({defaultSelected}) => {
                         </Menu.Item>
                     </>
                 }
-
-                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
-                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
-                    <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
-                    <Menu.Item key="/users" icon={<UsergroupAddOutlined/>}>Users List</Menu.Item>
-                    <Menu.Item key="/admin-profile" icon={<AccountBookOutlined/>}>Admin Profile</Menu.Item>
-                    <Menu.Item key="/admin-create" icon={<UserAddOutlined/>}>Create Admin</Menu.Item>
-                    <Menu.Item key="/admins" icon={<UsergroupAddOutlined/>}>Admin List</Menu.Item>
-                </SubMenu>
 
                 {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
