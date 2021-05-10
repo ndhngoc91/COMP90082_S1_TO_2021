@@ -47,7 +47,10 @@ module.exports = {
         ]
     },
     devServer: {
-        host: '127.0.0.1',
+        //Use 127.0.0.1 for local/manual deployment
+        // host: '127.0.0.1',
+        //Use 0.0.0.0 for Docker deployment
+        host: '0.0.0.0',
         historyApiFallback: true,
         proxy: {
             '/api/*': {
