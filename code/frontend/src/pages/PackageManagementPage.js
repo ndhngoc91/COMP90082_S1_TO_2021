@@ -153,7 +153,6 @@ const PackageManagementPage = () => {
                                             <Button icon={<EditOutlined/>} type="default"
                                                     onClick={() => {
                                                         console.log(values);
-                                                        values.products = values.what_is_included.split("-");
                                                         setEditFormFieldValues(values);
                                                         setIsEditPackageModelVisible(true);
                                                     }}>

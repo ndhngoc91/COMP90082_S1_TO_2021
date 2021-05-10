@@ -17,6 +17,9 @@ def filter_by_query(query: Optional[str],
                     age_group_id: Optional[int],
                     db: Session):
     sql_query = db.query(models.Package.id, models.Package.name,
+                         models.Package.age_group_id,
+                         models.Package.category_id,
+                         models.Package.skill_level_id,
                          models.AgeGroup.name.label("age_group"),
                          models.Category.name.label("category"),
                          models.SkillLevel.name.label("skill_level"),
@@ -63,9 +66,11 @@ def delete(package_id: int, db: Session):
 
 
 def put(package_id: int, request: schemas.Package, db: Session):
+    request_dict = dict(request)
+    request_dict.pop("product_group_ids")  # temporarily ignore this value
     package_to_update = db.query(models.Package).filter(models.Package.id == package_id)
     if not package_to_update.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {package_id} not found")
 
-    package_to_update.update(dict(request))
+    package_to_update.update(request_dict)
     db.commit()

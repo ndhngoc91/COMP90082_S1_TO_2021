@@ -5,7 +5,7 @@ import {
     Button,
     Select
 } from "antd";
-import {MinusCircleOutlined, PlusOutlined, CheckSquareOutlined} from "@ant-design/icons";
+import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import {useAgeGroups} from "../../hooks/AgeGroupHooks";
 import {useCategories} from "../../hooks/CategoryHooks";
 import {useSkillLevels} from "../../hooks/SkillLevelHooks";
@@ -29,7 +29,7 @@ const formItemLayoutWithOutLabel = {
     wrapperCol: {offset: 6, span: 16}
 };
 
-const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}) => {
+const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing, updateProductGroups = true}) => {
     const [form] = Form.useForm();
 
     const ageGroups = useAgeGroups();
@@ -102,6 +102,7 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                     })}
                 </Select>
             </Form.Item>
+            {updateProductGroups &&
             <Form.List name="product_group_ids"
                        rules={[
                            {
@@ -150,7 +151,7 @@ const PackageForm = ({fieldValues, onFinish, finishing, clearFormAfterFinishing}
                         </Form.Item>
                     </>
                 )}
-            </Form.List>
+            </Form.List>}
             <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit" loading={finishing}>
                     Submit
