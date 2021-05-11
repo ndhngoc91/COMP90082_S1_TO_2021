@@ -45,14 +45,11 @@ def create_user(request: schemas.UserWithAddresses, db: Session):
                                             city=address.city,
                                             postcode=address.postcode,
                                             address_line=address.address_line))
-
     new_user.addresses = new_addresses
-
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-
-    # print(new_user.addresses[0].address_line)
+    new_user.addresses = new_addresses  # refresh the addresses field
     return new_user
 
 
