@@ -33,7 +33,7 @@ const NavigationBar = observer(() => {
 
     const history = useHistory();
 
-    const [handleLogin] = useHandleLogin();
+    const [handleLogin, {handling}] = useHandleLogin();
 
     const {authStore: {username, userRole, logout}} = useStores();
 
@@ -126,7 +126,7 @@ const NavigationBar = observer(() => {
                         <Input.Password/>
                     </Form.Item>
                     <Form.Item {...loginFormTailLayout}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" loading={handling}>
                             Login
                         </Button>
                     </Form.Item>
