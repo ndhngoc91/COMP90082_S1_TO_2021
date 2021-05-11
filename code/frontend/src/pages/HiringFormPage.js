@@ -2,13 +2,14 @@ import React, {useEffect, useState }  from 'react'
 import HiringForm from '../components/HiringForm';
 import styled from 'styled-components';
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import { DatePicker, InputNumber, Row, Col, Alert, Layout, Space, Steps, Button, Checkbox, Image, Table, Form, Input, Select } from "antd";
+import { DatePicker, InputNumber, Row, Col, Alert, Layout, Space, Steps, Button, Radio, Image, Table, Form, Input, Select } from "antd";
 const { Content } = Layout;
 const { Step } = Steps;
 const { RangePicker } = DatePicker;
 import "../assets/css/booking.css";
 import { useCategories } from "../hooks/CategoryHooks";
 import { handlePackages} from "../hooks/PackageHooks";
+import { set } from 'mobx';
 
 const HiringFormPage = (props) => {
     //console.log(props.location.state);
@@ -31,20 +32,23 @@ const HiringFormPage = (props) => {
 
     // 2. Select Category
     const categories = useCategories();
-    const categoryOnChange = (event, id) => {
-        if (event.target.checked) {
-            setSelectedCatogories(oldCategories => [...oldCategories, id]);
-        } else {
-            setSelectedCatogories(selectedCategories.filter(oldId => oldId !== id));
-        }
+    const categoryOnChange = (event) => {
+        // if (event.target.checked) {
+        //     setSelectedCatogories(oldCategories => [...oldCategories, id]);
+        // } else {
+        //     setSelectedCatogories(selectedCategories.filter(oldId => oldId !== id)); 
+        //
+        console.log(event.target.value);
+        setSelectedCatogory(event.target.value);
+        
     }
 
 
     // 3. Select Packages
     const [
-        {packages, rentPeriod, selectedCategories, loading },
+        {packages, rentPeriod, selectedCategory, loading },
         setRentPeriod,
-        setSelectedCatogories,
+        setSelectedCatogory,
         getPackages,
         setLoading
     ] = handlePackages();
@@ -65,11 +69,11 @@ const HiringFormPage = (props) => {
 
     // Only change the quantity of a package type
     var changeQuantity = (quan, packageItem) => {
-        return packageItem = {'Name': packageItem.Name,'Type': packageItem.Type, 'Price': packageItem.Price, 'Age':packageItem.Age, 'Quantity': quan,  'Extras': packageItem.Extras};
+        return packageItem = {'PackageId': packageItem.PackageId, 'Name': packageItem.Name,'Type': packageItem.Type, 'Price': packageItem.Price, 'Age':packageItem.Age, 'Quantity': quan,  'Extras': packageItem.Extras};
     }
 
     // Handle Change on quantity
-    const onChange = (val, name, type, price, age, extras) => {
+    const onChange = (id, val, name, type, price, age, extras) => {
         var same = 0;
 
         setPackageItem(oldPackages => {
@@ -81,7 +85,7 @@ const HiringFormPage = (props) => {
                 }
             }
             if (same === 0){
-                return [...oldPackages, {'Name': name, 'Type':type, 'Price': price, 'Age': age, 'Quantity':val, 'Extras': extras}]
+                return [...oldPackages, {'PackageId': id, 'Name': name, 'Type':type, 'Price': price, 'Age': age, 'Quantity':val, 'Extras': extras}]
             }else{
                 return oldPackages
             }
@@ -108,7 +112,7 @@ const HiringFormPage = (props) => {
                 render: (_, type) => (
 
                     <InputNumber min={0} max={10} defaultValue={0} 
-                    onChange={val => onChange(val, record.package_name, type.type_name, record.price, record.age_group_id, record.extras)}></InputNumber>
+                    onChange={val => onChange(record.package_id, val, record.package_name, type.type_name, record.price, record.age_group_id, record.extras)}></InputNumber>
 
                   ),
               },
@@ -158,7 +162,7 @@ const HiringFormPage = (props) => {
         for (let i = 0; i < packagesItem.length; i++ ){
             let p = packagesItem[i];
             for (let j = 0; j < p.Quantity; j ++){
-                orders[n - 1] = {'key': n, 'Name': p.Name, 'Type': p.Type, 'Package Price': p.Price, 'AgeGroup': p.Age, 'Extras': p.Extras, 'customerInfo': '', selectedExtras: []};
+                orders[n - 1] = {'package_id':p.PackageId, 'key': n, 'Name': p.Name, 'Type': p.Type, 'Package Price': p.Price, 'AgeGroup': p.Age, 'Extras': p.Extras, 'customerInfo': '', selectedExtras: []};
                 n ++ ;
             }    
         }
@@ -234,27 +238,21 @@ const HiringFormPage = (props) => {
             extra[i].key = extra[i].extra_id;
         }
 
-        // const [customerInfo, setCustomerInfo] = useState({
-        //         'firstName': '', 'lastName': '', 'dob':'', 'skierLevel':'', 
-        //         'height':'', 'weight':'', 'shoeSize':'', 'tyreSize':'' });
+        record.category_id = selectedCategory;
+        record.start_date = dates[0].format('YYYY-MM-DD');
+        record.end_date = dates[1].format('YYYY-MM-DD');
+        record.user_id = record.key;
 
-        //const [selectedExtras, setSelectedExtras] = useState([]);
-
-        //record.customerInfo = customerInfo;
-        //record.selectedExtras = selectedExtras;
-
+       
 
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 record.selectedExtras  = selectedRows;
+                record.selected_extra_id = selectedRowKeys;
             },
             hideSelectAll: true
           };
 
-       
-
-       
-          
 
         return (
 
@@ -358,6 +356,26 @@ const HiringFormPage = (props) => {
         
     )}
 
+    const [message, setMessage] = useState("Please fill in First Name / Last Name / Birth Date");
+    
+    const submitInfo = (orders) => {
+
+        let required = true;
+
+        for (var i = 0; i < orders.length; i++){
+            var cus = orders[i].customerInfo;
+            if (cus === "" || cus.firstName === undefined || cus.lastName === undefined || cus.dob === undefined ){
+                required = false;
+                break;
+            }
+        }
+
+        if (required){
+            setMessage("Submit Successful");
+        }else{
+            setMessage("Please fill in First Name / Last Name / Birth Date");
+        }
+    }
 
 
    
@@ -391,14 +409,21 @@ const HiringFormPage = (props) => {
           title: 'Select Category',
           content: /*<HiringForm selectedCustomer = {props.location.state}/>*/
 
-            <Row className="step1-content">
-                {categories.map(category => (
-                    <Col key={category.id} span={6}>
-                        <Image width={200} src={category.image_url}/>
-                        <Checkbox onChange={e => categoryOnChange(e, category.id)}>{category.name}</Checkbox>
-                    </Col>
-                ))}
-            </Row>
+           
+
+            <Radio.Group layout="horizontal" onChange={e => categoryOnChange(e)}>
+                  <Row className="step1-content">
+                    {categories.map(category => (
+                        
+                        <Col key={category.id} span={6}>
+                            <Image width={200} src={category.image_url}/>
+                            <Radio value={category.id}>{category.name}</Radio>
+                        </Col>
+                
+                    ))}
+                 
+                </Row>
+            </Radio.Group>
           ,         
         },
         {
@@ -436,12 +461,18 @@ const HiringFormPage = (props) => {
                     </Table>
 
                     : "No Order"}
+
+                    
+                    <Alert message={message}/>
+                    
+                    
+                    
                 
             </Col>
         },
       ];
-   
 
+   
   
 
     const [current, setCurrent] = useState(0);
@@ -497,7 +528,8 @@ const HiringFormPage = (props) => {
 
 
                             {current === steps.length - 1 && (
-                            <Button type="primary" onClick={() => console.log(orders)}>
+                            <Button type="primary" onClick={() => { console.log(orders);
+                                                                    submitInfo(orders)}}>
                                 Submit
                             </Button>
                             )}
