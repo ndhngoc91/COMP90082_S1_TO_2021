@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
-import { Col, Layout, Spin, Row, Table, Typography, Input } from "antd";
+import React, {useEffect} from "react";
+import {Col, Layout, Spin, Row, Table, Typography, Input} from "antd";
 import PageFooter from "../components/PageFooter/PageFooter";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import { useCustomers } from "../hooks/CustomerHooks";
-const { Content } = Layout;
-const { Title } = Typography;
-const { Search } = Input;
+import {useCustomers} from "../hooks/CustomerHooks";
+
+const {Content} = Layout;
+const {Title} = Typography;
+const {Search} = Input;
 
 
 const CustomersPage = () => {
@@ -13,7 +14,7 @@ const CustomersPage = () => {
         getCustomers,
         setPageCurrent,
         setSearchQuery,
-        { loading, customers, totalCustomers, pageSize, pageCurrent, searchQuery }
+        {loading, customers, totalCustomers, pageSize, pageCurrent, searchQuery}
     ] = useCustomers();
 
     useEffect(() => {
@@ -76,9 +77,9 @@ const CustomersPage = () => {
     }
 
     return (
-        <Layout style={{ minHeight: "100vh" }}>
-            <NavigationBar defaultSelected="/customers" />
-            <Content style={{ margin: "90px 16px" }}>
+        <Layout style={{minHeight: "100vh"}}>
+            <NavigationBar/>
+            <Content style={{margin: "90px 16px"}}>
                 <Row justify="center">
                     <Col span={18}>
                         <Row>
@@ -94,7 +95,7 @@ const CustomersPage = () => {
                             </Col>
                         </Row>
                         {loading ?
-                            <Spin size="large" /> :
+                            <Spin size="large"/> :
                             <Table
                                 dataSource={customers}
                                 columns={columns}
@@ -109,7 +110,7 @@ const CustomersPage = () => {
                     </Col>
                 </Row>
             </Content>
-            <PageFooter />
+            <PageFooter/>
         </Layout>
     );
 }
