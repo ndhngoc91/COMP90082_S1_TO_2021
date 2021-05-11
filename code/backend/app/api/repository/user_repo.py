@@ -16,7 +16,7 @@ def create_user(request: schemas.UserCreate, db: Session):
     new_user = models.User(username=request.username, password=request.password, email=request.email,
                            birthday=request.birthday, phone=request.phone, gender=request.gender,
                            first_name=request.first_name, last_name=request.last_name,
-                           user_type_id=request.user_type_id)
+                           user_type_id=db.query(models.UserType.id).filter(models.UserType.type == request.user_type))
 
     new_address = models.Address(address_line=request.address_line, state=request.state, city=request.city,
                                  postcode=request.postcode, user_id=new_user.id)

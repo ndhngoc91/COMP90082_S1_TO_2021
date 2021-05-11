@@ -105,7 +105,11 @@ class TrailType(Base):
     name = Column(String(45))
 
 
-# sqlalchemy.exc.NoForeignKeysError
+'''
+sqlalchemy.exc.NoForeignKeysError: Could not determine join condition between parent/child tables on relationship 
+User.user_group - there are no foreign keys linking these tables.  Ensure that referencing columns are associated
+ with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.
+'''
 # class UserGroup(Base):
 #     __tablename__ = 'user_groups'
 #
@@ -193,7 +197,7 @@ class User(Base):
     organization = relationship('Organization')
     user_type = relationship('UserType')
     address = relationship('Address')
-    # user_group = relationship('UserGroup')
+    user_group = relationship('UserGroup')
 
 
 class Address(Base):
