@@ -2,8 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
-from app.api import models, schemas
-from app.api.hashing import Hash
+from app.api import models, schemas, hashing
 
 
 def get_all(db: Session):
@@ -25,7 +24,7 @@ def check_username(username: str, db: Session):
 
 
 def create_user(request: schemas.UserCreate, db: Session):
-    new_user = models.User(username=request.username, password=Hash.bcrypt(request.password), email=request.email,
+    new_user = models.User(username=request.username, password=hashing.get_password_hash(request.password), email=request.email,
                            birthday=request.birthday, phone=request.phone, gender=request.gender,
                            user_type_id=db.query(models.UserType.id).filter(models.UserType.type == request.user_type))
 
