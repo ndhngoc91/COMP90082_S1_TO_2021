@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Col, Layout, Spin, Row, Table, Typography, Input, Space, Button, Switch, Tooltip, Select} from "antd";
+import {Col, Layout, Spin, Row, Table, Typography, Input, Space, Button, Tooltip, Select} from "antd";
 import { useCustomers } from "../../hooks/CustomerHooks";
 const { Content } = Layout;
 const { Title } = Typography;
@@ -9,27 +9,29 @@ const {Option} = Select;
 
 const UserList = () => {
 
-    const [data,setData] =useState([]);
+    const [dataSource,setDataSource] =useState(dataSource);
+    const [isEnable, setIsEnable] = useState("enable");
 
     for (let i = 0; i < 100; ++i) {
         if(i<50){
-            data.push({
+            dataSource.push({
                 key: i,
                 userName: 'Screem',
                 firstName: 'iOS',
                 lastName: 'Jack',
                 gender:"female",
                 email: '2014-12-24 23:12:00',
-                isDisabled:true,
+                isEnable:isEnable,
             });
         }else{
-            data.push({
+            dataSource.push({
                 key: i,
                 userName: 'Screem',
                 firstName: 'iOS',
                 lastName: 'Jack',
                 gender:'male',
                 email: '2014-12-24 23:12:00',
+                isEnable:isEnable,
             });
         }
     }
@@ -82,46 +84,72 @@ const UserList = () => {
                 </Tooltip>),
         },
         {
-            title:"Is Disabled",
-            dataIndex:"isDisabled",
-            key:"isDisabled",
+            title:"Is Enable",
+            dataIndex:"isEnable",
+            key:"isEnable",
             width:"15%",
             render: (text, record,index) => {
-                return <Space size="middle">
-                    <Select
-                        name="isDisabled"
-                        value={record.isDisabled}
-                        style={{width:'80px'}}
-                        onChange={(value) => {
-                            console.log('Record: ');
-                            console.log(record);
-                            console.log('text: ');
-                            console.log(text);
-                            console.log('index: ');
-                            console.log(index);
-                            setIsDisabled(value);
-                        }}>
-                        <Option key="0" value="true">true</Option>
-                        <Option key="1" value="false">false</Option>
-                    </Select>
-                </Space>
+                return <>
+                    {
+                        text==="enable" ?
+                            <Button
+                                type="primary"
+                                style={{width:'100px'}}
+                                onClick={(event) => {
+                                if(text==="enable"){
+                                    text = "disable";
+                                    let newData = [];
+                                    for (let i=0;i<data.length;i++){
+                                        if (i==index){
+                                            newData[i] =text;
+                                        }else{
+                                            newData[i] = dataSource[i].isEnable;
+                                        }
+                                    }
+                                    console.log(newData[index]);
+                                    setDataSource(newData);
+                                    console.log('index: ',index);
+                                    return text;
+                                }else{
+                                    text = "enable";
+                                    let newData =dataSource;
+                                    newData[index].isEnable = text;
+                                    console.log(newData[index].isEnable);
+                                    setDataSource(newData);
+                                    console.log(text);
+                                    console.log(record.isEnable);
+                                    return text;
+                                }
+                            }}>
+                                {dataSource[index].isEnable}
+                            </Button>
+                            : <Button
+                                type="primary"
+                                style={{width:'100px'}}
+                                onClick={(event) => {
+                                    if(text==="enable"){
+                                        text = "disable";
+                                        let newData =dataSource;
+                                        newData[index].isEnable = text;
+                                        console.log(newData[index].isEnable);
+                                        setDataSource(newData);
+                                        console.log(text);
+                                        return text;
+                                    }else{
+                                        text = "enable";
+                                        let newData =dataSource;
+                                        newData.push();newData[index].isEnable = text;
+                                        console.log(newData[index]);
+                                        setDataSource(newData);
+                                        console.log(text);
+                                        return text;
+                                    }
+                                }}>
+                                {dataSource[index].isEnable}
+                            </Button>
 
-                /*
-                <Space size="middle">
-                    <Select
-                        name="isDisabled"
-                        value={isDisabled}
-                        style={{width:'80px'}}
-                        onChange={(value) => {
-                            console.log(record);
-                            setIsDisabled(value);
-                        }}>
-                        <Option key="0" value="true">true</Option>
-                        <Option key="1" value="false">false</Option>
-                    </Select>
-                </Space>
-                 */
-
+                    }
+                </>
             }
         },
     ];
@@ -132,8 +160,6 @@ const UserList = () => {
         setSearchQuery,
         { loading, customers, totalCustomers, pageSize, pageCurrent, searchQuery }
     ] = useCustomers();
-
-    const [isDisabled, setIsDisabled] = useState(false);
 
     useEffect(() => {
         getCustomers();
@@ -217,7 +243,7 @@ const UserList = () => {
                             <Spin size="large" /> :
                             <Table
                                 size='large'
-                                dataSource={data}
+                                dataSource={dataSource}
                                 columns={columns}
                                 scroll={{ y: 1300 }}
                                 bordered
