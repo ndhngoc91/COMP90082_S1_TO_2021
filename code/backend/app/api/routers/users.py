@@ -13,17 +13,17 @@ router = APIRouter(
 get_db = database.get_db
 
 
-'''
-When I user the response_model, I got the following error:
-pydantic.error_wrappers.ValidationError: 1 validation error for User
-response
-  value is not a valid dict (type=type_error.dict)
-'''
+@router.get('/', status_code=status.HTTP_200_OK)
+def check_username(username: str, db: Session = Depends(get_db)):
+    """
+    Check if **username** exists.
 
+    Returns:
+    - **200** & **username** if not exists
+    - **409** if already exists
 
-# @router.get('/', status_code=status.HTTP_200_OK)
-# def check_username(request: schemas.Username, db: Session = Depends(get_db)):
-#     return user_repo.check_username(request, db)
+    """
+    return user_repo.check_username(username, db)
 
 
 # @router.post('/', response_model=schemas.User, status_code=status.HTTP_201_CREATED)

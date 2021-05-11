@@ -1,4 +1,7 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from starlette import status
+
 from app.api import models, schemas
 
 
@@ -12,10 +15,12 @@ def authenticate(username: str, password: str, db: Session):
         .filter(models.User.username == username and models.User.password == password).first()
 
 
-# def check_username(request: schemas.Username, db: Session):
-#     username = db.query(models.User).filter(models.User.username == request.username).first()
-#     if username:
-#         raise
+def check_username(username: str, db: Session):
+    new_username = db.query(models.User).filter(models.User.username == username).first()
+    if new_username:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"Username already exists")
+    return username
 
 
 def create_user(request: schemas.UserCreate, db: Session):
