@@ -53,7 +53,7 @@ def create_user(request: schemas.UserWithAddresses, db: Session):
     return new_user
 
 
-def put(user_id: int, request: schemas.User, db: Session):
+def put(user_id: int, request: schemas.UserWithoutPassword, db: Session):
     user_to_update = db.query(models.User).filter(models.User.id == user_id)
     if not user_to_update.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {user_id} not found")

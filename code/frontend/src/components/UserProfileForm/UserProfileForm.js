@@ -7,19 +7,18 @@ import {
     PlusOutlined, TeamOutlined, UserOutlined
 } from "@ant-design/icons";
 import {
-    Button, Select, Form, Input, Row, Col, DatePicker, Rate, Tag, Image, Space
+    Button, Select, Form, Input, Row, Col, DatePicker, Tag, Image, Space, notification
 } from "antd";
-import moment from "moment";
 import {StateData, CityData} from "../../consts/StateData";
 import {useSkillLevels} from "../../hooks/SkillLevelHooks";
+import {useHandleEditProfile, useUserProfile} from "../../hooks/UserHooks";
 
 const {Option} = Select;
 
 const UserProfileForm = () => {
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0);
-    const [shoeSize, setShoeSize] = useState(0);
-    const [skierAbility, setSkierAbility] = useState(0);
+    const [footSize, setFootSize] = useState(0);
     const [din, setDin] = useState(0);
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
@@ -29,10 +28,12 @@ const UserProfileForm = () => {
     const [form] = Form.useForm();
 
     const skillLevels = useSkillLevels();
+    const userProfile = useUserProfile();
+    const [handleEditProfile, {handling}] = useHandleEditProfile();
 
     useEffect(() => {
-        setDin(height * 2 + weight * 3 + shoeSize * 4 + skierAbility * 5);
-    }, [weight, height, shoeSize, skierAbility]);
+        setDin(height * 2 + weight * 3 + footSize * 4);
+    }, [weight, height, footSize]);
 
     const onStateChange = value => {
         setCities(CityData[value]);
@@ -45,13 +46,11 @@ const UserProfileForm = () => {
     };
 
     const onFinish = values => {
-        console.log(form.isFieldsTouched());
-        console.log("Success:", values);
-    };
-
-    const onFinishFailed = errorInfo => {
-        console.log(form.isFieldsTouched())
-        console.log("Failed:", errorInfo);
+        handleEditProfile(values, () => {
+            notification.success({message: "Edit profile successfully!"});
+        }, () => {
+            notification.success({message: "Failed to edit profile!"});
+        });
     };
 
     return (
@@ -60,36 +59,20 @@ const UserProfileForm = () => {
                 <Image width={200} style={{borderRadius: "50%"}} preview={false}
                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                 <Form style={{width: "1000px"}}
-                      initialValues={{
-                          firstName: "Ruby",
-                          lastName: "Nguyen",
-                          gender: "male",
-                          birthdate: moment('2015-06-06', 'YYYY-MM-DD'),
-                          height: 178,
-                          weight: 75,
-                          shoeSize: 3,
-                          skierAbility: 2,
-                          organization: "Melb Uni",
-                          email: "hongngocn@unimelb.edu.au",
-                          phoneNumber: "0434117998",
-                          state: "VIC",
-                          city: "Melbourne",
-                          postcode: "3053"
-                      }}
+                      initialValues={userProfile}
                       form={form}
                       name="basic"
                       layout="vertical"
-                      onFinish={onFinish}
-                      onFinishFailed={onFinishFailed}>
+                      onFinish={onFinish}>
                     <Row justify="space-between" gutter={16}>
                         <Col span={8}>
-                            <Form.Item label="First Name" name="firstName"
+                            <Form.Item label="First Name" name="first_name"
                                        rules={[{required: true, message: "Please input your first name!"}]}>
                                 <Input prefix={<UserOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item label="Last Name" name="lastName"
+                            <Form.Item label="Last Name" name="last_name"
                                        rules={[{required: true, message: "Please input your last name!"}]}>
                                 <Input prefix={<TeamOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
@@ -127,15 +110,15 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item label="Shoe Size" name="shoeSize"
+                            <Form.Item label="Foot Size" name="foot_size"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Input type={"number"} size="large" value={shoeSize} readOnly={readOnly}
-                                       onChange={e => setShoeSize(parseInt(e.currentTarget.value))}/>
+                                <Input type={"number"} size="large" value={footSize} readOnly={readOnly}
+                                       onChange={e => setFootSize(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item label="Skill Ability"
-                                       name="skill_ability"
+                            <Form.Item label="Skill Level"
+                                       name="skill_level_id"
                                        rules={[{required: true, message: "Required!"}]}>
                                 <Select placeholder="Select Skill Level" disabled={readOnly}>
                                     {skillLevels.map((skillLevel, index) => {
@@ -167,54 +150,15 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item label="Phone Number" name="phoneNumber"
+                            <Form.Item label="Phone" name="phone"
                                        rules={[
-                                           {required: true, message: "Please input your phone number!"}
+                                           {required: true, message: "Please input your phone!"}
                                        ]}>
                                 <Input prefix={<PhoneOutlined/>} size="large" readOnly={readOnly}/>
                             </Form.Item>
                         </Col>
                     </Row>
-                    {/*
-                    <Row justify="space-between" gutter={16}>
-                        <Col span={12}>
-                            <Form.Item label="State" name="state" rules={[
-                                {required: true, message: "Please input your state!"}
-                            ]}>
-                                <Select value={selectedState} onChange={onStateChange} disabled={readOnly}>
-                                    {StateData.map(state => (
-                                        <Option key={state} value={state}>{state}</Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item label="City" name="city" rules={[
-                                {required: true, message: "Please input your city!"}
-                            ]}>
-                                <Select value={selectedCity} onChange={onCityChange} disabled={readOnly}>
-                                    {cities.map(city => (
-                                        <Option key={city} value={city}>{city}</Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    */}
-                    <Form.List name="addressLines"
-                               rules={[
-                                   {
-                                       required: true,
-                                       message: "Please input your address lines!"
-                                   },
-                                   {
-                                       validator: async (_, addressLines) => {
-                                           if (!addressLines) {
-                                               return Promise.reject(new Error('At least 1 address'));
-                                           }
-                                       },
-                                   },
-                               ]}>
+                    <Form.List name="addresses">
                         {(fields, {add, remove}, {errors}) => (
                             <>
                                 {fields.map(({key, name, fieldKey, ...field}) => (
@@ -249,7 +193,7 @@ const UserProfileForm = () => {
                                                           rules={[
                                                               {
                                                                   required: true,
-                                                                  message: "Please select your state!"
+                                                                  message: "Required!"
                                                               }
                                                           ]}
                                                           noStyle>
@@ -274,8 +218,7 @@ const UserProfileForm = () => {
                                                           rules={[
                                                               {
                                                                   required: true,
-                                                                  whitespace: true,
-                                                                  message: "Please select city.",
+                                                                  message: "Required!",
                                                               }
                                                           ]}
                                                           noStyle>
@@ -298,7 +241,7 @@ const UserProfileForm = () => {
                                                           rules={[
                                                               {
                                                                   required: true,
-                                                                  message: "Please input postcode!"
+                                                                  message: "Required!"
                                                               }
                                                           ]}
                                                           noStyle>
@@ -340,7 +283,7 @@ const UserProfileForm = () => {
                         </Button>}
                         {readOnly === false &&
                         <Space>
-                            <Button type="primary" htmlType="submit" size="large">
+                            <Button type="primary" htmlType="submit" size="large" loading={handling}>
                                 Submit
                             </Button>
                             <Button type="default" size="large" onClick={() => setReadOnly(true)}>
