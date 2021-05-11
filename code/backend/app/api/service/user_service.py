@@ -12,12 +12,16 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-def create_user(request: schemas.UserCreate, db: Session):
+def get_all(db: Session):
+    return user_repo.get_all(db=db)
+
+
+def get_user_by_id(user_id: int, db: Session):
+    return user_repo.get_one_by_id(user_id=user_id, db=db)
+
+
+def create_user(request: schemas.UserWithAddresses, db: Session):
     return user_repo.create_user(request=request, db=db)
-
-
-def create_admin(request: schemas.AdminCreate, db: Session):
-    return user_repo.create_admin(request=request, db=db)
 
 
 def check_username(username: str, db: Session):
@@ -52,3 +56,7 @@ def validate(username: str, password: str, db: Session) -> dict:
         return {"access_token": access_token, "token_type": "bearer"}
     else:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to connect to Squizz")
+
+
+def put(user_id: int, request: schemas.User, db: Session):
+    return user_repo.put(user_id=user_id, request=request, db=db)
