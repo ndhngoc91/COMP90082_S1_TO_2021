@@ -9,6 +9,7 @@ export const useHandleLogin = () => {
     const {authStore} = useStores();
 
     const handleLogin = useCallback(({username, password, signInAsStaff = false}, success) => {
+        setHandling(true);
         const formData = new FormData();
         formData.set("username", username);
         formData.set("password", password);
@@ -22,7 +23,7 @@ export const useHandleLogin = () => {
             success();
         }).catch(e => {
             if (e.response.status === 404) {
-                antdMessage.info(e.response.data['detail']);
+                console.log(e.response);
             }
         }).finally(() => {
             setHandling(false);
