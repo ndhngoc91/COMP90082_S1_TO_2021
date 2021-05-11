@@ -69,7 +69,7 @@ const PackageManagementPage = () => {
     return (
         <>
             <Layout style={{minHeight: "100vh"}}>
-                <NavigationBar defaultSelected="/package"/>
+                <NavigationBar/>
                 <Layout style={{height: "100%"}}>
                     <Content>
                         <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>

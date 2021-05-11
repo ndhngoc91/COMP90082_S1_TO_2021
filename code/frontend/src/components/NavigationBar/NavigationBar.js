@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom"
-import {Layout, Menu, Modal} from "antd";
+import {Button, Form, Input, Layout, Menu, Modal, notification} from "antd";
 import {
     HistoryOutlined,
     ShopOutlined,
@@ -9,38 +9,55 @@ import {
     ContainerOutlined,
     SettingOutlined,
     AccountBookOutlined,
-    HomeOutlined, LoginOutlined, UsergroupAddOutlined, UserAddOutlined
+    HomeOutlined, LoginOutlined, UserAddOutlined
 } from "@ant-design/icons";
 import {useStores} from "../../stores";
 import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import {USER_ROLE} from "../../consts/UserRole";
-import LoginPage from "../../pages/LoginPage";
+import {useHandleLogin} from "../../hooks/AuthHooks";
 
 const {Header} = Layout;
 const {SubMenu} = Menu;
 
-const NavigationBar = observer(({defaultSelected}) => {
-    const history = useHistory();
+const loginFormLayout = {
+    labelCol: {span: 6},
+    wrapperCol: {span: 18},
+};
+const loginFormTailLayout = {
+    wrapperCol: {offset: 6, span: 18},
+};
+
+const NavigationBar = observer(() => {
     const [isLoginModelVisible, setIsLoginModelVisible] = useState(false);
 
-    const {authStore: {username,userRole, logout}} = useStores();
+    const history = useHistory();
+
+    const [handleLogin] = useHandleLogin();
+
+    const {authStore: {username, userRole, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
-            history.push("/login");
+            history.push("/");
         } else if (key.startsWith("/")) {
             history.push(key)
         }
     }
 
+    const onFinish = values => {
+        handleLogin(values, () => {
+            setIsLoginModelVisible(false);
+            notification.success({message: "Login successfully"});
+        });
+    };
+
     const {leftItemCls, rightItemCls} = useNavigationBarStyles();
 
     return (
         <Header style={{width: "100%", padding: 0}}>
-            <Menu onClick={handleClick} mode="horizontal"
-                  theme={"dark"} defaultSelectedKeys={[defaultSelected]}>
+            <Menu onClick={handleClick} mode="horizontal" theme={"dark"}>
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
                 <>
@@ -58,7 +75,7 @@ const NavigationBar = observer(({defaultSelected}) => {
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
                     Booking Management
                 </Menu.Item>}
-                {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
+                {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
                     Calendar
                 </Menu.Item>}
@@ -67,36 +84,24 @@ const NavigationBar = observer(({defaultSelected}) => {
                     Package Management
                 </Menu.Item>}
                 {userRole === USER_ROLE.GUEST &&
-                    <>
-                        <Menu.Item key="login"
-                                   className={rightItemCls}
-                                   onClick={() => setIsLoginModelVisible(true)}
-                                   icon={<LoginOutlined/>}
-                        >
-                            Login
-                        </Menu.Item>
-                        <Menu.Item className={rightItemCls} key="/user-create" icon={<UserAddOutlined/>}>
-                            Register
-                        </Menu.Item>
-                    </>
-                }
-
-                {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
+                <>
+                    <Menu.Item key="login"
+                               className={rightItemCls}
+                               onClick={() => setIsLoginModelVisible(true)}
+                               icon={<LoginOutlined/>}>
+                        Login
+                    </Menu.Item>
+                    <Menu.Item className={rightItemCls} key="/user-create" icon={<UserAddOutlined/>}>
+                        Register
+                    </Menu.Item>
+                </>}
+                {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
-                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
                     {userRole === USER_ROLE.CUSTOMER &&
-                        <>
-                            <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
-                        </>
-                    }
+                    <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
                     {userRole === USER_ROLE.ADMIN &&
-                    <>
-                        <Menu.Item key="/users" icon={<UsergroupAddOutlined/>}>Users List</Menu.Item>
-                        <Menu.Item key="/admin-profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
-                        <Menu.Item key="/admin-create" icon={<UserAddOutlined/>}>Create Admin</Menu.Item>
-                        <Menu.Item key="/admins" icon={<UsergroupAddOutlined/>}>Admin List</Menu.Item>
-                    </>
-                    }
+                    <Menu.Item key="/admin-profile" icon={<ContainerOutlined/>}>User Management</Menu.Item>}
+                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
                 </SubMenu>
                 }
             </Menu>
@@ -105,7 +110,27 @@ const NavigationBar = observer(({defaultSelected}) => {
                    onCancel={() => {
                        setIsLoginModelVisible(false);
                    }}>
-                <LoginPage/>
+                <Form {...loginFormLayout}
+                      name="basic"
+                      initialValues={{remember: true}}
+                      onFinish={onFinish}>
+                    <Form.Item label="Username"
+                               name="username"
+                               rules={[{required: true, message: 'Please input your username!'}]}>
+                        <Input/>
+                    </Form.Item>
+
+                    <Form.Item label="Password"
+                               name="password"
+                               rules={[{required: true, message: 'Please input your password!'}]}>
+                        <Input.Password/>
+                    </Form.Item>
+                    <Form.Item {...loginFormTailLayout}>
+                        <Button type="primary" htmlType="submit">
+                            Login
+                        </Button>
+                    </Form.Item>
+                </Form>
             </Modal>
         </Header>
     );

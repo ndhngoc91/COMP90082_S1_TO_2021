@@ -1,10 +1,11 @@
 import {
-    Avatar, Collapse, Button, Modal, Form, Drawer, List, Divider, Col, Row, Select, Input, Space, Typography
+    Avatar, Collapse, Button, Modal, Form, Drawer, List, Divider, Col, Row, Select, Input, Space, Typography,Popconfirm,message
 } from "antd";
 import React, {useState} from "react";
 import "antd/dist/antd.css"
 import {
-    PlusOutlined,
+    DeleteOutlined, EditOutlined,
+    PlusOutlined, SearchOutlined,
 } from "@ant-design/icons";
 
 
@@ -23,6 +24,7 @@ const UserGroupList = () => {
     const [modelVisible, setModelVisible] = useState(0);
     const [drawVisible, setDrawVisible] = useState(false);
     const [groupMembers, setGroupMembers] = useState([]);
+    const [groupDetail, setGroupDetail] = useState([]);
     const [groups, setGroups] = useState([
             {
                 id: "1",
@@ -83,6 +85,10 @@ const UserGroupList = () => {
         setModelVisible(2);
     }
 
+    const showEditGroup = (group) => {
+        setModelVisible(4);
+        setGroupDetail(group);
+    }
     const showDrawer = (item) => {
         setDrawVisible(true);
         setGroupMembers(item);
@@ -91,6 +97,18 @@ const UserGroupList = () => {
     const onClose = () => {
         setDrawVisible(false);
     };
+
+    const editGroup = () => {
+        setModelVisible(0);
+    }
+
+    const confirmFriend = (item) => {
+        message.success(item.user_name + ' delete success' );
+    }
+
+    const confirmGroup = (group) => {
+        message.success(group.name + ' delete success' );
+    }
 
 
     return (
@@ -115,7 +133,26 @@ const UserGroupList = () => {
             <Collapse activeKey={["1", "2"]}>
                 {groups.map((group) => {
                     return (
-                        <Panel header={group.name} key={group.id}>
+                        <Panel header={group.name} key={group.id} extra={
+                            <Space>
+                                <Button type="primary" ghost onClick={() => showEditGroup(group)}>
+                                    <EditOutlined />
+                                    Edit
+                                </Button>,
+                                <Popconfirm
+                                    title="Are you sure？"
+                                    okText="Yes"
+                                    cancelText="No"
+                                    onConfirm={()=>confirmGroup(group)}
+                                >
+                                    <Button type="primary" ghost>
+                                        <DeleteOutlined/>
+                                        Delete
+                                    </Button>
+                                </Popconfirm>
+                            </Space>
+
+                        }>
                             <List
                                 dataSource={group.members}
                                 bordered
@@ -123,8 +160,18 @@ const UserGroupList = () => {
                                 renderItem={item => (
                                     <List.Item key={item.uid}
                                                actions={[
-                                                   <a onClick={() => showDrawer(item)} key={`a-${item.id}`}>
-                                                       View Profile
+                                                   <Popconfirm
+                                                       title="Are you sure？"
+                                                       okText="Yes"
+                                                       cancelText="No"
+                                                       onConfirm={()=>confirmFriend(item)}
+                                                   >
+                                                       <a>
+                                                           <DeleteOutlined />  Delete
+                                                       </a>
+                                                   </Popconfirm>,
+                                                   <a onClick={() => showDrawer(item)} key={`a-${item.uid}`}>
+                                                       <SearchOutlined />  View Profile
                                                    </a>,
                                                ]}>
                                         <List.Item.Meta
@@ -141,6 +188,7 @@ const UserGroupList = () => {
                     )
                 })}
             </Collapse>
+
             <Modal title="Add friend" visible={modelVisible === 1} onOk={addFriend}
                    onCancel={handleCancel} centered>
                 <Form>
@@ -168,13 +216,33 @@ const UserGroupList = () => {
                 <Form>
                     <Form.Item
                         label="Group"
-                        name="Group"
+                        name="group"
                         rules={[{required: true, message: "Please input the group name!"}]}
                     >
                         <Input placeholder="enter group name"/>
                     </Form.Item>
                 </Form>
             </Modal>
+
+
+            {/*edit group name */}
+            <Modal
+                title="Edit Group Name"
+                visible={modelVisible === 4}
+                onOk={editGroup}
+                onCancel={handleCancel} centered
+            >
+                <Form>
+                    <Form.Item
+                        label="Group Name"
+                        name="group_name"
+                        rules={[{required: true}]}
+                    >
+                        <Input placeholder={groupDetail.name}/>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
 
             <Drawer width={640}
                     placement="right"

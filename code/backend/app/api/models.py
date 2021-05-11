@@ -1,5 +1,5 @@
 from sqlalchemy import BigInteger, Column, DECIMAL, DateTime, Enum, Float, ForeignKey, Integer, String, Table, Text, \
-    text, BOOLEAN
+    text, DATE, BOOLEAN
 from sqlalchemy.orm import relationship
 from app.api.database import Base
 
@@ -110,8 +110,10 @@ class UserGroup(Base):
 
     group_id = Column(Integer, primary_key=True, unique=True)
     group_name = Column(String(50), nullable=False)
+    users = Column(String(255))
+    user_id = Column(ForeignKey('users.id'), index=True)
 
-    users = relationship('User', secondary='user_user_group')
+    user = relationship('User')
 
 
 class UserType(Base):
@@ -173,25 +175,39 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(60), nullable=False)
+    username = Column(String(60), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
     height = Column(DECIMAL(5, 2))
     weight = Column(DECIMAL(5, 2))
     foot_size = Column(DECIMAL(3, 1))
+    first_name = Column(String(127))
+    last_name = Column(String(127))
+    gender = Column(String(45))
+    birthday = Column(DATE)
+    phone = Column(String(20))
+    email = Column(String(255), unique=True)
+    din = Column(DECIMAL(5, 2))
+    skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
     organization_id = Column(ForeignKey('organizations.id'), index=True)
-    user_type_id = Column(Integer, index=True)
+    user_type_id = Column(ForeignKey('user_types.id'), index=True)
 
     organization = relationship('Organization')
+    skill_level = relationship('SkillLevel')
+    user_type = relationship('UserType')
 
 
-class Address(User):
+class Address(Base):
     __tablename__ = 'addresses'
 
-    user_id = Column(ForeignKey('users.id'), primary_key=True, index=True)
-    country_code = Column(String(10), nullable=False)
-    post_code = Column(String(10), nullable=False)
-    address = Column(Text, nullable=False)
-    order_id = Column(Integer, index=True)
+    id = Column(Integer, primary_key=True,  unique=True, nullable=False, index=True,)
+    state = Column(String(80))
+    city = Column(String(80))
+    postcode = Column(String(45))
+    address_line = Column(Text)
+    user_id = Column(ForeignKey('users.id'), nullable=False, index=True)
+    order_id = Column(ForeignKey('orders.id'), index=True)
+
+    order = relationship('Order')
 
 
 t_package_product_group = Table(
@@ -220,10 +236,3 @@ class PriceLevel(Base):
     price = Column(Float, server_default=text("'0'"))
 
     package = relationship('Package')
-
-
-t_user_user_group = Table(
-    'user_user_group', metadata,
-    Column('user_id', ForeignKey('users.id'), primary_key=True, nullable=False, index=True),
-    Column('user_group_id', ForeignKey('user_groups.group_id'), primary_key=True, nullable=False, index=True)
-)

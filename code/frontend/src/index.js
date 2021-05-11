@@ -16,9 +16,7 @@ import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
 import UserCreatePage from "./pages/UserCreatePage";
 import AdminCreatePage from "./pages/AdminCreatePage";
-import AdminUserListPage from "./pages/AdminUserListPage";
-import AdminAccountPage from "./pages/AdminAccountPage";
-import AdminListPage from "./pages/AdminListPage";
+import UserManagePage from "./pages/UserManagePage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -57,13 +55,11 @@ createStore().then(store => {
                         <Route path="/checkout" exact component={CheckOutPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
-                        <Route path="/users" component={AdminUserListPage}/>
-                        <Route path="/admin-profile" component={AdminAccountPage}/>
+                        <Route path="/admin-profile" component={UserManagePage}/>
                         <Route path="/profile" component={UserAccountPage}/>
                         <Route path="/profile" exact component={UserAccountPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
-                        <Route path="/admins" exact component={AdminListPage}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>
                     </Switch>
                 </BrowserRouter>

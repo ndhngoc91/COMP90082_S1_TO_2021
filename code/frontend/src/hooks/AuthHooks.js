@@ -8,7 +8,7 @@ export const useHandleLogin = () => {
 
     const {authStore} = useStores();
 
-    const handleLogin = useCallback(({username, password, signInAsStaff}, success) => {
+    const handleLogin = useCallback(({username, password, signInAsStaff = false}, success) => {
         const formData = new FormData();
         formData.set("username", username);
         formData.set("password", password);

@@ -227,13 +227,8 @@ const OrderPage = observer(() => {
 
     return (
         <Layout style={{minHeight: "100vh"}}>
-            {/* Top navigation bar */}
-            <NavigationBar history={history} defaultSelected="/order"/>
-
-            {/* Content body */}
+            <NavigationBar history={history}/>
             <Content style={{padding: "80px 16px"}}>
-
-                {/* Add product form and cart information */}
                 <Affix offsetTop={80}>
                     <Row justify="center" gutter={[0, 16]}>
                         <Col span={18}>
