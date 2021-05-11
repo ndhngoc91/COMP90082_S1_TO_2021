@@ -1,65 +1,65 @@
 import React, {useEffect, useState} from "react";
 import {Col, Layout, Spin, Row, Table, Typography, Input, Space, Button, Tooltip, Select} from "antd";
-import { useCustomers } from "../../hooks/CustomerHooks";
-const { Content } = Layout;
-const { Title } = Typography;
-const { Search } = Input;
+import {useCustomers} from "../../hooks/CustomerHooks";
+
+const {Content} = Layout;
+const {Title} = Typography;
+const {Search} = Input;
 const {Option} = Select;
+
+const initialData = []
+for (let i = 0; i < 100; ++i) {
+    if (i % 2 === 0) {
+        initialData.push({
+            key: i,
+            userName: 'Screem',
+            firstName: 'iOS',
+            lastName: 'Jack',
+            gender: "female",
+            email: '2014-12-24 23:12:00',
+            isEnabled: true,
+        });
+    } else {
+        initialData.push({
+            key: i,
+            userName: 'Screem',
+            firstName: 'iOS',
+            lastName: 'Jack',
+            gender: 'male',
+            email: '2014-12-24 23:12:00',
+            isEnabled: false,
+        });
+    }
+}
 
 
 const UserList = () => {
-
-    const [data,setData] =useState([]);
-    const [isEnable, setIsEnable] = useState("enable");
-
-    for (let i = 0; i < 100; ++i) {
-        if(i<50){
-            data.push({
-                key: i,
-                userName: 'Screem',
-                firstName: 'iOS',
-                lastName: 'Jack',
-                gender:"female",
-                email: '2014-12-24 23:12:00',
-                isEnable:{isEnable},
-            });
-        }else{
-            data.push({
-                key: i,
-                userName: 'Screem',
-                firstName: 'iOS',
-                lastName: 'Jack',
-                gender:'male',
-                email: '2014-12-24 23:12:00',
-                isEnable:{isEnable},
-            });
-        }
-    }
+    const [data, setData] = useState(initialData);
 
     const columns = [
         {
-            title:"User Name",
-            dataIndex:"userName",
-            key:"userName",
-            width:"15%",
+            title: "User Name",
+            dataIndex: "userName",
+            key: "userName",
+            width: "15%",
         },
         {
-            title:"First Name",
-            dataIndex:"firstName",
-            key:"firstName",
-            width:"20%"
+            title: "First Name",
+            dataIndex: "firstName",
+            key: "firstName",
+            width: "20%"
         },
         {
-            title:"Last Name",
-            dataIndex:"lastName",
-            key:"lastName",
-            width:"20%"
+            title: "Last Name",
+            dataIndex: "lastName",
+            key: "lastName",
+            width: "20%"
         },
         {
-            title:"Gender",
-            dataIndex:"gender",
-            key:"gender",
-            width:"15%",
+            title: "Gender",
+            dataIndex: "gender",
+            key: "gender",
+            width: "15%",
             filters: [
                 {
                     text: 'female',
@@ -73,92 +73,31 @@ const UserList = () => {
             onFilter: (value, record) => record.gender.indexOf(value) === 0,
         },
         {
-            title:"Email",
-            dataIndex:"email",
-            key:"email",
-            width:"20%",
-            ellipsis:false,
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+            width: "20%",
+            ellipsis: false,
             render: (email) => (
                 <Tooltip placement="topLeft" title={email}>
                     {email}
                 </Tooltip>),
         },
         {
-            title:"Is Enable",
-            dataIndex:"isEnable",
-            key:"isEnable",
-            width:"15%",
-            render: (text, record,index) => {
-                return <>
-                    {
-                        text==="enable" ?
-                            <Button
-                                type="primary"
-                                style={{width:'100px'}}
-                                onClick={(event) => {
-                                if(text==="enable"){
-                                    text = "disable";
-                                    /*
-                                    let newData = [];
-                                    for (let i=0;i<data.length;i++){
-                                        if (i==index){
-                                            newData[i] =text;
-                                        }else{
-                                            newData[i] = data[i].isEnable;
-                                        }
-                                    }
-                                    console.log(newData[index]);
-                                    setData(newData);
-                                    console.log('index: ',index);
-                                    * */
-
-                                    return text;
-                                }else{
-                                    text = "enable";
-                                    /*
-                                    let newData =data;
-                                    newData[index].isEnable = text;
-                                    console.log(newData[index].isEnable);
-                                    setData(newData);
-                                    console.log(text);
-                                    console.log(record.isEnable);
-                                    * */
-                                    return text;
-                                }
-                            }}>
-                                enable
-                            </Button>
-                            : <Button
-                                type="primary"
-                                style={{width:'100px'}}
-                                onClick={(event) => {
-                                    if(text==="enable"){
-                                        text = "disable";
-                                        /*
-                                        let newData =data;
-                                        newData[index].isEnable = text;
-                                        console.log(newData[index].isEnable);
-                                        setData(newData);
-                                        console.log(text);
-                                        * */
-                                        return text;
-                                    }else{
-                                        text = "enable";
-                                        /*
-                                        let newData =data;
-                                        newData.push();newData[index].isEnable = text;
-                                        console.log(newData[index]);
-                                        setData(newData);
-                                        console.log(text);
-                                        * */
-                                        return text;
-                                    }
-                                }}>
-                               disable
-                            </Button>
-
-                    }
-                </>
+            title: "Is Enable",
+            dataIndex: "isEnabled",
+            key: "isEnabled",
+            width: "15%",
+            render: (isEnabled, record, index) => {
+                return <Button
+                    type="primary"
+                    style={{width: '100px'}}
+                    onClick={(event) => {
+                        data[index].isEnabled = !isEnabled;
+                        setData([...data]);
+                    }}>
+                    {isEnabled ? "Disable" : "Enable"}
+                </Button>;
             }
         },
     ];
@@ -167,7 +106,7 @@ const UserList = () => {
         getCustomers,
         setPageCurrent,
         setSearchQuery,
-        { loading, customers, totalCustomers, pageSize, pageCurrent, searchQuery }
+        {loading, customers, totalCustomers, pageSize, pageCurrent, searchQuery}
     ] = useCustomers();
 
     useEffect(() => {
@@ -186,6 +125,7 @@ const UserList = () => {
         }
     }
 
+    console.log(data);
     /*
     const columns = [
         {
@@ -249,12 +189,12 @@ const UserList = () => {
                             </Col>
                         </Row>
                         {loading ?
-                            <Spin size="large" /> :
+                            <Spin size="large"/> :
                             <Table
                                 size='large'
                                 dataSource={data}
                                 columns={columns}
-                                scroll={{ y: 1300 }}
+                                scroll={{y: 1300}}
                                 bordered
                                 showHeader
                                 rowKey={
@@ -262,15 +202,7 @@ const UserList = () => {
                                         record.id
                                     }
                                 }
-                                onRow={(records,index) =>{
-                                    return{
-                                        onClick: event => {
-                                            console.log(records)
-                                            console.log(index)
-                                        }
-                                    };
-                                }}
-                                pagination={pagination}
+                                // pagination={pagination}
                             >
                             </Table>
                         }
