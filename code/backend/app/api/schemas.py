@@ -76,11 +76,11 @@ class User(Username):
     gender: str
     first_name: str
     last_name: str
-    address_line: str
-    state: str
-    city: str
-    postcode: str
-    user_type: str
+    address_line: Optional[str] = None
+    state: Optional[str] = None
+    city: Optional[str] = None
+    postcode: Optional[str] = None
+    user_type: Optional[str] = None
 
 
 class UserCreate(User):

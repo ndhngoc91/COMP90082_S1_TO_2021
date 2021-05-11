@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from starlette import status
-from typing import Dict
 
 from app.api import database, schemas
 from app.api.repository import user_repo
@@ -27,10 +26,10 @@ response
 #     return user_repo.check_username(request, db)
 
 
-# @router.post('/', response_model=schemas.User, status_code=status.HTTP_201_CREATED)
-@router.post('/', status_code=status.HTTP_201_CREATED)
+@router.post('/', response_model=schemas.User, status_code=status.HTTP_201_CREATED)
 def create_user(request: schemas.UserCreate, db: Session = Depends(get_db)):
-    return user_repo.create_user(request, db)
+    new_user = user_repo.create_user(request, db)
+    return new_user.__dict__
 
 
 @router.post('/admin', status_code=status.HTTP_201_CREATED)
