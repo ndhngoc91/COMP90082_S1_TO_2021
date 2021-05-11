@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button, Col, Form, Image, Input, message as antdMessage, notification, Row, Select, Typography
 } from "antd";
@@ -8,11 +8,11 @@ import {
     MailOutlined, CheckSquareOutlined,
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {useUserNames} from "../../hooks/UserNameHooks";
 import {useEmails} from "../../hooks/EmailHooks";
 import {Redirect} from "react-router-dom";
 import Axios from "axios";
 import {useHandleAddAdmin} from "../../hooks/CustomerHooks";
+import axios from "axios";
 
 
 const {Link, Title} = Typography;
@@ -31,7 +31,7 @@ const validateMessages = {
 
 const AdminCreateForm = () => {
     const [user_type, setUserType] = useState("staff");
-    const [userName, setUserName] = useState("admin1");
+    const [username, setUserName] = useState("admin1");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [password, setPassword] = useState("1234sS");
     const [errorMessage, setErrorMessage] = useState("");
@@ -39,8 +39,36 @@ const AdminCreateForm = () => {
 
     const [handleAddAdmin, {handling}] = useHandleAddAdmin();
 
-    const userNames = useUserNames();
+    //const [username,{isExist}] = useUserNames();
     const emails = useEmails();
+
+    //const [isExist,setIsExist] = useState();
+
+    /*
+    * const onChange = (username) => {
+        axios.get("http://127.0.0.1:8000/user/", {
+            params: {
+                username: username
+            }
+        }, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
+        }).then((response) => {
+            if (response.status === 200) {
+                setUserName(response.data);
+                setIsExist(false);
+                notification.open({
+                    message: "Added a customer successfullly!",
+                    description: "Added a customer successfullly!",
+                    icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
+                    duration: 2
+                });
+            }else{
+                setIsExist(true);
+                return Promise.reject(new Error("× username exist."))
+            }
+        });
+    }
+    * */
 
     const [form] = Form.useForm();
 
@@ -171,6 +199,7 @@ const AdminCreateForm = () => {
                                 <Input/>
                             </Form.Item>
                             <Form.Item name="username"
+                                       value={username}
                                        rules={[
                                            {
                                                required: true,
@@ -184,22 +213,29 @@ const AdminCreateForm = () => {
                                                    return Promise.reject(new Error('× Must have at least 5 characters'));
                                                },
                                            }),
-                                           /*
                                            ({
                                                validator(_, value) {
-                                                   const exist_user = userNames.includes(value);
-                                                   if (exist_user) {
-                                                       return Promise.resolve();
-                                                   }
-                                                   return Promise.reject(new Error('× User name exists'));
+                                                   axios.get("http://127.0.0.1:8000/user/", {
+                                                       params: {
+                                                           username: value
+                                                       }
+                                                   }, {
+                                                       headers: {"Content-Type": "application/JSON; charset=UTF-8"},
+                                                   }).then((response) => {
+                                                       if (response.status === 200) {
+                                                           setUserName(value);
+                                                           //setIsExist(false);
+                                                           return Promise.resolve();
+                                                       }else{
+                                                           //setIsExist(true);
+                                                           return Promise.reject(new Error("× username exist."))
+                                                       }
+                                                   });
+                                                   //onChange(value);
                                                },
                                            }),
-                                           * */
                                        ]}
-                                       value={userName}
-                                       onChange={(event) => {
-                                           setUserName(event.target.value);
-                                       }}>
+                                       >
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
                                        className="name"
