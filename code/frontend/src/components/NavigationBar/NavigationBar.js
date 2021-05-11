@@ -81,6 +81,12 @@ const NavigationBar = observer(({defaultSelected}) => {
                     </>
                 }
 
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
+                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                    <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
+                    <Menu.Item key="/admin-profile" icon={<ContainerOutlined/>}>User Management</Menu.Item>
+                </SubMenu>
+
                 {(userRole === USER_ROLE.CUSTOMER || userRole === USER_ROLE.ADMIN) &&
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
