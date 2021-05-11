@@ -79,14 +79,6 @@ class User(Username):
     city: str
     postcode: str
     user_type: str
-# BUG
-    # user_type: Optional[str] = None
-    # address_line: Optional[str] = None
-    # state: Optional[str] = None
-    # city: Optional[str] = None
-    # postcode: Optional[str] = None
-    # user_type: Optional[str] = None
-
     class Config:
         orm_mode = True
 
@@ -116,5 +108,3 @@ class UserProfile(User):
     skill_level: str
     din: str
     organization: str
-
-
