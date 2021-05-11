@@ -14,11 +14,21 @@ router = APIRouter(
 get_db = database.get_db
 
 
+@router.get("")
+def get_all_users(db: Session = Depends(get_db)):
+    return user_service.get_all(db=db)
+
+
+@router.get("/{user_id}", response_model=schemas.UserWithoutPassword)
+def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    return user_service.get_user_by_id(user_id=user_id, db=db).__dict__
+
+
 @router.post("", status_code=status.HTTP_201_CREATED)
-def create_user(request: schemas.UserCreate, db: Session = Depends(get_db)):
-    return user_service.create_user(request, db)
+def create_user(request: schemas.UserWithAddresses, db: Session = Depends(get_db)):
+    return user_service.create_user(request=request, db=db)
 
 
-@router.post("/admin", status_code=status.HTTP_201_CREATED)
-def create_admin(request: schemas.AdminCreate, db: Session = Depends(get_db)):
-    return user_service.create_admin(request, db)
+@router.put("/{user_id}", status_code=status.HTTP_202_ACCEPTED)
+def update_user(user_id: int, request: schemas.User, db: Session = Depends(get_db)):
+    return user_service.put(user_id=user_id, request=request, db=db)
