@@ -29,7 +29,7 @@ const NavigationBar = observer(({defaultSelected}) => {
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
-            history.push("/login");
+            history.push("/");
         } else if (key.startsWith("/")) {
             history.push(key)
         }
@@ -91,10 +91,7 @@ const NavigationBar = observer(({defaultSelected}) => {
                     }
                     {userRole === USER_ROLE.ADMIN &&
                     <>
-                        <Menu.Item key="/users" icon={<UsergroupAddOutlined/>}>Users List</Menu.Item>
-                        <Menu.Item key="/admin-profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>
-                        <Menu.Item key="/admin-create" icon={<UserAddOutlined/>}>Create Admin</Menu.Item>
-                        <Menu.Item key="/admins" icon={<UsergroupAddOutlined/>}>Admin List</Menu.Item>
+                        <Menu.Item key="/admin-profile" icon={<ContainerOutlined/>}>User Management</Menu.Item>
                     </>
                     }
                 </SubMenu>

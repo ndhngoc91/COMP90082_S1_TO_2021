@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
 import {
-    Button, Col, DatePicker, Form, Image, Input, InputNumber, notification, Row, Select, Typography
+    Button, Col, DatePicker, Form, Image, Input,  notification, Row, Select, Typography
 } from "antd";
 import {
     LockOutlined,
@@ -9,11 +8,11 @@ import {
     MailOutlined, PhoneOutlined, CheckSquareOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {CityData, StateData} from "../consts/StateData";
+import {CityData, StateData} from "../../consts/StateData";
 import moment from "moment";
-import {useUserNames} from "../hooks/UserNameHooks";
-import {useEmails} from "../hooks/EmailHooks";
-import {useHandleAddAccount} from "../hooks/CustomerHooks";
+import {useUserNames} from "../../hooks/UserNameHooks";
+import {useEmails} from "../../hooks/EmailHooks";
+import {useHandleAddAccount} from "../../hooks/CustomerHooks";
 
 const {Link, Title} = Typography;
 const {Option} = Select;
@@ -30,9 +29,9 @@ const validateMessages = {
 };
 
 
-const UserCreatePage = () => {
+const UserCreateForm = () => {
     const [userType, setUserType] = useState(0);
-    //const [userName, setUserName] = useState("user1");
+    //const [username, setUsername] = useState("user1");
     //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
     //const [phone, setPhone] = useState("0000000000");
@@ -87,20 +86,12 @@ const UserCreatePage = () => {
         console.log("Failed:", errorInfo);
     };
 
-    const onClick = () => {
-        //console.log({username: userName}, {email}, {birthdate}, {phone}, {gender}, {street: address}, {postcode}, {password});
-        setUserType(2);
-    }
-
     return (
         <>
             <Row justify="center" align="middle" style={{minHeight: "100vh"}}>
                 <Col>
                     <Row justify="center">
-                        <Image src={rockyValleyLogo} preview={false} width={"400px"}/>
-                    </Row>
-                    <Row justify="center">
-                        <Title level={3}>Register</Title>
+                        <Title level={3}>Customer Register</Title>
                     </Row>
                     <Row justify="center">
                         <Form name="register"
@@ -159,7 +150,8 @@ const UserCreatePage = () => {
                                        onChange={(event) => {
                                            setUserName(event.target.value);
                                        }}
-                                       * */
+                                        */
+
                             >
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
@@ -193,11 +185,12 @@ const UserCreatePage = () => {
                                        onChange={(event) => {
                                            setEmail(event.target.value);
                                        }}
-                                       * */
+                                        */
                                        >
                                 <Input
                                     prefix={<MailOutlined className="site-form-item-icon"/>}
                                     placeholder="Your email address"
+                                    className="email"
                                 />
                             </Form.Item>
 
@@ -237,6 +230,7 @@ const UserCreatePage = () => {
                                        >
                                 <Input
                                     prefix={<PhoneOutlined/>}
+                                    className="Phone"
                                     placeholder="Enter your phone number"
                                     style={{
                                         width: "100%",
@@ -287,7 +281,7 @@ const UserCreatePage = () => {
                                                        message: "Please input address"
                                                    }
                                                ]}>
-                                        <Input placeholder="Input address"/>
+                                        <Input placeholder="Input address" className="street"/>
                                     </Form.Item>
                                 </Input.Group>
                             </Form.Item>
@@ -354,7 +348,7 @@ const UserCreatePage = () => {
                                        }}
                                        * */
                                        >
-                                <Input placeholder="Input postcode"/>
+                                <Input placeholder="Input postcode" className="postcode"/>
                             </Form.Item>
 
                             <Form.Item name="password"
@@ -423,6 +417,7 @@ const UserCreatePage = () => {
                                 <Input.Password
                                     prefix={<LockOutlined className="site-form-item-icon"/>}
                                     placeholder="Create password"
+                                    className="password"
                                 />
                             </Form.Item>
 
@@ -446,6 +441,7 @@ const UserCreatePage = () => {
                                 <Input.Password
                                     prefix={<LockOutlined className="site-form-item-icon"/>}
                                     placeholder="Confirm password"
+                                    className="confirm-password"
                                 />
                             </Form.Item>
                             <Form.Item name="agreement"
@@ -470,12 +466,6 @@ const UserCreatePage = () => {
                                     Create
                                 </Button>
                             </Form.Item>
-                            <Form.Item className="redirect">
-                                Already have an account? &nbsp;
-                                <Link href="/login">
-                                    Sign in
-                                </Link>
-                            </Form.Item>
 
                         </Form>
                     </Row>
@@ -485,4 +475,4 @@ const UserCreatePage = () => {
     );
 };
 
-export default UserCreatePage;
+export default UserCreateForm;

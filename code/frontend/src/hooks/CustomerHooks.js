@@ -36,30 +36,77 @@ export const useCustomers = () => {
 export const useHandleAddAccount = () => {
     const [handling, setHandling] = useState(false);
 
-    const handleAddAccount = useCallback((name, description, products) => {
+    const handleAddAccount = useCallback((userName, email, birthdate,phoneNumber,firstName,lastName,address,state,city,postcode,password) => {
         setHandling(true);
         //TODO: get url
-        axios.post('http://127.0.0.1:8000/packages', {
-            name: name,
-            description: description,
-            what_is_included: products.join("-"),
-            available: available
+        axios.post('http://127.0.0.1:8000/user/admin', {
+            username: "string",
+            email: "string",
+            birthday: "2021-05-11",
+            phone: "string",
+            gender: "string",
+            first_name: "string",
+            last_name: "string",
+            address_line: "string",
+            state: "string",
+            city: "string",
+            postcode: "string",
+            user_type_id: 0,
+            password: "string"
         }, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {
             if (response.status === 201) {
-                description();
+
             } else {
-                products();
+
             }
         }).catch(() => {
-            products();
+
         }).finally(() => {
             setHandling(false);
         });
     }, []);
 
     return [handleAddAccount, {handling}];
+};
+
+export const useHandleAddAdmin = () => {
+    const [handling, setHandling] = useState(false);
+
+    const handleAddAdmin = useCallback((userName, email, birthdate,phoneNumber,firstName,lastName,address,state,city,postcode,password) => {
+        setHandling(true);
+        //TODO: get url
+        axios.post('http://127.0.0.1:8000/user/admin', {
+            username: "string",
+            email: "string",
+            birthday: "2021-05-11",
+            phone: "string",
+            gender: "string",
+            first_name: "string",
+            last_name: "string",
+            address_line: "string",
+            state: "string",
+            city: "string",
+            postcode: "string",
+            user_type_id: 0,
+            password: "string"
+        }, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then(response => {
+            if (response.status === 201) {
+
+            } else {
+
+            }
+        }).catch(() => {
+
+        }).finally(() => {
+            setHandling(false);
+        });
+    }, []);
+
+    return [handleAddAdmin, {handling}];
 };
 
 export const useHandleEditAccount = () => {
@@ -69,10 +116,19 @@ export const useHandleEditAccount = () => {
         setHandling(true);
         //TODO: get url
         axios.put(`http://127.0.0.1:8000/packages/${id}`, {
-            name: name,
-            description: description,
-            what_is_included: products.join("-"),
-            available: available
+            username: "string",
+            email: "string",
+            birthday: "2021-05-11",
+            phone: "string",
+            gender: "string",
+            first_name: "string",
+            last_name: "string",
+            address_line: "string",
+            state: "string",
+            city: "string",
+            postcode: "string",
+            user_type_id: 0,
+            password: "string"
         }, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {
@@ -90,35 +146,5 @@ export const useHandleEditAccount = () => {
     }, []);
 
     return [handleEditAccount, {handling}];
-};
-
-export const useHandleDeleteAccount = () => {
-    const [handling, setHandling] = useState(false);
-
-    const handleDeleteAccount = useCallback((id, name, description) => {
-        setHandling(true);
-        //TODO: get url
-        axios.put(`http://127.0.0.1:8000/packages/${id}`, {
-            name: name,
-            description: description,
-            what_is_included: products.join("-"),
-            available: available
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
-        }).then(response => {
-            if (response.status === 202) {
-                name();
-            } else {
-                description();
-            }
-        }).catch(err => {
-            console.log(err);
-            description();
-        }).finally(() => {
-            setHandling(false);
-        });
-    }, []);
-
-    return [handleDeleteAccount, {handling}];
 };
 
