@@ -56,7 +56,6 @@ createStore().then(store => {
                         <Route path="/customers" exact component={CustomersPage}/>
                         {/*new add*/}
                         <Route path="/admin-profile" component={UserManagePage}/>
-                        <Route path="/profile" component={UserAccountPage}/>
                         <Route path="/profile" exact component={UserAccountPage}/>
                         <Route path="/user-create" exact component={UserCreatePage}/>
                         <Route path="/admin-create" exact component={AdminCreatePage}/>
