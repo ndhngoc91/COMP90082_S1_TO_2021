@@ -197,7 +197,7 @@ class User(Base):
     organization = relationship('Organization')
     user_type = relationship('UserType')
     address = relationship('Address')
-    user_group = relationship('UserGroup')
+    # user_group = relationship('UserGroup')
 
 
 class Address(Base):
