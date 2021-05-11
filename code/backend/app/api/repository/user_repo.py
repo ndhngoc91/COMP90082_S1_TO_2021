@@ -12,6 +12,12 @@ def authenticate(username: str, password: str, db: Session):
         .filter(models.User.username == username and models.User.password == password).first()
 
 
+# def check_username(request: schemas.Username, db: Session):
+#     username = db.query(models.User).filter(models.User.username == request.username).first()
+#     if username:
+#         raise
+
+
 def create_user(request: schemas.UserCreate, db: Session):
     new_user = models.User(username=request.username, password=request.password, email=request.email,
                            birthday=request.birthday, phone=request.phone, gender=request.gender,

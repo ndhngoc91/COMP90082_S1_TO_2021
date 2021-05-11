@@ -65,8 +65,11 @@ class Session(BaseModel):
     organization_id: int
 
 
-class User(BaseModel):
+class Username(BaseModel):
     username: str
+
+
+class User(Username):
     email: str
     birthday: date
     phone: str
@@ -84,8 +87,7 @@ class UserCreate(User):
     password: str
 
 
-class Admin(BaseModel):
-    username: str
+class Admin(Username):
     email: str
 
 

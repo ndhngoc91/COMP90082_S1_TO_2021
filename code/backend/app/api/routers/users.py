@@ -22,6 +22,11 @@ response
 '''
 
 
+# @router.get('/', status_code=status.HTTP_200_OK)
+# def check_username(request: schemas.Username, db: Session = Depends(get_db)):
+#     return user_repo.check_username(request, db)
+
+
 # @router.post('/', response_model=schemas.User, status_code=status.HTTP_201_CREATED)
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create_user(request: schemas.UserCreate, db: Session = Depends(get_db)):
