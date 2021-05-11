@@ -31,7 +31,7 @@ const ProductDetailsPage = () => {
     const productInfo = useProductInfo(productCode);
     const productMetaData = useProductMetaData(productCode);
 
-    const {authStore:{authenticated}, cartStore} = useStores();
+    const {authStore: {authenticated}, cartStore} = useStores();
 
     // Event Handler for Product Quantity Change
     const onQuantityChange = (value) => {
@@ -51,12 +51,7 @@ const ProductDetailsPage = () => {
         if (productInfo == null) {
             return (
                 <Layout style={{minHeight: "100vh"}}>
-
-                    {/* Top navigation bar */}
                     <NavigationBar history={history} defaultSelected={null}/>
-
-
-                    {/* Main Content */}
                     <Content style={{padding: "100px 100px"}}>
                         <div style={{marginTop: "150px"}}>
 
@@ -67,8 +62,6 @@ const ProductDetailsPage = () => {
                             </Row>
                         </div>
                     </Content>
-
-                    {/* Footer */}
                     <Footer style={{position: "sticky", bottom: "0", textAlign: "center"}}>SQUIZZ ©2020 Created by
                         SQ-Wombat and SQ-Koala</Footer>
                 </Layout>
@@ -81,7 +74,7 @@ const ProductDetailsPage = () => {
 
         return (
             <Layout style={{minHeight: "100vh"}}>
-                <NavigationBar defaultSelected="/product"/>
+                <NavigationBar/>
                 <div style={{marginTop: "50px"}}>
                     <Content style={{padding: "50px 50px"}}>
                         <Card style={{borderRadius: "1.25rem"}} hoverable={true}>

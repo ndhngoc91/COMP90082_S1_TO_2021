@@ -32,18 +32,20 @@ services:
     networks:
       - local-net
 
-  # frontend:
-  #   links:
-  #     - backend
-  #   container_name: "frontend"
-  #   build: ./code/frontend
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./code/frontend:/usr/src/frontend
-  #     - /usr/src/frontend/node
-  #   networks:
-  #     - local-net
+  frontend:
+    links:
+      - backend
+    container_name: "frontend"
+    build: ./code/frontend
+    tty: true
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./code/frontend:/usr/src/frontend
+      - /usr/src/frontend/node_modules
+    networks:
+      - local-net
 
 networks:
   local-net:

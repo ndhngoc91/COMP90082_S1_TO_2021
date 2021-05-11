@@ -1,5 +1,4 @@
 import datetime
-
 from fastapi import HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
@@ -11,6 +10,20 @@ import logging
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
+
+
+def create_user(request: schemas.UserCreate, db: Session):
+    return user_repo.create_user(request=request, db=db)
+
+
+def create_admin(request: schemas.AdminCreate, db: Session):
+    return user_repo.create_admin(request=request, db=db)
+
+
+def check_username(username: str, db: Session):
+    if user_repo.check_username(username=username, db=db):
+        return
+    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Username already exists")
 
 
 def validate(username: str, password: str, db: Session) -> dict:

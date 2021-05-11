@@ -13,25 +13,25 @@ const getListData = (value) => {
     switch (value.date()) {
         case 8:
             listData = [
-                {type: 'warning', content: 'This is warning event.'},
-                {type: 'success', content: 'This is usual event.'},
+                {type: "warning", content: "This is warning event."},
+                {type: "success", content: "This is usual event."},
             ];
             break;
         case 10:
             listData = [
-                {type: 'warning', content: 'This is warning event.'},
-                {type: 'success', content: 'This is usual event.'},
-                {type: 'error', content: 'This is error event.'},
+                {type: "warning", content: "This is warning event."},
+                {type: "success", content: "This is usual event."},
+                {type: "error", content: "This is error event."},
             ];
             break;
         case 15:
             listData = [
-                {type: 'warning', content: 'This is warning event'},
-                {type: 'success', content: 'This is very long usual event。。....'},
-                {type: 'error', content: 'This is error event 1.'},
-                {type: 'error', content: 'This is error event 2.'},
-                {type: 'error', content: 'This is error event 3.'},
-                {type: 'error', content: 'This is error event 4.'},
+                {type: "warning", content: "This is warning event"},
+                {type: "success", content: "This is very long usual event。。...."},
+                {type: "error", content: "This is error event 1."},
+                {type: "error", content: "This is error event 2."},
+                {type: "error", content: "This is error event 3."},
+                {type: "error", content: "This is error event 4."},
             ];
             break;
         default:
@@ -71,15 +71,15 @@ const monthCellRender = (value) => {
 };
 
 const options = [
-    {label: 'All', value: 'All'},
-    {label: 'Ski', value: 'Ski'},
-    {label: 'Poles', value: 'Poles'},
-    {label: 'Snowboard', value: 'Snowboard'},
-    {label: 'Helmet', value: 'Helmet'},
-    {label: 'Suit', value: 'Suit'},
-    {label: 'Jacket', value: 'Jacket'},
-    {label: 'Pants', value: 'Pants'},
-    {label: 'Boots', value: 'Boots'}
+    {label: "All", value: "All"},
+    {label: "Ski", value: "Ski"},
+    {label: "Poles", value: "Poles"},
+    {label: "Snowboard", value: "Snowboard"},
+    {label: "Helmet", value: "Helmet"},
+    {label: "Suit", value: "Suit"},
+    {label: "Jacket", value: "Jacket"},
+    {label: "Pants", value: "Pants"},
+    {label: "Boots", value: "Boots"}
 ];
 
 
@@ -87,7 +87,7 @@ const CalendarPage = () => {
     const {authStore: {userRole}} = useStores();
 
     return <Layout style={{minHeight: "100vh"}}>
-        <NavigationBar defaultSelected="/package"/>
+        <NavigationBar/>
         <Layout style={{height: "100%"}}>
             <Sider style={{backgroundColor: "white", padding: "20px"}} width={300}>
                 <Title level={3}>Filter</Title>
@@ -102,7 +102,7 @@ const CalendarPage = () => {
                     <Row>
                         <Col>
                             <Title level={5}>Type</Title>
-                            <Checkbox.Group options={options} defaultValue={['Pear']}/>
+                            <Checkbox.Group options={options} defaultValue={["Pear"]}/>
                         </Col>
                     </Row>
                     <Row>
