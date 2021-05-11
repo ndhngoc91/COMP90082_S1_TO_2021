@@ -2,18 +2,25 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 export const useUserNames = () => {
-    const [userNames, setUserNames] = useState([]);
+    const [userName, setUserName] = useState("");
+    const [isExist,setIsExist] = useState();
 
-    useEffect(() => {
-        //TODO:extract the url of username to replace "http://127.0.0.1:8000/skill-levels"
-        axios.get("http://127.0.0.1:8000/skill-levels", {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
+    useEffect((username) => {
+        axios.get("http://127.0.0.1:8000/user", {
+            params:{
+                username:username
+            }
+        },
+            {headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
             if (response.status === 200) {
-                setUserNames(response.data);
+                setUserName(response.data);
+                setIsExist(false);
+            }else{
+                setIsExist(true);
             }
         });
     }, []);
 
-    return userNames;
+    return userName;
 };

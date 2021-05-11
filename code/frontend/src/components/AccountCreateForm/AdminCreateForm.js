@@ -1,22 +1,21 @@
-import React, {useEffect, useState} from "react";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
+import React, {useState} from "react";
 import {
-    Button, Col, Form, Image, Input, message as antdMessage, Row, Select, Typography
+    Button, Col, Form, Image, Input, message as antdMessage, notification, Row, Select, Typography
 } from "antd";
 import {
     LockOutlined,
     UserOutlined,
-    MailOutlined,
+    MailOutlined, CheckSquareOutlined,
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {useUserNames} from "../hooks/UserNameHooks";
-import {useEmails} from "../hooks/EmailHooks";
+import {useUserNames} from "../../hooks/UserNameHooks";
+import {useEmails} from "../../hooks/EmailHooks";
 import {Redirect} from "react-router-dom";
 import Axios from "axios";
+import {useHandleAddAdmin} from "../../hooks/CustomerHooks";
 
 
 const {Link, Title} = Typography;
-const {Option} = Select;
 
 const validateMessages = {
     required: "${label} is required!",
@@ -30,13 +29,15 @@ const validateMessages = {
 };
 
 
-const AdminCreatePage = () => {
-    const [user_type, setUserType] = useState("");
-    //const [userName, setUserName] = useState("admin1");
-    //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
+const AdminCreateForm = () => {
+    const [user_type, setUserType] = useState("staff");
+    const [userName, setUserName] = useState("admin1");
+    const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [password, setPassword] = useState("1234sS");
     const [errorMessage, setErrorMessage] = useState("");
     const [createSuccess, setCreateSuccess] = useState("");
+
+    const [handleAddAdmin, {handling}] = useHandleAddAdmin();
 
     const userNames = useUserNames();
     const emails = useEmails();
@@ -119,8 +120,16 @@ const AdminCreatePage = () => {
 
     const onFinish = values => {
         console.log(form.isFieldsTouched());
+        handleAddAdmin(values, () => {
+            notification.open({
+                message: "Added a customer successfullly!",
+                description: "Added a customer successfullly!",
+                icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
+                duration: 2
+            });
+        });
         const newRecord = [values,user_type];
-        console.log("Success:", newRecord);
+        console.log("Success:", values);
     };
 
     const onFinishFailed = errorInfo => {
@@ -141,10 +150,7 @@ const AdminCreatePage = () => {
             <Row justify="center" align="middle" style={{minHeight: "100vh"}}>
                 <Col>
                     <Row justify="center">
-                        <Image src={rockyValleyLogo} preview={false} width={"400px"}/>
-                    </Row>
-                    <Row justify="center">
-                        <Title level={3}>Register</Title>
+                        <Title level={3}>Admin Register</Title>
                     </Row>
                     <Row justify="center">
                         <Form name="register"
@@ -155,7 +161,7 @@ const AdminCreatePage = () => {
                               onFinishFailed={onFinishFailed}
                               initialValues={{
                                   user_type: "staff",
-                                  username: "admin1",
+                                  username: "admin2",
                                   email: "xxxx@unimelb.edu.au",
                               }}
                               validateMessages={validateMessages}>
@@ -178,6 +184,7 @@ const AdminCreatePage = () => {
                                                    return Promise.reject(new Error('× Must have at least 5 characters'));
                                                },
                                            }),
+                                           /*
                                            ({
                                                validator(_, value) {
                                                    const exist_user = userNames.includes(value);
@@ -187,14 +194,12 @@ const AdminCreatePage = () => {
                                                    return Promise.reject(new Error('× User name exists'));
                                                },
                                            }),
+                                           * */
                                        ]}
-                                       /*
                                        value={userName}
                                        onChange={(event) => {
                                            setUserName(event.target.value);
-                                       }}
-                                       * */
-                                       >
+                                       }}>
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
                                        className="name"
@@ -210,6 +215,7 @@ const AdminCreatePage = () => {
                                                required: true,
                                                message: "Please input your E-mail!",
                                            },
+                                           /*
                                            ({
                                                validator(_, value) {
                                                    const exist_email = emails.includes(value);
@@ -219,14 +225,13 @@ const AdminCreatePage = () => {
                                                    return Promise.reject(new Error('× Email exists'));
                                                },
                                            }),
+                                           * */
+
                                        ]}
-                                       /*
                                        value={email}
                                        onChange={(event) => {
                                            setEmail(event.target.value);
-                                       }}
-                                       * */
-                                       >
+                                       }}>
                                 <Input
                                     prefix={<MailOutlined className="site-form-item-icon"/>}
                                     placeholder="Your email address"
@@ -344,15 +349,10 @@ const AdminCreatePage = () => {
                                 <Button type="primary"
                                         htmlType="submit"
                                         className="login-form-button"
+                                        loading={handling}
                                         onClick={() => setUserType("staff")}>
                                     Create
                                 </Button>
-                            </Form.Item>
-                            <Form.Item className="redirect">
-                                Already have an account? &nbsp;
-                                <Link href="/login">
-                                    Sign in
-                                </Link>
                             </Form.Item>
 
                         </Form>
@@ -363,4 +363,4 @@ const AdminCreatePage = () => {
     );
 };
 
-export default AdminCreatePage;
+export default AdminCreateForm;

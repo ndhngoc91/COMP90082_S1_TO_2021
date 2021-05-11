@@ -30,15 +30,16 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
 
     const [usertype, setUsertype] = useState(0);
     const [username, setUsername] = useState("user1");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
-    const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
-    const [phone, setPhone] = useState("0000000000");
-    const [gender, setGender] = useState("male");
-    const [address, setAddress] = useState("28 Bouverie St");
-    const [postcode, setPostcode] = useState("3053");
+    //const [firstName, setFirstName] = useState("");
+    //const [lastName, setLastName] = useState("");
+    //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
+    //const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
+    //const [phone, setPhone] = useState("0000000000");
+    //const [gender, setGender] = useState("male");
+    //const [address, setAddress] = useState("28 Bouverie St");
+    //const [postcode, setPostcode] = useState("3053");
     //const [password, setPassword] = useState("1234sS");
+    const [is_enable,setIsEnable] = useState("enable");
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
@@ -73,8 +74,13 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                     form.resetFields();
                 }
             }}>
-                <Form.Item label="UserType"
-                           name="usertype"
+                <Form.Item label="Id"
+                           name="id"
+                           hidden>
+                    <Input/>
+                </Form.Item>
+
+                <Form.Item name="user_type"
                            value={usertype}
                            hidden>
                     <Input/>
@@ -82,6 +88,7 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
 
                 <Form.Item name="username"
                            rules={[
+                               /*
                                {
                                    required: true,
                                    message: "Please input your Username!",
@@ -94,6 +101,8 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                                        return Promise.reject(new Error('× Must have at least 5 characters'));
                                    },
                                }),
+                               * */
+                               /*
                                ({
                                    validator(_, value) {
                                        const exist_user = userNames.includes(value);
@@ -103,25 +112,54 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                                        return Promise.reject(new Error('× User name exists'));
                                    },
                                }),
+                               * */
                            ]}
+                           /*
                            value={username}
                            onChange={(event) => {
                                setUsername(event.target.value);
                            }}
-
+                           * */
                 >
                     <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                            placeholder="Enter username"
                            className="name"
-                           readOnly={readOnly}
+                           disabled={true}
+                           readOnly={true}
                     />
                 </Form.Item>
 
-                <Form.Item name="firstName"
+                <Form.Item name="is_enable"
+                           rules={[
+                               {
+                                   required: true,
+                                   message: "access right is required"
+                               }
+                           ]}
+                    value={is_enable}
+                    onChange={(value) => {
+                        setIsEnable(value);
+                    }}
+                >
+                    <Select
+                        placeholder="Choose access right"
+                        style={{
+                            width: "100%",
+                        }}
+                        disabled={readOnly}
+                    >
+                        <Option value="enable">enable</Option>
+                        <Option value="disable">disable</Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item name="first_name"
+                           /*
                            value={firstName}
                            onChange={(event) => {
                                setFirstName(event.target.value);
                            }}
+                           * */
                            rules={[
                                {
                                    required: true,
@@ -135,11 +173,13 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                     />
                 </Form.Item>
 
-                <Form.Item name="lastName"
+                <Form.Item name="last_name"
+                           /*
                            value={lastName}
                            onChange={(event) => {
                                setLastName(event.target.value);
                            }}
+                           * */
                            rules={[
                                {
                                    required: true,
@@ -162,6 +202,7 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                                    required: true,
                                    message: "Please input your E-mail!",
                                },
+                               /*
                                ({
                                    validator(_, value) {
                                        const exist_email = emails.includes(value);
@@ -171,11 +212,15 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                                        return Promise.reject(new Error('× User name exists'));
                                    },
                                }),
+                               * */
                            ]}
+                           /*
                            value={email}
                            onChange={(event) => {
                                setEmail(event.target.value);
-                           }}>
+                           }}
+                           * */
+                           >
                     <Input
                         prefix={<MailOutlined className="site-form-item-icon"/>}
                         placeholder="Your email address"
@@ -184,17 +229,20 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                     />
                 </Form.Item>
 
-                <Form.Item name="birthdate"
+                <Form.Item name="birthday"
                            rules={[
                                {
                                    required: true,
                                    message: "Please choose birthdate!",
                                },
                            ]}
+                           /*
                            value={birthdate}
                            onChange={(event) => {
                                setBirthdate(event.target.value);
-                           }}>
+                           }}
+                           * */
+                           >
                     <DatePicker
                         placeholder="Choose your birthdate"
                         style={{
@@ -204,17 +252,20 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                     />
                 </Form.Item>
 
-                <Form.Item name="phoneNumber"
+                <Form.Item name="phone"
                            rules={[
                                {
                                    required: true,
                                    message: "Please input your phone number!",
                                }
                            ]}
+                           /*
                            value={phone}
                            onChange={(event) => {
                                setPhone(event.target.value);
-                           }}>
+                           }}
+                           * */
+                           >
                     <Input
                         prefix={<PhoneOutlined/>}
                         className="Phone"
@@ -233,10 +284,13 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                                    message: "Please choose gender!",
                                },
                            ]}
+                           /*
                            value={gender}
                            onChange={(value) => {
                                setGender(value);
-                           }}>
+                           }}
+                           * */
+                           >
                     <Select
                         placeholder="Choose gender"
                         style={{
@@ -253,14 +307,15 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                 {query === "edit" &&
                     <>
                         <Form.Item name="totalAddress"
-                                   value={{address}+{postcode}}
                         >
-                            <Form.Item name="address"
+                            <Form.Item name="address_line"
                                        noStyle
+                                       /*
                                        value={address}
                                        onChange={(event) => {
                                            setAddress(event.target.value);
                                        }}
+                                       * */
                                        rules={[
                                            {
                                                required: true,
@@ -273,7 +328,7 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                         <Form.Item>
                             <Row gutter={16}>
                                 <Col span={12}>
-                                    <Form.Item name="region"
+                                    <Form.Item name="state"
                                                rules={[
                                                    {
                                                        required: true,
@@ -327,10 +382,13 @@ const UserAddForm = ({fieldValues, onFinish, finishing, query, clearFormAfterFin
                                            message: "Postcode is required"
                                        }
                                    ]}
+                                   /*
                                    value={postcode}
                                    onChange={(event) => {
                                        setPostcode(event.target.value);
-                                   }}>
+                                   }}
+                                   * */
+                                   >
                             <Input placeholder="Input postcode" className="postcode" readOnly={readOnly}/>
                         </Form.Item>
 
