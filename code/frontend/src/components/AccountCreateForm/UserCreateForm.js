@@ -30,21 +30,21 @@ const validateMessages = {
 
 
 const UserCreateForm = () => {
-    const [userType, setUserType] = useState(0);
+    const [user_type, setUserType] = useState("customer");
     //const [username, setUsername] = useState("user1");
     //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
-    const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
+    //const [birthday, setBirthdate] = useState("");
     //const [phone, setPhone] = useState("0000000000");
     //const [gender, setGender] = useState("male");
     //const [address, setAddress] = useState("28 Bouverie St");
     //const [postcode, setPostcode] = useState("3053");
-    const [password, setPassword] = useState("1234sS");
+    //const [password, setPassword] = useState("1234sS");
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
     const [clearFormAfterFinishing, setClearFormAfterFinishing] = useState(false);
 
-    const [handleAddUser, {handling}] = useHandleAddAccount();
+    const [handleAddAccount, {handling}] = useHandleAddAccount();
 
     const userNames = useUserNames();
     const emails = useEmails();
@@ -66,7 +66,7 @@ const UserCreateForm = () => {
         console.log(values);
         //onFinish(values);
         setClearFormAfterFinishing(true);
-        handleAddUser(values, () => {
+        handleAddAccount(values, () => {
             notification.open({
                 message: "Added a customer successfullly!",
                 description: "Added a customer successfullly!",
@@ -74,8 +74,8 @@ const UserCreateForm = () => {
                 duration: 2
             });
         });
-        const newRecord = [values,userType];
-        console.log("Success:", userType);
+        const newRecord = [values,user_type];
+        console.log("Success:", user_type);
         if (clearFormAfterFinishing) {
             form.resetFields();
         }
@@ -100,6 +100,10 @@ const UserCreateForm = () => {
                               onFinish={onFinish}
                               onFinishFailed={onFinishFailed}
                               initialValues={{
+                                  user_type: "customer",
+                              }}
+                              /*
+                              initialValues={{
                                   userType: 2,
                                   userName: "user1",
                                   gender: "male",
@@ -110,15 +114,18 @@ const UserCreateForm = () => {
                                   city: "Melbourne",
                                   postcode: "3053"
                               }}
+                              * */
+
                               validateMessages={validateMessages}>
 
-                            <Form.Item name="userType"
-                                       value={userType}
+                            <Form.Item name="user_type"
+                                       value={user_type}
                                        hidden>
                                 <Input/>
                             </Form.Item>
 
-                            <Form.Item name="userName"
+                            {/*how to check the username exists???????*/}
+                            <Form.Item name="username"
                                        rules={[
                                            {
                                                required: true,
@@ -132,6 +139,7 @@ const UserCreateForm = () => {
                                                    return Promise.reject(new Error('× Must have at least 5 characters'));
                                                },
                                            }),
+
                                            {/*
                                            ({
                                                validator(_, value) {
@@ -194,27 +202,26 @@ const UserCreateForm = () => {
                                 />
                             </Form.Item>
 
-                            <Form.Item name="birthdate"
+                            <Form.Item name="birthday"
                                        rules={[
                                            {
                                                required: true,
                                                message: "Please choose birthdate!",
                                            },
                                        ]}
-                                       value={birthdate}
-                                       onChange={(event) => {
-                                           setBirthdate(event.target.value);
-                                       }}
+                                       onChange
                                        >
                                 <DatePicker
                                     placeholder="Choose your birthdate"
                                     style={{
                                         width: "100%",
                                     }}
+                                    //value={birthday}
+                                    //onChange={e => setBirthdate(birthday.format(e.currentTarget.value))}
                                 />
                             </Form.Item>
 
-                            <Form.Item name="phoneNumber"
+                            <Form.Item name="phone"
                                        rules={[
                                            {
                                                required: true,
@@ -267,21 +274,21 @@ const UserCreateForm = () => {
                             <Form.Item name="totalAddress"
                             >
                                 <Input.Group compact>
-                                    <Form.Item name="address"
+                                    <Form.Item name="address_line"
                                                noStyle
-                                               /*
-                                               value={address}
-                                               onChange={(event) => {
-                                                   setAddress(event.target.value);
-                                               }}
-                                               * */
+                                        /*
+                                        value={address}
+                                        onChange={(event) => {
+                                            setAddress(event.target.value);
+                                        }}
+                                        * */
                                                rules={[
                                                    {
                                                        required: true,
                                                        message: "Please input address"
                                                    }
                                                ]}>
-                                        <Input placeholder="Input address" className="street"/>
+                                        <Input placeholder="Input address"/>
                                     </Form.Item>
                                 </Input.Group>
                             </Form.Item>
@@ -410,10 +417,13 @@ const UserCreateForm = () => {
                                            },
                                        ]}
                                        hasFeedback
+                                       /*
                                        value={password}
                                        onChange={(event) => {
                                            setPassword(event.target.value);
-                                       }}>
+                                       }}
+                                       * */
+                                       >
                                 <Input.Password
                                     prefix={<LockOutlined className="site-form-item-icon"/>}
                                     placeholder="Create password"
@@ -444,8 +454,7 @@ const UserCreateForm = () => {
                                     className="confirm-password"
                                 />
                             </Form.Item>
-                            <Form.Item name="agreement"
-                                       className="agree"
+                            <Form.Item className="agree"
                                        valuePropName="checked"
                                        rules={[
                                            {
@@ -462,7 +471,7 @@ const UserCreateForm = () => {
                                         htmlType="submit"
                                         className="login-form-button"
                                         loading={handling}
-                                        onClick={() => setUserType(2)}>
+                                        onClick={() => setUserType("customer")}>
                                     Create
                                 </Button>
                             </Form.Item>

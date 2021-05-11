@@ -30,7 +30,7 @@ const validateMessages = {
 
 
 const AdminCreateForm = () => {
-    const [userType, setUserType] = useState(0);
+    const [user_type, setUserType] = useState("staff");
     const [userName, setUserName] = useState("admin1");
     const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [password, setPassword] = useState("1234sS");
@@ -128,8 +128,8 @@ const AdminCreateForm = () => {
                 duration: 2
             });
         });
-        const newRecord = [values,userType];
-        console.log("Success:", newRecord);
+        const newRecord = [values,user_type];
+        console.log("Success:", values);
     };
 
     const onFinishFailed = errorInfo => {
@@ -160,18 +160,17 @@ const AdminCreateForm = () => {
                               onFinish={onFinish}
                               onFinishFailed={onFinishFailed}
                               initialValues={{
-                                  usertype: 1,
-                                  username: "admin1",
+                                  user_type: "staff",
+                                  username: "admin2",
                                   email: "xxxx@unimelb.edu.au",
                               }}
                               validateMessages={validateMessages}>
-                            <Form.Item label="UserType"
-                                       name="userType"
-                                       value={userType}
+                            <Form.Item name="user_type"
+                                       value={user_type}
                                        hidden>
                                 <Input/>
                             </Form.Item>
-                            <Form.Item name="userName"
+                            <Form.Item name="username"
                                        rules={[
                                            {
                                                required: true,
@@ -185,6 +184,7 @@ const AdminCreateForm = () => {
                                                    return Promise.reject(new Error('× Must have at least 5 characters'));
                                                },
                                            }),
+                                           /*
                                            ({
                                                validator(_, value) {
                                                    const exist_user = userNames.includes(value);
@@ -194,6 +194,7 @@ const AdminCreateForm = () => {
                                                    return Promise.reject(new Error('× User name exists'));
                                                },
                                            }),
+                                           * */
                                        ]}
                                        value={userName}
                                        onChange={(event) => {
@@ -214,6 +215,7 @@ const AdminCreateForm = () => {
                                                required: true,
                                                message: "Please input your E-mail!",
                                            },
+                                           /*
                                            ({
                                                validator(_, value) {
                                                    const exist_email = emails.includes(value);
@@ -223,6 +225,8 @@ const AdminCreateForm = () => {
                                                    return Promise.reject(new Error('× Email exists'));
                                                },
                                            }),
+                                           * */
+
                                        ]}
                                        value={email}
                                        onChange={(event) => {
@@ -346,7 +350,7 @@ const AdminCreateForm = () => {
                                         htmlType="submit"
                                         className="login-form-button"
                                         loading={handling}
-                                        onClick={() => setUserType(1)}>
+                                        onClick={() => setUserType("staff")}>
                                     Create
                                 </Button>
                             </Form.Item>

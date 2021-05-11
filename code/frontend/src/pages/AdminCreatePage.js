@@ -31,9 +31,9 @@ const validateMessages = {
 
 
 const AdminCreatePage = () => {
-    const [userType, setUserType] = useState(0);
-    const [userName, setUserName] = useState("admin1");
-    const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
+    const [user_type, setUserType] = useState("");
+    //const [userName, setUserName] = useState("admin1");
+    //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [password, setPassword] = useState("1234sS");
     const [errorMessage, setErrorMessage] = useState("");
     const [createSuccess, setCreateSuccess] = useState("");
@@ -119,7 +119,7 @@ const AdminCreatePage = () => {
 
     const onFinish = values => {
         console.log(form.isFieldsTouched());
-        const newRecord = [values,userType];
+        const newRecord = [values,user_type];
         console.log("Success:", newRecord);
     };
 
@@ -154,18 +154,17 @@ const AdminCreatePage = () => {
                               onFinish={onFinish}
                               onFinishFailed={onFinishFailed}
                               initialValues={{
-                                  usertype: 1,
+                                  user_type: "staff",
                                   username: "admin1",
                                   email: "xxxx@unimelb.edu.au",
                               }}
                               validateMessages={validateMessages}>
-                            <Form.Item label="UserType"
-                                       name="userType"
-                                       value={userType}
+                            <Form.Item name="user_type"
+                                       value={user_type}
                                        hidden>
                                 <Input/>
                             </Form.Item>
-                            <Form.Item name="userName"
+                            <Form.Item name="username"
                                        rules={[
                                            {
                                                required: true,
@@ -189,10 +188,13 @@ const AdminCreatePage = () => {
                                                },
                                            }),
                                        ]}
+                                       /*
                                        value={userName}
                                        onChange={(event) => {
                                            setUserName(event.target.value);
-                                       }}>
+                                       }}
+                                       * */
+                                       >
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
                                        className="name"
@@ -218,10 +220,13 @@ const AdminCreatePage = () => {
                                                },
                                            }),
                                        ]}
+                                       /*
                                        value={email}
                                        onChange={(event) => {
                                            setEmail(event.target.value);
-                                       }}>
+                                       }}
+                                       * */
+                                       >
                                 <Input
                                     prefix={<MailOutlined className="site-form-item-icon"/>}
                                     placeholder="Your email address"
@@ -339,7 +344,7 @@ const AdminCreatePage = () => {
                                 <Button type="primary"
                                         htmlType="submit"
                                         className="login-form-button"
-                                        onClick={() => setUserType(1)}>
+                                        onClick={() => setUserType("staff")}>
                                     Create
                                 </Button>
                             </Form.Item>

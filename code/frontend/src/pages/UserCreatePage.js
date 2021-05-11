@@ -31,7 +31,7 @@ const validateMessages = {
 
 
 const UserCreatePage = () => {
-    const [userType, setUserType] = useState(0);
+    const [user_type, setUserType] = useState(0);
     //const [userName, setUserName] = useState("user1");
     //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
     const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
@@ -75,8 +75,8 @@ const UserCreatePage = () => {
                 duration: 2
             });
         });
-        const newRecord = [values,userType];
-        console.log("Success:", userType);
+        const newRecord = [values,user_type];
+        console.log("Success:", user_type);
         if (clearFormAfterFinishing) {
             form.resetFields();
         }
@@ -109,25 +109,25 @@ const UserCreatePage = () => {
                               onFinish={onFinish}
                               onFinishFailed={onFinishFailed}
                               initialValues={{
-                                  userType: 2,
-                                  userName: "user1",
+                                  user_type: 2,
+                                  username: "user1",
                                   gender: "male",
-                                  birthdate: moment('2015-06-06', 'YYYY-MM-DD'),
+                                  birthday: moment('2015-06-06', 'YYYY-MM-DD'),
                                   email: "xxxx@unimelb.edu.au",
-                                  phoneNumber: "04xxxxxxxx",
+                                  phone: "04xxxxxxxx",
                                   state: "VIC",
                                   city: "Melbourne",
                                   postcode: "3053"
                               }}
                               validateMessages={validateMessages}>
 
-                            <Form.Item name="userType"
-                                       value={userType}
+                            <Form.Item name="user_type"
+                                       value={user_type}
                                        hidden>
                                 <Input/>
                             </Form.Item>
 
-                            <Form.Item name="userName"
+                            <Form.Item name="username"
                                        rules={[
                                            {
                                                required: true,
@@ -201,7 +201,7 @@ const UserCreatePage = () => {
                                 />
                             </Form.Item>
 
-                            <Form.Item name="birthdate"
+                            <Form.Item name="birthday"
                                        rules={[
                                            {
                                                required: true,
@@ -221,7 +221,7 @@ const UserCreatePage = () => {
                                 />
                             </Form.Item>
 
-                            <Form.Item name="phoneNumber"
+                            <Form.Item name="phone"
                                        rules={[
                                            {
                                                required: true,
@@ -273,7 +273,7 @@ const UserCreatePage = () => {
                             <Form.Item name="totalAddress"
                             >
                                 <Input.Group compact>
-                                    <Form.Item name="address"
+                                    <Form.Item name="address_line"
                                                noStyle
                                                /*
                                                value={address}
@@ -449,7 +449,6 @@ const UserCreatePage = () => {
                                 />
                             </Form.Item>
                             <Form.Item name="agreement"
-                                       className="agree"
                                        valuePropName="checked"
                                        rules={[
                                            {

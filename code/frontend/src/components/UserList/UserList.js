@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Col, Layout, Spin, Row, Table, Typography, Input, Space, Button, Tooltip, Select} from "antd";
+import {Col, Layout, Spin, Row, Table, Typography, Input, Space, Button, Tooltip, Select, Modal} from "antd";
 import {useCustomers} from "../../hooks/CustomerHooks";
+import {EditOutlined} from "@ant-design/icons";
+import UserCreateForm from "../AccountCreateForm/UserCreateForm";
+import EditUserForm from "../AdminUserList/EditUserForm";
 
 const {Content} = Layout;
 const {Title} = Typography;
@@ -35,6 +38,9 @@ for (let i = 0; i < 100; ++i) {
 
 const UserList = () => {
     const [data, setData] = useState(initialData);
+    const [isAddCustomerModelVisible, setIsAddCustomerModelVisible] = useState(false);
+    const [isEditCustomerVisible, setIsEditCustomerModelVisible] = useState(false);
+    const [editFormFieldValues, setEditFormFieldValues] = useState({});
 
     const columns = [
         {
@@ -98,6 +104,18 @@ const UserList = () => {
                     }}>
                     {isEnabled ? "Enable" : "Disable"}
                 </Button>;
+                /*
+                <Space size="middle">
+                    <Button icon={<EditOutlined/>} type="default"
+                            onClick={() => {
+                                console.log(values);
+                                setEditFormFieldValues(values);
+                                setIsEditCustomerModelVisible(true);
+                            }}>
+                        <span>Edit</span>
+                    </Button>
+                </Space>
+                *  */
             }
         },
     ];
@@ -175,11 +193,72 @@ const UserList = () => {
         <>
             <Content>
                 <Row justify="center">
+                    <Col>
+                        <Title level={2}>Customer List</Title>
+                    </Col>
+                </Row>
+                {/*
+                <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>
+                    <Col span={8}>
+                        <Search placeholder="Search for customers"
+                                allowClear
+                                enterButton="Search"
+                                size="large"
+                                //onSearch={onSearch}
+                                //loading={filtering}
+                        />
+                    </Col>
+                    ///////////////////////////
+                    <Col lg={4}>
+                        <Select defaultValue={-1} size="large"
+                                value={selectedAgeGroupId}
+                                onSelect={onSelectAgeGroup} style={{width: "100%"}}>
+                            <Option key={0} value={-1}>Select Age Group</Option>
+                            {ageGroups.map((ageGroup, index) => {
+                                return (
+                                    <Option key={index} value={ageGroup.id}>{ageGroup.name}</Option>
+                                );
+                            })}
+                        </Select>
+                    </Col>
+                    <Col lg={4}>
+                        <Select defaultValue={-1} size="large" value={selectedCategoryId}
+                                onSelect={onSelectCategory} style={{width: "100%"}}>
+                            <Option key={0} value={-1}>Select Category</Option>
+                            {categories.map((category, index) => {
+                                return (
+                                    <Option key={index} value={category.id}>{category.name}</Option>
+                                );
+                            })}
+                        </Select>
+                    </Col>
+                    <Col lg={4}>
+                        <Select defaultValue={-1} size="large"
+                                value={selectedSkillLevelId}
+                                onSelect={onSelectSkillLevel} style={{width: "100%"}}>
+                            <Option key={0} value={-1}>Select Skill Level</Option>
+                            {skillLevels.map((skillLevel, index) => {
+                                return (
+                                    <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
+                                );
+                            })}
+                        </Select>
+                    </Col>
+                    ///////
+
+                <Col span={4}>
+                    <Button size="large"
+                            onClick={() => setIsAddCustomerModelVisible(true)}>
+                        Create
+                    </Button>
+                </Col>
+                </Row>
+                */}
+
+
+                <Row justify="center">
                     <Col span={18}>
                         <Row>
-                            <Col span={20}>
-                                <Title level={4}>Customer List</Title>
-                            </Col>
                             <Col span={4}>
                                 <Search
                                     placeholder="search"
@@ -188,6 +267,9 @@ const UserList = () => {
                                 />
                             </Col>
                         </Row>
+                    </Col>
+                </Row>
+                <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>
                         {loading ?
                             <Spin size="large"/> :
                             <Table
@@ -206,9 +288,26 @@ const UserList = () => {
                             >
                             </Table>
                         }
-                    </Col>
                 </Row>
             </Content>
+            {/*
+            <Modal title="Register a customer " visible={isAddCustomerModelVisible}
+                   footer={null} closable={false}
+                   onCancel={() => {
+                       setIsAddCustomerModelVisible(false);
+                   }}>
+                <UserCreateForm/>
+            </Modal>
+             <Modal title="Edit a customer" visible={isEditCustomerVisible}
+                   footer={null} closable={false}
+                   onCancel={() => {
+                       setIsEditCustomerModelVisible(false);
+                   }}>
+                <EditUserForm fieldValues={editFormFieldValues}/>
+            </Modal>
+            */}
+
+
 
         </>
     );

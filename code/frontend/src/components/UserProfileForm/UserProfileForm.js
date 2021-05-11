@@ -11,6 +11,7 @@ import {
 } from "antd";
 import moment from "moment";
 import {StateData, CityData} from "../../consts/StateData";
+import {useSkillLevels} from "../../hooks/SkillLevelHooks";
 
 const {Option} = Select;
 
@@ -26,6 +27,8 @@ const UserProfileForm = () => {
     const [readOnly, setReadOnly] = useState(true);
 
     const [form] = Form.useForm();
+
+    const skillLevels = useSkillLevels();
 
     useEffect(() => {
         setDin(height * 2 + weight * 3 + shoeSize * 4 + skierAbility * 5);
@@ -131,10 +134,17 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item label="Skier Ability" name="skierAbility"
+                            <Form.Item label="Skill Ability"
+                                       name="skill_ability"
+                                       hasFeedback
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Rate value={skierAbility} onChange={value => setSkierAbility(value)}
-                                      disabled={readOnly}/>
+                                <Select placeholder="Select Skill Level" disabled={readOnly}>
+                                    {skillLevels.map((skillLevel, index) => {
+                                        return (
+                                            <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
+                                        );
+                                    })}
+                                </Select>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
