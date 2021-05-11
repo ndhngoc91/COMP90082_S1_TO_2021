@@ -84,17 +84,19 @@ const NavigationBar = observer(() => {
                     Package Management
                 </Menu.Item>}
                 {userRole === USER_ROLE.GUEST &&
-                <>
-                    <Menu.Item key="login"
-                               className={rightItemCls}
-                               onClick={() => setIsLoginModelVisible(true)}
-                               icon={<LoginOutlined/>}>
-                        Login
-                    </Menu.Item>
-                    <Menu.Item className={rightItemCls} key="/user-create" icon={<UserAddOutlined/>}>
-                        Register
-                    </Menu.Item>
-                </>}
+                    <>
+                        <Menu.Item key="login"
+                                   className={rightItemCls}
+                                   onClick={() => setIsLoginModelVisible(true)}
+                                   icon={<LoginOutlined/>}
+                        >
+                            Login
+                        </Menu.Item>
+                        <Menu.Item className={rightItemCls} key="/user-create" icon={<UserAddOutlined/>}>
+                            Register
+                        </Menu.Item>
+                    </>
+                }
                 {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
                     {userRole === USER_ROLE.CUSTOMER &&
