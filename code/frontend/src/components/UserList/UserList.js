@@ -96,7 +96,7 @@ const UserList = () => {
                         data[index].isEnabled = !isEnabled;
                         setData([...data]);
                     }}>
-                    {isEnabled ? "Disable" : "Enable"}
+                    {isEnabled ? "Enable" : "Disable"}
                 </Button>;
             }
         },
@@ -125,7 +125,7 @@ const UserList = () => {
         }
     }
 
-    console.log(data);
+    console.log(data[1].isEnabled);
     /*
     const columns = [
         {

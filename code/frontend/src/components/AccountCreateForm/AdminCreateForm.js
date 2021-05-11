@@ -12,7 +12,7 @@ import {useUserNames} from "../../hooks/UserNameHooks";
 import {useEmails} from "../../hooks/EmailHooks";
 import {Redirect} from "react-router-dom";
 import Axios from "axios";
-import {useHandleAddAccount} from "../../hooks/CustomerHooks";
+import {useHandleAddAdmin} from "../../hooks/CustomerHooks";
 
 
 const {Link, Title} = Typography;
@@ -37,7 +37,7 @@ const AdminCreateForm = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [createSuccess, setCreateSuccess] = useState("");
 
-    const [handleAddAccount, {handling}] = useHandleAddAccount();
+    const [handleAddAdmin, {handling}] = useHandleAddAdmin();
 
     const userNames = useUserNames();
     const emails = useEmails();
@@ -120,7 +120,7 @@ const AdminCreateForm = () => {
 
     const onFinish = values => {
         console.log(form.isFieldsTouched());
-        handleAddAccount(values, () => {
+        handleAddAdmin(values, () => {
             notification.open({
                 message: "Added a customer successfullly!",
                 description: "Added a customer successfullly!",
