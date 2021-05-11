@@ -9,29 +9,29 @@ const {Option} = Select;
 
 const UserList = () => {
 
-    const [dataSource,setDataSource] =useState(dataSource);
+    const [data,setData] =useState([]);
     const [isEnable, setIsEnable] = useState("enable");
 
     for (let i = 0; i < 100; ++i) {
         if(i<50){
-            dataSource.push({
+            data.push({
                 key: i,
                 userName: 'Screem',
                 firstName: 'iOS',
                 lastName: 'Jack',
                 gender:"female",
                 email: '2014-12-24 23:12:00',
-                isEnable:isEnable,
+                isEnable:{isEnable},
             });
         }else{
-            dataSource.push({
+            data.push({
                 key: i,
                 userName: 'Screem',
                 firstName: 'iOS',
                 lastName: 'Jack',
                 gender:'male',
                 email: '2014-12-24 23:12:00',
-                isEnable:isEnable,
+                isEnable:{isEnable},
             });
         }
     }
@@ -98,30 +98,35 @@ const UserList = () => {
                                 onClick={(event) => {
                                 if(text==="enable"){
                                     text = "disable";
+                                    /*
                                     let newData = [];
                                     for (let i=0;i<data.length;i++){
                                         if (i==index){
                                             newData[i] =text;
                                         }else{
-                                            newData[i] = dataSource[i].isEnable;
+                                            newData[i] = data[i].isEnable;
                                         }
                                     }
                                     console.log(newData[index]);
-                                    setDataSource(newData);
+                                    setData(newData);
                                     console.log('index: ',index);
+                                    * */
+
                                     return text;
                                 }else{
                                     text = "enable";
-                                    let newData =dataSource;
+                                    /*
+                                    let newData =data;
                                     newData[index].isEnable = text;
                                     console.log(newData[index].isEnable);
-                                    setDataSource(newData);
+                                    setData(newData);
                                     console.log(text);
                                     console.log(record.isEnable);
+                                    * */
                                     return text;
                                 }
                             }}>
-                                {dataSource[index].isEnable}
+                                enable
                             </Button>
                             : <Button
                                 type="primary"
@@ -129,23 +134,27 @@ const UserList = () => {
                                 onClick={(event) => {
                                     if(text==="enable"){
                                         text = "disable";
-                                        let newData =dataSource;
+                                        /*
+                                        let newData =data;
                                         newData[index].isEnable = text;
                                         console.log(newData[index].isEnable);
-                                        setDataSource(newData);
+                                        setData(newData);
                                         console.log(text);
+                                        * */
                                         return text;
                                     }else{
                                         text = "enable";
-                                        let newData =dataSource;
+                                        /*
+                                        let newData =data;
                                         newData.push();newData[index].isEnable = text;
                                         console.log(newData[index]);
-                                        setDataSource(newData);
+                                        setData(newData);
                                         console.log(text);
+                                        * */
                                         return text;
                                     }
                                 }}>
-                                {dataSource[index].isEnable}
+                               disable
                             </Button>
 
                     }
@@ -243,7 +252,7 @@ const UserList = () => {
                             <Spin size="large" /> :
                             <Table
                                 size='large'
-                                dataSource={dataSource}
+                                dataSource={data}
                                 columns={columns}
                                 scroll={{ y: 1300 }}
                                 bordered
