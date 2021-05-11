@@ -105,18 +105,15 @@ class TrailType(Base):
     name = Column(String(45))
 
 
-'''
-sqlalchemy.exc.NoForeignKeysError: Could not determine join condition between parent/child tables on relationship 
-User.user_group - there are no foreign keys linking these tables.  Ensure that referencing columns are associated
- with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.
-'''
-# class UserGroup(Base):
-#     __tablename__ = 'user_groups'
-#
-#     group_id = Column(Integer, primary_key=True, unique=True)
-#     group_name = Column(String(50), nullable=False)
-#     users = Column(String(255))
-#     user_id = ForeignKey('users.id', index=True)
+class UserGroup(Base):
+    __tablename__ = 'user_groups'
+
+    group_id = Column(Integer, primary_key=True, unique=True)
+    group_name = Column(String(50), nullable=False)
+    users = Column(String(255))
+    user_id = Column(ForeignKey('users.id'), index=True)
+
+    user = relationship('User')
 
 
 class UserType(Base):
@@ -189,15 +186,14 @@ class User(Base):
     birthday = Column(DATE)
     phone = Column(String(20))
     email = Column(String(255), unique=True)
-    skier_ability = Column(Integer)
     din = Column(DECIMAL(5, 2))
+    skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
     organization_id = Column(ForeignKey('organizations.id'), index=True)
     user_type_id = Column(ForeignKey('user_types.id'), index=True)
 
     organization = relationship('Organization')
+    skill_level = relationship('SkillLevel')
     user_type = relationship('UserType')
-    address = relationship('Address')
-    # user_group = relationship('UserGroup')
 
 
 class Address(Base):
@@ -240,4 +236,3 @@ class PriceLevel(Base):
     price = Column(Float, server_default=text("'0'"))
 
     package = relationship('Package')
-

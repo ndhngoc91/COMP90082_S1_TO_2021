@@ -82,6 +82,9 @@ class User(Username):
     postcode: Optional[str] = None
     user_type: Optional[str] = None
 
+    class Config:
+        orm_mode = True
+
 
 class UserCreate(User):
     password: str
@@ -89,6 +92,10 @@ class UserCreate(User):
 
 class Admin(Username):
     email: str
+    user_type: Optional[str] = None
+
+    class Config:
+        orm_mode = True
 
 
 class AdminCreate(Admin):
@@ -99,7 +106,7 @@ class UserProfile(User):
     height: str
     weight: str
     shoe_size: str
-    skier_ability: int
+    skill_level: str
     din: str
     organization: str
 

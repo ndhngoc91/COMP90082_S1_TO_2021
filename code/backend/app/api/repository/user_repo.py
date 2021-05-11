@@ -36,8 +36,9 @@ def create_user(request: schemas.UserCreate, db: Session):
     return new_user
 
 
-def create_admin(request: schemas.UserCreate, db: Session):
-    new_admin = models.User(username=request.username, password=request.password, email=request.email)
+def create_admin(request: schemas.AdminCreate, db: Session):
+    new_admin = models.User(username=request.username, password=request.password, email=request.email,
+                            user_type_id=db.query(models.UserType.id).filter(models.UserType.type == request.user_type))
 
     db.add(new_admin)
     db.commit()

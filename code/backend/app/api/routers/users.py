@@ -32,7 +32,8 @@ def create_user(request: schemas.UserCreate, db: Session = Depends(get_db)):
     return new_user.__dict__
 
 
-@router.post('/admin', status_code=status.HTTP_201_CREATED)
-def create_user(request: schemas.UserCreate, db: Session = Depends(get_db)):
-    return user_repo.create_admin(request, db)
+@router.post('/admin', response_model=schemas.Admin, status_code=status.HTTP_201_CREATED)
+def create_admin(request: schemas.AdminCreate, db: Session = Depends(get_db)):
+    new_admin = user_repo.create_admin(request, db)
+    return new_admin.__dict__
 
