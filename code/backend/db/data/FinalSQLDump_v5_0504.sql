@@ -1,5 +1,6 @@
 DROP SCHEMA IF EXISTS `squizz_app`;
-CREATE DATABASE  IF NOT EXISTS `squizz_app` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `squizz_app`
+/*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 USE `squizz_app`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
 --
@@ -211,10 +212,14 @@ DROP TABLE IF EXISTS `order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
+                                 `id` int NOT NULL,
                                  `order_id` int NOT NULL,
-                                 `item_id` varchar(45) DEFAULT NULL,
-                                 PRIMARY KEY (`order_id`),
-                                 KEY `orderId` (`order_id`) USING BTREE
+                                 `package_id` int NOT NULL,
+                                 `extra_id` int DEFAULT NULL,
+                                 PRIMARY KEY (`id`),
+                                 KEY `fk_orderdetails_orders1_idx` (`order_id`),
+                                 KEY `fk_orderdetails_package1_idx` (`package_id`),
+                                 KEY `fk_orderdetails_extra1_idx` (`extra_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -224,7 +229,7 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` VALUES (18,'orderdetails18'),(19,'orderdetails19');
+INSERT INTO `order_details` VALUES (18,14,1,null),(19,15,1,1),(20,15,1,2),(21,15,2,1);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,6 +254,7 @@ CREATE TABLE `order_receipts` (
 
 LOCK TABLES `order_receipts` WRITE;
 /*!40000 ALTER TABLE `order_receipts` DISABLE KEYS */;
+INSERT INTO `order_receipts` VALUES (14,'this is a link to recerpts -14'),(15,'this is a link to recerpts -15');
 /*!40000 ALTER TABLE `order_receipts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,12 +271,10 @@ CREATE TABLE `orders` (
                           `start_date` datetime DEFAULT NULL,
                           `end_date` datetime DEFAULT NULL,
                           `description` text,
-                          `package_id` int NOT NULL,
                           `is_drop_ship` enum('Y','N') NOT NULL DEFAULT 'N',
                           `is_pending` enum('Y','N') NOT NULL DEFAULT 'N',
                           PRIMARY KEY (`id`) USING BTREE,
-                          KEY `fk_orders_users1_idx` (`user_id`),
-                          KEY `fk_orders_package1_idx` (`package_id`)
+                          KEY `fk_orders_users1_idx` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -280,7 +284,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order',1,'Y','Y'),(15,4,NULL,NULL,'this is the second order',2,'N','Y');
+INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order','Y','Y'),(15,4,NULL,NULL,'this is the second order','N','Y');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
