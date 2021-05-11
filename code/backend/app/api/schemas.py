@@ -74,13 +74,18 @@ class User(Username):
     birthday: date
     phone: str
     gender: str
-    first_name: str
-    last_name: str
-    address_line: Optional[str] = None
-    state: Optional[str] = None
-    city: Optional[str] = None
-    postcode: Optional[str] = None
-    user_type: Optional[str] = None
+    address_line: str
+    state: str
+    city: str
+    postcode: str
+    user_type: str
+# BUG
+    # user_type: Optional[str] = None
+    # address_line: Optional[str] = None
+    # state: Optional[str] = None
+    # city: Optional[str] = None
+    # postcode: Optional[str] = None
+    # user_type: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -103,6 +108,8 @@ class AdminCreate(Admin):
 
 
 class UserProfile(User):
+    first_name: str
+    last_name: str
     height: str
     weight: str
     shoe_size: str

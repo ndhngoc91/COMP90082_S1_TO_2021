@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from app.api import models, schemas
+from app.api.hashing import Hash
 
 
 def get_all(db: Session):
@@ -24,9 +25,8 @@ def check_username(username: str, db: Session):
 
 
 def create_user(request: schemas.UserCreate, db: Session):
-    new_user = models.User(username=request.username, password=request.password, email=request.email,
+    new_user = models.User(username=request.username, password=Hash.bcrypt(request.password), email=request.email,
                            birthday=request.birthday, phone=request.phone, gender=request.gender,
-                           first_name=request.first_name, last_name=request.last_name,
                            user_type_id=db.query(models.UserType.id).filter(models.UserType.type == request.user_type))
 
     new_address = models.Address(address_line=request.address_line, state=request.state, city=request.city,

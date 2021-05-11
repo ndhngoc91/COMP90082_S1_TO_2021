@@ -39,3 +39,6 @@ def create_admin(request: schemas.AdminCreate, db: Session = Depends(get_db)):
     new_admin = user_repo.create_admin(request, db)
     return new_admin.__dict__
 
+
+
+
