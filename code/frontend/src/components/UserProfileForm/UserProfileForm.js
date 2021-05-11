@@ -136,7 +136,6 @@ const UserProfileForm = () => {
                         <Col span={4}>
                             <Form.Item label="Skill Ability"
                                        name="skill_ability"
-                                       hasFeedback
                                        rules={[{required: true, message: "Required!"}]}>
                                 <Select placeholder="Select Skill Level" disabled={readOnly}>
                                     {skillLevels.map((skillLevel, index) => {
@@ -210,23 +209,22 @@ const UserProfileForm = () => {
                                    },
                                    {
                                        validator: async (_, addressLines) => {
-                                           if (!addressLines ) {
+                                           if (!addressLines) {
                                                return Promise.reject(new Error('At least 1 address'));
                                            }
                                        },
                                    },
-                               ]}
-                    >
+                               ]}>
                         {(fields, {add, remove}, {errors}) => (
                             <>
-                                {fields.map(({key,name,fieldKey,...field}) => (
+                                {fields.map(({key, name, fieldKey, ...field}) => (
                                     <Form.Item label={key === 0 ? "Addresses" : ""}
                                                required={false}
                                                key={key}>
                                         <Row justify="space-between" gutter={16}>
                                             <Col span={12}>
                                                 <Form.Item{...field}
-                                                          name = {[name,'address']}
+                                                          name={[name, 'address']}
                                                           fieldKey={[fieldKey, 'address']}
                                                           validateTrigger={["onChange", "onBlur"]}
                                                           rules={[
@@ -245,7 +243,7 @@ const UserProfileForm = () => {
                                             </Col>
                                             <Col span={4}>
                                                 <Form.Item{...field}
-                                                          name = {[name,'state']}
+                                                          name={[name, 'state']}
                                                           fieldKey={[fieldKey, 'state']}
                                                           validateTrigger={["onChange", "onBlur"]}
                                                           rules={[
@@ -270,7 +268,7 @@ const UserProfileForm = () => {
                                             </Col>
                                             <Col span={4}>
                                                 <Form.Item{...field}
-                                                          name = {[name,'city']}
+                                                          name={[name, 'city']}
                                                           fieldKey={[fieldKey, 'city']}
                                                           validateTrigger={["onChange", "onBlur"]}
                                                           rules={[
@@ -281,13 +279,11 @@ const UserProfileForm = () => {
                                                               }
                                                           ]}
                                                           noStyle>
-                                                    <Select
-                                                        value={selectedCity}
-                                                        onChange={onCityChange}
-                                                        disabled={readOnly}
-                                                        size="large"
-                                                        placeholder="City"
-                                                    >
+                                                    <Select value={selectedCity}
+                                                            onChange={onCityChange}
+                                                            disabled={readOnly}
+                                                            size="large"
+                                                            placeholder="City">
                                                         {cities.map(city => (
                                                             <Option key={city} value={city}>{city}</Option>
                                                         ))}
@@ -296,7 +292,7 @@ const UserProfileForm = () => {
                                             </Col>
                                             <Col span={4}>
                                                 <Form.Item{...field}
-                                                          name = {[name,'postcode']}
+                                                          name={[name, 'postcode']}
                                                           fieldKey={[fieldKey, 'postcode']}
                                                           validateTrigger={["onChange", "onBlur"]}
                                                           rules={[

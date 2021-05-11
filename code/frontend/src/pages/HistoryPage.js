@@ -90,10 +90,7 @@ const HistoryPage = () => {
     // Otherwise, just render the order history table
     return (
         <Layout style={{minHeight: "100vh"}}>
-            {/* Top navigation bar */}
-            <NavigationBar defaultSelected="/history"/>
-
-            {/* Content body */}
+            <NavigationBar/>
             <Content style={{padding: "90px 16px"}}>
                 <Row justify="center">
                     <Col span={18}>
@@ -103,7 +100,6 @@ const HistoryPage = () => {
                     </Col>
                 </Row>
             </Content>
-
             <PageFooter/>
         </Layout>
     );
