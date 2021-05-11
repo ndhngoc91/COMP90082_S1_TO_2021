@@ -33,7 +33,7 @@ const BookingManagementPage = () => {
     return (
         <>
             <Layout style={{minHeight: "100vh"}}>
-                <NavigationBar defaultSelected="/package"/>
+                <NavigationBar/>
                 <Layout style={{height: "100%"}}>
                     <Content>
                         <Table dataSource={data}>

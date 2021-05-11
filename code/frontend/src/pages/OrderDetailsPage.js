@@ -57,11 +57,7 @@ const OrderDetailsPage = () => {
 
     return (
         <Layout style={{minHeight: "100vh"}}>
-
-            {/* Top navigation bar */}
-            <NavigationBar history={history} defaultSelected={null}/>
-
-            {/* Content body */}
+            <NavigationBar history={history}/>
             <Content style={{padding: "80px 16px"}}>
                 <Row justify="center">
                     <Col span={18}>
