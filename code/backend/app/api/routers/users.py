@@ -19,7 +19,7 @@ def get_all_users(db: Session = Depends(get_db)):
     return user_service.get_all(db=db)
 
 
-@router.get("/{user_id}", response_model=schemas.UserWithoutPassword)
+@router.get("/{user_id}", response_model=schemas.UserWithAddresses)
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     return user_service.get_user_by_id(user_id=user_id, db=db).__dict__
 
@@ -30,5 +30,5 @@ def create_user(request: schemas.UserWithAddresses, db: Session = Depends(get_db
 
 
 @router.put("/{user_id}", status_code=status.HTTP_202_ACCEPTED)
-def update_user(user_id: int, request: schemas.User, db: Session = Depends(get_db)):
+def update_user(user_id: int, request: schemas.UserWithoutPassword, db: Session = Depends(get_db)):
     return user_service.put(user_id=user_id, request=request, db=db)
