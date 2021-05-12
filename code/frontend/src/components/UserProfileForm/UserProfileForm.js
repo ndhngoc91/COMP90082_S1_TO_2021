@@ -11,7 +11,7 @@ import {
 } from "antd";
 import {StateData, CityData} from "../../consts/StateData";
 import {useSkillLevels} from "../../hooks/SkillLevelHooks";
-import {useHandleEditProfile, useUserProfile} from "../../hooks/UserHooks";
+import {useHandleEditProfile} from "../../hooks/UserHooks";
 import {useStores} from "../../stores";
 
 const {Option} = Select;
@@ -24,7 +24,7 @@ const UserProfileForm = () => {
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
-    const [readOnly, setReadOnly] = useState(true);
+    const [editing, setEditing] = useState(false);
 
     const [form] = Form.useForm();
 
@@ -72,19 +72,19 @@ const UserProfileForm = () => {
                         <Col span={8}>
                             <Form.Item label="First Name" name="first_name"
                                        rules={[{required: true, message: "Please input your first name!"}]}>
-                                <Input prefix={<UserOutlined/>} size="large" readOnly={readOnly}/>
+                                <Input prefix={<UserOutlined/>} size="large" readOnly={editing === false}/>
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label="Last Name" name="last_name"
                                        rules={[{required: true, message: "Please input your last name!"}]}>
-                                <Input prefix={<TeamOutlined/>} size="large" readOnly={readOnly}/>
+                                <Input prefix={<TeamOutlined/>} size="large" readOnly={editing === false}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Gender" name="gender"
                                        rules={[{required: true, message: "Required"}]}>
-                                <Select placeholder="Gender" size="large" disabled={readOnly}>
+                                <Select placeholder="Gender" size="large" disabled={editing === false}>
                                     <Option value="male">Male</Option>
                                     <Option value="female">Female</Option>
                                     <Option value="others">Others</Option>
@@ -94,7 +94,7 @@ const UserProfileForm = () => {
                         <Col span={4}>
                             <Form.Item label="Birthdate" name="birthdate"
                                        rules={[{required: true, message: "Required"}]}>
-                                <DatePicker size="large" disabled={readOnly}/>
+                                <DatePicker size="large" disabled={editing === false}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -102,21 +102,21 @@ const UserProfileForm = () => {
                         <Col span={4}>
                             <Form.Item label="Height (cm)" name="height"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Input type={"number"} size="large" value={height} readOnly={readOnly}
+                                <Input type={"number"} size="large" value={height} readOnly={editing === false}
                                        onChange={e => setHeight(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Weight (kg)" name="weight"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Input type={"number"} size="large" value={weight} readOnly={readOnly}
+                                <Input type={"number"} size="large" value={weight} readOnly={editing === false}
                                        onChange={e => setWeight(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Foot Size" name="foot_size"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Input type={"number"} size="large" value={footSize} readOnly={readOnly}
+                                <Input type={"number"} size="large" value={footSize} readOnly={editing === false}
                                        onChange={e => setFootSize(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
@@ -124,7 +124,7 @@ const UserProfileForm = () => {
                             <Form.Item label="Skill Level"
                                        name="skill_level_id"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Select placeholder="Select Skill Level" disabled={readOnly}>
+                                <Select placeholder="Select Skill Level" disabled={editing === false}>
                                     {skillLevels.map((skillLevel, index) => {
                                         return (
                                             <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
@@ -146,7 +146,7 @@ const UserProfileForm = () => {
                                            {required: true, message: "Please input your email!"},
                                            {type: "email", message: "Email is not valid!"}
                                        ]}>
-                                <Input prefix={<MailOutlined/>} size="large" readOnly={readOnly}/>
+                                <Input prefix={<MailOutlined/>} size="large" readOnly={editing === false}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -154,10 +154,11 @@ const UserProfileForm = () => {
                                        rules={[
                                            {required: true, message: "Please input your phone!"}
                                        ]}>
-                                <Input prefix={<PhoneOutlined/>} size="large" readOnly={readOnly}/>
+                                <Input prefix={<PhoneOutlined/>} size="large" readOnly={editing === false}/>
                             </Form.Item>
                         </Col>
                     </Row>
+                    {editing === false &&
                     <Form.List name="addresses">
                         {(fields, {add, remove}, {errors}) => (
                             <>
@@ -181,7 +182,7 @@ const UserProfileForm = () => {
                                                           noStyle>
                                                     <Input size="large"
                                                            placeholder="Address line"
-                                                           readOnly={readOnly}
+                                                           readOnly={editing === false}
                                                     />
                                                 </Form.Item>
                                             </Col>
@@ -200,7 +201,7 @@ const UserProfileForm = () => {
                                                     <Select
                                                         value={selectedState}
                                                         onChange={onStateChange}
-                                                        disabled={readOnly}
+                                                        disabled={editing === false}
                                                         size="large"
                                                         placeholder="State"
                                                     >
@@ -224,7 +225,7 @@ const UserProfileForm = () => {
                                                           noStyle>
                                                     <Select value={selectedCity}
                                                             onChange={onCityChange}
-                                                            disabled={readOnly}
+                                                            disabled={editing === false}
                                                             size="large"
                                                             placeholder="City">
                                                         {cities.map(city => (
@@ -246,7 +247,7 @@ const UserProfileForm = () => {
                                                           ]}
                                                           noStyle>
                                                     <Input
-                                                        disabled={readOnly}
+                                                        disabled={editing === false}
                                                         size="large"
                                                         placeholder="Postcode"
                                                     >
@@ -268,25 +269,25 @@ const UserProfileForm = () => {
                                             style={{width: "60%"}}
                                             size="large"
                                             icon={<PlusOutlined/>}
-                                            disabled={readOnly}>
+                                            disabled={editing === false}>
                                         Add address line
                                     </Button>
                                     <Form.ErrorList errors={errors}/>
                                 </Form.Item>
                             </>
                         )}
-                    </Form.List>
+                    </Form.List>}
                     <Form.Item>
-                        {readOnly &&
-                        <Button type="primary" size="large" onClick={() => setReadOnly(false)}>
+                        {editing === false &&
+                        <Button type="primary" size="large" onClick={() => setEditing(true)}>
                             Edit
                         </Button>}
-                        {readOnly === false &&
+                        {editing &&
                         <Space>
                             <Button type="primary" htmlType="submit" size="large" loading={handling}>
                                 Submit
                             </Button>
-                            <Button type="default" size="large" onClick={() => setReadOnly(true)}>
+                            <Button type="default" size="large" onClick={() => setEditing(false)}>
                                 Cancel
                             </Button>
                         </Space>}
