@@ -98,7 +98,7 @@ const NavigationBar = observer(() => {
                                icon={<LoginOutlined/>}>
                         Login
                     </Menu.Item>
-                    <Menu.Item className={rightItemCls} key="/user-create" icon={<UserAddOutlined/>}>
+                    <Menu.Item className={rightItemCls} key="/register" icon={<UserAddOutlined/>}>
                         Register
                     </Menu.Item>
                 </>}

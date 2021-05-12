@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Col, Layout, Row, Select, Space, Table, Tag, Input} from "antd";
+import {Col, Layout, Row, Space, Table, Input} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleFilterUsers} from "../hooks/UserHooks";
 
@@ -29,7 +29,7 @@ const UserManagementPage = () => {
                         </Col>
                     </Row>
                     <Content>
-                        <Table dataSource={users}>
+                        <Table dataSource={users} loading={filtering}>
                             <Column title="Username" dataIndex="username"/>
                             <Column title="First Name" dataIndex="first_name"/>
                             <Column title="Last Name" dataIndex="last_name"/>
@@ -38,8 +38,7 @@ const UserManagementPage = () => {
                             <Column title="Gender" dataIndex="gender"/>
                             <Column title="Action" key="action" render={(text, record) => (
                                 <Space size="middle">
-                                    <a>Invite {record.name}</a>
-                                    <a>Delete</a>
+                                    <a>Disable</a>
                                 </Space>
                             )}/>
                         </Table>

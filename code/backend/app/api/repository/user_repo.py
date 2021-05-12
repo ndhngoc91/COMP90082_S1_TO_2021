@@ -18,8 +18,8 @@ def filter_users(query: Optional[str], db: Session):
 
 def authenticate(username: str, password: str, db: Session):
     query = db.query(models.User)
-    query.filter(models.User.username == username)
-    query.filter(models.User.password == password)
+    query = query.filter(models.User.username == username)
+    query = query.filter(models.User.password == password)
     return query.first()
 
 
