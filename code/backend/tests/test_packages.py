@@ -39,12 +39,12 @@ def test_create_package(test_app, sample_package):
     response = test_app.post("/packages", data=sample_package)
     assert response.status_code == 201
     newly_created_id = response.json()["id"]
-    test_app.delete(f"/packages/{newly_created_id}")
+    test_app.delete_package(f"/packages/{newly_created_id}")
 
 
 def test_delete_package(test_app, sample_package):
     response = test_app.post("/packages", data=sample_package)
     assert response.status_code == 201
     newly_created_id = response.json()["id"]
-    delete_response = test_app.delete(f"/packages/{newly_created_id}")
+    delete_response = test_app.delete_package(f"/packages/{newly_created_id}")
     assert delete_response.status_code == 204

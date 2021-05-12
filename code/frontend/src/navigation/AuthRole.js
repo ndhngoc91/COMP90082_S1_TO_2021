@@ -4,19 +4,25 @@ import {observer} from "mobx-react-lite";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
-const AuthRoute = observer(({path, exact = false, Component, requiredRoles = [...Object.values(USER_ROLE)]}) => {
-    const {authStore: {authenticated, userRole}} = useStores();
+const AuthRoute = observer(({path, exact = false, Component, requiredRoles = []}) => {
+    const {authStore: {userRole}} = useStores();
 
-    const useHasRequiredRole = requiredRoles && requiredRoles.length > 0 ? requiredRoles.includes(userRole) : true;
+    const useHasRequiredRole = requiredRoles.includes(userRole);
 
     return (
         <Route path={path} exact={exact} render={props => {
-            if (authenticated && useHasRequiredRole) {
+            if (useHasRequiredRole) {
                 return <Component {...props}/>;
             } else {
-                return <Redirect to={{
-                    pathname: "/login"
-                }}/>;
+                if (userRole === USER_ROLE.GUEST) {
+                    return <Redirect to={{
+                        pathname: "/login"
+                    }}/>;
+                } else {
+                    return <Redirect to={{
+                        pathname: "/"
+                    }}/>;
+                }
             }
         }}/>
     );

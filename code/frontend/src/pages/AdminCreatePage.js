@@ -9,7 +9,6 @@ import {
     MailOutlined,
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {useUserNames} from "../hooks/UserNameHooks";
 import {useEmails} from "../hooks/EmailHooks";
 import {Redirect} from "react-router-dom";
 import Axios from "axios";
@@ -38,7 +37,6 @@ const AdminCreatePage = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [createSuccess, setCreateSuccess] = useState("");
 
-    const userNames = useUserNames();
     const emails = useEmails();
 
     const [form] = Form.useForm();
