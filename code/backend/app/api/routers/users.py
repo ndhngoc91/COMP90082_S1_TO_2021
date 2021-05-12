@@ -30,5 +30,5 @@ def create_user(request: schemas.UserWithAddresses, db: Session = Depends(get_db
 
 
 @router.put("/{user_id}", status_code=status.HTTP_202_ACCEPTED)
-def update_user(user_id: int, request: schemas.UserWithoutPassword, db: Session = Depends(get_db)):
+def update_user(user_id: int, request: schemas.UserWithEditableFields, db: Session = Depends(get_db)):
     return user_service.put(user_id=user_id, request=request, db=db)

@@ -88,7 +88,7 @@ export const useHandleEditPackage = () => {
                                                age_group_id,
                                                category_id,
                                                skill_level_id
-                                           }, success, failure) => {
+                                           }, success, failure = () => {}) => {
         setHandling(true);
         axios.put(`http://127.0.0.1:8000/packages/${id}`, {
             name: name,
