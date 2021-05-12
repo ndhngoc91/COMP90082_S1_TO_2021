@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routers import auth, users
+from app.api.routers import auth
+from app.api.routers import user_groups
+from app.api.routers import users
 from app.api.routers import age_groups
 from app.api.routers import categories
 from app.api.routers import customers
@@ -50,4 +52,5 @@ app.include_router(product_groups.router)
 app.include_router(products.router)
 app.include_router(skill_levels.router)
 app.include_router(squizz.router)
+app.include_router(user_groups.router)
 app.include_router(users.router)
