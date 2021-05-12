@@ -1,14 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {Col, Layout, Spin, Row, Table, Typography, Input, Space, Button, Tooltip, Select, Modal} from "antd";
+import {Col, Layout, Spin, Row, Table, Typography, Input, Button, Tooltip} from "antd";
 import {useCustomers} from "../../hooks/CustomerHooks";
-import {EditOutlined} from "@ant-design/icons";
-import UserCreateForm from "../AccountCreateForm/UserCreateForm";
-import EditUserForm from "../AdminUserList/EditUserForm";
 
 const {Content} = Layout;
 const {Title} = Typography;
 const {Search} = Input;
-const {Option} = Select;
 
 const initialData = []
 for (let i = 0; i < 100; ++i) {
@@ -270,24 +266,24 @@ const UserList = () => {
                     </Col>
                 </Row>
                 <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>
-                        {loading ?
-                            <Spin size="large"/> :
-                            <Table
-                                size='large'
-                                dataSource={data}
-                                columns={columns}
-                                scroll={{y: 1300}}
-                                bordered
-                                showHeader
-                                rowKey={
-                                    record => {
-                                        record.id
-                                    }
+                    {loading ?
+                        <Spin size="large"/> :
+                        <Table
+                            size='large'
+                            dataSource={data}
+                            columns={columns}
+                            scroll={{y: 1300}}
+                            bordered
+                            showHeader
+                            rowKey={
+                                record => {
+                                    record.id
                                 }
-                                // pagination={pagination}
-                            >
-                            </Table>
-                        }
+                            }
+                            // pagination={pagination}
+                        >
+                        </Table>
+                    }
                 </Row>
             </Content>
             {/*
@@ -306,7 +302,6 @@ const UserList = () => {
                 <EditUserForm fieldValues={editFormFieldValues}/>
             </Modal>
             */}
-
 
 
         </>
