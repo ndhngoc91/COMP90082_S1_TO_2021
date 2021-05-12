@@ -12,19 +12,6 @@ router = APIRouter(
 )
 
 
-@router.get('/verify-username', status_code=status.HTTP_200_OK)
-def check_username(username: str, db: Session = Depends(get_db)):
-    """
-    Check if **username** exists.
-
-    Returns:
-    - **200** & **username** if not exists
-    - **409** if already exists
-
-    """
-    return user_service.check_username(username=username, db=db)
-
-
 @router.get("/verify-token")
 def validate_token(token: str):
     return verify_token(token)

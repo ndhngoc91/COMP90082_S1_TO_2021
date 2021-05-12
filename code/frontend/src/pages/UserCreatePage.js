@@ -11,7 +11,6 @@ import {
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {CityData, StateData} from "../consts/StateData";
 import moment from "moment";
-import {useUserNames} from "../hooks/UserNameHooks";
 import {useEmails} from "../hooks/EmailHooks";
 import {useHandleAddAccount} from "../hooks/CustomerHooks";
 
@@ -46,9 +45,6 @@ const UserCreatePage = () => {
     const [clearFormAfterFinishing, setClearFormAfterFinishing] = useState(false);
 
     const [handleAddUser, {handling}] = useHandleAddAccount();
-
-    const userNames = useUserNames();
-    const emails = useEmails();
 
     const [form] = Form.useForm();
 

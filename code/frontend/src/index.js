@@ -23,7 +23,7 @@ import "./index.css";
 import {createStore, StoreContext} from "./stores";
 import AuthRoute from "./navigation/AuthRole";
 import {USER_ROLE} from "./consts/UserRole";
-import UserList from "./components/UserList/UserList";
+import UserManagementPage from "./pages/UserManagementPage";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -32,7 +32,6 @@ createStore().then(store => {
                 <BrowserRouter>
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
-
                         <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
@@ -48,7 +47,7 @@ createStore().then(store => {
                         <Route path="/order" exact component={OrderPage} requiredRoles={[
                             USER_ROLE.CUSTOMER
                         ]}/>
-                        <AuthRoute path="/user-management" exact Component={UserList} requiredRoles={[
+                        <AuthRoute path="/user-management" exact Component={UserManagementPage} requiredRoles={[
                             USER_ROLE.ADMIN
                         ]}/>
                         <AuthRoute path="/booking-management" exact Component={BookingManagementPage} requiredRoles={[
