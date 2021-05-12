@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import axios from "axios";
 import {UserType} from "../consts/UserType";
 
@@ -19,26 +19,6 @@ export const useHandleFilterUsers = () => {
     }, [])
 
     return [handleFilterUsers, {users, filtering}];
-};
-
-export const useUserProfile = (id = 47) => {
-    const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState([]);
-
-    useEffect(() => {
-        setLoading(true);
-        axios.get(`http://127.0.0.1:8000/users/${id}`, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
-        }).then(response => {
-            if (response.status === 200) {
-                setUser(response.data);
-            }
-        }).finally(() => {
-            setLoading(false);
-        });
-    }, []);
-
-    return [user, {loading}];
 };
 
 export const useHandleRegisterCustomer = () => {
@@ -86,7 +66,7 @@ export const useHandleRegisterCustomer = () => {
             } else {
                 failure();
             }
-        }).catch(e => {
+        }).catch(() => {
             failure();
         }).finally(() => {
             setHandling(false);
@@ -94,6 +74,42 @@ export const useHandleRegisterCustomer = () => {
     }, []);
 
     return [handleRegisterCustomer, {handling}];
+};
+
+export const useHandleRegisterAdmin = () => {
+    const [handling, setHandling] = useState(false);
+
+    const handleRegisterAdmin = useCallback(({
+                                                 username,
+                                                 email,
+                                                 phone,
+                                                 password
+                                             }, success, failure = () => {
+    }) => {
+        setHandling(true);
+        axios.post('http://127.0.0.1:8000/users', {
+            username: username,
+            email: email,
+            phone: phone,
+            password: password,
+            user_type_id: UserType.STAFF,
+            address_list: []
+        }, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then(response => {
+            if (response.status === 201) {
+                success();
+            } else {
+                failure();
+            }
+        }).catch(() => {
+            failure();
+        }).finally(() => {
+            setHandling(false);
+        });
+    }, []);
+
+    return [handleRegisterAdmin, {handling}];
 };
 
 export const useHandleEditProfile = () => {
