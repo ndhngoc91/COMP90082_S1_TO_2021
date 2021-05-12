@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {
-    Button, Col, Form, Image, Input, Row, Select, Typography, DatePicker
+    Button, Col, Form, Image, Input, Row, Typography, notification, Select
 } from "antd";
 import {
     LockOutlined,
@@ -8,26 +8,25 @@ import {
     MailOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {CityData, StateData} from "../consts/StateData";
 import rockyValleyLogo from "../assets/rocky_valley.svg";
-
+import {useHandleRegisterAdmin} from "../hooks/UserHooks";
+import {useForm} from "antd/es/form/Form";
 
 const {Link, Title} = Typography;
 const {Option} = Select;
 
-const UserCreatePage = () => {
-    const [cities, setCities] = useState(CityData[StateData[0]]);
-    const [selectedState, setSelectedState] = useState(StateData[0]);
-    const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
+const AdminRegisterPage = () => {
+    const [handleRegisterAdmin, {handling}] = useHandleRegisterAdmin();
 
-    const onStateChange = value => {
-        setCities(CityData[value]);
-        setSelectedState(value);
-        setSelectedCity(CityData[value][0])
-    };
+    const [form] = useForm();
 
-    const onCityChange = value => {
-        setSelectedCity(value);
+    const onFinish = values => {
+        handleRegisterAdmin(values, () => {
+            notification.success({message: "Create a new admin account successfully!"});
+            form.resetFields();
+        }, () => {
+            notification.error({message: "Failed to create an admin account!"});
+        });
     };
 
     const prefixSelector = (
@@ -42,10 +41,6 @@ const UserCreatePage = () => {
         </Form.Item>
     );
 
-    const onFinish = values => {
-        console.log(values);
-    };
-
     return (
         <>
             <Row justify="center" align="middle" style={{minHeight: "100vh"}}>
@@ -57,7 +52,7 @@ const UserCreatePage = () => {
                         <Title level={3}>Register</Title>
                     </Row>
                     <Row justify="center">
-                        <Form name="register"
+                        <Form form={form}
                               style={{width: "600px"}}
                               initialValues={{
                                   prefix: "61",
@@ -75,7 +70,6 @@ const UserCreatePage = () => {
                                        className="name"
                                 />
                             </Form.Item>
-
                             <Form.Item name="email"
                                        rules={[
                                            {
@@ -91,42 +85,6 @@ const UserCreatePage = () => {
                                        placeholder="Your email address"
                                        className="email"/>
                             </Form.Item>
-                            <Row justify="space-between" gutter={16}>
-                                <Col span={12}>
-                                    <Form.Item name={"first_name"}
-                                               rules={[
-                                                   {
-                                                       required: true,
-                                                       message: "Please input your first name!",
-                                                   }
-                                               ]}
-                                               style={{
-                                                   width: "100%",
-                                               }}>
-                                        <Input placeholder="Enter your first name"
-                                               style={{
-                                                   width: "100%",
-                                               }}/>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item name={"last_name"}
-                                               rules={[
-                                                   {
-                                                       required: true,
-                                                       message: "Please input your last name!",
-                                                   }
-                                               ]}
-                                               style={{
-                                                   width: "100%",
-                                               }}>
-                                        <Input placeholder="Enter your last name"
-                                               style={{
-                                                   width: "100%",
-                                               }}/>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
                             <Form.Item name="phone"
                                        rules={[
                                            {
@@ -140,58 +98,6 @@ const UserCreatePage = () => {
                                        style={{
                                            width: "100%",
                                        }}/>
-                            </Form.Item>
-                            <Form.Item name="birthdate"
-                                       rules={[
-                                           {
-                                               required: true,
-                                               message: "Please select your birthday!",
-                                           }
-                                       ]}>
-                                <DatePicker style={{
-                                    width: "100%",
-                                }}/>
-                            </Form.Item>
-                            <Form.Item name="address_line">
-                                <Input.Group compact>
-                                    <Form.Item name="address_line"
-                                               noStyle
-                                               rules={[
-                                                   {
-                                                       required: true,
-                                                       message: "Address line is required!"
-                                                   }
-                                               ]}>
-                                        <Input placeholder="Input address line"/>
-                                    </Form.Item>
-                                </Input.Group>
-                            </Form.Item>
-                            <Form.Item>
-                                <Row gutter={16}>
-                                    <Col span={12}>
-                                        <Select value={selectedState} onChange={onStateChange}>
-                                            {StateData.map(state => (
-                                                <Option key={state} value={state}>{state}</Option>
-                                            ))}
-                                        </Select>
-                                    </Col>
-                                    <Col span={12}>
-                                        <Select value={selectedCity} onChange={onCityChange}>
-                                            {cities.map(city => (
-                                                <Option key={city} value={city}>{city}</Option>
-                                            ))}
-                                        </Select>
-                                    </Col>
-                                </Row>
-                            </Form.Item>
-                            <Form.Item name="postcode"
-                                       rules={[
-                                           {
-                                               required: true,
-                                               message: "Postcode is required"
-                                           }
-                                       ]}>
-                                <Input placeholder="Input postcode" className="postcode"/>
                             </Form.Item>
                             <Form.Item name="password"
                                        rules={[
@@ -253,7 +159,7 @@ const UserCreatePage = () => {
                             <Form.Item className="create-btn">
                                 <Button type="primary"
                                         htmlType="submit"
-                                        className="login-form-button">
+                                        loading={handling}>
                                     Create
                                 </Button>
                             </Form.Item>
@@ -272,4 +178,4 @@ const UserCreatePage = () => {
     );
 };
 
-export default UserCreatePage;
+export default AdminRegisterPage;
