@@ -35,10 +35,10 @@ createStore().then(store => {
                         <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
-                        <AuthRoute path="/user-create" exact component={UserCreatePage} requiredRoles={[
+                        <AuthRoute path="/register" exact Component={UserCreatePage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
-                        <AuthRoute path="/admin-create" exact component={AdminCreatePage} requiredRoles={[
+                        <AuthRoute path="/register-as-a-admin" exact Component={AdminCreatePage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
                         <Route path="/history" exact component={HistoryPage} requiredRoles={[
