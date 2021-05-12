@@ -14,8 +14,8 @@ import PackageManagementPage from "./pages/PackageManagementPage";
 import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
-import UserCreatePage from "./pages/UserCreatePage";
-import AdminCreatePage from "./pages/AdminCreatePage";
+import RegisterPage from "./pages/RegisterPage";
+import AdminRegisterPage from "./pages/AdminRegisterPage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -35,10 +35,10 @@ createStore().then(store => {
                         <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
-                        <AuthRoute path="/register" exact Component={UserCreatePage} requiredRoles={[
+                        <AuthRoute path="/register" exact Component={RegisterPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
-                        <AuthRoute path="/register-as-a-admin" exact Component={AdminCreatePage} requiredRoles={[
+                        <AuthRoute path="/register-as-a-admin" exact Component={AdminRegisterPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
                         <Route path="/history" exact component={HistoryPage} requiredRoles={[

@@ -105,6 +105,15 @@ class TrailType(Base):
     name = Column(VARCHAR(45))
 
 
+class UserGroup(Base):
+    __tablename__ = 'user_groups'
+
+    id = Column(Integer, primary_key=True, unique=True)
+    group_name = Column(VARCHAR(50), nullable=False)
+    contacts = Column(Text)
+    user_id = Column(Integer, index=True)
+
+
 class UserType(Base):
     __tablename__ = 'user_types'
 
@@ -226,14 +235,3 @@ class PriceLevel(Base):
     price = Column(Float, server_default=text("'0'"))
 
     package = relationship('Package')
-
-
-class UserGroup(Base):
-    __tablename__ = 'user_groups'
-
-    group_id = Column(Integer, primary_key=True, unique=True)
-    group_name = Column(VARCHAR(50), nullable=False)
-    users = Column(VARCHAR(255))
-    user_id = Column(ForeignKey('users.id'), index=True)
-
-    user = relationship('User')
