@@ -1,28 +1,29 @@
+from typing import Optional
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.api import models, schemas, hashing
 
 
-def get_all(db: Session):
+def get_all_users(db: Session):
     return db.query(models.User).all()
 
 
-def get_one_by_id(user_id: int, db: Session):
+def get_user_by_id(user_id: int, db: Session):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-def authenticate(username: str, password: str, db: Session) -> models.User:
-    return db.query(models.User).filter(models.User.username == username).filter(models.User.password == password).first()
+def filter_users(query: Optional[str], db: Session):
+    return db.query(models.User).filter(models.User.username.like(f"%{query}%")).all()
 
 
-def check_username(username: str, db: Session):
-    new_username = db.query(models.User).filter(models.User.username == username).first()
-    if new_username:
-        return True
-    return False
+def authenticate(username: str, password: str, db: Session):
+    query = db.query(models.User)
+    query.filter(models.User.username == username)
+    query.filter(models.User.password == password)
+    return query.first()
 
 
-def create_user(request: schemas.UserWithAddresses, db: Session):
+def create_new_user(request: schemas.UserWithAddresses, db: Session):
     new_user = models.User(username=request.username,
                            height=request.height,
                            weight=request.weight,
@@ -51,7 +52,7 @@ def create_user(request: schemas.UserWithAddresses, db: Session):
     return new_user
 
 
-def put(user_id: int, request: schemas.UserWithEditableFields, db: Session):
+def update_user(user_id: int, request: schemas.UserWithEditableFields, db: Session):
     user_to_update = db.query(models.User).filter(models.User.id == user_id)
     if not user_to_update.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {user_id} not found")

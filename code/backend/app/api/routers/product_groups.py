@@ -13,4 +13,4 @@ router = APIRouter(
 
 @router.get("")
 def get_all_product_groups(db: Session = Depends(get_db)):
-    return product_group_service.get_all(db=db)
+    return product_group_service.get_all_product_groups(db=db)

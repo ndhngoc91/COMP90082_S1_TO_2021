@@ -74,9 +74,14 @@ const NavigationBar = observer(() => {
                     <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
                 </>}
                 {userRole === USER_ROLE.ADMIN &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
-                    Booking Management
-                </Menu.Item>}
+                <>
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/user-management">
+                        User Management
+                    </Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
+                        Booking Management
+                    </Menu.Item>
+                </>}
                 {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
                     Calendar
@@ -101,8 +106,6 @@ const NavigationBar = observer(() => {
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
                     {userRole === USER_ROLE.CUSTOMER &&
                     <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
-                    {userRole === USER_ROLE.ADMIN &&
-                    <Menu.Item key="/admin-profile" icon={<ContainerOutlined/>}>User Management</Menu.Item>}
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
                 </SubMenu>
                 }

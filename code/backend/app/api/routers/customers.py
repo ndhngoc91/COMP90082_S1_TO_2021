@@ -27,10 +27,10 @@ def switch_customer(customer_id: int, db: Session = Depends(get_db),
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-def create_customer(request: schemas.Customer, db: Session = Depends(get_db)):
+def create_new_customer(request: schemas.Customer, db: Session = Depends(get_db)):
     return customer_service.create_new_customer(request=request, db=db)
 
 
 @router.get("/{customer_id}")
-def get_one_customer(customer_id: int, db: Session = Depends(get_db)):
+def get_customer_by_id(customer_id: int, db: Session = Depends(get_db)):
     return customer_service.get_one_customer(customer_id=customer_id, db=db)

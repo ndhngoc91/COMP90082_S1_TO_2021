@@ -1,6 +1,25 @@
 import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 
+export const useHandleFilterUsers = () => {
+    const [users, setUsers] = useState([]);
+    const [filtering, setFiltering] = useState(false);
+
+    const handleFilterUsers = useCallback((filterParams) => {
+        setFiltering(true);
+        axios.get("http://localhost:8000/users/filter", {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
+            params: filterParams
+        }).then((response) => {
+            setUsers(response.data);
+        }).finally(() => {
+            setFiltering(false);
+        });
+    }, [])
+
+    return [handleFilterUsers, {users, filtering}];
+};
+
 export const useUserProfile = (id = 47) => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState([]);

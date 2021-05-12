@@ -1,6 +1,6 @@
 import datetime
 import json
-
+from typing import Optional
 from fastapi import HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
@@ -14,22 +14,20 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-def get_all(db: Session):
-    return user_repo.get_all(db=db)
+def get_all_users(db: Session):
+    return user_repo.get_all_users(db=db)
 
 
 def get_user_by_id(user_id: int, db: Session):
-    return user_repo.get_one_by_id(user_id=user_id, db=db)
+    return user_repo.get_user_by_id(user_id=user_id, db=db)
 
 
-def create_user(request: schemas.UserWithAddresses, db: Session):
-    return user_repo.create_user(request=request, db=db)
+def filter_users(query: Optional[str], db: Session):
+    return user_repo.filter_users(query=query, db=db)
 
 
-def check_username(username: str, db: Session):
-    if user_repo.check_username(username=username, db=db):
-        return
-    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Username already exists")
+def create_new_user(request: schemas.UserWithAddresses, db: Session):
+    return user_repo.create_new_user(request=request, db=db)
 
 
 def validate(username: str, password: str, db: Session) -> dict:
@@ -39,7 +37,7 @@ def validate(username: str, password: str, db: Session) -> dict:
 
     connection = auth_util.build_connection(org_id="11EA64D91C6E8F70A23EB6800B5BCB6D")  # temporarily hardcoded
     session_id, status_code = connection.create_session()
-    session_repo.create(
+    session_repo.create_new_session(
         schemas.Session(
             session_id=session_id,
             date=datetime.datetime.now(),
@@ -58,5 +56,5 @@ def validate(username: str, password: str, db: Session) -> dict:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to connect to Squizz")
 
 
-def put(user_id: int, request: schemas.UserWithEditableFields, db: Session):
-    return user_repo.put(user_id=user_id, request=request, db=db)
+def update_user(user_id: int, request: schemas.UserWithEditableFields, db: Session):
+    return user_repo.update_user(user_id=user_id, request=request, db=db)
