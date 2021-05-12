@@ -28,13 +28,13 @@ def filter_packages(query: Optional[str],
     sql_query = sql_query.join(models.Category)
     sql_query = sql_query.join(models.SkillLevel)
     if query is not None:
-        sql_query = sql_query.filter_packages(models.Package.name.like(f"%{query}%"))
+        sql_query = sql_query.filter(models.Package.name.like(f"%{query}%"))
     if category_id is not None:
-        sql_query = sql_query.filter_packages(models.Package.category_id == category_id)
+        sql_query = sql_query.filter(models.Package.category_id == category_id)
     if skill_level_id is not None:
-        sql_query = sql_query.filter_packages(models.Package.skill_level_id == skill_level_id)
+        sql_query = sql_query.filter(models.Package.skill_level_id == skill_level_id)
     if age_group_id is not None:
-        sql_query = sql_query.filter_packages(models.Package.age_group_id == age_group_id)
+        sql_query = sql_query.filter(models.Package.age_group_id == age_group_id)
     return sql_query.all()
 
 
