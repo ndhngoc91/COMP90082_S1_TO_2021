@@ -1,4 +1,6 @@
 import datetime
+import json
+
 from fastapi import HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
@@ -33,30 +35,28 @@ def check_username(username: str, db: Session):
 def validate(username: str, password: str, db: Session) -> dict:
     user = user_repo.authenticate(username=username, password=password, db=db)
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Credentials is not valid")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Credentials are not valid")
 
-    if user.organization_str_id is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Org Id Not Found")
-
-    connection = auth_util.build_connection(org_id=user.organization_str_id)
+    connection = auth_util.build_connection(org_id="11EA64D91C6E8F70A23EB6800B5BCB6D")  # temporarily hardcoded
     session_id, status_code = connection.create_session()
     session_repo.create(
         schemas.Session(
             session_id=session_id,
             date=datetime.datetime.now(),
             user_id=user.id,
-            organization_id=user.organization_id
+            organization_id=1  # temporarily hardcoded
         ),
         db=db
     )
+
     if status_code == "LOGIN_SUCCESS":
-        access_token = token.create_access_token(data={"username": username,
-                                                       "org_id": user.organization_str_id,
+        access_token = token.create_access_token(data={"username": user.username,
+                                                       "org_id": "11EA64D91C6E8F70A23EB6800B5BCB6D",
                                                        "session_id": session_id})
-        return {"access_token": access_token, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer", "user": user}
     else:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to connect to Squizz")
 
 
-def put(user_id: int, request: schemas.UserWithoutPassword, db: Session):
+def put(user_id: int, request: schemas.UserWithEditableFields, db: Session):
     return user_repo.put(user_id=user_id, request=request, db=db)

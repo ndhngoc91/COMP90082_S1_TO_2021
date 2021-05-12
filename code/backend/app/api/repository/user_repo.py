@@ -11,10 +11,8 @@ def get_one_by_id(user_id: int, db: Session):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-def authenticate(username: str, password: str, db: Session):
-    return db.query(models.User.username, models.User.id, models.User.organization_id,
-                    models.Organization.organization_id.label("organization_str_id")).join(models.Organization) \
-        .filter(models.User.username == username and models.User.password == password).first()
+def authenticate(username: str, password: str, db: Session) -> models.User:
+    return db.query(models.User).filter(models.User.username == username).filter(models.User.password == password).first()
 
 
 def check_username(username: str, db: Session):
@@ -53,7 +51,7 @@ def create_user(request: schemas.UserWithAddresses, db: Session):
     return new_user
 
 
-def put(user_id: int, request: schemas.UserWithoutPassword, db: Session):
+def put(user_id: int, request: schemas.UserWithEditableFields, db: Session):
     user_to_update = db.query(models.User).filter(models.User.id == user_id)
     if not user_to_update.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {user_id} not found")

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, Input, Row, Col, Image, Typography} from "antd";
+import {Button, Form, Input, Row, Col, Image, Typography, message} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {useHandleLogin} from "../hooks/AuthHooks";
@@ -11,13 +11,15 @@ const {Title, Text, Link} = Typography;
 const LoginPage = () => {
     const history = useHistory();
 
+    const [handleLogin, {handling}] = useHandleLogin();
+
     const onFinish = ({username, password, signInAsStaff}) => {
         handleLogin({username, password, signInAsStaff}, () => {
             history.push("/");
+        }, async (errorMessage) => {
+            message.error(errorMessage);
         });
     };
-
-    const [handleLogin, {handling}] = useHandleLogin();
 
     return (
         <>

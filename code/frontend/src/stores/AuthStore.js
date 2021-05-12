@@ -5,6 +5,7 @@ import {USER_ROLE} from "../consts/UserRole";
 export class AuthStore {
     @persist username;
     @persist accessToken;
+    @persist("object") user;
     @persist authenticated;
     @persist userRole;
 
@@ -14,18 +15,21 @@ export class AuthStore {
             logout: action,
             username: observable,
             accessToken: observable,
+            user: observable,
             authenticated: observable,
             userRole: observable
         });
         this.username = "";
         this.accessToken = "";
+        this.user = {};
         this.authenticated = false;
         this.userRole = USER_ROLE.GUEST;
     }
 
-    login = (username, accessToken, signInAsStaff) => {
+    login = (username, accessToken, user, signInAsStaff) => {
         this.username = username;
         this.accessToken = accessToken;
+        this.user = user;
         this.authenticated = true;
         if (signInAsStaff) {
             this.userRole = USER_ROLE.ADMIN;
@@ -37,6 +41,7 @@ export class AuthStore {
     logout = () => {
         this.username = "";
         this.accessToken = "";
+        this.user = {};
         this.authenticated = false;
         this.userRole = USER_ROLE.GUEST;
     }

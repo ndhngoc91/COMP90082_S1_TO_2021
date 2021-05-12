@@ -12,6 +12,7 @@ import {
 import {StateData, CityData} from "../../consts/StateData";
 import {useSkillLevels} from "../../hooks/SkillLevelHooks";
 import {useHandleEditProfile, useUserProfile} from "../../hooks/UserHooks";
+import {useStores} from "../../stores";
 
 const {Option} = Select;
 
@@ -28,7 +29,9 @@ const UserProfileForm = () => {
     const [form] = Form.useForm();
 
     const skillLevels = useSkillLevels();
-    const userProfile = useUserProfile();
+
+    const {authStore: {user}} = useStores();
+
     const [handleEditProfile, {handling}] = useHandleEditProfile();
 
     useEffect(() => {
@@ -46,6 +49,7 @@ const UserProfileForm = () => {
     };
 
     const onFinish = values => {
+        values.id = user.id;
         handleEditProfile(values, () => {
             notification.success({message: "Edit profile successfully!"});
         }, () => {
@@ -59,7 +63,7 @@ const UserProfileForm = () => {
                 <Image width={200} style={{borderRadius: "50%"}} preview={false}
                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                 <Form style={{width: "1000px"}}
-                      initialValues={userProfile}
+                      initialValues={user}
                       form={form}
                       name="basic"
                       layout="vertical"
@@ -135,10 +139,6 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Form.Item label="Organization" name="organization"
-                               rules={[{required: true, message: "Please input your organization!"}]}>
-                        <Input size="large"/>
-                    </Form.Item>
                     <Row justify="space-between" gutter={16}>
                         <Col span={12}>
                             <Form.Item label="Email" name="email"

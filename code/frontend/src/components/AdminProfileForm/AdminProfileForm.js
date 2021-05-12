@@ -29,7 +29,7 @@ const AdminProfilePage = () => {
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]][0]);
     const [readOnly, setReadOnly] = useState(true);
 
-    const {authStore: {username,userRole}} = useStores();
+    const {authStore: {user,userRole}} = useStores();
 
     const [form] = Form.useForm();
 
@@ -64,7 +64,7 @@ const AdminProfilePage = () => {
                     <Form style={{width: "1000px"}}
                           initialValues={{
                               userType: {userRole},//1,
-                              userName: {username},//"Admin1",
+                              userName: {user: username},//"Admin1",
                               firstName: "Ruby",
                               lastName: "Nguyen",
                               gender: "male",
@@ -89,7 +89,7 @@ const AdminProfilePage = () => {
                                     <Input/>
                                 </Form.Item>
                                 <Form.Item label="User Name" name="userName"
-                                           value={username}
+                                           value={user}
                                            rules={[{required: true, message: "Please input your user name!"}]}>
                                     <Input prefix={<UserOutlined/>} size="large" readOnly={readOnly}/>
                                 </Form.Item>
