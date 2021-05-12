@@ -1,52 +1,24 @@
-import React, {useEffect, useState} from "react";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
+import React, {useState} from "react";
 import {
-    Button, Col, DatePicker, Form, Image, Input, InputNumber, notification, Row, Select, Typography
+    Button, Col, Form, Image, Input, Row, Select, Typography, DatePicker
 } from "antd";
 import {
     LockOutlined,
     UserOutlined,
-    MailOutlined, PhoneOutlined, CheckSquareOutlined
+    MailOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {CityData, StateData} from "../consts/StateData";
-import moment from "moment";
-import {useEmails} from "../hooks/EmailHooks";
-import {useHandleAddAccount} from "../hooks/CustomerHooks";
+import rockyValleyLogo from "../assets/rocky_valley.svg";
+
 
 const {Link, Title} = Typography;
 const {Option} = Select;
 
-const validateMessages = {
-    required: "${label} is required!",
-    types: {
-        email: "${label} is not a valid email!",
-        number: "${label} is not a valid number!",
-    },
-    number: {
-        range: "${label} must be between ${min} and ${max}",
-    },
-};
-
-
 const UserCreatePage = () => {
-    const [user_type, setUserType] = useState(0);
-    //const [userName, setUserName] = useState("user1");
-    //const [email, setEmail] = useState("XXXXX@student.unimelb.edu.au");
-    const [birthdate, setBirthdate] = useState(moment('2015-06-06', 'YYYY-MM-DD'));
-    //const [phone, setPhone] = useState("0000000000");
-    //const [gender, setGender] = useState("male");
-    //const [address, setAddress] = useState("28 Bouverie St");
-    //const [postcode, setPostcode] = useState("3053");
-    const [password, setPassword] = useState("1234sS");
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
-    const [clearFormAfterFinishing, setClearFormAfterFinishing] = useState(false);
-
-    const [handleAddUser, {handling}] = useHandleAddAccount();
-
-    const [form] = Form.useForm();
 
     const onStateChange = value => {
         setCities(CityData[value]);
@@ -58,35 +30,21 @@ const UserCreatePage = () => {
         setSelectedCity(value);
     };
 
+    const prefixSelector = (
+        <Form.Item name="prefix" noStyle>
+            <Select style={{
+                width: 70,
+            }}>
+                <Option value="61">+61</Option>
+                <Option value="86">+86</Option>
+                <Option value="87">+87</Option>
+            </Select>
+        </Form.Item>
+    );
+
     const onFinish = values => {
-        console.log(form.isFieldsTouched());
         console.log(values);
-        //onFinish(values);
-        setClearFormAfterFinishing(true);
-        handleAddUser(values, () => {
-            notification.open({
-                message: "Added a customer successfullly!",
-                description: "Added a customer successfullly!",
-                icon: <CheckSquareOutlined style={{color: '#108ee9'}}/>,
-                duration: 2
-            });
-        });
-        const newRecord = [values,user_type];
-        console.log("Success:", user_type);
-        if (clearFormAfterFinishing) {
-            form.resetFields();
-        }
     };
-
-    const onFinishFailed = errorInfo => {
-        console.log(form.isFieldsTouched())
-        console.log("Failed:", errorInfo);
-    };
-
-    const onClick = () => {
-        //console.log({username: userName}, {email}, {birthdate}, {phone}, {gender}, {street: address}, {postcode}, {password});
-        setUserType(2);
-    }
 
     return (
         <>
@@ -101,238 +59,128 @@ const UserCreatePage = () => {
                     <Row justify="center">
                         <Form name="register"
                               style={{width: "600px"}}
-                              form={form}
-                              onFinish={onFinish}
-                              onFinishFailed={onFinishFailed}
                               initialValues={{
-                                  user_type: 2,
-                                  username: "user1",
-                                  gender: "male",
-                                  birthday: moment('2015-06-06', 'YYYY-MM-DD'),
-                                  email: "xxxx@unimelb.edu.au",
-                                  phone: "04xxxxxxxx",
-                                  state: "VIC",
-                                  city: "Melbourne",
-                                  postcode: "3053"
+                                  prefix: "61",
                               }}
-                              validateMessages={validateMessages}>
-
-                            <Form.Item name="user_type"
-                                       value={user_type}
-                                       hidden>
-                                <Input/>
-                            </Form.Item>
-
+                              onFinish={onFinish}>
                             <Form.Item name="username"
                                        rules={[
                                            {
                                                required: true,
                                                message: "Please input your Username!",
-                                           },
-                                           ({
-                                               validator(_, value) {
-                                                   if (value.length > 4) {
-                                                       return Promise.resolve();
-                                                   }
-                                                   return Promise.reject(new Error('× Must have at least 5 characters'));
-                                               },
-                                           }),
-                                           {/*
-                                           ({
-                                               validator(_, value) {
-                                                   const exist_user = userNames.includes(value);
-                                                   if (exist_user) {
-                                                       return Promise.resolve();
-                                                   }
-                                                   return Promise.reject(new Error('× User name exists'));
-                                               },
-                                           }),
-                                           */}
-
-                                       ]}
-                                       /*
-                                       value={userName}
-                                       onChange={(event) => {
-                                           setUserName(event.target.value);
-                                       }}
-                                       * */
-                            >
+                                           }
+                                       ]}>
                                 <Input prefix={<UserOutlined className="site-form-item-icon"/>}
                                        placeholder="Enter username"
+                                       className="name"
                                 />
                             </Form.Item>
 
                             <Form.Item name="email"
                                        rules={[
                                            {
+                                               required: true,
+                                               message: "Please input your e-mail!"
+                                           },
+                                           {
                                                type: "email",
-                                           },
-                                           {
-                                               required: true,
-                                               message: "Please input your E-mail!",
-                                           },
-                                           {/*
-                                           ({
-                                               validator(_, value) {
-                                                   const exist_email = emails.includes(value);
-                                                   if (exist_email) {
-                                                       return Promise.resolve();
+                                               message: "Please input a valid email!"
+                                           }
+                                       ]}>
+                                <Input prefix={<MailOutlined className="site-form-item-icon"/>}
+                                       placeholder="Your email address"
+                                       className="email"/>
+                            </Form.Item>
+                            <Row justify="space-between" gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item name={"first_name"}
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: "Please input your first name!",
                                                    }
-                                                   return Promise.reject(new Error('× Email exists'));
-                                               },
-                                           }),
-                                           */}
-
-                                       ]}
-                                       /*
-                                       value={email}
-                                       onChange={(event) => {
-                                           setEmail(event.target.value);
-                                       }}
-                                       * */
-                                       >
-                                <Input
-                                    prefix={<MailOutlined className="site-form-item-icon"/>}
-                                    placeholder="Your email address"
-                                />
-                            </Form.Item>
-
-                            <Form.Item name="birthday"
-                                       rules={[
-                                           {
-                                               required: true,
-                                               message: "Please choose birthdate!",
-                                           },
-                                       ]}
-                                       value={birthdate}
-                                       onChange={(event) => {
-                                           setBirthdate(event.target.value);
-                                       }}
-                                       >
-                                <DatePicker
-                                    placeholder="Choose your birthdate"
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                />
-                            </Form.Item>
-
+                                               ]}
+                                               style={{
+                                                   width: "100%",
+                                               }}>
+                                        <Input placeholder="Enter your first name"
+                                               style={{
+                                                   width: "100%",
+                                               }}/>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item name={"last_name"}
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: "Please input your last name!",
+                                                   }
+                                               ]}
+                                               style={{
+                                                   width: "100%",
+                                               }}>
+                                        <Input placeholder="Enter your last name"
+                                               style={{
+                                                   width: "100%",
+                                               }}/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                             <Form.Item name="phone"
                                        rules={[
                                            {
                                                required: true,
                                                message: "Please input your phone number!",
                                            }
-                                       ]}
-                                       /*
-                                       value={phone}
-                                       onChange={(event) => {
-                                           setPhone(event.target.value);
-                                       }}
-                                       * */
-                                       >
-                                <Input
-                                    prefix={<PhoneOutlined/>}
-                                    placeholder="Enter your phone number"
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                />
+                                       ]}>
+                                <Input addonBefore={prefixSelector}
+                                       className="Phone"
+                                       placeholder="Enter your phone number"
+                                       style={{
+                                           width: "100%",
+                                       }}/>
                             </Form.Item>
-
-                            <Form.Item name="gender"
+                            <Form.Item name="birthdate"
                                        rules={[
                                            {
                                                required: true,
-                                               message: "Please choose gender!",
-                                           },
-                                       ]}
-                                       /*
-                                       value={gender}
-                                       onChange={(value) => {
-                                           setGender(value);
-                                       }}
-                                       * */
-                                       >
-                                <Select
-                                    placeholder="Choose gender"
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                >
-                                    <Option value="male">Male</Option>
-                                    <Option value="female">Female</Option>
-                                    <Option value="others">Others</Option>
-                                </Select>
+                                               message: "Please select your birthday!",
+                                           }
+                                       ]}>
+                                <DatePicker style={{
+                                    width: "100%",
+                                }}/>
                             </Form.Item>
-
-                            <Form.Item name="totalAddress"
-                            >
+                            <Form.Item name="address_line">
                                 <Input.Group compact>
                                     <Form.Item name="address_line"
                                                noStyle
-                                               /*
-                                               value={address}
-                                               onChange={(event) => {
-                                                   setAddress(event.target.value);
-                                               }}
-                                               * */
                                                rules={[
                                                    {
                                                        required: true,
-                                                       message: "Please input address"
+                                                       message: "Address line is required!"
                                                    }
                                                ]}>
-                                        <Input placeholder="Input address"/>
+                                        <Input placeholder="Input address line"/>
                                     </Form.Item>
                                 </Input.Group>
                             </Form.Item>
-
                             <Form.Item>
                                 <Row gutter={16}>
                                     <Col span={12}>
-                                        <Form.Item name="state"
-                                                   rules={[
-                                                       {
-                                                           required: true,
-                                                           message: "Please choose state!",
-                                                       },
-                                                   ]}
-                                                   value={selectedState}
-                                                   onChange={(value) => {
-                                                       setSelectedState(value);
-                                                   }}
-                                        >
-                                            <Select
-                                                onChange={onStateChange}
-                                            >
-                                                {StateData.map(state => (
-                                                    <Option key={state} value={state}>{state}</Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
+                                        <Select value={selectedState} onChange={onStateChange}>
+                                            {StateData.map(state => (
+                                                <Option key={state} value={state}>{state}</Option>
+                                            ))}
+                                        </Select>
                                     </Col>
                                     <Col span={12}>
-                                        <Form.Item name="city"
-                                                   rules={[
-                                                       {
-                                                           required: true,
-                                                           message: "Please choose state!",
-                                                       },
-                                                   ]}
-                                                   value={selectedCity}
-                                                   onChange={(value) => {
-                                                       setSelectedCity(value);
-                                                   }}
-                                        >
-                                            <Select
-                                                onChange={onCityChange}
-                                            >
-                                                {cities.map(city => (
-                                                    <Option key={city} value={city}>{city}</Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
+                                        <Select value={selectedCity} onChange={onCityChange}>
+                                            {cities.map(city => (
+                                                <Option key={city} value={city}>{city}</Option>
+                                            ))}
+                                        </Select>
                                     </Col>
                                 </Row>
                             </Form.Item>
@@ -342,87 +190,34 @@ const UserCreatePage = () => {
                                                required: true,
                                                message: "Postcode is required"
                                            }
-                                       ]}
-                                       /*
-                                       value={postcode}
-                                       onChange={(event) => {
-                                           setPostcode(event.target.value);
-                                       }}
-                                       * */
-                                       >
-                                <Input placeholder="Input postcode"/>
+                                       ]}>
+                                <Input placeholder="Input postcode" className="postcode"/>
                             </Form.Item>
-
                             <Form.Item name="password"
                                        rules={[
+                                           {required: true, message: "Please input your password!"},
                                            {
-                                               required: true,
-                                               message: "× Please input your password!",
+                                               pattern: /\d/,
+                                               message: "Must have at least one number!"
                                            },
                                            {
-                                               pattern: /^[a-zA-Z0-9]+$/,
-                                               message: "× Only contains numbers and letters",
+                                               pattern: /.*[A-Z].*/,
+                                               message: "Must have at least one capital letter!"
                                            },
-                                           ({
+                                           () => ({
                                                validator(_, value) {
-                                                   if (value.length > 5) {
+                                                   if (!value || value.length > 8) {
                                                        return Promise.resolve();
                                                    }
-                                                   return Promise.reject(new Error('× Must have at least 6 characters'));
+                                                   return Promise.reject(new Error("Must have at least 8 characters!"));
                                                },
-                                           }),
-                                           ({
-                                               validator(_, value) {
-                                                   if (value.length < 16) {
-                                                       return Promise.resolve();
-                                                   }
-                                                   return Promise.reject(new Error('× Must have at most 15 characters'));
-                                               },
-                                           }),
-                                           ({
-                                               validator(_, value) {
-                                                   const reg1 = /[0-9]/;
-                                                   if (reg1.test(value)) {
-                                                       return Promise.resolve();
-                                                   }
-                                                   return Promise.reject(new Error('× Must have at least 1 number'));
-                                               },
-                                           }),
-                                           ({
-                                               validator(_, value) {
-                                                   const reg2 = /[a-z]/;
-                                                   if (reg2.test(value)) {
-                                                       return Promise.resolve();
-                                                   }
-                                                   return Promise.reject(new Error('× Must have at least 1 lower letter'));
-                                               },
-                                           }),
-                                           ({
-                                               validator(_, value) {
-                                                   const reg3 = /[A-Z]/;
-                                                   if (reg3.test(value)) {
-                                                       return Promise.resolve();
-                                                   }
-                                                   return Promise.reject(new Error('× Must have at least 1 capital letter'));
-                                               },
-                                           }),
-                                           {
-                                               whitespace: true,
-                                               message: "× No white space!",
-                                           },
+                                           })
                                        ]}
-                                       hasFeedback
-                                       value={password}
-                                       onChange={(event) => {
-                                           setPassword(event.target.value);
-                                       }}>
-                                <Input.Password
-                                    prefix={<LockOutlined className="site-form-item-icon"/>}
-                                    placeholder="Create password"
-                                />
+                                       hasFeedback>
+                                <Input.Password prefix={<LockOutlined className="site-form-item-icon"/>}
+                                                placeholder="Create password"/>
                             </Form.Item>
-
-                            <Form.Item name="confirm"
+                            <Form.Item name="confirm_password"
                                        dependencies={["password"]}
                                        hasFeedback
                                        rules={[
@@ -439,12 +234,11 @@ const UserCreatePage = () => {
                                                },
                                            }),
                                        ]}>
-                                <Input.Password
-                                    prefix={<LockOutlined className="site-form-item-icon"/>}
-                                    placeholder="Confirm password"
-                                />
+                                <Input.Password prefix={<LockOutlined className="site-form-item-icon"/>}
+                                                placeholder="Confirm password"/>
                             </Form.Item>
                             <Form.Item name="agreement"
+                                       className="agree"
                                        valuePropName="checked"
                                        rules={[
                                            {
@@ -459,9 +253,7 @@ const UserCreatePage = () => {
                             <Form.Item className="create-btn">
                                 <Button type="primary"
                                         htmlType="submit"
-                                        className="login-form-button"
-                                        loading={handling}
-                                        onClick={() => setUserType(2)}>
+                                        className="login-form-button">
                                     Create
                                 </Button>
                             </Form.Item>

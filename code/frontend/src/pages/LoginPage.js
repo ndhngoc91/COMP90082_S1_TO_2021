@@ -63,7 +63,7 @@ const LoginPage = () => {
                                     <Row justify="center">
                                         <Text>
                                             <Text>Don't have an account? </Text>
-                                            <Link href="/user-create" target="_blank">
+                                            <Link href="/register" target="_blank">
                                                 Create one now
                                             </Link>
                                         </Text>
