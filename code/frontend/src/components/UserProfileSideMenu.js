@@ -2,24 +2,24 @@ import React from "react";
 import "antd/dist/antd.css"
 import {Menu} from "antd";
 import {
-    PieChartOutlined,
     DesktopOutlined,
-    MailOutlined,
+    MailOutlined
 } from "@ant-design/icons";
-import {Link} from "react-router-dom";
-
+import {Link, useLocation} from "react-router-dom";
 
 const UserProfileSideMenu = () => {
+    const location = useLocation();
+
     return (
         <div className="menu">
-            <Menu defaultSelectedKeys={["0"]}
+            <Menu defaultSelectedKeys={[location.pathname]}
                   mode="inline">
-                <Menu.Item key="0" icon={<MailOutlined/>}>
+                <Menu.Item key="/profile" icon={<MailOutlined/>}>
                     <Link to="/profile">
                         Profile
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="1" icon={<DesktopOutlined/>}>
+                <Menu.Item key="/profile/user-groups" icon={<DesktopOutlined/>}>
                     <Link to="/profile/user-groups">
                         User Groups
                     </Link>
