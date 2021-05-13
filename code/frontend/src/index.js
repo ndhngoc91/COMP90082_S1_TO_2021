@@ -60,7 +60,7 @@ createStore().then(store => {
                         <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.ADMIN
                         ]}/>
-                        <AuthRoute path="/profile" exact Component={UserAccountPage} requiredRoles={[
+                        <AuthRoute path="/profile" Component={UserAccountPage} requiredRoles={[
                             USER_ROLE.CUSTOMER
                         ]}/>
                         <Route path="/productList" exact component={ProductListPage}/>

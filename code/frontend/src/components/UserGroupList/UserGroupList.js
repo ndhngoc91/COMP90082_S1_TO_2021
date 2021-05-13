@@ -1,115 +1,35 @@
-import {
-    Avatar, Collapse, Button, Modal, Form, Drawer, List, Divider, Col, Row, Select, Input, Space, Typography,Popconfirm,message
-} from "antd";
 import React, {useState} from "react";
-import "antd/dist/antd.css"
+import {
+    Avatar,
+    Collapse,
+    Button,
+    List,
+    Col,
+    Row,
+    Space,
+    Typography,
+    Popconfirm, Drawer, Modal
+} from "antd";
 import {
     DeleteOutlined, EditOutlined,
     PlusOutlined, SearchOutlined,
 } from "@ant-design/icons";
+import {useUserGroups} from "../../hooks/UserGroupHooks";
+import {useStores} from "../../stores";
+import AddUserGroupForm from "./AddUserGroupForm";
 
-
-const {Title} = Typography;
+const {Title, Link} = Typography;
 const {Panel} = Collapse;
 
-const {Option} = Select;
-
-const DescriptionItem = ({title, content}) => (
-    <div className="site-description-item-profile-wrapper">
-        <p className="site-description-item-profile-p-label">{title}: {content}</p>
-    </div>
-);
+const SampleAvatar = () => <Avatar src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"/>;
 
 const UserGroupList = () => {
-    const [modelVisible, setModelVisible] = useState(0);
     const [drawVisible, setDrawVisible] = useState(false);
-    const [groupMembers, setGroupMembers] = useState([]);
-    const [groupDetail, setGroupDetail] = useState([]);
-    const [groups, setGroups] = useState([
-            {
-                id: "1",
-                name: "Group 1",
-                members: [
-                    {
-                        uid: "1",
-                        user_name: "A1",
-                        intro: "aaaaa"
-                    },
-                    {
-                        uid: "2",
-                        user_name: "A2",
-                        intro: "bbbbb"
-                    },
+    const [addUserGroupFormVisible, setAddUserGroupFormVisible] = useState(false);
+    const [selectedContact, setSelectedContact] = useState({});
 
-                ],
-            },
-            {
-                id: "2",
-                name: "Group 2",
-                members: [
-                    {
-                        uid: "3",
-                        user_name: "A3",
-                        intro: "cccc"
-                    },
-                    {
-                        uid: "4",
-                        user_name: "A4",
-                        intro: "ddddd"
-                    },
-                ],
-            },
-        ]
-    );
-
-    // close the window
-    const handleCancel = () => {
-        setModelVisible(0);
-    }
-
-    // add friend and close the window
-    const addFriend = () => {
-        setModelVisible(0);
-    }
-
-    const addFriendGroup = () => {
-        setModelVisible(0);
-    }
-
-
-    const showAddFriend = () => {
-        setModelVisible(1);
-    }
-
-    const showAddGroup = () => {
-        setModelVisible(2);
-    }
-
-    const showEditGroup = (group) => {
-        setModelVisible(4);
-        setGroupDetail(group);
-    }
-    const showDrawer = (item) => {
-        setDrawVisible(true);
-        setGroupMembers(item);
-    };
-
-    const onClose = () => {
-        setDrawVisible(false);
-    };
-
-    const editGroup = () => {
-        setModelVisible(0);
-    }
-
-    const confirmFriend = (item) => {
-        message.success(item.user_name + ' delete success' );
-    }
-
-    const confirmGroup = (group) => {
-        message.success(group.name + ' delete success' );
-    }
-
+    const {authStore: {user}} = useStores();
+    const [userGroups] = useUserGroups(user.id);
 
     return (
         <>
@@ -119,32 +39,26 @@ const UserGroupList = () => {
                 </Col>
                 <Col>
                     <Space>
-                        <Button type="primary" onClick={() => showAddFriend()}>
-                            <PlusOutlined/>
-                            Add Friend
-                        </Button>
-                        <Button type="primary" onClick={() => showAddGroup()}>
+                        <Button type="primary" onClick={() => setAddUserGroupFormVisible(true)}>
                             <PlusOutlined/>
                             Add Group
                         </Button>
                     </Space>
                 </Col>
             </Row>
-            <Collapse activeKey={["1", "2"]}>
-                {groups.map((group) => {
+            <Collapse defaultActiveKey={[0]}>
+                {userGroups.map((userGroup, index) => {
+                    const contacts = JSON.parse(userGroup["contacts"]);
                     return (
-                        <Panel header={group.name} key={group.id} extra={
+                        <Panel header={userGroup.name} key={index} extra={
                             <Space>
-                                <Button type="primary" ghost onClick={() => showEditGroup(group)}>
-                                    <EditOutlined />
+                                <Button type="primary" ghost>
+                                    <EditOutlined/>
                                     Edit
                                 </Button>,
-                                <Popconfirm
-                                    title="Are you sure？"
-                                    okText="Yes"
-                                    cancelText="No"
-                                    onConfirm={()=>confirmGroup(group)}
-                                >
+                                <Popconfirm title="Are you sure？"
+                                            okText="Yes"
+                                            cancelText="No">
                                     <Button type="primary" ghost>
                                         <DeleteOutlined/>
                                         Delete
@@ -153,123 +67,51 @@ const UserGroupList = () => {
                             </Space>
 
                         }>
-                            <List
-                                dataSource={group.members}
-                                bordered
-                                key={group.id}
-                                renderItem={item => (
-                                    <List.Item key={item.uid}
-                                               actions={[
-                                                   <Popconfirm
-                                                       title="Are you sure？"
-                                                       okText="Yes"
-                                                       cancelText="No"
-                                                       onConfirm={()=>confirmFriend(item)}
-                                                   >
-                                                       <a>
-                                                           <DeleteOutlined />  Delete
-                                                       </a>
-                                                   </Popconfirm>,
-                                                   <a onClick={() => showDrawer(item)} key={`a-${item.uid}`}>
-                                                       <SearchOutlined />  View Profile
-                                                   </a>,
-                                               ]}>
-                                        <List.Item.Meta
-                                            avatar={<Avatar
-                                                src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"/>}
-                                            title={item.user_name}
-                                            description={item.intro}
-                                            key={item.uid}
-                                        />
-                                    </List.Item>
-                                )}
-                            />
+                            <List dataSource={contacts}
+                                  renderItem={contact => (
+                                      <List.Item key={contact.name}
+                                                 actions={[
+                                                     <Popconfirm
+                                                         title="Are you sure？"
+                                                         okText="Yes"
+                                                         cancelText="No">
+                                                         <Link>
+                                                             <DeleteOutlined/> Delete
+                                                         </Link>
+                                                     </Popconfirm>,
+                                                     <Link key={`a-${contact.name}`}
+                                                           onClick={() => {
+                                                               setSelectedContact(contact);
+                                                               setDrawVisible(true);
+                                                           }}>
+                                                         <SearchOutlined/> View Profile
+                                                     </Link>,
+                                                 ]}>
+                                          <List.Item.Meta avatar={<SampleAvatar/>}
+                                                          title={contact.name}
+                                                          description={contact.name}
+                                                          key={contact.name}/>
+                                      </List.Item>
+                                  )}/>
                         </Panel>
                     )
                 })}
             </Collapse>
-
-            <Modal title="Add friend" visible={modelVisible === 1} onOk={addFriend}
-                   onCancel={handleCancel} centered>
-                <Form>
-                    <Form.Item label="Username"
-                               name="username"
-                               rules={[{required: true, message: "Please input the username!"}]}>
-                        <Input placeholder="enter username"/>
-                    </Form.Item>
-                    <Form.Item label="Group"
-                               name="group"
-                               rules={[{required: true}]}>
-                        <Select showSearch
-                                style={{width: 200}}
-                                placeholder="Choose one group"
-                                optionFilterProp="children">
-                            {groups.map((group) => <Option value={group.id}>{group.name}</Option>)}
-                        </Select>
-                    </Form.Item>
-                </Form>
+            <Modal title="Edit a package" visible={addUserGroupFormVisible} footer={null} closable={false}
+                   onCancel={() => {
+                       setAddUserGroupFormVisible(false);
+                   }}>
+                <AddUserGroupForm/>
             </Modal>
-
-            {/*add group*/}
-            <Modal title="Add group" visible={modelVisible === 2} onOk={addFriendGroup}
-                   onCancel={handleCancel} centered>
-                <Form>
-                    <Form.Item
-                        label="Group"
-                        name="group"
-                        rules={[{required: true, message: "Please input the group name!"}]}
-                    >
-                        <Input placeholder="enter group name"/>
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-
-            {/*edit group name */}
-            <Modal
-                title="Edit Group Name"
-                visible={modelVisible === 4}
-                onOk={editGroup}
-                onCancel={handleCancel} centered
-            >
-                <Form>
-                    <Form.Item
-                        label="Group Name"
-                        name="group_name"
-                        rules={[{required: true}]}
-                    >
-                        <Input placeholder={groupDetail.name}/>
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-
             <Drawer width={640}
                     placement="right"
                     closable={false}
-                    onClose={onClose}
+                    onClose={() => setDrawVisible(false)}
                     visible={drawVisible}>
-                <p className="site-description-item-profile-p" style={{marginBottom: 24}}>
-                    User Profile
-                </p>
-                <p className="site-description-item-profile-p">Personal</p>
-                <Row>
-                    <Col span={12}>
-                        <DescriptionItem title="Full Name" content={groupMembers.user_name}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={24}>
-                        <DescriptionItem
-                            title="Intro"
-                            content={groupMembers.intro}
-                        />
-                    </Col>
-                </Row>
-                <Divider/>
+                {selectedContact.name}
             </Drawer>
         </>
     );
-}
+};
 
 export default UserGroupList;
