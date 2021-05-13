@@ -69,18 +69,6 @@ class Username(BaseModel):
     username: str
 
 
-class UserWithEditableFields(BaseModel):
-    height: Optional[float]
-    weight: Optional[float]
-    foot_size: Optional[float]
-    first_name: Optional[str]
-    last_name: Optional[str]
-    gender: Optional[str]
-    birthday: Optional[date]
-    phone: Optional[str]
-    skill_level_id: Optional[int]
-
-
 class UserWithoutPassword(BaseModel):
     username: str
     height: Optional[float]
