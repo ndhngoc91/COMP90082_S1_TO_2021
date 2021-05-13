@@ -36,7 +36,7 @@ const NavigationBar = observer(() => {
 
     const [handleLogin, {handling}] = useHandleLogin();
 
-    const {authStore: {username, userRole, logout}} = useStores();
+    const {authStore: {firstName, lastName, userRole, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
@@ -104,7 +104,8 @@ const NavigationBar = observer(() => {
                     </Menu.Item>
                 </>}
                 {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
-                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>}
+                         title={`${firstName} ${lastName}`}>
                     {userRole === USER_ROLE.CUSTOMER &&
                     <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
