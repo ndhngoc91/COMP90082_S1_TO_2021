@@ -10,7 +10,7 @@ export const useUserGroups = (userId) => {
         setLoading(true);
         axios.get(`http://localhost:8000/user-groups?user_id=${userId}`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
-        }).then((response) => {
+        }).then(response => {
             setUserGroups(response.data);
         }).finally(() => {
             setLoading(false);

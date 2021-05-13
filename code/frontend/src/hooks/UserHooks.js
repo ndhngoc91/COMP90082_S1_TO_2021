@@ -12,7 +12,12 @@ export const useHandleFilterUsers = () => {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
             params: {query: query}
         }).then((response) => {
-            setUsers(response.data);
+            if (response.status === 200) {
+                response.data.forEach((dataItem, index) => {
+                    dataItem.key = index
+                });
+                setUsers(response.data);
+            }
         }).finally(() => {
             setFiltering(false);
         });

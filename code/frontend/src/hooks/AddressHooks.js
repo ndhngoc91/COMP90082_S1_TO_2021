@@ -1,55 +1,32 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {useStores} from "../stores";
+import {USER_ROLE} from "../consts/UserRole";
 
-export const useAddresses = () => {
-    const {
-        addressStore: {
-            setAddresses
-        },
-        customerStore: {customerId, setDeliveryAddrId, setBillingAddrId}
-    } = useStores();
+export const usePersonalAddresses = () => {
+    const [personalAddresses, setPersonalAddresses] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const {authStore: {id, userRole}} = useStores();
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/customers/${customerId}/addresses`).then(res => {
-            setAddresses(res.data);
-            setDeliveryAddrId(res.data[0].id);
-            setBillingAddrId(res.data[0].id);
-        }).catch(err => console.log(err));
-    }, []);
-};
+        setLoading(true);
+        if (userRole !== USER_ROLE.GUEST) {
+            axios.get(`http://127.0.0.1:8000/addresses?user_id=${id}`).then(response => {
+                if (response.status === 200) {
+                    response.data.forEach((dataItem, index) => {
+                        dataItem.key = index
+                    });
+                    setPersonalAddresses(response.data);
+                }
+            }).catch(err => console.log(err)).finally(() => {
+                setLoading(false);
+            });
+        } else {
+            setPersonalAddresses([]);
+            setLoading(false);
+        }
 
-export const useHandleAddAddress = () => {
-    const [handling, setHandling] = useState(false);
-    const {addressStore: {addAddress}} = useStores();
-
-    const handleAddAddress = useCallback((customerId, {
-        contact,
-        addr1,
-        addr2,
-        postcode,
-        region,
-        country
-    }, success, failure) => {
-        setHandling(true);
-        axios.post(`http://127.0.0.1:8000/customers/${customerId}/addresses`, {
-            "contact": contact,
-            "address_line1": addr1,
-            "address_line2": addr2,
-            "postcode": postcode,
-            "region": region,
-            "country": country
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF- 8"}
-        }).then((response) => {
-            addAddress(response.data);
-            success();
-        }).catch(() => {
-            failure();
-        }).finally(() => {
-            setHandling(false);
-        });
     }, []);
 
-    return [handleAddAddress, {loading: handling}];
+    return [personalAddresses, {loading}];
 };
