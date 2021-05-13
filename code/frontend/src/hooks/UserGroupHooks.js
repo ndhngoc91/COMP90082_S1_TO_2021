@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
-import {UserType} from "../consts/UserType";
 import {useStores} from "../stores";
 
 export const useUserGroups = (userId) => {
@@ -53,4 +52,28 @@ export const useHandleAddUserGroup = () => {
     }, []);
 
     return [handleAddUserGroup, {handling}];
+};
+
+export const useHandleDeleteUserGroup = () => {
+    const [handling, setHandling] = useState(false);
+
+    const handleDeleteUserGroup = useCallback((user_group_id, success, failure = () => {
+    }) => {
+        setHandling(true);
+        axios.delete(`http://127.0.0.1:8000/user-groups/${user_group_id}`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then(response => {
+            if (response.status === 204) {
+                success();
+            } else {
+                failure();
+            }
+        }).catch(() => {
+            failure();
+        }).finally(() => {
+            setHandling(false);
+        });
+    }, []);
+
+    return [handleDeleteUserGroup, {handling}];
 };

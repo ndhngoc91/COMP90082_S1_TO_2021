@@ -14,7 +14,7 @@ import {
     DeleteOutlined, EditOutlined,
     PlusOutlined, SearchOutlined,
 } from "@ant-design/icons";
-import {useUserGroups} from "../../hooks/UserGroupHooks";
+import {useHandleDeleteUserGroup, useUserGroups} from "../../hooks/UserGroupHooks";
 import {useStores} from "../../stores";
 import AddUserGroupForm from "./AddUserGroupForm";
 
@@ -30,6 +30,8 @@ const UserGroupList = () => {
 
     const {authStore: {user}} = useStores();
     const [userGroups] = useUserGroups(user.id);
+
+    const [handleDeleteUserGroup, {handling: handlingDelete}] = useHandleDeleteUserGroup();
 
     return (
         <>
@@ -52,18 +54,24 @@ const UserGroupList = () => {
                     return (
                         <Panel header={userGroup.name} key={index} extra={
                             <Space>
-                                <Button type="primary" ghost>
-                                    <EditOutlined/>
-                                    Edit
-                                </Button>,
-                                <Popconfirm title="Are you sure？"
-                                            okText="Yes"
-                                            cancelText="No">
-                                    <Button type="primary" ghost>
-                                        <DeleteOutlined/>
-                                        Delete
+                                <div onClick={e => e.stopPropagation()}>
+                                    <Button type="primary" ghost
+                                            loading={handlingDelete}>
+                                        <EditOutlined/>
+                                        Edit
                                     </Button>
-                                </Popconfirm>
+                                </div>
+                                <div onClick={e => e.stopPropagation()}>
+                                    <Popconfirm title="Are you sure？"
+                                                okText="Yes"
+                                                cancelText="No"
+                                                onConfirm={() => handleDeleteUserGroup(userGroup.id)}>
+                                        <Button type="primary" ghost loading={handlingDelete}>
+                                            <DeleteOutlined/>
+                                            Delete
+                                        </Button>
+                                    </Popconfirm>
+                                </div>
                             </Space>
 
                         }>

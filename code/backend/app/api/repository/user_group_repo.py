@@ -24,3 +24,13 @@ def create_user_group(request: schemas.UserGroup, db: Session):
     db.commit()
     db.refresh(new_user_group)
     return new_user_group
+
+
+def delete_user_group(user_group_id: int, db: Session):
+    user_group_to_delete = db.query(models.UserGroup).filter(models.UserGroup.id == user_group_id)
+    if not user_group_to_delete:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"data with id {user_group_id} not found, delete failure")
+
+    user_group_to_delete.delete(synchronize_session=False)
+    db.commit()
