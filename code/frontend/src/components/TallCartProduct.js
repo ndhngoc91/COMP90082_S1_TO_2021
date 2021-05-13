@@ -20,7 +20,6 @@ import {
 } from "@ant-design/icons";
 
 const {Title, Text} = Typography;
-import ModelMetadata from "./ModelMetadata";
 
 const TallCartProduct = ({product, onQuantityChange, onRemove}) => {
     const [subtotal, setSubtotal] = useState(product.price);
@@ -182,7 +181,7 @@ const TallCartProduct = ({product, onQuantityChange, onRemove}) => {
                    style={{top: 20}}
                    width="80vw"
                    maskClosable={true}>
-                <ModelMetadata metadata={metadata}/>
+                Model Metadata
             </Modal>
         </Row>
     );

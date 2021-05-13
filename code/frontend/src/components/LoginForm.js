@@ -1,76 +1,36 @@
-import React, {useState} from 'react';
-import {Button, Form, Input, Row, Col, Image, Typography} from "antd";
-import {LockOutlined, UserOutlined} from "@ant-design/icons";
-import Checkbox from "antd/es/checkbox/Checkbox";
-import {useHandleLogin} from "../hooks/AuthHooks";
-import {useHistory} from "react-router-dom";
+import {Button, Form, Input} from "antd";
+import React from "react";
 
-const {Title, Text, Link} = Typography;
+const loginFormLayout = {
+    labelCol: {span: 6},
+    wrapperCol: {span: 18},
+};
+const loginFormTailLayout = {
+    wrapperCol: {offset: 6, span: 18},
+};
 
-const LoginForm = () => {
-    const history = useHistory();
+const LoginForm = ({handling, onFinish}) => {
+    return <Form {...loginFormLayout}
+                 name="basic"
+                 initialValues={{remember: true}}
+                 onFinish={onFinish}>
+        <Form.Item label="Username"
+                   name="username"
+                   rules={[{required: true, message: 'Please input your username!'}]}>
+            <Input/>
+        </Form.Item>
 
-    const [isLoginModelVisible, setIsLoginModelVisible] = useState(false);
-
-    const onFinish = ({username, password, signInAsStaff}) => {
-        handleLogin({username, password, signInAsStaff}, () => {
-            history.push("/");
-            setIsLoginModelVisible(true);
-        });
-    };
-
-    const [handleLogin, {handling}] = useHandleLogin();
-
-    return (
-        <>
-            <Row justify="center">
-                <Title level={3}>Sign In</Title>
-            </Row>
-            <Row justify="center">
-                <Form name="normal_login"
-                      initialValues={{remember: true}}
-                      onFinish={onFinish}>
-                    <Form.Item name="username"
-                               rules={[{required: true, message: "Please input your Username!"}]}>
-                        <Input prefix={<UserOutlined className="prefix-icon"/>}
-                               placeholder="Username"/>
-                    </Form.Item>
-                    <Form.Item name="password"
-                               rules={[{required: true, message: "Please input your Password!"}]}>
-                        <Input prefix={<LockOutlined className="prefix-icon"/>}
-                               type="password"
-                               placeholder="Password"/>
-                    </Form.Item>
-                    <Form.Item name="remember" valuePropName="checked">
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-                    <Form.Item name="signInAsStaff" valuePropName="checked">
-                        <Checkbox>Sign in as staff</Checkbox>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary"
-                                htmlType="submit"
-                                loading={handling}
-                        >
-                            Sign In
-                        </Button>
-                    </Form.Item>
-                    <Form.Item>
-                        <Col>
-                            <Row justify="center">
-                                <Text>
-                                    <Text>Don't have an account? </Text>
-                                    <Link href="/user-create" target="_blank">
-                                        Create one now
-                                    </Link>
-                                </Text>
-                            </Row>
-                        </Col>
-                    </Form.Item>
-                </Form>
-            </Row>
-        </>
-    );
+        <Form.Item label="Password"
+                   name="password"
+                   rules={[{required: true, message: 'Please input your password!'}]}>
+            <Input.Password/>
+        </Form.Item>
+        <Form.Item {...loginFormTailLayout}>
+            <Button type="primary" htmlType="submit" loading={handling}>
+                Login
+            </Button>
+        </Form.Item>
+    </Form>;
 }
 
 export default LoginForm;

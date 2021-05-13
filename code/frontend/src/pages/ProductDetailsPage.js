@@ -1,6 +1,5 @@
 import React from "react";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import ModelMetadata from "../components/ModelMetadata";
 import {
     Layout,
     Row,
@@ -143,7 +142,7 @@ const ProductDetailsPage = () => {
                                             {productMetaData &&
                                             <TabPane tab="Parameter" key="3">
                                                 <Row gutter={[16, 16]}>
-                                                    <ModelMetadata metadata={productMetaData}/>
+                                                    Model Metadata
                                                 </Row>
                                             </TabPane>}
                                             <TabPane tab="Downloads" key="4">

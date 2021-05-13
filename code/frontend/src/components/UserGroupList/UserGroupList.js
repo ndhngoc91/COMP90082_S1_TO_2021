@@ -28,8 +28,8 @@ const UserGroupList = () => {
     const [addUserGroupFormVisible, setAddUserGroupFormVisible] = useState(false);
     const [selectedContact, setSelectedContact] = useState({});
 
-    const {authStore: {user}} = useStores();
-    const [userGroups] = useUserGroups(user.id);
+    const {authStore: {id}} = useStores();
+    const [userGroups] = useUserGroups(id);
 
     const [handleDeleteUserGroup, {handling: handlingDelete}] = useHandleDeleteUserGroup();
 
