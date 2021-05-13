@@ -29,7 +29,7 @@ const AddAddressForm = () => {
                       region: region,
                       country: country
                   }, () => {
-                      notification.success({message: "Create new address success!"});
+                      notification.success({message: "Create new address successfully!"});
                   }, () => {
                       notification.error({message: "Failed to create a new address success!"});
                   });

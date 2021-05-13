@@ -102,3 +102,9 @@ class User(UserWithoutPassword):
 
 class UserWithAddresses(User):
     address_list: Optional[List[Address]]
+
+
+class UserGroup(BaseModel):
+    name: str
+    contacts: str
+    user_id: int
