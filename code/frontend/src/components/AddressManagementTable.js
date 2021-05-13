@@ -32,7 +32,7 @@ const UserManagementPage = () => {
                 <Column title="City" dataIndex="city"/>
                 <Column title="Postcode" dataIndex="postcode"/>
                 <Column title="Address Line" dataIndex="address_line"/>
-                <Column title="Action" render={(text, record) => (
+                <Column title="Action" render={() => (
                     <>
                         <Space size="middle">
                             <a>Edit</a>

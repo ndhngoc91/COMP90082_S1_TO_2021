@@ -57,17 +57,17 @@ const NavigationBar = observer(() => {
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
                 <>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/products">Products</Menu.Item>
                     <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
                 </>}
                 {userRole === USER_ROLE.CUSTOMER &&
                 <>
-                    <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
+                    <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/order-history">
                         Order History
                     </Menu.Item>
                     <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
                 </>}
-                {userRole === USER_ROLE.ADMIN &&
+                {userRole === USER_ROLE.STAFF &&
                 <>
                     <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/user-management">
                         User Management
@@ -76,11 +76,11 @@ const NavigationBar = observer(() => {
                         Booking Management
                     </Menu.Item>
                 </>}
-                {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
                     Calendar
                 </Menu.Item>}
-                {userRole === USER_ROLE.ADMIN &&
+                {userRole === USER_ROLE.STAFF &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
                     Package Management
                 </Menu.Item>}
@@ -96,7 +96,7 @@ const NavigationBar = observer(() => {
                         Register
                     </Menu.Item>
                 </>}
-                {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
                 <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>}
                          title={`${firstName} ${lastName}`}>
                     {userRole === USER_ROLE.CUSTOMER &&

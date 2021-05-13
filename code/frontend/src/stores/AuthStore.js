@@ -2,6 +2,7 @@ import {action, computed, makeObservable, observable} from "mobx";
 import {persist} from "mobx-persist";
 import {USER_ROLE} from "../consts/UserRole";
 import moment from "moment";
+import {UserType} from "../consts/UserType";
 
 export class AuthStore {
     @persist id;
@@ -25,8 +26,8 @@ export class AuthStore {
     @persist userRole;
 
     setData = ({
-                   id, username, password, height, weight, foot_size, first_name, last_name, gender,
-                   birthday, phone, email, din, skill_level_id, organization_id, user_type_id
+                   id, username, password, height, weight, foot_size, first_name, last_name, gender, birthday,
+                   phone, email, din, skill_level_id, organization_id, user_type_id, access_token, token_type
                }) => {
         this.id = id;
         this.username = username;
@@ -44,6 +45,8 @@ export class AuthStore {
         this.skillLevelId = skill_level_id;
         this.organizationId = organization_id;
         this.userTypeId = user_type_id;
+        this.accessToken = access_token;
+        this.tokenType = token_type;
     }
 
     constructor() {
@@ -66,6 +69,9 @@ export class AuthStore {
             skillLevelId: observable,
             organizationId: observable,
             userTypeId: observable,
+            accessToken: observable,
+            tokenType: observable,
+            userRole: observable,
             values: computed
         });
         this.setData({
@@ -84,7 +90,9 @@ export class AuthStore {
             din: "",
             skillLevelId: 0,
             organizationId: 0,
-            userTypeId: 0
+            userTypeId: 0,
+            access_token: "",
+            token_type: ""
         });
         this.userRole = USER_ROLE.GUEST;
     }
@@ -106,17 +114,19 @@ export class AuthStore {
             din: this.din,
             skill_level_id: this.skillLevelId,
             organization_id: this.organizationId,
-            user_type_id: this.userTypeId
+            user_type_id: this.userTypeId,
+            access_token: this.accessToken,
+            token_type: this.tokenType
         };
     }
 
     login = (data) => {
         this.setData(data);
         const {user_type_id} = data;
-        if (user_type_id === 1) {
-            this.userRole = USER_ROLE.CUSTOMER;
+        if (user_type_id === UserType.STAFF) {
+            this.userRole = USER_ROLE.STAFF;
         } else {
-            this.userRole = USER_ROLE.ADMIN;
+            this.userRole = USER_ROLE.CUSTOMER;
         }
     }
 
@@ -137,7 +147,9 @@ export class AuthStore {
             din: "",
             skillLevelId: 0,
             organizationId: 0,
-            userTypeId: 0
+            userTypeId: 0,
+            access_token: "",
+            token_type: ""
         });
         this.userRole = USER_ROLE.GUEST;
     }

@@ -118,7 +118,7 @@ const CalendarPage = () => {
                 </Space>
             </Sider>
             <Content>
-                {userRole === USER_ROLE.ADMIN &&
+                {userRole === USER_ROLE.STAFF &&
                 <GanttTimeline/>}
                 {userRole === USER_ROLE.CUSTOMER &&
                 <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender}/>}
