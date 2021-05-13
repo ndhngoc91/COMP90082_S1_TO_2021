@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useHistory} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom"
 import {Button, Form, Input, Layout, Menu, Modal, notification} from "antd";
 import {
     HistoryOutlined,
@@ -32,6 +32,7 @@ const NavigationBar = observer(() => {
     const [isLoginModelVisible, setIsLoginModelVisible] = useState(false);
 
     const history = useHistory();
+    const location = useLocation();
 
     const [handleLogin, {handling}] = useHandleLogin();
 
@@ -59,7 +60,7 @@ const NavigationBar = observer(() => {
 
     return (
         <Header style={{width: "100%", padding: 0}}>
-            <Menu onClick={handleClick} mode="horizontal" theme={"dark"}>
+            <Menu onClick={handleClick} mode="horizontal" theme={"dark"} defaultSelectedKeys={[location.pathname]}>
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
                 <>
