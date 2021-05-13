@@ -20,3 +20,7 @@ def get_all_user_groups(db: Session):
 
 def get_user_groups_by_user_id(user_id: int, db: Session):
     return user_group_repo.get_user_groups_by_user_id(user_id=user_id, db=db)
+
+
+def create_new_user_group(request: schemas.UserGroup, db: Session):
+    return user_group_repo.create_user_group(request=request, db=db)

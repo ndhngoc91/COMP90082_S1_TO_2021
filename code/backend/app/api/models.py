@@ -109,7 +109,7 @@ class UserGroup(Base):
     __tablename__ = 'user_groups'
 
     id = Column(Integer, primary_key=True, unique=True)
-    group_name = Column(VARCHAR(50), nullable=False)
+    name = Column(VARCHAR(50), nullable=False)
     contacts = Column(Text)
     user_id = Column(Integer, index=True)
 
