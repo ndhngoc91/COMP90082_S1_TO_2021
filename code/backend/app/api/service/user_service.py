@@ -58,5 +58,5 @@ def validate(username: str, password: str, db: Session) -> dict:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to connect to Squizz")
 
 
-def update_user(user_id: int, request: schemas.UserWithEditableFields, db: Session):
+def update_user(user_id: int, request: schemas.UserWithoutPassword, db: Session):
     return user_repo.update_user(user_id=user_id, request=request, db=db)
