@@ -16,20 +16,13 @@ import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import {USER_ROLE} from "../../consts/UserRole";
 import {useHandleLogin} from "../../hooks/AuthHooks";
+import LoginForm from "../LoginForm";
 
 const {Header} = Layout;
 const {SubMenu} = Menu;
 
-const loginFormLayout = {
-    labelCol: {span: 6},
-    wrapperCol: {span: 18},
-};
-const loginFormTailLayout = {
-    wrapperCol: {offset: 6, span: 18},
-};
-
 const NavigationBar = observer(() => {
-    const [isLoginModelVisible, setIsLoginModelVisible] = useState(false);
+    const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
 
     const history = useHistory();
     const location = useLocation();
@@ -49,7 +42,7 @@ const NavigationBar = observer(() => {
 
     const onFinish = values => {
         handleLogin(values, () => {
-            setIsLoginModelVisible(false);
+            setIsLoginModalVisible(false);
             notification.success({message: "Login successfully"});
         }, errorMessage => {
             notification.error({message: errorMessage});
@@ -95,7 +88,7 @@ const NavigationBar = observer(() => {
                 <>
                     <Menu.Item key="login"
                                className={rightItemCls}
-                               onClick={() => setIsLoginModelVisible(true)}
+                               onClick={() => setIsLoginModalVisible(true)}
                                icon={<LoginOutlined/>}>
                         Login
                     </Menu.Item>
@@ -112,32 +105,12 @@ const NavigationBar = observer(() => {
                 </SubMenu>
                 }
             </Menu>
-            <Modal title="Login " visible={isLoginModelVisible}
+            <Modal title="Login" visible={isLoginModalVisible}
                    footer={null} closable={false}
                    onCancel={() => {
-                       setIsLoginModelVisible(false);
+                       setIsLoginModalVisible(false);
                    }}>
-                <Form {...loginFormLayout}
-                      name="basic"
-                      initialValues={{remember: true}}
-                      onFinish={onFinish}>
-                    <Form.Item label="Username"
-                               name="username"
-                               rules={[{required: true, message: 'Please input your username!'}]}>
-                        <Input/>
-                    </Form.Item>
-
-                    <Form.Item label="Password"
-                               name="password"
-                               rules={[{required: true, message: 'Please input your password!'}]}>
-                        <Input.Password/>
-                    </Form.Item>
-                    <Form.Item {...loginFormTailLayout}>
-                        <Button type="primary" htmlType="submit" loading={handling}>
-                            Login
-                        </Button>
-                    </Form.Item>
-                </Form>
+                <LoginForm handling={handling} onFinish={onFinish}/>
             </Modal>
         </Header>
     );

@@ -19,7 +19,6 @@ import {
 } from "@ant-design/icons";
 
 const {Title, Text} = Typography;
-import ModelMetadata from "./ModelMetadata";
 import {useHistory} from "react-router-dom";
 import {useStores} from "../stores";
 
@@ -185,7 +184,7 @@ const HistoryProduct = ({product}) => {
                 width="80vw"
                 maskClosable={true}
             >
-                <ModelMetadata metadata={metadata}/>
+                Model Metadata
             </Modal>
         </Row>
     );

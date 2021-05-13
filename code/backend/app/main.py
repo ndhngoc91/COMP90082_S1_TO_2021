@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.routers import addresses
 from app.api.routers import auth
 from app.api.routers import user_groups
 from app.api.routers import users
@@ -42,6 +43,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(addresses.router)
 app.include_router(auth.router)
 app.include_router(age_groups.router)
 app.include_router(categories.router)
