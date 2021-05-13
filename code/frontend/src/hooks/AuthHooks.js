@@ -17,9 +17,7 @@ export const useHandleLogin = () => {
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
         }).then(response => {
             if (response.status === 200) {
-                const accessToken = response.data["access_token"];
-                const user = response.data["user"];
-                authStore.login(username, accessToken, user, signInAsStaff);
+                authStore.login(response.data);
             }
             success();
         }).catch(e => {

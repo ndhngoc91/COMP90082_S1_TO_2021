@@ -17,10 +17,12 @@ import {useStores} from "../../stores";
 const {Option} = Select;
 
 const UserProfileForm = () => {
+    const {authStore: {values, din}} = useStores();
+
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0);
     const [footSize, setFootSize] = useState(0);
-    const [din, setDin] = useState(0);
+    const [estimatedDin, setEstimatedDin] = useState(0);
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
@@ -30,12 +32,10 @@ const UserProfileForm = () => {
 
     const skillLevels = useSkillLevels();
 
-    const {authStore: {user}} = useStores();
-
     const [handleEditProfile, {handling}] = useHandleEditProfile();
 
     useEffect(() => {
-        setDin(height * 2 + weight * 3 + footSize * 4);
+        setEstimatedDin(height * 2 + weight * 3 + footSize * 4);
     }, [weight, height, footSize]);
 
     const onStateChange = value => {
@@ -49,7 +49,6 @@ const UserProfileForm = () => {
     };
 
     const onFinish = values => {
-        values.id = user.id;
         handleEditProfile(values, () => {
             notification.success({message: "Edit profile successfully!"});
         }, () => {
@@ -63,7 +62,7 @@ const UserProfileForm = () => {
                 <Image width={200} style={{borderRadius: "50%"}} preview={false}
                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                 <Form style={{width: "1000px"}}
-                      initialValues={user}
+                      initialValues={values}
                       form={form}
                       name="basic"
                       layout="vertical"
@@ -92,7 +91,7 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item label="Birthdate" name="birthdate"
+                            <Form.Item label="Birthday" name="birthday"
                                        rules={[{required: true, message: "Required"}]}>
                                 <DatePicker size="large" disabled={editing === false}/>
                             </Form.Item>
@@ -135,7 +134,12 @@ const UserProfileForm = () => {
                         </Col>
                         <Col span={8}>
                             <Form.Item label="DIN">
-                                <Tag color="green" style={{fontSize: "25px", padding: "5px"}}>{din}</Tag>
+                                <Tag color="green" style={{
+                                    fontSize: "25px",
+                                    padding: "5px"
+                                }}>
+                                    {estimatedDin ? estimatedDin : din}
+                                </Tag>
                             </Form.Item>
                         </Col>
                     </Row>

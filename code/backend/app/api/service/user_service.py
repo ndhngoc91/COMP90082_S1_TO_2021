@@ -51,7 +51,9 @@ def validate(username: str, password: str, db: Session) -> dict:
         access_token = token.create_access_token(data={"username": user.username,
                                                        "org_id": "11EA64D91C6E8F70A23EB6800B5BCB6D",
                                                        "session_id": session_id})
-        return {"access_token": access_token, "token_type": "bearer", "user": user}
+        user.access_token = access_token
+        user.token_type = "Bearer"
+        return user
     else:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to connect to Squizz")
 

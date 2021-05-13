@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useHistory} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom"
 import {Button, Form, Input, Layout, Menu, Modal, notification} from "antd";
 import {
     HistoryOutlined,
@@ -32,10 +32,11 @@ const NavigationBar = observer(() => {
     const [isLoginModelVisible, setIsLoginModelVisible] = useState(false);
 
     const history = useHistory();
+    const location = useLocation();
 
     const [handleLogin, {handling}] = useHandleLogin();
 
-    const {authStore: {username, userRole, logout}} = useStores();
+    const {authStore: {firstName, lastName, userRole, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
@@ -59,7 +60,7 @@ const NavigationBar = observer(() => {
 
     return (
         <Header style={{width: "100%", padding: 0}}>
-            <Menu onClick={handleClick} mode="horizontal" theme={"dark"}>
+            <Menu onClick={handleClick} mode="horizontal" theme={"dark"} defaultSelectedKeys={[location.pathname]}>
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
                 <>
@@ -103,7 +104,8 @@ const NavigationBar = observer(() => {
                     </Menu.Item>
                 </>}
                 {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
-                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>}
+                         title={`${firstName} ${lastName}`}>
                     {userRole === USER_ROLE.CUSTOMER &&
                     <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
