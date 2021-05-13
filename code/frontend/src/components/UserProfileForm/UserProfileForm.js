@@ -17,7 +17,7 @@ import {useStores} from "../../stores";
 const {Option} = Select;
 
 const UserProfileForm = () => {
-    const {authStore: {values, din}} = useStores();
+    const {authStore: {values: initialValues, din, login}} = useStores();
 
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0);
@@ -49,8 +49,11 @@ const UserProfileForm = () => {
     };
 
     const onFinish = values => {
+        values.birthday = values.birthday.format("YYYY-MM-DD");
+        values = Object.assign(initialValues, values)
         handleEditProfile(values, () => {
             notification.success({message: "Edit profile successfully!"});
+            login(values); // reset store
         }, () => {
             notification.success({message: "Failed to edit profile!"});
         });
@@ -62,7 +65,7 @@ const UserProfileForm = () => {
                 <Image width={200} style={{borderRadius: "50%"}} preview={false}
                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                 <Form style={{width: "1000px"}}
-                      initialValues={values}
+                      initialValues={initialValues}
                       form={form}
                       name="basic"
                       layout="vertical"
@@ -100,14 +103,33 @@ const UserProfileForm = () => {
                     <Row justify="space-between" gutter={16}>
                         <Col span={4}>
                             <Form.Item label="Height (cm)" name="height"
-                                       rules={[{required: true, message: "Required!"}]}>
+                                       rules={[
+                                           {required: true, message: "Required!"},
+                                           ({getFieldValue}) => ({
+                                               validator(_, value) {
+                                                   if (parseInt(getFieldValue("height")) > 200) {
+                                                       return Promise.reject("Invalid height!");
+                                                   }
+                                                   return Promise.resolve();
+                                               },
+                                           })]}>
                                 <Input type={"number"} size="large" value={height} readOnly={editing === false}
                                        onChange={e => setHeight(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Form.Item label="Weight (kg)" name="weight"
-                                       rules={[{required: true, message: "Required!"}]}>
+                                       rules={[
+                                           {required: true, message: "Required!"},
+                                           ({getFieldValue}) => ({
+                                               validator(_, value) {
+                                                   if (parseInt(getFieldValue("weight")) > 100) {
+                                                       return Promise.reject("Invalid weight!");
+                                                   }
+                                                   return Promise.resolve();
+                                               },
+                                           })
+                                       ]}>
                                 <Input type={"number"} size="large" value={weight} readOnly={editing === false}
                                        onChange={e => setWeight(parseInt(e.currentTarget.value))}/>
                             </Form.Item>
@@ -162,125 +184,6 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    {editing === false &&
-                    <Form.List name="addresses">
-                        {(fields, {add, remove}, {errors}) => (
-                            <>
-                                {fields.map(({key, name, fieldKey, ...field}) => (
-                                    <Form.Item label={key === 0 ? "Addresses" : ""}
-                                               required={false}
-                                               key={key}>
-                                        <Row justify="space-between" gutter={16}>
-                                            <Col span={12}>
-                                                <Form.Item{...field}
-                                                          name={[name, 'address']}
-                                                          fieldKey={[fieldKey, 'address']}
-                                                          validateTrigger={["onChange", "onBlur"]}
-                                                          rules={[
-                                                              {
-                                                                  required: true,
-                                                                  whitespace: true,
-                                                                  message: "Please input address or delete this field.",
-                                                              }
-                                                          ]}
-                                                          noStyle>
-                                                    <Input size="large"
-                                                           placeholder="Address line"
-                                                           readOnly={editing === false}
-                                                    />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col span={4}>
-                                                <Form.Item{...field}
-                                                          name={[name, 'state']}
-                                                          fieldKey={[fieldKey, 'state']}
-                                                          validateTrigger={["onChange", "onBlur"]}
-                                                          rules={[
-                                                              {
-                                                                  required: true,
-                                                                  message: "Required!"
-                                                              }
-                                                          ]}
-                                                          noStyle>
-                                                    <Select
-                                                        value={selectedState}
-                                                        onChange={onStateChange}
-                                                        disabled={editing === false}
-                                                        size="large"
-                                                        placeholder="State"
-                                                    >
-                                                        {StateData.map(state => (
-                                                            <Option key={state} value={state}>{state}</Option>
-                                                        ))}
-                                                    </Select>
-                                                </Form.Item>
-                                            </Col>
-                                            <Col span={4}>
-                                                <Form.Item{...field}
-                                                          name={[name, 'city']}
-                                                          fieldKey={[fieldKey, 'city']}
-                                                          validateTrigger={["onChange", "onBlur"]}
-                                                          rules={[
-                                                              {
-                                                                  required: true,
-                                                                  message: "Required!",
-                                                              }
-                                                          ]}
-                                                          noStyle>
-                                                    <Select value={selectedCity}
-                                                            onChange={onCityChange}
-                                                            disabled={editing === false}
-                                                            size="large"
-                                                            placeholder="City">
-                                                        {cities.map(city => (
-                                                            <Option key={city} value={city}>{city}</Option>
-                                                        ))}
-                                                    </Select>
-                                                </Form.Item>
-                                            </Col>
-                                            <Col span={4}>
-                                                <Form.Item{...field}
-                                                          name={[name, 'postcode']}
-                                                          fieldKey={[fieldKey, 'postcode']}
-                                                          validateTrigger={["onChange", "onBlur"]}
-                                                          rules={[
-                                                              {
-                                                                  required: true,
-                                                                  message: "Required!"
-                                                              }
-                                                          ]}
-                                                          noStyle>
-                                                    <Input
-                                                        disabled={editing === false}
-                                                        size="large"
-                                                        placeholder="Postcode"
-                                                    >
-                                                    </Input>
-                                                </Form.Item>
-                                            </Col>
-                                        </Row>
-                                        {fields.length > 1 ? (
-                                            <MinusCircleOutlined
-                                                className="dynamic-delete-button"
-                                                onClick={() => remove(name)}
-                                            />
-                                        ) : null}
-                                    </Form.Item>
-                                ))}
-                                <Form.Item>
-                                    <Button type="dashed"
-                                            onClick={() => add()}
-                                            style={{width: "60%"}}
-                                            size="large"
-                                            icon={<PlusOutlined/>}
-                                            disabled={editing === false}>
-                                        Add address line
-                                    </Button>
-                                    <Form.ErrorList errors={errors}/>
-                                </Form.Item>
-                            </>
-                        )}
-                    </Form.List>}
                     <Form.Item>
                         {editing === false &&
                         <Button type="primary" size="large" onClick={() => setEditing(true)}>
