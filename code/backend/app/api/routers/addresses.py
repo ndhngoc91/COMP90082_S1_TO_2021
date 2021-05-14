@@ -18,3 +18,8 @@ def get_addresses_by_user_id(user_id: Optional[int] = None, db: Session = Depend
     if user_id is not None:
         return address_service.get_addresses_by_user_id(user_id=user_id, db=db)
     return address_service.get_all_addresses(db=db)
+
+
+@router.post("", status_code=status.HTTP_201_CREATED)
+def create_new_address(request: schemas.Address, db: Session = Depends(get_db)):
+    return address_service.create_new_address(request=request, db=db)
