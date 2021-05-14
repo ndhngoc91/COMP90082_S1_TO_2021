@@ -12,6 +12,14 @@ export const useUserGroups = (userId) => {
         axios.get(`http://localhost:8000/user-groups?user_id=${userId}`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {
+            const data = response.data;
+            data.forEach(dataItem => {
+                try {
+                    dataItem.contacts = JSON.parse(dataItem.contacts);
+                } catch (e) {
+                    dataItem.contacts = [];
+                }
+            });
             setUserGroups(response.data);
         }).finally(() => {
             setLoading(false);
@@ -96,7 +104,7 @@ export const useHandleEditUserGroup = () => {
     }) => {
         if (userRole === USER_ROLE.CUSTOMER) {
             setHandling(true);
-            axios.post(`http://127.0.0.1:8000/user-groups/${user_group_id}`, {
+            axios.put(`http://127.0.0.1:8000/user-groups/${user_group_id}`, {
                 name: name,
                 contacts: contacts,
                 user_id: user_id
