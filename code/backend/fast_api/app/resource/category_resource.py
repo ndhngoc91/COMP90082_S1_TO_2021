@@ -99,15 +99,16 @@ class CategoryResource(SimpleModelResource):
             else:
                 detail["price"] = price[0]["price"]
 
-            query_type_id = "SELECT type_id FROM package_types WHERE package_id = %s"
+            query_type_id = "SELECT trail_type_id FROM package_ttypes_pair WHERE package_id = %s"
 
             type_ids_dict = self.run_query(
                 query_type_id,
                 [package_id],
             )
             type_ids_list = [] if type_ids_dict is None else [
-                type_id["type_id"] for type_id in type_ids_dict]
-            query_types = "SELECT * FROM types WHERE id = %s"
+                type_id["trail_type_id"] for type_id in type_ids_dict]
+
+            query_types = "SELECT * FROM trail_types WHERE id = %s"
 
             all_type_details = []
             for type_id in type_ids_list:
