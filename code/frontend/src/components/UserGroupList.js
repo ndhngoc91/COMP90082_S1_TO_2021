@@ -34,7 +34,7 @@ const UserGroupList = () => {
     const {authStore: {id}} = useStores();
     const [userGroups] = useUserGroups(id);
 
-    const [handleDeleteUserGroup, {handling: handlingDelete}] = useHandleDeleteUserGroup();
+    const [handleDeleteUserGroup] = useHandleDeleteUserGroup();
 
     return (
         <>
@@ -53,7 +53,6 @@ const UserGroupList = () => {
             </Row>
             <Collapse defaultActiveKey={[0]}>
                 {userGroups.map((userGroup, index) => {
-                    const contacts = JSON.parse(userGroup["contacts"]);
                     return (
                         <Panel header={userGroup.name} key={index} extra={
                             <Space>
@@ -72,7 +71,7 @@ const UserGroupList = () => {
                                                 okText="Yes"
                                                 cancelText="No"
                                                 onConfirm={() => handleDeleteUserGroup(userGroup.id)}>
-                                        <Button type="primary" ghost loading={handlingDelete}>
+                                        <Button type="primary" ghost>
                                             <DeleteOutlined/>
                                             Delete
                                         </Button>
@@ -80,18 +79,10 @@ const UserGroupList = () => {
                                 </div>
                             </Space>
                         }>
-                            <List dataSource={contacts}
+                            <List dataSource={userGroup.contacts}
                                   renderItem={contact => (
                                       <List.Item key={contact.name}
                                                  actions={[
-                                                     <Popconfirm
-                                                         title="Are you sure？"
-                                                         okText="Yes"
-                                                         cancelText="No">
-                                                         <Link>
-                                                             <DeleteOutlined/> Delete
-                                                         </Link>
-                                                     </Popconfirm>,
                                                      <Link key={`a-${contact.name}`}
                                                            onClick={() => {
                                                                setSelectedContact(contact);
@@ -114,13 +105,13 @@ const UserGroupList = () => {
                    onCancel={() => {
                        setAddUserGroupFormVisible(false);
                    }}>
-                <EditUserGroupForm fieldsValue={selectedUserGroup}/>
+                <AddUserGroupForm/>
             </Modal>
             <Modal title="Edit user group" visible={editUserGroupFormVisible} footer={null} closable={false}
                    onCancel={() => {
                        setEditUserGroupFormVisible(false);
                    }}>
-                <AddUserGroupForm/>
+                <EditUserGroupForm fieldsValue={selectedUserGroup}/>
             </Modal>
             <Drawer width={640}
                     placement="right"
