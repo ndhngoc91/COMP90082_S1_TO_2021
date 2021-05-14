@@ -38,8 +38,7 @@ const EditAddressForm = ({fieldValues}) => {
         values.state = state;
         values.city = city;
         handleEditAddress(values, () => {
-            notification.success({message: "Add a new address successfully!"});
-            form.resetFields();
+            notification.success({message: "Edit address successfully!"});
         });
     };
 

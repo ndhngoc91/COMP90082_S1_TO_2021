@@ -106,24 +106,25 @@ export const useHandleDeleteAddress = () => {
 
 export const useHandleEditAddress = () => {
     const [handling, setHandling] = useState(false);
-    const {authStore: {userRole}} = useStores();
+    const {authStore: {id: user_id, userRole}} = useStores();
 
     const handleEditAddress = useCallback(({
-                                              id: address_id,
-                                              state,
-                                              city,
-                                              postcode,
-                                              address_line,
-                                              order_id
-                                          }, success, failure = () => {
+                                               id: address_id,
+                                               state,
+                                               city,
+                                               postcode,
+                                               address_line,
+                                               order_id
+                                           }, success, failure = () => {
     }) => {
         if (userRole !== USER_ROLE.GUEST) {
             setHandling(true);
-            axios.post(`http://127.0.0.1:8000/addresses/${address_id}`, {
+            axios.put(`http://127.0.0.1:8000/addresses/${address_id}`, {
                 state: state,
                 city: city,
                 postcode: postcode,
                 address_line: address_line,
+                user_id: user_id,
                 order_id: order_id
             }, {
                 headers: {"Content-Type": "application/JSON; charset=UTF-8"}

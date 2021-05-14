@@ -20,3 +20,7 @@ def create_new_address(request: schemas.Address, db: Session):
 
 def delete_address(address_id: int, db: Session):
     return address_repo.delete_address(address_id=address_id, db=db)
+
+
+def update_address(address_id: int, request: schemas.Address, db: Session):
+    return address_repo.update_address(address_id=address_id, request=request, db=db)
