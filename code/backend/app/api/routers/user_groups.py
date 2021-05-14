@@ -29,3 +29,8 @@ def create_new_user_group(request: schemas.UserGroup, db: Session = Depends(get_
 def delete_user_group(user_group_id: int, db: Session = Depends(get_db)):
     user_group_service.delete_user_group(user_group_id=user_group_id, db=db)
     return f'id {user_group_id} data is deleted'
+
+
+@router.put("/{user_group_id}", status_code=status.HTTP_202_ACCEPTED)
+def update_user_group(user_group_id: int, request: schemas.UserGroup, db: Session = Depends(get_db)):
+    return user_group_service.update_user_group(user_group_id=user_group_id, request=request, db=db)

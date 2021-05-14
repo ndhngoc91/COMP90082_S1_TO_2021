@@ -14,9 +14,10 @@ import {
     DeleteOutlined, EditOutlined,
     PlusOutlined, SearchOutlined,
 } from "@ant-design/icons";
-import {useHandleDeleteUserGroup, useUserGroups} from "../../hooks/UserGroupHooks";
-import {useStores} from "../../stores";
-import AddUserGroupForm from "./AddUserGroupForm";
+import {useHandleDeleteUserGroup, useHandleEditUserGroup, useUserGroups} from "../hooks/UserGroupHooks";
+import {useStores} from "../stores";
+import AddUserGroupForm from "./UserGroupList/AddUserGroupForm";
+import EditUserGroupForm from "./UserGroupList/EditUserGroupForm";
 
 const {Title, Link} = Typography;
 const {Panel} = Collapse;
@@ -26,7 +27,9 @@ const SampleAvatar = () => <Avatar src="https://gw.alipayobjects.com/zos/rmsport
 const UserGroupList = () => {
     const [drawVisible, setDrawVisible] = useState(false);
     const [addUserGroupFormVisible, setAddUserGroupFormVisible] = useState(false);
+    const [editUserGroupFormVisible, setEditUserGroupFormVisible] = useState(false);
     const [selectedContact, setSelectedContact] = useState({});
+    const [selectedUserGroup, setSelectedUserGroup] = useState({});
 
     const {authStore: {id}} = useStores();
     const [userGroups] = useUserGroups(id);
@@ -56,7 +59,10 @@ const UserGroupList = () => {
                             <Space>
                                 <div onClick={e => e.stopPropagation()}>
                                     <Button type="primary" ghost
-                                            loading={handlingDelete}>
+                                            onClick={() => {
+                                                setSelectedUserGroup(userGroup);
+                                                setEditUserGroupFormVisible(true);
+                                            }}>
                                         <EditOutlined/>
                                         Edit
                                     </Button>
@@ -73,7 +79,6 @@ const UserGroupList = () => {
                                     </Popconfirm>
                                 </div>
                             </Space>
-
                         }>
                             <List dataSource={contacts}
                                   renderItem={contact => (
@@ -105,9 +110,15 @@ const UserGroupList = () => {
                     )
                 })}
             </Collapse>
-            <Modal title="Edit a package" visible={addUserGroupFormVisible} footer={null} closable={false}
+            <Modal title="Add a user group" visible={addUserGroupFormVisible} footer={null} closable={false}
                    onCancel={() => {
                        setAddUserGroupFormVisible(false);
+                   }}>
+                <EditUserGroupForm fieldsValue={selectedUserGroup}/>
+            </Modal>
+            <Modal title="Edit user group" visible={editUserGroupFormVisible} footer={null} closable={false}
+                   onCancel={() => {
+                       setEditUserGroupFormVisible(false);
                    }}>
                 <AddUserGroupForm/>
             </Modal>

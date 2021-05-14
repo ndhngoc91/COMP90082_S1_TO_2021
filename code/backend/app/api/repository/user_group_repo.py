@@ -34,3 +34,13 @@ def delete_user_group(user_group_id: int, db: Session):
 
     user_group_to_delete.delete(synchronize_session=False)
     db.commit()
+
+
+def update_user_group(user_group_id: int, request: schemas.UserGroup, db: Session):
+    request_dict = dict(request)
+    user_group_to_update = db.query(models.UserGroup).filter(models.UserGroup.id == user_group_id)
+    if not user_group_to_update.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {address_id} not found")
+
+    user_group_to_update.update(request_dict)
+    db.commit()

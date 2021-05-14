@@ -43,7 +43,7 @@ const NavigationBar = observer(() => {
     const onFinish = values => {
         handleLogin(values, () => {
             setIsLoginModalVisible(false);
-            notification.success({message: "Login successfully"});
+            notification.success({message: "Login successfully!"});
         }, errorMessage => {
             notification.error({message: errorMessage});
         });

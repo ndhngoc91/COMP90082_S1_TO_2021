@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
@@ -6,12 +6,12 @@ import {USER_ROLE} from "../consts/UserRole";
 export const usePersonalAddresses = () => {
     const [personalAddresses, setPersonalAddresses] = useState([]);
     const [loading, setLoading] = useState(false);
-    const {authStore: {id, userRole}} = useStores();
+    const {authStore: {id: user_id, userRole}} = useStores();
 
     useEffect(() => {
         setLoading(true);
         if (userRole !== USER_ROLE.GUEST) {
-            axios.get(`http://127.0.0.1:8000/addresses?user_id=${id}`).then(response => {
+            axios.get(`http://127.0.0.1:8000/addresses?user_id=${user_id}`).then(response => {
                 if (response.status === 200) {
                     response.data.forEach((dataItem, index) => {
                         dataItem.key = index
@@ -29,4 +29,121 @@ export const usePersonalAddresses = () => {
     }, []);
 
     return [personalAddresses, {loading}];
+};
+
+export const useHandleAddAddress = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {id: user_id, userRole}} = useStores();
+
+    const handleAddAddress = useCallback(({
+                                              state,
+                                              city,
+                                              postcode,
+                                              address_line,
+                                              order_id
+                                          }, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.post('http://127.0.0.1:8000/addresses', {
+                state: state,
+                city: city,
+                postcode: postcode,
+                address_line: address_line,
+                user_id: user_id,
+                order_id: order_id
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 201) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleAddAddress, {handling}];
+};
+
+export const useHandleDeleteAddress = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {userRole}} = useStores();
+
+    const handleDeleteAddress = useCallback((addressId, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.delete(`http://127.0.0.1:8000/addresses/${addressId}`, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 204) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleDeleteAddress, {handling}];
+};
+
+export const useHandleEditAddress = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {id: user_id, userRole}} = useStores();
+
+    const handleEditAddress = useCallback(({
+                                               id: address_id,
+                                               state,
+                                               city,
+                                               postcode,
+                                               address_line,
+                                               order_id
+                                           }, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.put(`http://127.0.0.1:8000/addresses/${address_id}`, {
+                state: state,
+                city: city,
+                postcode: postcode,
+                address_line: address_line,
+                user_id: user_id,
+                order_id: order_id
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 202) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleEditAddress, {handling}];
 };

@@ -23,3 +23,7 @@ def create_new_user_group(request: schemas.UserGroup, db: Session):
 
 def delete_user_group(user_group_id: int, db: Session):
     return user_group_repo.delete_user_group(user_group_id=user_group_id, db=db)
+
+
+def update_user_group(user_group_id, request: schemas.UserGroup, db: Session):
+    return user_group_repo.update_user_group(user_group_id=user_group_id, request=request, db=db)
