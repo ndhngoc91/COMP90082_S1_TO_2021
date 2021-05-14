@@ -29,6 +29,8 @@ createStore().then(store => {
                             USER_ROLE.GUEST
                         ]}/>
                         <AuthRoute path="/register" exact Component={RegisterPage} requiredRoles={[
+                            USER_ROLE.STAFF,
+                            USER_ROLE.CUSTOMER,
                             USER_ROLE.GUEST
                         ]}/>
                         <AuthRoute path="/register-as-a-admin" exact Component={AdminRegisterPage} requiredRoles={[

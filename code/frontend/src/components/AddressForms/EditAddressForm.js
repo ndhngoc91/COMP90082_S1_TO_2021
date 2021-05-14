@@ -1,8 +1,8 @@
 import {Button, Col, Form, Input, notification, Row, Select} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CityData, StateData} from "../../consts/StateData";
 import {useForm} from "antd/es/form/Form";
-import {useHandleAddAddress} from "../../hooks/AddressHooks";
+import {useHandleAddAddress, useHandleEditAddress} from "../../hooks/AddressHooks";
 
 const {Option} = Select;
 
@@ -14,14 +14,14 @@ const loginFormTailLayout = {
     wrapperCol: {offset: 6, span: 18},
 };
 
-const AddAddressForm = () => {
+const EditAddressForm = ({fieldsValue}) => {
     const [form] = useForm();
 
-    const [state, setState] = useState(StateData[0]);
+    const [state, setState] = useState(fieldsValue.state);
     const [cities, setCities] = useState(CityData[StateData[0]]);
-    const [city, setCity] = useState(CityData[StateData[0]][0]);
+    const [city, setCity] = useState(fieldsValue.city);
 
-    const [handleAddAddress, {handling}] = useHandleAddAddress();
+    const [handleEditAddress, {handling}] = useHandleEditAddress();
 
     const onStateChange = value => {
         setState(value);
@@ -34,13 +34,17 @@ const AddAddressForm = () => {
     };
 
     const onFinish = values => {
+        values.id = fieldsValue.id;
         values.state = state;
         values.city = city;
-        handleAddAddress(values, () =>{
-            notification.success({message: "Add a new address successfully!"});
-            form.resetFields();
+        handleEditAddress(values, () => {
+            notification.success({message: "Edit address successfully!"});
         });
     };
+
+    useEffect(() => {
+        form.setFieldsValue(fieldsValue);
+    }, [fieldsValue]);
 
     return <Form form={form}
                  {...loginFormLayout}
@@ -71,10 +75,10 @@ const AddAddressForm = () => {
         </Form.Item>
         <Form.Item {...loginFormTailLayout}>
             <Button type="primary" htmlType="submit" loading={handling}>
-                Add
+                Edit
             </Button>
         </Form.Item>
     </Form>;
 }
 
-export default AddAddressForm;
+export default EditAddressForm;
