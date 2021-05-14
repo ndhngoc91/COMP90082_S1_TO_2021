@@ -14,12 +14,12 @@ const loginFormTailLayout = {
     wrapperCol: {offset: 6, span: 18},
 };
 
-const EditAddressForm = ({fieldValues}) => {
+const EditAddressForm = ({fieldsValue}) => {
     const [form] = useForm();
 
-    const [state, setState] = useState(StateData[0]);
+    const [state, setState] = useState(fieldsValue.state);
     const [cities, setCities] = useState(CityData[StateData[0]]);
-    const [city, setCity] = useState(CityData[StateData[0]][0]);
+    const [city, setCity] = useState(fieldsValue.city);
 
     const [handleEditAddress, {handling}] = useHandleEditAddress();
 
@@ -34,7 +34,7 @@ const EditAddressForm = ({fieldValues}) => {
     };
 
     const onFinish = values => {
-        values.id = fieldValues.id;
+        values.id = fieldsValue.id;
         values.state = state;
         values.city = city;
         handleEditAddress(values, () => {
@@ -43,8 +43,8 @@ const EditAddressForm = ({fieldValues}) => {
     };
 
     useEffect(() => {
-        form.setFieldsValue(fieldValues);
-    }, [fieldValues]);
+        form.setFieldsValue(fieldsValue);
+    }, [fieldsValue]);
 
     return <Form form={form}
                  {...loginFormLayout}

@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useStores} from "../stores";
+import {USER_ROLE} from "../consts/UserRole";
 
 export const useUserGroups = (userId) => {
     const [userGroups, setUserGroups] = useState([]);
@@ -23,32 +24,36 @@ export const useUserGroups = (userId) => {
 export const useHandleAddUserGroup = () => {
     const [handling, setHandling] = useState(false);
 
-    const {authStore: {user}} = useStores();
+    const {authStore: {id: user_id, userRole}} = useStores();
 
     const handleAddUserGroup = useCallback(({
                                                 name,
-                                                contacts,
-                                                user_id
+                                                contacts
                                             }, success, failure = () => {
     }) => {
-        setHandling(true);
-        axios.post('http://127.0.0.1:8000/user-groups', {
-            name: name,
-            contacts: contacts,
-            user_id: user.id
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
-        }).then(response => {
-            if (response.status === 201) {
-                success();
-            } else {
+        if (userRole === USER_ROLE.CUSTOMER) {
+            setHandling(true);
+            axios.post('http://127.0.0.1:8000/user-groups', {
+                name: name,
+                contacts: contacts,
+                user_id: user_id
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 201) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
                 failure();
-            }
-        }).catch(() => {
-            failure();
-        }).finally(() => {
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
             setHandling(false);
-        });
+        }
+
     }, []);
 
     return [handleAddUserGroup, {handling}];
@@ -76,4 +81,43 @@ export const useHandleDeleteUserGroup = () => {
     }, []);
 
     return [handleDeleteUserGroup, {handling}];
+};
+
+export const useHandleEditUserGroup = () => {
+    const [handling, setHandling] = useState(false);
+
+    const {authStore: {id: user_id, userRole}} = useStores();
+
+    const handleEditUserGroup = useCallback(({
+                                                id: user_group_id,
+                                                name,
+                                                contacts
+                                            }, success, failure = () => {
+    }) => {
+        if (userRole === USER_ROLE.CUSTOMER) {
+            setHandling(true);
+            axios.post(`http://127.0.0.1:8000/user-groups/${user_group_id}`, {
+                name: name,
+                contacts: contacts,
+                user_id: user_id
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 202) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleEditUserGroup, {handling}];
 };

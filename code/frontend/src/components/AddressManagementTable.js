@@ -64,7 +64,7 @@ const UserManagementPage = () => {
                    onCancel={() => {
                        setIsEditAddressFormModalVisible(false);
                    }}>
-                <EditAddressForm fieldValues={selectedRecord}/>
+                <EditAddressForm fieldsValue={selectedRecord}/>
             </Modal>
         </>
 
