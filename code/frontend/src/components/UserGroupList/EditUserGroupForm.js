@@ -9,12 +9,14 @@ const EditUserGroupForm = ({fieldsValue}) => {
     const [handleEditUserGroup, {handling}] = useHandleEditUserGroup();
 
     useEffect(() => {
+        fieldsValue.contact_names = fieldsValue.contacts.map(contact => contact.name);
         form.setFieldsValue(fieldsValue);
-    }, []);
+    }, [fieldsValue]);
 
     const onFinish = values => {
         const contacts = [];
-        values.contacts.forEach(contact => {
+        values.id = fieldsValue.id;
+        values.contact_names.forEach(contact => {
             contacts.push({"name": contact});
         });
         values.contacts = JSON.stringify(contacts);
@@ -28,10 +30,10 @@ const EditUserGroupForm = ({fieldsValue}) => {
             <Form.Item name="name" label="Name" rules={[{required: true, message: 'Missing area'}]}>
                 <Input/>
             </Form.Item>
-            <Form.List name="contacts">
+            <Form.List name={"contact_names"}>
                 {(fields, {add, remove}) => (
                     <>
-                        {fields.map(field => (
+                        {fields.map(field =>
                             <Space key={field.key} align="baseline">
                                 <Form.Item
                                     {...field}
@@ -40,9 +42,7 @@ const EditUserGroupForm = ({fieldsValue}) => {
                                     <Input/>
                                 </Form.Item>
                                 <MinusCircleOutlined onClick={() => remove(field.name)}/>
-                            </Space>
-                        ))}
-
+                            </Space>)}
                         <Form.Item>
                             <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
                                 Add contacts
