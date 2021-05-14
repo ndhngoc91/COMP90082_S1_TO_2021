@@ -23,3 +23,9 @@ def get_addresses_by_user_id(user_id: Optional[int] = None, db: Session = Depend
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create_new_address(request: schemas.Address, db: Session = Depends(get_db)):
     return address_service.create_new_address(request=request, db=db)
+
+
+@router.delete("/{address_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_address(address_id: int, db: Session = Depends(get_db)):
+    address_service.delete_address(address_id=address_id, db=db)
+    return f'id {address_id} data is deleted'

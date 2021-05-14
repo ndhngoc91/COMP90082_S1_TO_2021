@@ -26,3 +26,13 @@ def create_new_address(request: schemas.Address, db: Session):
     db.commit()
     db.refresh(new_address)
     return new_address
+
+
+def delete_address(address_id: int, db: Session):
+    address_to_delete = db.query(models.Address).filter(models.Address.id == address_id)
+    if not address_to_delete:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"data with id {package_id} not found, delete failure")
+
+    address_to_delete.delete(synchronize_session=False)
+    db.commit()

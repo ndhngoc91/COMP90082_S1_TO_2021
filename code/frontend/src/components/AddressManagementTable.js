@@ -1,16 +1,20 @@
 import React, {useState} from "react";
-import {Col, Row, Space, Table, Button, Typography, Modal} from "antd";
+import {Col, Row, Space, Table, Button, Typography, Modal, notification} from "antd";
 import {PlusOutlined} from "@ant-design/icons";
-import {usePersonalAddresses} from "../hooks/AddressHooks";
+import {useHandleDeleteAddress, usePersonalAddresses} from "../hooks/AddressHooks";
 import AddAddressForm from "./AddressForms/AddAddressForm";
+import EditAddressForm from "./AddressForms/EditAddressForm";
 
 const {Column} = Table;
-const {Title} = Typography;
+const {Title, Link} = Typography;
 
 const UserManagementPage = () => {
-    const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
+    const [isAddAddressFormModalVisible, setIsAddAddressFormModalVisible] = useState(false);
+    const [isEditAddressFormModalVisible, setIsEditAddressFormModalVisible] = useState(false);
+    const [selectedRecord, setSelectedRecord] = useState(null);
 
     const [addresses, {loading}] = usePersonalAddresses();
+    const [handleDeleteAddress] = useHandleDeleteAddress();
 
     return (
         <>
@@ -20,7 +24,7 @@ const UserManagementPage = () => {
                 </Col>
                 <Col>
                     <Space>
-                        <Button type="primary" onClick={() => setIsLoginModalVisible(true)}>
+                        <Button type="primary" onClick={() => setIsAddAddressFormModalVisible(true)}>
                             <PlusOutlined/>
                             Add Address
                         </Button>
@@ -32,21 +36,35 @@ const UserManagementPage = () => {
                 <Column title="City" dataIndex="city"/>
                 <Column title="Postcode" dataIndex="postcode"/>
                 <Column title="Address Line" dataIndex="address_line"/>
-                <Column title="Action" render={() => (
+                <Column title="Action" render={record => (
                     <>
                         <Space size="middle">
-                            <a>Edit</a>
-                            <a>Delete</a>
+                            <Link onClick={() => {
+                                setSelectedRecord(record);
+                                setIsEditAddressFormModalVisible(true);
+                            }}>Edit</Link>
+                            <Link onClick={() => {
+                                handleDeleteAddress(record.id, () => {
+                                    notification.success({message: "Delete address successfully!"});
+                                });
+                            }}>Delete</Link>
                         </Space>
                     </>
                 )}/>
             </Table>
-            <Modal title="Add Address" visible={isLoginModalVisible}
+            <Modal title="Add Address" visible={isAddAddressFormModalVisible}
                    footer={null} closable={false}
                    onCancel={() => {
-                       setIsLoginModalVisible(false);
+                       setIsAddAddressFormModalVisible(false);
                    }}>
                 <AddAddressForm/>
+            </Modal>
+            <Modal title="Edit Address" visible={isEditAddressFormModalVisible}
+                   footer={null} closable={false}
+                   onCancel={() => {
+                       setIsEditAddressFormModalVisible(false);
+                   }}>
+                <EditAddressForm fieldValues={selectedRecord}/>
             </Modal>
         </>
 

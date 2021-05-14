@@ -73,3 +73,76 @@ export const useHandleAddAddress = () => {
 
     return [handleAddAddress, {handling}];
 };
+
+export const useHandleDeleteAddress = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {userRole}} = useStores();
+
+    const handleDeleteAddress = useCallback((addressId, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.delete(`http://127.0.0.1:8000/addresses/${addressId}`, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 204) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleDeleteAddress, {handling}];
+};
+
+export const useHandleEditAddress = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {userRole}} = useStores();
+
+    const handleEditAddress = useCallback(({
+                                              id: address_id,
+                                              state,
+                                              city,
+                                              postcode,
+                                              address_line,
+                                              order_id
+                                          }, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.post(`http://127.0.0.1:8000/addresses/${address_id}`, {
+                state: state,
+                city: city,
+                postcode: postcode,
+                address_line: address_line,
+                order_id: order_id
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 202) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleEditAddress, {handling}];
+};

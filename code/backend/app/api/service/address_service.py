@@ -16,3 +16,7 @@ def get_addresses_by_user_id(user_id: int, db: Session):
 
 def create_new_address(request: schemas.Address, db: Session):
     return address_repo.create_new_address(request=request, db=db)
+
+
+def delete_address(address_id: int, db: Session):
+    return address_repo.delete_address(address_id=address_id, db=db)
