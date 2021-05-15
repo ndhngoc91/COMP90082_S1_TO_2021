@@ -97,7 +97,7 @@ def test_create_an_invalid_package(test_app):
     assert response.status_code == 422
 
 def test_delete_a_package_that_does_not_exist(test_app):
-    invalid_package_id = str(0) # package_id starts with 0
+    invalid_package_id = str(0) # package_id starts with 1
     delete_response = test_app.delete("/packages/{package_id}".format(package_id=invalid_package_id))
     assert delete_response.status_code == 204
 
