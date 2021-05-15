@@ -7,6 +7,9 @@ import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
+import CustomersPage from "./pages/CustomersPage";
+import HiringFormPage from './pages/HiringFormPage';
+import HiringPaymentResultPage from './pages/HiringPaymentResultPage';
 import RegisterPage from "./pages/RegisterPage";
 import AdminRegisterPage from "./pages/AdminRegisterPage";
 
@@ -28,6 +31,9 @@ createStore().then(store => {
                 <BrowserRouter>
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
+                        <Route path="/hiringForm" exact component={HiringFormPage}/>
+                        <Route path="/hiringPaymentResult" exact component={HiringPaymentResultPage}/>
+                        <Route path="/customers" exact component={CustomersPage}/>
                         <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
