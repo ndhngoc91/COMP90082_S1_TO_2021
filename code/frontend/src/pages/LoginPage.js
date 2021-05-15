@@ -73,11 +73,6 @@ const LoginPage = () => {
                         </Form>
                     </Row>
                 </Col>
-                <Col>
-                    <Button type="link" block href="/hiringForm">
-                        Create a hiring contract!
-                    </Button>
-                </Col>
             </Row>
         </>
     );
