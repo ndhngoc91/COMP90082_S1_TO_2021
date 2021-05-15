@@ -1,6 +1,8 @@
 from typing import Optional
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from starlette import status
+
 from app.api import models, schemas, hashing
 
 
