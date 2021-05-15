@@ -66,7 +66,7 @@ const UserProfileForm = () => {
             notification.success({message: "Edit profile successfully!"});
             login(values); // reset store
         }, () => {
-            notification.success({message: "Failed to edit profile!"});
+            notification.error({message: "Failed to edit profile!"});
         });
     };
 
