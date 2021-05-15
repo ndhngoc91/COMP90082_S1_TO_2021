@@ -13,7 +13,6 @@ import rockyValleyLogo from "../assets/rocky_valley.svg";
 import {useHandleRegisterCustomer} from "../hooks/UserHooks";
 import {useForm} from "antd/es/form/Form";
 
-
 const {Link, Title} = Typography;
 const {Option} = Select;
 
