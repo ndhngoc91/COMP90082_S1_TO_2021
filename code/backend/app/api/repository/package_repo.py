@@ -46,9 +46,6 @@ def create_new_package(request: schemas.Package, db: Session):
         age_group_id=request.age_group_id,
         skill_level_id=request.skill_level_id
     )
-    product_groups = product_group_repo.get_product_groups_by_ids(ids=request.product_group_ids, db=db)
-    for product_group in product_groups:
-        new_package.product_groups.append(product_group)
     db.add(new_package)
     db.commit()
     db.refresh(new_package)

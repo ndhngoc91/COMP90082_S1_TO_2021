@@ -55,7 +55,6 @@ class Package(BaseModel):
     age_group_id: int
     category_id: int
     skill_level_id: int
-    product_group_ids: List[int]
 
 
 class Session(BaseModel):
