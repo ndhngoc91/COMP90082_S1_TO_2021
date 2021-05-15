@@ -12,8 +12,8 @@ router = APIRouter(
 
 
 @router.get("")
-def get_all_categories(db: Session = Depends(get_db)):
-    return category_service.get_all_categories(db)
+def get_all_categories():
+    return category_service.get_all_categories()
 
 
 @router.post("")

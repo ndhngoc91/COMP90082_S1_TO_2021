@@ -19,7 +19,7 @@ class CategoryResource(SimpleModelResource):
     def __init__(self):
         super().__init__()
 
-    def get_all_categories(self, query=None):
+    def get_all_categories(self):
         """
         This method will return all categories of records from the database
 
