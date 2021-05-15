@@ -35,6 +35,7 @@ def create_new_user(request: schemas.UserWithAddresses, db: Session):
                            gender=request.gender,
                            birthday=request.birthday,
                            phone=request.phone,
+                           email=request.email,
                            din=request.din,
                            skill_level_id=request.skill_level_id,
                            user_type_id=request.user_type_id,

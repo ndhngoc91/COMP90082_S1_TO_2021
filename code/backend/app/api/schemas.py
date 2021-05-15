@@ -79,6 +79,7 @@ class UserWithoutPassword(BaseModel):
     gender: Optional[str]
     birthday: Optional[date]
     phone: Optional[str]
+    email: Optional[str]
     din: Optional[float]
     skill_level_id: Optional[int]
     user_type_id: Optional[int]
