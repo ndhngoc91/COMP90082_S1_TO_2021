@@ -93,3 +93,47 @@ def test_delete_a_package_that_does_not_exist(test_app):
     invalid_package_id = str(0) # package_id starts with 0
     delete_response = test_app.delete("/packages/{package_id}".format(package_id=invalid_package_id))
     assert delete_response.status_code == 204
+
+def test_update_a_package(test_app):
+    # Create a package
+    package_data = json.dumps({
+        "name": "Test Package 1",
+        "description": "Test Package 1 has some descriptions",
+        "category_id": 1,
+        "age_group_id": 1,
+        "skill_level_id": 1
+    })
+    post_response = test_app.post("/packages", data=package_data)
+    assert post_response.status_code == 201
+    assert post_response.json()["name"] == "Test Package 1"
+
+    package_id_created = str(post_response.json()["id"])
+
+    # Update the package
+    updated_package_data = json.dumps({
+        "name": "Test Package 2",
+        "description": "Test Package 2 has some descriptions",
+        "category_id": 1,
+        "age_group_id": 2,
+        "skill_level_id": 1
+    })
+    put_response = test_app.put("/packages/{package_id}".format(package_id=package_id_created),
+                             data=updated_package_data)
+    assert put_response.status_code == 202
+    assert put_response.json() == 'UPDATED'
+
+    # Delete the package
+    delete_response = test_app.delete("/packages/{package_id}".format(package_id=package_id_created))
+    assert delete_response.status_code == 204
+
+def test_update_a_package_that_does_not_exist(test_app):
+    updated_package_data = json.dumps({
+        "name": "Test Package 3",
+        "description": "Test Package 3 has some descriptions",
+        "category_id": 1,
+        "age_group_id": 3,
+        "skill_level_id": 1
+    })
+    put_response = test_app.put("/packages/{package_id}".format(package_id="0"),
+                                data=updated_package_data)
+    assert put_response.status_code == 404
