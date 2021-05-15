@@ -22,6 +22,13 @@ def test_get_all_packages(test_app):
     assert response.status_code == 200
     assert len(response.json()) > 0
 
+def test_get_packages_by_query(test_app):
+    sql_query = "Beginner Package - Adult" # Search by keywords in package names
+    response = test_app.get("/packages/filter?query={query}".format(query=sql_query))
+    assert response.status_code == 200
+    assert len(response.json()) > 1
+    assert response.json()[0]["name"] == sql_query
+
 def test_get_packages_by_category_id(test_app):
     response = test_app.get("/packages/filter?category_id=1")
     assert response.status_code == 200
