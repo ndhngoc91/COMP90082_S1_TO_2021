@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { Col, Layout, Spin, Row, Table, Typography, Input } from "antd";
+import React, {useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+import { Col, Layout, Spin, Row, Table, Typography, Input, Radio, Button} from "antd";
 import PageFooter from "../components/PageFooter/PageFooter";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import { useCustomers } from "../hooks/CustomerHooks";
@@ -63,6 +64,17 @@ const CustomersPage = () => {
         }
     ];
 
+    const [selectedCustomer, setSelectedCustomer] = useState("");
+
+
+    const rowSelection = {
+    
+        onSelect: (record, selected, selectedRows) => {
+          setSelectedCustomer(selectedRows[0]);
+        },
+        type: "radio",
+      };
+
     const pagination = {
         position: ["bottom"],
         total: totalCustomers,
@@ -82,8 +94,13 @@ const CustomersPage = () => {
                 <Row justify="center">
                     <Col span={18}>
                         <Row>
-                            <Col span={20}>
+                            <Col span={16}>
                                 <Title level={4}>Customer List</Title>
+                            </Col>
+                            <Col span={4}>
+                                <Link style={{color: "white", backgroundColor:"#1890ff", padding: 4}} 
+                                to={{ pathname: '/hiringForm', state: selectedCustomer}}>
+                                    Add to Hiring Form</Link>
                             </Col>
                             <Col span={4}>
                                 <Search
@@ -104,10 +121,12 @@ const CustomersPage = () => {
                                 bordered
                                 showHeader
                                 pagination={pagination}
+                                rowSelection = {rowSelection}
                             />
                         }
                     </Col>
                 </Row>
+                
             </Content>
             <PageFooter />
         </Layout>

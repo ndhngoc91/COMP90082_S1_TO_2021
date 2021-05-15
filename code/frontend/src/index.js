@@ -4,8 +4,8 @@ import {Route, BrowserRouter, Switch} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import CreatePage from "./pages/CreatePage";
-import ChooseCustomerPage from "./pages/ChooseCustomerPage";
 import ProductListPage from "./pages/ProductListPage";
+import ChooseCustomerPage from "./pages/ChooseCustomerPage";
 import CustomersPage from "./pages/CustomersPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
@@ -14,6 +14,8 @@ import OrderPage from "./pages/OrderPage";
 import PackagePage from "./pages/PackagePage";
 import CheckOutPage from "./pages/CheckOutPage";
 import CenterPage from "./pages/CenterPage";
+import HiringFormPage from './pages/HiringFormPage';
+import HiringPaymentResultPage from './pages/HiringPaymentResultPage';
 
 // CSS
 import CategoryPage from "./pages/CategoryPage";
@@ -39,6 +41,8 @@ createStore().then(store => {
                         <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
                         <Route path="/productCategories/:id" exact component={CategoryPage}/>
                         <Route path="/checkout" exact component={CheckOutPage}/>
+                        <Route path="/hiringForm" exact component={HiringFormPage}/>
+                        <Route path="/hiringPaymentResult" exact component={HiringPaymentResultPage}/>
                         <Route path="/customers" exact component={CustomersPage}/>
                         <Route path="/center" component={CenterPage}/>
                     </Switch>

@@ -1,4 +1,4 @@
-import {Row, Col} from "antd";
+import {Row, Col, Button} from "antd";
 import React from "react";
 import LoginForm from "../components/LoginForm"
 
@@ -8,6 +8,11 @@ const LoginPage = () => {
             <Row style={{height: "100%"}} justify="space-around" align="middle">
                 <Col>
                     <LoginForm/>
+                </Col>
+                <Col>
+                    <Button type="link" block href="/hiringForm">
+                        Create a hiring contract!
+                    </Button>
                 </Col>
             </Row>
         </div>
