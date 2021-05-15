@@ -1,61 +1,117 @@
-import React from "react";
-import {useHistory} from "react-router-dom"
-import {Layout, Menu, Image} from "antd";
+import React, {useState} from "react";
+import {useHistory, useLocation} from "react-router-dom"
+import {Button, Form, Input, Layout, Menu, Modal, notification} from "antd";
 import {
     HistoryOutlined,
     ShopOutlined,
     LogoutOutlined,
     ShoppingCartOutlined,
-    UserSwitchOutlined,
     ContainerOutlined,
-    CalendarOutlined
+    SettingOutlined,
+    AccountBookOutlined,
+    HomeOutlined, LoginOutlined, UserAddOutlined
 } from "@ant-design/icons";
 import {useStores} from "../../stores";
-import rockyValleyLogo from "../../assets/rocky_valley.svg";
 import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
+import {USER_ROLE} from "../../consts/UserRole";
+import {useHandleLogin} from "../../hooks/AuthHooks";
+import LoginForm from "../LoginForm";
 
 const {Header} = Layout;
+const {SubMenu} = Menu;
 
-const NavigationBar = observer(({defaultSelected}) => {
+const NavigationBar = observer(() => {
+    const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
+
     const history = useHistory();
+    const location = useLocation();
 
-    const {authStore: {isStaff, logout}} = useStores();
+    const [handleLogin, {handling}] = useHandleLogin();
+
+    const {authStore: {firstName, lastName, userRole, logout}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
-            history.push("/login");
+            history.push("/");
         } else if (key.startsWith("/")) {
             history.push(key)
         }
     }
 
-    const {logoCls, leftItemCls, rightItemCls} = useNavigationBarStyles();
+    const onFinish = values => {
+        handleLogin(values, () => {
+            setIsLoginModalVisible(false);
+            notification.success({message: "Login successfully!"});
+        }, errorMessage => {
+            notification.error({message: errorMessage});
+        });
+    };
+
+    const {leftItemCls, rightItemCls} = useNavigationBarStyles();
 
     return (
         <Header style={{width: "100%", padding: 0}}>
-            <Menu onClick={handleClick} style={{backgroundColor: "#D8D8D5"}} mode="horizontal"
-                  defaultSelectedKeys={[defaultSelected]}>
-                <div className={leftItemCls}>
-                    <Image className={logoCls} src={rockyValleyLogo} preview={false}/>
-                </div>
-                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
-                    Order History
-                </Menu.Item>
-                <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
-
-
-                {isStaff &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package">Packages</Menu.Item>}
-                <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/logout">Logout</Menu.Item>
-                <Menu.Item className={rightItemCls} icon={<LogoutOutlined/>} key="/center">Account</Menu.Item>
-                <Menu.Item className={rightItemCls} icon={<UserSwitchOutlined/>} key="/choose">
-                    Switch account
-                </Menu.Item>
+            <Menu onClick={handleClick} mode="horizontal" theme={"dark"} defaultSelectedKeys={[location.pathname]}>
+                <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
+                {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
+                <>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/products">Products</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
+                </>}
+                {userRole === USER_ROLE.CUSTOMER &&
+                <>
+                    <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/order-history">
+                        Order History
+                    </Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
+                </>}
+                {userRole === USER_ROLE.STAFF &&
+                <>
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/user-management">
+                        User Management
+                    </Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
+                        Booking Management
+                    </Menu.Item>
+                </>}
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
+                    Calendar
+                </Menu.Item>}
+                {userRole === USER_ROLE.STAFF &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
+                    Package Management
+                </Menu.Item>}
+                {userRole === USER_ROLE.GUEST &&
+                <>
+                    <Menu.Item key="login"
+                               className={rightItemCls}
+                               onClick={() => setIsLoginModalVisible(true)}
+                               icon={<LoginOutlined/>}>
+                        Login
+                    </Menu.Item>
+                    <Menu.Item className={rightItemCls} key="/register" icon={<UserAddOutlined/>}>
+                        Register
+                    </Menu.Item>
+                </>}
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>}
+                         title={`${firstName} ${lastName}`}>
+                    {userRole === USER_ROLE.CUSTOMER &&
+                    <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
+                    <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
+                </SubMenu>
+                }
             </Menu>
+            <Modal title="Login" visible={isLoginModalVisible}
+                   footer={null} closable={false}
+                   onCancel={() => {
+                       setIsLoginModalVisible(false);
+                   }}>
+                <LoginForm handling={handling} onFinish={onFinish}/>
+            </Modal>
         </Header>
     );
 });

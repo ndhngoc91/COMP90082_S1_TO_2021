@@ -1,22 +1,11 @@
-# Set base image
-FROM python:3.8-alpine
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
-# Set working directory
-WORKDIR /app
+WORKDIR /usr/src/backend
 
-# Timezone selection
-RUN apk add --no-cache tzdata
-ENV TZ=Australia/Melbourne
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ADD requirements.txt .
 
-# Install Alpine dependencies
-RUN apk add build-base
-RUN apk add unixodbc-dev
-RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev
+COPY /app .
 
-# Copy source code and project files, and install requirements
-COPY ./ /app
 RUN pip install -r requirements.txt
 
-# Start the server
-CMD /bin/sh -c "python -m flask run -h 0.0.0.0 -p 5000"
+CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]

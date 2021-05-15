@@ -1,55 +1,149 @@
 import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useStores} from "../stores";
+import {USER_ROLE} from "../consts/UserRole";
 
-export const useAddresses = () => {
-    const {
-        addressStore: {
-            setAddresses
-        },
-        customerStore: {customerId, setDeliveryAddrId, setBillingAddrId}
-    } = useStores();
+export const usePersonalAddresses = () => {
+    const [personalAddresses, setPersonalAddresses] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const {authStore: {id: user_id, userRole}} = useStores();
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/customers/${customerId}/addresses`).then(res => {
-            setAddresses(res.data);
-            setDeliveryAddrId(res.data[0].id);
-            setBillingAddrId(res.data[0].id);
-        }).catch(err => console.log(err));
+        setLoading(true);
+        if (userRole !== USER_ROLE.GUEST) {
+            axios.get(`http://127.0.0.1:8000/addresses?user_id=${user_id}`).then(response => {
+                if (response.status === 200) {
+                    response.data.forEach((dataItem, index) => {
+                        dataItem.key = index
+                    });
+                    setPersonalAddresses(response.data);
+                }
+            }).catch(err => console.log(err)).finally(() => {
+                setLoading(false);
+            });
+        } else {
+            setPersonalAddresses([]);
+            setLoading(false);
+        }
+
     }, []);
+
+    return [personalAddresses, {loading}];
 };
 
 export const useHandleAddAddress = () => {
     const [handling, setHandling] = useState(false);
-    const {addressStore: {addAddress}} = useStores();
+    const {authStore: {id: user_id, userRole}} = useStores();
 
-    const handleAddAddress = useCallback((customerId, {
-        contact,
-        addr1,
-        addr2,
-        postcode,
-        region,
-        country
-    }, success, failure) => {
-        setHandling(true);
-        axios.post(`http://127.0.0.1:8000/customers/${customerId}/addresses`, {
-            "contact": contact,
-            "address_line1": addr1,
-            "address_line2": addr2,
-            "postcode": postcode,
-            "region": region,
-            "country": country
-        }, {
-            headers: {"Content-Type": "application/JSON; charset=UTF- 8"}
-        }).then((response) => {
-            addAddress(response.data);
-            success();
-        }).catch(() => {
-            failure();
-        }).finally(() => {
+    const handleAddAddress = useCallback(({
+                                              state,
+                                              city,
+                                              postcode,
+                                              address_line,
+                                              order_id
+                                          }, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.post('http://127.0.0.1:8000/addresses', {
+                state: state,
+                city: city,
+                postcode: postcode,
+                address_line: address_line,
+                user_id: user_id,
+                order_id: order_id
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 201) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
             setHandling(false);
-        });
+        }
+
     }, []);
 
-    return [handleAddAddress, {loading: handling}];
+    return [handleAddAddress, {handling}];
+};
+
+export const useHandleDeleteAddress = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {userRole}} = useStores();
+
+    const handleDeleteAddress = useCallback((addressId, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.delete(`http://127.0.0.1:8000/addresses/${addressId}`, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 204) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleDeleteAddress, {handling}];
+};
+
+export const useHandleEditAddress = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {id: user_id, userRole}} = useStores();
+
+    const handleEditAddress = useCallback(({
+                                               id: address_id,
+                                               state,
+                                               city,
+                                               postcode,
+                                               address_line,
+                                               order_id
+                                           }, success, failure = () => {
+    }) => {
+        if (userRole !== USER_ROLE.GUEST) {
+            setHandling(true);
+            axios.put(`http://127.0.0.1:8000/addresses/${address_id}`, {
+                state: state,
+                city: city,
+                postcode: postcode,
+                address_line: address_line,
+                user_id: user_id,
+                order_id: order_id
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 202) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        } else {
+            setHandling(false);
+        }
+
+    }, []);
+
+    return [handleEditAddress, {handling}];
 };

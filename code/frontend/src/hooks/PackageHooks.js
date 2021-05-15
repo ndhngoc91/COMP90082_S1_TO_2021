@@ -27,13 +27,11 @@ export const useHandleFilterPackages = () => {
     const [packages, setPackages] = useState([]);
     const [filtering, setFiltering] = useState(false);
 
-    const filterItems = useCallback((query) => {
+    const handleFilterPackages = useCallback((filterParams) => {
         setFiltering(true);
-        const url = query ? "http://localhost:8000/packages/filter" : "http://localhost:8000/packages";
-        const params = query ? {query: query} : {};
-        axios.get(url, {
+        axios.get("http://localhost:8000/packages/filter", {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-            params: params
+            params: filterParams
         }).then((response) => {
             setPackages(response.data);
         }).finally(() => {
@@ -41,19 +39,29 @@ export const useHandleFilterPackages = () => {
         });
     }, [])
 
-    return [filterItems, {packages, filtering}];
+    return [handleFilterPackages, {packages, filtering}];
 };
 
 export const useHandleAddPackage = () => {
     const [handling, setHandling] = useState(false);
 
-    const handleAddPackage = useCallback(({name, description, products, available}, success, failure) => {
+    const handleAddPackage = useCallback(({
+                                              name,
+                                              description,
+                                              age_group_id,
+                                              category_id,
+                                              skill_level_id,
+                                              product_group_ids
+                                          }, success, failure = () => {
+    }) => {
         setHandling(true);
         axios.post('http://127.0.0.1:8000/packages', {
             name: name,
             description: description,
-            what_is_included: products.join("-"),
-            available: available
+            age_group_id: age_group_id,
+            category_id: category_id,
+            skill_level_id: skill_level_id,
+            product_group_ids: product_group_ids
         }, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {
@@ -71,6 +79,7 @@ export const useHandleAddPackage = () => {
 
     return [handleAddPackage, {handling}];
 };
+
 export const handlePackages = () => {
 
     const [rentPeriod, setRentPeriod] = useState("");
@@ -112,6 +121,40 @@ export const handlePackages = () => {
               setRentPeriod, setSelectedCatogory, getPackages, setLoading ];
 };
 
+export const useHandleEditPackage = () => {
+    const [handling, setHandling] = useState(false);
 
-  
+    const handleEditPackage = useCallback(({
+                                               id,
+                                               name,
+                                               description,
+                                               age_group_id,
+                                               category_id,
+                                               skill_level_id
+                                           }, success, failure = () => {}) => {
+        setHandling(true);
+        axios.put(`http://127.0.0.1:8000/packages/${id}`, {
+            name: name,
+            description: description,
+            age_group_id: age_group_id,
+            category_id: category_id,
+            skill_level_id: skill_level_id,
+            product_group_ids: []
+        }, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then(response => {
+            if (response.status === 202) {
+                success();
+            } else {
+                failure();
+            }
+        }).catch(err => {
+            console.log(err);
+            failure();
+        }).finally(() => {
+            setHandling(false);
+        });
+    }, []);
 
+    return [handleEditPackage, {handling}];
+};

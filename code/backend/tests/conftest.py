@@ -1,33 +1,32 @@
-import os
-import sys
-import tempfile
 import pytest
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from app import create_app,sess
+from starlette.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from app.main import app
 
 
-
-@pytest.fixture
-def apps():
-    apps = create_app('config.test.py')
-    from flask_session import Session
-    sess = Session()
-    sess.init_app(apps)
-    return apps
+@pytest.fixture(scope="module")
+def test_app():
+    client = TestClient(app)
+    yield client
 
 
-@pytest.fixture
-def client(app):
-    return app.test_client()
+# you DO NOT need to modify these configs. The test cases are currently running with your local database
+TEST_HOST = "localhost:3306"
+TEST_USER = "backend"
+TEST_PASSWORD = "password123"
+TEST_DB_NAME = "squizz_app"
+
+SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{TEST_USER}:{TEST_PASSWORD}@{TEST_HOST}/{TEST_DB_NAME}"
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@pytest.fixture
-def runner(app):
-    return app.test_cli_runner()
-
-
-@pytest.fixture
-def session_set():
-    sess.permanent = True
-    sess['login_session'] = "78C7030C644264F9DDBA41821ABD1E98"
-    sess['org_id'] = "11EA64D91C6E8F70A23EB6800B5BCB6D"
+@pytest.fixture(scope="module")
+def test_db():
+    test_db = session_local()
+    try:
+        yield test_db
+    finally:
+        test_db.close()
