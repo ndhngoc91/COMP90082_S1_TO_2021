@@ -17,6 +17,9 @@ import {createStore, StoreContext} from "./stores";
 import AuthRoute from "./navigation/AuthRole";
 import {USER_ROLE} from "./consts/UserRole";
 import UserManagementPage from "./pages/UserManagementPage";
+import PackagePage from "./pages/PackagePage/PackagePage";
+import PackageDetailsPage from "./pages/PackageDetailsPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -36,6 +39,21 @@ createStore().then(store => {
                         <AuthRoute path="/register-as-a-admin" exact Component={AdminRegisterPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
+                        <AuthRoute path="/profile" Component={UserAccountPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER
+                        ]}/>
+                        <AuthRoute path="/packages" Component={PackagePage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/package-details" Component={PackageDetailsPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/shopping-cart" Component={ShoppingCartPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
                         <AuthRoute path="/user-management" exact Component={UserManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
@@ -48,9 +66,6 @@ createStore().then(store => {
                         ]}/>
                         <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
-                        ]}/>
-                        <AuthRoute path="/profile" Component={UserAccountPage} requiredRoles={[
-                            USER_ROLE.CUSTOMER
                         ]}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>
                     </Switch>
