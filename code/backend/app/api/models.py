@@ -194,6 +194,7 @@ class User(Base):
     organization = relationship('Organization')
     skill_level = relationship('SkillLevel')
     user_type = relationship('UserType')
+    addresses = relationship('Address', cascade='save-update')
 
 
 class Address(Base):
