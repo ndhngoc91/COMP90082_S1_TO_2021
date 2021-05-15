@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
-from app.api import token, schemas
+from app.api import token, schemas, models
 from app.api.repository import user_repo, session_repo
 from app.api.util import auth_util
 
@@ -29,6 +29,10 @@ def validate(username: str, password: str, db: Session) -> dict:
     user = user_repo.authenticate(username=username, password=password, db=db)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Credentials are not valid")
+
+    is_user_enabled = db.query(models.User.is_enabled).filter(models.User.username == username).first()
+    if is_user_enabled == 0:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Account is disabled")
 
     connection = auth_util.build_connection(org_id="11EA64D91C6E8F70A23EB6800B5BCB6D")  # temporarily hardcoded
     session_id, status_code = connection.create_session()

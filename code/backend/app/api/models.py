@@ -185,6 +185,7 @@ class User(Base):
     phone = Column(VARCHAR(20))
     email = Column(VARCHAR(255), unique=True)
     din = Column(DECIMAL(5, 2))
+    is_enabled = Column(Integer)
     skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
     organization_id = Column(ForeignKey('organizations.id'), index=True)
     user_type_id = Column(ForeignKey('user_types.id'), index=True)
