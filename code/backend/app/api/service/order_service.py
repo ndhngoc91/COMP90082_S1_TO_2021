@@ -3,4 +3,4 @@ from app.api.repository import order_repo
 
 
 def get_all_orders(db: Session):
-    return order_repo.get_all(db=db)
+    return order_repo.get_all_orders(db=db)

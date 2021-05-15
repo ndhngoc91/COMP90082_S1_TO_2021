@@ -30,12 +30,12 @@ class Order(BaseModel):
 
 
 class Address(BaseModel):
-    contact: str
-    address_line1: str
-    address_line2: str
-    postcode: str
-    region: str
-    country: str
+    state: Optional[str]
+    city: Optional[str]
+    postcode: Optional[str]
+    address_line: Optional[str]
+    user_id: Optional[int]
+    order_id: Optional[int]
 
 
 class Token(BaseModel):
@@ -55,7 +55,6 @@ class Package(BaseModel):
     age_group_id: int
     category_id: int
     skill_level_id: int
-    product_group_ids: List[int]
 
 
 class Session(BaseModel):
@@ -69,42 +68,30 @@ class Username(BaseModel):
     username: str
 
 
-class User(Username):
-    email: str
-    birthday: date
-    phone: str
-    gender: str
-    address_line: str
-    state: str
-    city: str
-    postcode: str
-    user_type: str
-    class Config:
-        orm_mode = True
+class UserWithoutPassword(BaseModel):
+    username: str
+    height: Optional[float]
+    weight: Optional[float]
+    foot_size: Optional[float]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    gender: Optional[str]
+    birthday: Optional[date]
+    phone: Optional[str]
+    din: Optional[float]
+    skill_level_id: Optional[int]
+    user_type_id: Optional[int]
 
 
-class UserCreate(User):
+class User(UserWithoutPassword):
     password: str
 
 
-class Admin(Username):
-    email: str
-    user_type: Optional[str] = None
-
-    class Config:
-        orm_mode = True
+class UserWithAddresses(User):
+    address_list: Optional[List[Address]]
 
 
-class AdminCreate(Admin):
-    password: str
-
-
-class UserProfile(User):
-    first_name: str
-    last_name: str
-    height: str
-    weight: str
-    shoe_size: str
-    skill_level: str
-    din: str
-    organization: str
+class UserGroup(BaseModel):
+    name: str
+    contacts: str
+    user_id: int

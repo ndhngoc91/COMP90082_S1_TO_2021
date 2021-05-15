@@ -1,11 +1,10 @@
 from app.api.repository import product_repo
 from sqlalchemy.orm import Session
-
 from app.api import models, schemas
 
 
-def get_all(db: Session):
-    return product_repo.get_all(db=db)
+def get_all_products(db: Session):
+    return product_repo.get_all_products(db=db)
 
 
 # deprecated

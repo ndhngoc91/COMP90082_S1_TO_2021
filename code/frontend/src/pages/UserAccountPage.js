@@ -4,8 +4,8 @@ import {BrowserRouter, Route, Switch, useRouteMatch} from "react-router-dom";
 import UserProfileSideMenu from "../components/UserProfileSideMenu";
 import NavigatorBar from "../components/NavigationBar/NavigationBar";
 import UserProfileForm from "../components/UserProfileForm/UserProfileForm";
-import UserGroupList from "../components/UserGroupList/UserGroupList";
-
+import UserGroupList from "../components/UserGroupList";
+import AddressManagementTable from "../components/AddressManagementTable";
 
 const {Sider, Content} = Layout;
 
@@ -24,6 +24,7 @@ const UserAccountPage = () => {
                         <Switch>
                             <Route path={`${path}`} exact component={UserProfileForm}/>
                             <Route path={`${path}/user-groups`} component={UserGroupList}/>
+                            <Route path={`${path}/address`} component={AddressManagementTable}/>
                         </Switch>
                     </Content>
                 </Layout>

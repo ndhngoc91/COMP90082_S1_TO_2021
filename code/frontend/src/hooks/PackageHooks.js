@@ -25,7 +25,7 @@ export const useHandleFilterPackages = () => {
     const [packages, setPackages] = useState([]);
     const [filtering, setFiltering] = useState(false);
 
-    const filterItems = useCallback((filterParams) => {
+    const handleFilterPackages = useCallback((filterParams) => {
         setFiltering(true);
         axios.get("http://localhost:8000/packages/filter", {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
@@ -37,7 +37,7 @@ export const useHandleFilterPackages = () => {
         });
     }, [])
 
-    return [filterItems, {packages, filtering}];
+    return [handleFilterPackages, {packages, filtering}];
 };
 
 export const useHandleAddPackage = () => {
@@ -88,7 +88,7 @@ export const useHandleEditPackage = () => {
                                                age_group_id,
                                                category_id,
                                                skill_level_id
-                                           }, success, failure) => {
+                                           }, success, failure = () => {}) => {
         setHandling(true);
         axios.put(`http://127.0.0.1:8000/packages/${id}`, {
             name: name,

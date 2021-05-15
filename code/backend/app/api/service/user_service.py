@@ -1,4 +1,6 @@
 import datetime
+import json
+from typing import Optional
 from fastapi import HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
@@ -6,49 +8,50 @@ from app.api import token, schemas
 from app.api.repository import user_repo, session_repo
 from app.api.util import auth_util
 
-import logging
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-
-
-def create_user(request: schemas.UserCreate, db: Session):
-    return user_repo.create_user(request=request, db=db)
+def get_all_users(db: Session):
+    return user_repo.get_all_users(db=db)
 
 
-def create_admin(request: schemas.AdminCreate, db: Session):
-    return user_repo.create_admin(request=request, db=db)
+def get_user_by_id(user_id: int, db: Session):
+    return user_repo.get_user_by_id(user_id=user_id, db=db)
 
 
-def check_username(username: str, db: Session):
-    if user_repo.check_username(username=username, db=db):
-        return
-    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Username already exists")
+def filter_users(query: Optional[str], db: Session):
+    return user_repo.filter_users(query=query, db=db)
+
+
+def create_new_user(request: schemas.UserWithAddresses, db: Session):
+    return user_repo.create_new_user(request=request, db=db)
 
 
 def validate(username: str, password: str, db: Session) -> dict:
     user = user_repo.authenticate(username=username, password=password, db=db)
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Credentials is not valid")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Credentials are not valid")
 
-    if user.organization_str_id is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Org Id Not Found")
-
-    connection = auth_util.build_connection(org_id=user.organization_str_id)
+    connection = auth_util.build_connection(org_id="11EA64D91C6E8F70A23EB6800B5BCB6D")  # temporarily hardcoded
     session_id, status_code = connection.create_session()
-    session_repo.create(
+    session_repo.create_new_session(
         schemas.Session(
             session_id=session_id,
             date=datetime.datetime.now(),
             user_id=user.id,
-            organization_id=user.organization_id
+            organization_id=1  # temporarily hardcoded
         ),
         db=db
     )
+
     if status_code == "LOGIN_SUCCESS":
-        access_token = token.create_access_token(data={"username": username,
-                                                       "org_id": user.organization_str_id,
+        access_token = token.create_access_token(data={"username": user.username,
+                                                       "org_id": "11EA64D91C6E8F70A23EB6800B5BCB6D",
                                                        "session_id": session_id})
-        return {"access_token": access_token, "token_type": "bearer"}
+        user.access_token = access_token
+        user.token_type = "Bearer"
+        return user
     else:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to connect to Squizz")
+
+
+def update_user(user_id: int, request: schemas.UserWithoutPassword, db: Session):
+    return user_repo.update_user(user_id=user_id, request=request, db=db)

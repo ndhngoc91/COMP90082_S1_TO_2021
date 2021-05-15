@@ -8,7 +8,7 @@ export const useHandleLogin = () => {
 
     const {authStore} = useStores();
 
-    const handleLogin = useCallback(({username, password, signInAsStaff = false}, success) => {
+    const handleLogin = useCallback(({username, password, signInAsStaff = false}, success, failure) => {
         setHandling(true);
         const formData = new FormData();
         formData.set("username", username);
@@ -17,13 +17,14 @@ export const useHandleLogin = () => {
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
         }).then(response => {
             if (response.status === 200) {
-                const accessToken = response.data['access_token'];
-                authStore.login(username, accessToken, signInAsStaff);
+                authStore.login(response.data);
             }
             success();
         }).catch(e => {
             if (e.response.status === 404) {
-                console.log(e.response);
+                failure(e.response.data['detail']);
+            } else {
+                failure("Failed to login!");
             }
         }).finally(() => {
             setHandling(false);

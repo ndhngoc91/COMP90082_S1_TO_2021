@@ -7,11 +7,11 @@ from app.api import models, schemas
 from app.api.repository import product_group_repo
 
 
-def get_all(db: Session):
+def get_all_packages(db: Session):
     return db.query(models.Package).all()
 
 
-def filter_by_query(query: Optional[str],
+def filter_packages(query: Optional[str],
                     category_id: Optional[int],
                     skill_level_id: Optional[int],
                     age_group_id: Optional[int],
@@ -38,7 +38,7 @@ def filter_by_query(query: Optional[str],
     return sql_query.all()
 
 
-def create(request: schemas.Package, db: Session):
+def create_new_package(request: schemas.Package, db: Session):
     new_package = models.Package(
         name=request.name,
         description=request.description,
@@ -46,16 +46,13 @@ def create(request: schemas.Package, db: Session):
         age_group_id=request.age_group_id,
         skill_level_id=request.skill_level_id
     )
-    product_groups = product_group_repo.get_by_ids(ids=request.product_group_ids, db=db)
-    for product_group in product_groups:
-        new_package.product_groups.append(product_group)
     db.add(new_package)
     db.commit()
     db.refresh(new_package)
     return new_package
 
 
-def delete(package_id: int, db: Session):
+def delete_package(package_id: int, db: Session):
     package_to_delete = db.query(models.Package).filter(models.Package.id == package_id)
     if not package_to_delete:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -65,9 +62,8 @@ def delete(package_id: int, db: Session):
     db.commit()
 
 
-def put(package_id: int, request: schemas.Package, db: Session):
+def update_package(package_id: int, request: schemas.Package, db: Session):
     request_dict = dict(request)
-    request_dict.pop("product_group_ids")  # temporarily ignore this value
     package_to_update = db.query(models.Package).filter(models.Package.id == package_id)
     if not package_to_update.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {package_id} not found")

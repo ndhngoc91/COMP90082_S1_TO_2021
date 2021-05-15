@@ -13,4 +13,4 @@ router = APIRouter(
 
 @router.get("")
 def get_all_skill_levels(db: Session = Depends(get_db)):
-    return skill_level_service.get_all(db=db)
+    return skill_level_service.get_all_skill_levels(db=db)

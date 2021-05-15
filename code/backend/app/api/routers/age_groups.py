@@ -13,4 +13,4 @@ router = APIRouter(
 
 @router.get("")
 def get_all_age_groups(db: Session = Depends(get_db)):
-    return age_group_service.get_all(db=db)
+    return age_group_service.get_all_age_groups(db=db)

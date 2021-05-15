@@ -1,22 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ProductListPage from "./pages/ProductListPage";
-import CustomersPage from "./pages/CustomersPage";
-import ProductDetailsPage from "./pages/ProductDetailsPage";
-import OrderDetailsPage from "./pages/OrderDetailsPage";
-import HistoryPage from "./pages/HistoryPage";
-import OrderPage from "./pages/OrderPage";
+import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage";
 import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
-import CheckOutPage from "./pages/CheckOutPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
-import UserCreatePage from "./pages/UserCreatePage";
-import AdminCreatePage from "./pages/AdminCreatePage";
-import UserManagePage from "./pages/UserManagePage";
+import RegisterPage from "./pages/RegisterPage";
+import AdminRegisterPage from "./pages/AdminRegisterPage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -24,6 +16,10 @@ import "./index.css";
 import {createStore, StoreContext} from "./stores";
 import AuthRoute from "./navigation/AuthRole";
 import {USER_ROLE} from "./consts/UserRole";
+import UserManagementPage from "./pages/UserManagementPage";
+import PackagePage from "./pages/PackagePage/PackagePage";
+import PackageDetailsPage from "./pages/PackageDetailsPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -32,33 +28,45 @@ createStore().then(store => {
                 <BrowserRouter>
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
-                        <Route path="/login" exact component={LoginPage}/>
-                        <Route path="/history" exact component={HistoryPage} requiredRoles={[
+                        <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/register" exact Component={RegisterPage} requiredRoles={[
+                            USER_ROLE.STAFF,
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/register-as-a-admin" exact Component={AdminRegisterPage} requiredRoles={[
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/profile" Component={UserAccountPage} requiredRoles={[
                             USER_ROLE.CUSTOMER
                         ]}/>
-                        <Route path="/order" exact component={OrderPage} requiredRoles={[
-                            USER_ROLE.CUSTOMER
+                        <AuthRoute path="/packages" Component={PackagePage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/package-details" Component={PackageDetailsPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/shopping-cart" Component={ShoppingCartPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/user-management" exact Component={UserManagementPage} requiredRoles={[
+                            USER_ROLE.STAFF
                         ]}/>
                         <AuthRoute path="/booking-management" exact Component={BookingManagementPage} requiredRoles={[
-                            USER_ROLE.ADMIN
+                            USER_ROLE.STAFF
                         ]}/>
                         <AuthRoute path="/calendar" exact Component={CalendarPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
-                            USER_ROLE.ADMIN
+                            USER_ROLE.STAFF
                         ]}/>
-                        {<AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
-                            USER_ROLE.ADMIN
-                        ]}/>}
-                        <Route path="/productList" exact component={ProductListPage}/>
-                        <Route path="/products/:productCode*" exact component={ProductDetailsPage}/>
-                        <Route path="/orders/:orderId" exact component={OrderDetailsPage}/>
-                        <Route path="/checkout" exact component={CheckOutPage}/>
-                        <Route path="/customers" exact component={CustomersPage}/>
-                        {/*new add*/}
-                        <Route path="/admin-profile" component={UserManagePage}/>
-                        <Route path="/profile" exact component={UserAccountPage}/>
-                        <Route path="/user-create" exact component={UserCreatePage}/>
-                        <Route path="/admin-create" exact component={AdminCreatePage}/>
+                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
+                            USER_ROLE.STAFF
+                        ]}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>
                     </Switch>
                 </BrowserRouter>
