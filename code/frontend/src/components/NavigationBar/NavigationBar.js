@@ -57,15 +57,8 @@ const NavigationBar = observer(() => {
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
                 <>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/products">Products</Menu.Item>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
-                </>}
-                {userRole === USER_ROLE.CUSTOMER &&
-                <>
-                    <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/order-history">
-                        Order History
-                    </Menu.Item>
-                    <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/packages">Packages</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/package-details">Package Details</Menu.Item>
                 </>}
                 {userRole === USER_ROLE.STAFF &&
                 <>
@@ -102,8 +95,8 @@ const NavigationBar = observer(() => {
                     {userRole === USER_ROLE.CUSTOMER &&
                     <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
-                </SubMenu>
-                }
+                </SubMenu>}
+                <Menu.Item className={rightItemCls} icon={<ShopOutlined/>} key="/shopping-cart">Shopping Cart</Menu.Item>
             </Menu>
             <Modal title="Login" visible={isLoginModalVisible}
                    footer={null} closable={false}

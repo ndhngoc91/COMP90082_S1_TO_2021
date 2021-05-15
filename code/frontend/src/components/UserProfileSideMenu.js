@@ -2,8 +2,7 @@ import React from "react";
 import "antd/dist/antd.css"
 import {Menu} from "antd";
 import {
-    DesktopOutlined, HomeOutlined,
-    MailOutlined, TeamOutlined
+    HomeOutlined, MailOutlined, TeamOutlined
 } from "@ant-design/icons";
 import {Link, useLocation} from "react-router-dom";
 
