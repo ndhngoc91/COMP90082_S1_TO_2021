@@ -1,18 +1,19 @@
 import logging
 import datetime
-from app.model.address import Address
-from app.model.customer import Customer
-from app.model.organization import Organization
-from app.resource.database_base import DatabaseBase
+
 from app.resource.simple_model_resource import SimpleModelResource as SR
 from app.model.order import Order
 from app.model.order_detail import OrderDetail
+from app.model.order_extra import OrderExtra
+
+from typing import List
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-class OrderResource(DatabaseBase):
+class OrderResource(SR):
     """
     A subclass of DatabaseBase, responsible for handling database
     operations regarding orders
@@ -69,7 +70,8 @@ class OrderResource(DatabaseBase):
                     order_details = self.run_query(search_query, values, False)
                     order['lines'] = order_details
                 except Exception as e:
-                    logger.error(f'Could not retrieve order details for order ID {order_id}')
+                    logger.error(
+                        f'Could not retrieve order details for order ID {order_id}')
 
             result = {
                 'status': 'success',
@@ -86,48 +88,72 @@ class OrderResource(DatabaseBase):
 
         return result
 
-    def create_order(self, org: Organization, customer: Customer, delivery: Address, billing: Address,
-                     order_details_list: [OrderDetail], status, instructions=""):
+    def create_order(self, packages: List[Order]):
         """Create an order for the provided customer"""
         new_order = Order()
-        new_order.organizationId = org.id
-        new_order.createdDate = datetime.datetime.now().strftime("%Y-%m-%d  %H:%M:%S"),
-        new_order.instructions = instructions
-        new_order.deliveryOrgName = delivery.organization
-        new_order.deliveryContact = delivery.contact
-        new_order.deliveryEmail = delivery.email
-        new_order.deliveryAddress1 = delivery.address_line1
-        new_order.deliveryAddress2 = delivery.address_line2
-        new_order.deliveryAddress3 = delivery.address_line3
-        new_order.deliveryRegionName = delivery.region
-        new_order.deliveryCountryName = delivery.country
-        new_order.deliveryPostcode = delivery.postcode
-        new_order.billingContact = billing.contact
-        new_order.billingOrgName = billing.organization
-        new_order.billingEmail = billing.email
-        new_order.billingAddress1 = billing.address_line1
-        new_order.billingAddress2 = billing.address_line2
-        new_order.billingAddress3 = billing.address_line3
-        new_order.billingRegionName = billing.region
-        new_order.billingCountryName = billing.country
-        new_order.billingPostcode = billing.postcode
-        new_order.billStatus = status
-        new_order.customer_id = customer.id
 
-        # Create Order and Related Order lines
+        new_order.user_id = packages[0].user_id
+        new_order.start_date = packages[0].start_date
+        new_order.end_date = packages[0].end_date
+        new_order.description = None
+        new_order.is_drop_ship = "N"
+        new_order.is_pending = "Y"
+
+        order_id_query = "SELECT max(id) from orders"
+        order_detail_id_query = "SELECT max(id) from order_details"
+
+        # Create Order
         sr = SR()
-        try:
-            sr.insert(new_order, False)
-            for line in order_details_list:
-                line.orderId = new_order.id
-                sr.insert(line, False)
+        failed_to_store = []
 
+        try:
+            sr.insert(new_order, True)
+
+            order_id = self.run_query(
+                order_id_query,
+                [],
+                True)[0]["max(id)"]
         except Exception as e:
-            sr.connection.rollback()
-            sr.cursor.close()
-            raise e
-        else:
-            sr.connection.commit()
-            sr.cursor.close()
-            new_order.lines = order_details_list
-            return new_order
+            failed_to_store.append("error: " + str(e))
+            return failed_to_store
+
+        # create order detail
+        new_order_detail = OrderDetail()
+        new_order_extra = OrderExtra()
+        details_id = []
+        for package in packages:
+            new_order_detail.order_id = order_id
+            new_order_detail.package_id = package.package_id
+            new_order_detail.user_id = package.user_id
+            try:
+                sr.insert(new_order_detail, True)
+            except Exception as e:
+                failed_to_store.append("error: " + str(e))
+                return failed_to_store
+            order_details_id = self.run_query(
+                order_detail_id_query,
+                [],
+                True)[0]["max(id)"]
+            details_id.append(order_details_id)
+
+            # create order extra
+            for extra in package.extras:
+
+                new_order_extra.order_details_id = order_details_id
+                new_order_extra.extra_id = extra
+                try:
+                    sr.insert(new_order_extra, True)
+                except Exception as e:
+                    failed_to_store.append("error: " + str(e))
+                    return failed_to_store
+
+        result = {
+            'status': "success",
+            'message': "successfully stored packages",
+            'data': {
+                'failed': failed_to_store
+            },
+            'inserted_order_id': details_id
+
+        }
+        return result

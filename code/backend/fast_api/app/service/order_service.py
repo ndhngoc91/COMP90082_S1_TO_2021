@@ -70,3 +70,9 @@ def get_order(order_id):
     lines = SimpleModelResource().find_all(OrderDetail({'orderId': order_id}))
     order.lines = lines
     return order
+
+def create_order(packages):
+    return OrderResource().create_order(packages)
+
+
+
