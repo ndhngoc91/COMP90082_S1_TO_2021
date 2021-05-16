@@ -16,6 +16,7 @@ import {
 } from "antd";
 import {usePackage} from "../hooks/PackageHooks";
 import {useStores} from "../stores";
+import imageComing from "../assets/imageComing.png";
 
 const {Content} = Layout;
 const {Title, Paragraph} = Typography;
@@ -73,7 +74,7 @@ const PackageDetailsPage = () => {
                     {package_ &&
                     <Row justify="space-between" gutter={80}>
                         <Col span={12}>
-                            <Image style={{width: "100%"}} src={package_["image_url"]}/>
+                            <Image style={{width: "100%"}} src={package_["image_url"]} fallback={imageComing}/>
                         </Col>
                         <Col span={12}>
                             <Space direction="vertical">
