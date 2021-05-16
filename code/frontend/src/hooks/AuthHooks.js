@@ -23,7 +23,9 @@ export const useHandleLogin = () => {
         }).catch(e => {
             if (e.response.status === 404) {
                 failure(e.response.data['detail']);
-            } else {
+            } else if (e.response.status === 401){
+                failure(e.response.data['detail']);
+            } else{
                 failure("Failed to login!");
             }
         }).finally(() => {
