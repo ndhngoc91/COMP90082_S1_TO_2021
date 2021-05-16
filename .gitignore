@@ -1,0 +1,35 @@
+# Flask related
+.DS_Store
+.env
+.flaskenv
+*.pyc
+*.pyo
+env/
+env*
+dist/
+build/
+*.egg
+*.egg-info/
+_mailinglist
+.tox/
+.cache/
+.pytest_cache/
+__pycache__/
+flask_session/
+venv/
+squizz/
+.idea/
+docs/_build/
+.vscode
+
+# Node
+node_modules/
+package-lock.json
+yarn.lock
+yarn-error.log
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+*,cover

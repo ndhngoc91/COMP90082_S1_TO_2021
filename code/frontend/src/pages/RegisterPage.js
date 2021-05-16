@@ -14,7 +14,6 @@ import {useHandleRegisterCustomer} from "../hooks/UserHooks";
 import {useForm} from "antd/es/form/Form";
 import {useHistory} from "react-router-dom";
 
-
 const {Link, Title} = Typography;
 const {Option} = Select;
 
