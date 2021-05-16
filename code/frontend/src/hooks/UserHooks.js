@@ -134,7 +134,8 @@ export const useHandleEditProfile = () => {
                                                email,
                                                din,
                                                skill_level_id,
-                                               user_type_id
+                                               user_type_id,
+                                               is_enabled
                                            }, success, failure = () => {
     }) => {
         setHandling(true);
@@ -151,7 +152,8 @@ export const useHandleEditProfile = () => {
             email:email,
             din: din,
             skill_level_id: skill_level_id,
-            user_type_id: user_type_id
+            user_type_id: user_type_id,
+            is_enabled: is_enabled,
         }, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {
