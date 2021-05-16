@@ -41,10 +41,15 @@ def is_enable(username: str, db: Session):
 
 
 def create_new_user(request: schemas.UserWithAddresses, db: Session):
-    user = db.query(models.User).filter(models.User.username == request.username).first()
-    if user:
+    is_username_exist = db.query(models.User).filter(models.User.username == request.username).first()
+    if is_username_exist:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail="Username already exists")
+
+    is_email_exist = db.query(models.User).filter(models.User.email == request.email).first()
+    if is_email_exist:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail="Email already exists")
 
     new_user = models.User(username=request.username,
                            height=request.height,
