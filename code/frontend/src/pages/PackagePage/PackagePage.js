@@ -11,8 +11,6 @@ const {Title, Link} = Typography;
 const {Content} = Layout;
 
 const PackagePage = () => {
-    const history = useHistory();
-
     const [packages] = usePackages();
 
     const {packageItemCls} = usePackagePageStyles();

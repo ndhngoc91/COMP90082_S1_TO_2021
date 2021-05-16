@@ -14,7 +14,7 @@ import {
     Space,
     Typography
 } from "antd";
-import bikePhoto from "../assets/bike.png";
+import bikePhoto from "../assets/packages/Ski Packages/Performance Package.png";
 import {usePackage} from "../hooks/PackageHooks";
 import {useStores} from "../stores";
 
