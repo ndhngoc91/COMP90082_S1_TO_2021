@@ -131,6 +131,7 @@ export const useHandleEditProfile = () => {
                                                gender,
                                                birthday,
                                                phone,
+                                               email,
                                                din,
                                                skill_level_id,
                                                user_type_id
@@ -147,6 +148,7 @@ export const useHandleEditProfile = () => {
             gender: gender,
             birthday: birthday,
             phone: phone,
+            email:email,
             din: din,
             skill_level_id: skill_level_id,
             user_type_id: user_type_id

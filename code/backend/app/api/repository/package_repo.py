@@ -12,7 +12,7 @@ def get_all_packages(db: Session):
 
 
 def get_package(package_id: int, db: Session):
-    return db.query(models.Package).join(models.Package.product_groups).filter(models.Package.id == package_id).first()
+    return db.query(models.Package).filter(models.Package.id == package_id).first()
 
 
 def filter_packages(query: Optional[str],
