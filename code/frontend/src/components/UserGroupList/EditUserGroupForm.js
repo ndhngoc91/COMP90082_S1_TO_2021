@@ -22,6 +22,7 @@ const EditUserGroupForm = ({fieldsValue}) => {
         values.contacts = JSON.stringify(contacts);
         handleEditUserGroup(values, () => {
             notification.success({message: "Edit user group successfully!"});
+            location.reload();
         });
     };
 
