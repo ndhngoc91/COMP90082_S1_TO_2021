@@ -2,6 +2,7 @@ import axios from "axios";
 import {useCallback, useState} from "react";
 import {message as antdMessage} from "antd";
 import {useStores} from "../stores";
+import CryptoJs from "crypto-js";
 
 export const useHandleLogin = () => {
     const [handling, setHandling] = useState(false);
@@ -12,7 +13,7 @@ export const useHandleLogin = () => {
         setHandling(true);
         const formData = new FormData();
         formData.set("username", username);
-        formData.set("password", password);
+        formData.set("password", CryptoJs.MD5(password).toString());
         axios.post("http://localhost:8000/auth/login", formData, {
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
         }).then(response => {

@@ -118,7 +118,40 @@ const UserGroupList = () => {
                     closable={false}
                     onClose={() => setDrawVisible(false)}
                     visible={drawVisible}>
-                {selectedContact.name}
+                <p >
+                    User Profile
+                </p>
+                <Row>
+                    <Col span={12}>
+                        <p>Username：</p>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <p>First Name：</p>
+                    </Col>
+                    <Col span={12}>
+                        <p>Last Name：</p>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <p>Birthday：</p>
+                    </Col>
+                    <Col span={12}>
+                        <p>Gender：</p>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <p>Phone：</p>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <p>Email：</p>
+                    </Col>
+                </Row>
             </Drawer>
         </>
     );

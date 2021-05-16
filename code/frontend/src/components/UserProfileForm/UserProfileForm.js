@@ -47,6 +47,7 @@ const UserProfileForm = () => {
         console.log("skill",skill_level_id);
         setEstimatedDin(SkierCode({weight, height, skill_level_id, age, footSize}));
         console.log("din",estimatedDin);
+        const pwd = CryptoJs.MD5(password).toString();
     }, [weight, height, skill_level_id,age,footSize]);
 
     const onStateChange = value => {
