@@ -21,6 +21,26 @@ export const usePackages = () => {
     return [packages, {loading}];
 };
 
+export const usePackage = (package_id) => {
+    const [loading, setLoading] = useState(false);
+    const [package_, setPackage_] = useState([]);
+
+    useEffect(() => {
+        setLoading(true);
+        axios.get(`http://127.0.0.1:8000/packages/${package_id}`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then(response => {
+            if (response.status === 200) {
+                setPackage_(response.data);
+            }
+        }).finally(() => {
+            setLoading(false);
+        });
+    }, []);
+
+    return [package_, {loading}];
+}
+
 export const useHandleFilterPackages = () => {
     const [packages, setPackages] = useState([]);
     const [filtering, setFiltering] = useState(false);
@@ -88,7 +108,8 @@ export const useHandleEditPackage = () => {
                                                age_group_id,
                                                category_id,
                                                skill_level_id
-                                           }, success, failure = () => {}) => {
+                                           }, success, failure = () => {
+    }) => {
         setHandling(true);
         axios.put(`http://127.0.0.1:8000/packages/${id}`, {
             name: name,

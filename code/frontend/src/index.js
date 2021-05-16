@@ -7,6 +7,7 @@ import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
+import CustomersPage from "./pages/CustomersPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminRegisterPage from "./pages/AdminRegisterPage";
 
@@ -19,7 +20,7 @@ import {USER_ROLE} from "./consts/UserRole";
 import UserManagementPage from "./pages/UserManagementPage";
 import PackagePage from "./pages/PackagePage/PackagePage";
 import PackageDetailsPage from "./pages/PackageDetailsPage";
-import ShoppingCartPage from "./pages/ShoppingCartPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -28,6 +29,7 @@ createStore().then(store => {
                 <BrowserRouter>
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
+                        <Route path="/customers" exact component={CustomersPage}/>
                         <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
@@ -46,7 +48,7 @@ createStore().then(store => {
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.GUEST
                         ]}/>
-                        <AuthRoute path="/package-details" Component={PackageDetailsPage} requiredRoles={[
+                        <AuthRoute path="/package-details/:packageId" Component={PackageDetailsPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.GUEST
                         ]}/>

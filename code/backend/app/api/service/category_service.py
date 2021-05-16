@@ -1,8 +1,9 @@
-from app.api.repository import category_repo
-from sqlalchemy.orm import Session
-
-from app.api import models, schemas
+from app.api.resource.category_resource import CategoryResource
 
 
-def get_all_categories(db: Session):
-    return category_repo.get_all_categories(db=db)
+def get_all_categories():
+    return CategoryResource().get_all_categories()
+
+
+def list_category_details(days, category_id):
+    return CategoryResource().get_category_details(days, category_id)

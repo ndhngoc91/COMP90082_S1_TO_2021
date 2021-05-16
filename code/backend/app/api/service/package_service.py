@@ -1,12 +1,21 @@
 from typing import Optional
-
 from sqlalchemy.orm import Session
 from app.api import models, schemas
-from app.api.repository import package_repo, product_group_repo
+from app.api.repository import package_repo, trail_type_repo, product_group_repo
 
 
 def get_all_packages(db: Session):
-    return package_repo.get_all_packages(db=db)
+    packages = package_repo.get_all_packages(db=db)
+    for package in packages:
+        package.trail_types = trail_type_repo.get_trail_types_by_package_id(package_id=package.id, db=db)
+    return packages
+
+
+def get_package(package_id: int, db: Session):
+    package = package_repo.get_package(package_id=package_id, db=db)
+    if package is not None:
+        package.trail_types = trail_type_repo.get_trail_types_by_package_id(package_id=package_id, db=db)
+    return package
 
 
 def filter_packages(query: Optional[str],
