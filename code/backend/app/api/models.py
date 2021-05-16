@@ -1,5 +1,6 @@
 from sqlalchemy import BigInteger, Column, DECIMAL, DateTime, Enum, Float, ForeignKey, Integer, String, Table, Text, \
     text, Date, DATE, BOOLEAN, VARCHAR
+from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.orm import relationship
 from app.api.database import Base
 
@@ -185,6 +186,7 @@ class User(Base):
     phone = Column(VARCHAR(20))
     email = Column(VARCHAR(255), unique=True)
     din = Column(DECIMAL(5, 2))
+    is_enabled = Column(TINYINT, server_default=text("'1'"))
     skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
     organization_id = Column(ForeignKey('organizations.id'), index=True)
     user_type_id = Column(ForeignKey('user_types.id'), index=True)

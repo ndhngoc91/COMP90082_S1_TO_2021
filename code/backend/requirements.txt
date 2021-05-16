@@ -12,4 +12,5 @@ python-multipart
 pymysql~=1.0.2
 jose~=1.0.0
 sqlacodegen
-starlette
+starlette==0.13.6
+pip==21.1.1
