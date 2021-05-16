@@ -19,14 +19,14 @@ import moment from "moment";
 const {Option} = Select;
 
 const UserProfileForm = () => {
-    const {authStore: {values: initialValues, din, login}} = useStores();
+    const {authStore: {values: initialValues, login}} = useStores();
 
     const [height, setHeight] = useState(initialValues.height);
     const [weight, setWeight] = useState(initialValues.weight);
     const [footSize, setFootSize] = useState(initialValues.foot_size);
     const [skill_level_id, setSkillLevel] = useState(initialValues.skill_level_id);
     const [birthday, setBirthday] = useState(initialValues.birthday);
-    const [estimatedDin, setEstimatedDin] = useState(0);
+    const [estimateDin, setEstimatedDin] = useState(initialValues.din === null ? 0 : initialValues.din);
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
@@ -45,8 +45,8 @@ const UserProfileForm = () => {
         console.log("footsize",footSize);
         console.log(age);
         console.log("skill",skill_level_id);
-        setEstimatedDin(SkierCode({weight, height, skill_level_id, age, footSize}));
-        console.log("din",estimatedDin);
+        setEstimatedDin(parseInt(SkierCode({weight, height, skill_level_id, age, footSize})));
+        console.log("din",estimateDin);
     }, [weight, height, skill_level_id,age,footSize]);
 
     const onStateChange = value => {
@@ -62,11 +62,14 @@ const UserProfileForm = () => {
     const onFinish = values => {
         values.birthday = values.birthday.format("YYYY-MM-DD");
         values = Object.assign(initialValues, values)
+        values.din = estimateDin;
         handleEditProfile(values, () => {
             notification.success({message: "Edit profile successfully!"});
             login(values); // reset store
+            console.log(values)
         }, () => {
             notification.error({message: "Failed to edit profile!"});
+            console.log(values.din)
         });
     };
 
@@ -165,7 +168,8 @@ const UserProfileForm = () => {
                                        name="skill_level_id"
                                        rules={[{required: true, message: "Required!"}]}>
                                 <Select placeholder="Select Skill Level" disabled={editing === false}
-                                        value={skill_level_id} onChange={e => setSkillLevel(parseInt(e))}>
+                                        size="large" value={skill_level_id}
+                                        onChange={e => setSkillLevel(parseInt(e))}>
                                     {skillLevels.map((skillLevel, index) => {
                                         return (
                                             <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
@@ -175,12 +179,13 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item label="DIN">
-                                <Tag color="green" style={{
+                            <Form.Item label="DIN" name="din">
+                                <Tag color="green" size="large"
+                                     style={{
                                     fontSize: "25px",
                                     padding: "5px"
                                 }}>
-                                    {estimatedDin ? estimatedDin : din}
+                                    {estimateDin}
                                 </Tag>
                             </Form.Item>
                         </Col>
