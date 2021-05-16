@@ -148,6 +148,7 @@ class Package(Base):
     age_group_id = Column(ForeignKey('age_groups.id'), nullable=False, index=True)
     name = Column(VARCHAR(45))
     description = Column(VARCHAR(45))
+    image_key = Column(VARCHAR(45))
 
     age_group = relationship('AgeGroup')
     category = relationship('Category')

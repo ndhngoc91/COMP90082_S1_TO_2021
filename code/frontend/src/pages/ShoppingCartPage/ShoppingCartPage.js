@@ -1,8 +1,21 @@
 import React from "react";
-import {Button, Col, Descriptions, Divider, Image, Layout, Row, Space, Typography, DatePicker, Tag} from "antd";
+import {
+    Button,
+    Col,
+    Descriptions,
+    Divider,
+    Image,
+    Layout,
+    Row,
+    Space,
+    Typography,
+    DatePicker,
+    Tag,
+    notification
+} from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
-import {BrowserRouter} from "react-router-dom";
-import bikePhoto from "../../assets/bike.png";
+import {BrowserRouter, useHistory} from "react-router-dom";
+import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.png";
 import {useStores} from "../../stores";
 import {useShoppingCartPageStyles} from "./styles";
 import {observer} from "mobx-react-lite";
@@ -12,6 +25,8 @@ const {Title} = Typography;
 const {RangePicker} = DatePicker;
 
 const ShoppingCartPage = observer(() => {
+    const history = useHistory();
+
     const {shoppingCartStore: {totalCost, cartItems, deleteCartItem}} = useStores();
 
     const {tagCls, fullWidthCls} = useShoppingCartPageStyles();
@@ -74,9 +89,14 @@ const ShoppingCartPage = observer(() => {
                         </Col>
                         <Col span={6}>
                             <Space direction="vertical" className={fullWidthCls}>
-                                <Button className={fullWidthCls} type="primary" size="large">Proceed to
-                                    checkout</Button>
-                                <Button className={fullWidthCls} size="large">Continue booking</Button>
+                                <Button className={fullWidthCls} type="primary" size="large" onClick={() => {
+                                    notification.success({message: `Checking out: ${JSON.stringify(cartItems)}`});
+                                }}>
+                                    Proceed to checkout
+                                </Button>
+                                <Button className={fullWidthCls} size="large" onClick={() => {
+                                    history.push("/packages");
+                                }}>Continue booking</Button>
                             </Space>
                         </Col>
                     </Row>

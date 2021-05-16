@@ -56,10 +56,7 @@ const NavigationBar = observer(() => {
             <Menu onClick={handleClick} mode="horizontal" theme={"dark"} defaultSelectedKeys={[location.pathname]}>
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
-                <>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/packages">Packages</Menu.Item>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/package-details">Package Details</Menu.Item>
-                </>}
+                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/packages">Packages</Menu.Item>}
                 {userRole === USER_ROLE.STAFF &&
                 <>
                     <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/user-management">
