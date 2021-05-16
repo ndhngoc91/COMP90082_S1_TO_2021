@@ -2,6 +2,7 @@ import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
 export const usePersonalAddresses = () => {
     const [personalAddresses, setPersonalAddresses] = useState([]);
@@ -11,7 +12,7 @@ export const usePersonalAddresses = () => {
     useEffect(() => {
         setLoading(true);
         if (userRole !== USER_ROLE.GUEST) {
-            axios.get(`http://127.0.0.1:8000/addresses?user_id=${user_id}`).then(response => {
+            axios.get(`${BACKEND_ENDPOINT}addresses?user_id=${user_id}`).then(response => {
                 if (response.status === 200) {
                     response.data.forEach((dataItem, index) => {
                         dataItem.key = index
@@ -45,7 +46,7 @@ export const useHandleAddAddress = () => {
     }) => {
         if (userRole !== USER_ROLE.GUEST) {
             setHandling(true);
-            axios.post('http://127.0.0.1:8000/addresses', {
+            axios.post(`${BACKEND_ENDPOINT}addresses`, {
                 state: state,
                 city: city,
                 postcode: postcode,
@@ -82,7 +83,7 @@ export const useHandleDeleteAddress = () => {
     }) => {
         if (userRole !== USER_ROLE.GUEST) {
             setHandling(true);
-            axios.delete(`http://127.0.0.1:8000/addresses/${addressId}`, {
+            axios.delete(`${BACKEND_ENDPOINT}addresses/${addressId}`, {
                 headers: {"Content-Type": "application/JSON; charset=UTF-8"}
             }).then(response => {
                 if (response.status === 204) {
@@ -119,7 +120,7 @@ export const useHandleEditAddress = () => {
     }) => {
         if (userRole !== USER_ROLE.GUEST) {
             setHandling(true);
-            axios.put(`http://127.0.0.1:8000/addresses/${address_id}`, {
+            axios.put(`${BACKEND_ENDPOINT}addresses/${address_id}`, {
                 state: state,
                 city: city,
                 postcode: postcode,

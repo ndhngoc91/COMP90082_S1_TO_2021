@@ -14,12 +14,12 @@ import {
     Space,
     Typography
 } from "antd";
-import bikePhoto from "../assets/bike.png";
 import {usePackage} from "../hooks/PackageHooks";
 import {useStores} from "../stores";
+import imageComing from "../assets/imageComing.png";
 
 const {Content} = Layout;
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 const layout = {
     labelCol: {span: 16},
@@ -74,17 +74,19 @@ const PackageDetailsPage = () => {
                     {package_ &&
                     <Row justify="space-between" gutter={80}>
                         <Col span={12}>
-                            <Image style={{width: "100%"}} src={bikePhoto} preview={false}/>
+                            <Image style={{width: "100%"}} src={package_["image_url"]} fallback={imageComing}/>
                         </Col>
                         <Col span={12}>
                             <Space direction="vertical">
-                                <Title level={2}>{package_.name}</Title>
+                                <Title level={2}>{package_["name"]}</Title>
                                 <Descriptions bordered>
                                     <Descriptions.Item label="Status" span={3}>
                                         Available
                                     </Descriptions.Item>
                                     <Descriptions.Item label="Summary" span={3}>
-                                        {package_.description}
+                                        {package_["description"] && package_["description"].split("/").map((description, key) => {
+                                            return <Paragraph key={key}>{description}</Paragraph>;
+                                        })}
                                     </Descriptions.Item>
                                 </Descriptions>
                                 <Divider/>
