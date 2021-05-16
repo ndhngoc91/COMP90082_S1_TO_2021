@@ -2,6 +2,7 @@ import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
 export const useUserGroups = (userId) => {
     const [userGroups, setUserGroups] = useState([]);
@@ -9,7 +10,7 @@ export const useUserGroups = (userId) => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`http://localhost:8000/user-groups?user_id=${userId}`, {
+        axios.get(`${BACKEND_ENDPOINT}user-groups?user_id=${userId}`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {
             const data = response.data;
