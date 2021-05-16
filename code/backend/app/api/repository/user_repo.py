@@ -25,6 +25,13 @@ def authenticate(username: str, password: str, db: Session):
     return query.first()
 
 
+def is_enable(username: str, db: Session):
+    query = db.query(models.User.is_enabled)
+    query = query.filter(models.User.username == username)
+    query = query.filter(models.User.is_enabled == 1)
+    return query.first()
+
+
 def create_new_user(request: schemas.UserWithAddresses, db: Session):
     new_user = models.User(username=request.username,
                            height=request.height,

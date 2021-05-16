@@ -30,8 +30,8 @@ def validate(username: str, password: str, db: Session) -> dict:
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Credentials are not valid")
 
-    is_user_enabled = db.query(models.User.is_enabled).filter(models.User.username == username).first()
-    if is_user_enabled == 0:
+    is_user_enabled = user_repo.is_enable(username=username, db=db)
+    if not is_user_enabled:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Account is disabled")
 
     connection = auth_util.build_connection(org_id="11EA64D91C6E8F70A23EB6800B5BCB6D")  # temporarily hardcoded
