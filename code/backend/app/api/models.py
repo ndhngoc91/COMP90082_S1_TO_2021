@@ -178,7 +178,7 @@ class User(Base):
     password = Column(VARCHAR(255), nullable=False)
     height = Column(DECIMAL(5, 2))
     weight = Column(DECIMAL(5, 2))
-    foot_size = Column(DECIMAL(3, 1))
+    foot_size = Column(Integer)
     first_name = Column(VARCHAR(127))
     last_name = Column(VARCHAR(127))
     gender = Column(VARCHAR(45))

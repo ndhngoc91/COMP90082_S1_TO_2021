@@ -94,7 +94,7 @@ class UserWithoutPassword(BaseModel):
     username: str
     height: Optional[float]
     weight: Optional[float]
-    foot_size: Optional[float]
+    foot_size: Optional[int]
     first_name: Optional[str]
     last_name: Optional[str]
     gender: Optional[str]
