@@ -5,6 +5,7 @@ import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {usePackagePageStyles} from "./styles";
 import {usePackages} from "../../hooks/PackageHooks";
 import PageFooter from "../../components/PageFooter/PageFooter";
+import imageComing from "../../assets/imageComing.png";
 
 const {Title, Link} = Typography;
 const {Content} = Layout;
@@ -24,8 +25,9 @@ const PackagePage = () => {
                             {packages.map(package_ => {
                                 return <Col span={6}>
                                     <Space className={packageItemCls} direction="vertical">
-                                        <Image style={{width: "100%", minWidth: "238px"}}
+                                        <Image style={{width: "100%", minHeight: "238px"}}
                                                src={package_["image_url"]}
+                                               fallback={imageComing}
                                                preview={false}/>
                                         <Title level={4}>{package_["name"]}</Title>
                                         <Space>
