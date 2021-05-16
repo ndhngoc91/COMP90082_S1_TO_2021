@@ -41,6 +41,11 @@ def is_enable(username: str, db: Session):
 
 
 def create_new_user(request: schemas.UserWithAddresses, db: Session):
+    user = db.query(models.User).filter(models.User.username == request.username).first()
+    if user:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail="Username already exists")
+
     new_user = models.User(username=request.username,
                            height=request.height,
                            weight=request.weight,
