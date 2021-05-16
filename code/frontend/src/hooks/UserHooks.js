@@ -69,11 +69,17 @@ export const useHandleRegisterCustomer = () => {
         }).then(response => {
             if (response.status === 201) {
                 success();
+            } else if (response.status === 409){
+                failure(response.data['detail']);
             } else {
-                failure();
+                failure()
             }
-        }).catch(() => {
-            failure();
+        }).catch(e => {
+            if (e.response.status === 409){
+                failure(e.response.data['detail']);
+            } else {
+                failure("Failed to create an account!")
+            } //failure();
         }).finally(() => {
             setHandling(false);
         });
@@ -105,11 +111,17 @@ export const useHandleRegisterAdmin = () => {
         }).then(response => {
             if (response.status === 201) {
                 success();
+            } else if (response.status === 409){
+                failure(response.data);
             } else {
-                failure();
+                failure()
             }
-        }).catch(() => {
-            failure();
+        }).catch((e) => {
+            if (e.response.status === 409){
+                failure(e.response.data['detail']);
+            } else {
+                failure("Failed to create an admin account!")
+            } //failure();
         }).finally(() => {
             setHandling(false);
         });
