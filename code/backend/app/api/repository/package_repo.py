@@ -11,6 +11,10 @@ def get_all_packages(db: Session):
     return db.query(models.Package).all()
 
 
+def get_package(package_id: int, db: Session):
+    return db.query(models.Package).join(models.Package.product_groups).filter(models.Package.id == package_id).first()
+
+
 def filter_packages(query: Optional[str],
                     category_id: Optional[int],
                     skill_level_id: Optional[int],
@@ -46,6 +50,9 @@ def create_new_package(request: schemas.Package, db: Session):
         age_group_id=request.age_group_id,
         skill_level_id=request.skill_level_id
     )
+    product_groups = product_group_repo.get_product_groups_by_ids(ids=request.product_group_ids, db=db)
+    for product_group in product_groups:
+        new_package.product_groups.append(product_group)
     db.add(new_package)
     db.commit()
     db.refresh(new_package)
