@@ -1,10 +1,9 @@
 import React from "react";
 import {Col, Button, Image, Layout, Row, Space, Typography} from "antd";
-import {BrowserRouter, useHistory} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {usePackagePageStyles} from "./styles";
 import {usePackages} from "../../hooks/PackageHooks";
-import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.png";
 import PageFooter from "../../components/PageFooter/PageFooter";
 
 const {Title, Link} = Typography;
@@ -25,10 +24,12 @@ const PackagePage = () => {
                             {packages.map(package_ => {
                                 return <Col span={6}>
                                     <Space className={packageItemCls} direction="vertical">
-                                        <Image style={{width: "100%"}} src={bikePhoto} preview={false}/>
-                                        <Title level={4}>{package_.name}</Title>
+                                        <Image style={{width: "100%", minWidth: "238px"}}
+                                               src={package_["image_url"]}
+                                               preview={false}/>
+                                        <Title level={4}>{package_["name"]}</Title>
                                         <Space>
-                                            <Link href={`/package-details/${package_.id}`}>
+                                            <Link href={`/package-details/${package_["id"]}`}>
                                                 <Button type="primary">
                                                     View Details
                                                 </Button>
