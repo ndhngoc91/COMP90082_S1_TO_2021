@@ -9,6 +9,10 @@ def get_all_packages(db: Session):
     return package_repo.get_all_packages(db=db)
 
 
+def get_package(package_id: int, db: Session):
+    return package_repo.get_package(package_id=package_id, db=db)
+
+
 def filter_packages(query: Optional[str],
                     category_id: Optional[int],
                     skill_level_id: Optional[int],

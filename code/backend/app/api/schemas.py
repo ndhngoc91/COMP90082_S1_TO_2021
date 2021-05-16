@@ -21,12 +21,34 @@ class Product(BaseModel):
     quantity: int
 
 
+class CustomerInfo(BaseModel):
+    firstName: str
+    lastName: str
+    dob: str
+    height: int
+    shoeSize: int
+    skierLevel: int
+    tyreSize: int
+    weight: int
+
+
+class PackageInfo(BaseModel):
+    customer: CustomerInfo
+    category_id: int
+    package_id: int
+    extras: List[int]
+    start_date: str
+    end_date: str
+    user_id: int
+
+
 class Order(BaseModel):
     customer_id: int
     delivery_addr_id: str
     billing_addr_id: str
     lines: List[Product]
     instruction: str
+    packages: List[PackageInfo]
 
 
 class Address(BaseModel):
@@ -78,7 +100,9 @@ class UserWithoutPassword(BaseModel):
     gender: Optional[str]
     birthday: Optional[date]
     phone: Optional[str]
+    email: Optional[str]
     din: Optional[float]
+    is_enabled: Optional[int] = 1
     skill_level_id: Optional[int]
     user_type_id: Optional[int]
 

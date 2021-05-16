@@ -15,3 +15,8 @@ router = APIRouter(
 @router.get("")
 def get_all_orders(db: Session = Depends(get_db)):
     return order_service.get_all_orders(db)
+
+
+@router.post("/hiring", status_code=status.HTTP_201_CREATED)
+def submit_order(orders: schemas.Order):
+    return order_service.create_order(orders.packages)

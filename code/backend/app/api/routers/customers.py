@@ -34,3 +34,13 @@ def create_new_customer(request: schemas.Customer, db: Session = Depends(get_db)
 @router.get("/{customer_id}")
 def get_customer_by_id(customer_id: int, db: Session = Depends(get_db)):
     return customer_service.get_one_customer(customer_id=customer_id, db=db)
+
+
+@router.post("/search")
+async def search_customers(req: Request):
+    req = await req.json()
+    customers = customer_service.search_customers(req["query"], req["page_id"])
+
+    customers["items"] = [
+        customer.__dict__ for customer in customers["items"]]
+    return customers

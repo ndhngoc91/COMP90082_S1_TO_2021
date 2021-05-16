@@ -1,11 +1,12 @@
 import React from "react";
-import {Button, Col, Descriptions, Divider, Image, Layout, Row, Space, Typography} from "antd";
+import {Button, Col, Descriptions, Divider, Image, Layout, Row, Space, Typography, DatePicker, Tag} from "antd";
 import NavigatorBar from "../components/NavigationBar/NavigationBar";
 import {BrowserRouter} from "react-router-dom";
 import bikePhoto from "../assets/bike.png";
 
 const {Content} = Layout;
 const {Title} = Typography;
+const {RangePicker} = DatePicker;
 
 const ShoppingCartPage = () => {
     return <Layout style={{minHeight: "100vh"}}>
@@ -16,6 +17,8 @@ const ShoppingCartPage = () => {
                     <Row justify="space-between" gutter={80}>
                         <Col span={18}>
                             <Title level={2}>Shopping Cart</Title>
+                            <Divider/>
+                            <RangePicker renderExtraFooter={() => 'extra footer'} showTime/>
                             <Divider/>
                             <Row gutter={16}>
                                 <Col span={4}>
@@ -66,6 +69,18 @@ const ShoppingCartPage = () => {
                                 </Col>
                                 <Col span={4}>
                                     <Title level={1}>$125</Title>
+                                </Col>
+                            </Row>
+                            <Divider/>
+                            <Row gutter={16}>
+                                <Col span={4}>
+                                </Col>
+                                <Col span={16}>
+                                </Col>
+                                <Col span={4}>
+                                    <Tag color="green">
+                                        $125
+                                    </Tag>
                                 </Col>
                             </Row>
                         </Col>
