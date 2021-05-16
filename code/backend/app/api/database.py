@@ -29,7 +29,7 @@ HOST = "localhost:3306"
 # This HOST is for Docker
 # HOST = "mysqldb"
 USER = "root"
-PASSWORD = "rootpasswordgiven"
+PASSWORD = "0000"
 DB_NAME = "squizz_app"
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"

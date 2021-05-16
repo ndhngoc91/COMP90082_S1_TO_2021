@@ -5,9 +5,29 @@ then
 1. cd Cypress
 
 2. To run the test:
-   ./node_modules/.bin/cypress open
+    cd to ./node_modules/.bin
+    $npm run cypress:open
 
 all the main testing script.js files are within the integration folder
+
+
+
+
+
+
+**if you face: EEXIST: file already exists, mkdir
+
+edit the package.json file : 
+
+{
+  "scripts": {
+    "cypress:open": "cypress open"
+  }
+}
+
+then run again $ npm run cypress:open
+
+
 
 
 
