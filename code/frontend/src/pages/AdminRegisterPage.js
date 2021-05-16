@@ -11,6 +11,7 @@ import Checkbox from "antd/es/checkbox/Checkbox";
 import rockyValleyLogo from "../assets/rocky_valley.svg";
 import {useHandleRegisterAdmin} from "../hooks/UserHooks";
 import {useForm} from "antd/es/form/Form";
+import {useHistory} from "react-router-dom";
 
 const {Link, Title} = Typography;
 const {Option} = Select;
@@ -19,10 +20,12 @@ const AdminRegisterPage = () => {
     const [handleRegisterAdmin, {handling}] = useHandleRegisterAdmin();
 
     const [form] = useForm();
+    const history = useHistory();
 
     const onFinish = values => {
         handleRegisterAdmin(values, () => {
             notification.success({message: "Create a new admin account successfully!"});
+            history.push("/");
             form.resetFields();
         }, () => {
             notification.error({message: "Failed to create an admin account!"});
@@ -112,7 +115,7 @@ const AdminRegisterPage = () => {
                                            },
                                            () => ({
                                                validator(_, value) {
-                                                   if (!value || value.length > 8) {
+                                                   if (!value || value.length > 7) {
                                                        return Promise.resolve();
                                                    }
                                                    return Promise.reject(new Error("Must have at least 8 characters!"));
