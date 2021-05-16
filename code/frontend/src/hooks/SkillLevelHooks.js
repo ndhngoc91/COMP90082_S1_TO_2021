@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
 export const useSkillLevels = () => {
     const [skillLevels, setSkillLevels] = useState([]);
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/skill-levels", {
+        axios.get(`${BACKEND_ENDPOINT}skill-levels`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
             if (response.status === 200) {
