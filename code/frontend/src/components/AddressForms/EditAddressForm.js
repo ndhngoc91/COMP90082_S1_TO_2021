@@ -39,6 +39,7 @@ const EditAddressForm = ({fieldsValue}) => {
         values.city = city;
         handleEditAddress(values, () => {
             notification.success({message: "Edit address successfully!"});
+            location.reload();
         });
     };
 

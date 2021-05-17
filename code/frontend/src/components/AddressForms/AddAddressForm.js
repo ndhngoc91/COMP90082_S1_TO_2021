@@ -39,6 +39,7 @@ const AddAddressForm = () => {
         handleAddAddress(values, () =>{
             notification.success({message: "Add a new address successfully!"});
             form.resetFields();
+            location.reload();
         });
     };
 
