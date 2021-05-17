@@ -95,6 +95,8 @@ export const useHandleRegisterAdmin = () => {
     const handleRegisterAdmin = useCallback(({
                                                  username,
                                                  email,
+                                                 first_name,
+                                                 last_name,
                                                  phone,
                                                  password
                                              }, success, failure = () => {
@@ -103,6 +105,8 @@ export const useHandleRegisterAdmin = () => {
         axios.post('http://127.0.0.1:8000/users', {
             username: username,
             email: email,
+            first_name: first_name,
+            last_name: last_name,
             phone: phone,
             password: CryptoJs.MD5(password+username).toString(),
             user_type_id: UserType.STAFF,
