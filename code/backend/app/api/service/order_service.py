@@ -12,5 +12,9 @@ def filter_orders(query: Optional[str], db: Session):
     return order_repo.filter_orders(query=query, db=db)
 
 
+def cancel_order(order_id: int, db: Session):
+    return order_repo.cancel_order(order_id=order_id, db=db)
+
+
 def create_order(packages):
     return OrderResource().create_order(packages)

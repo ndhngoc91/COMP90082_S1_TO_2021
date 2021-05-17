@@ -74,8 +74,8 @@ class Order(Base):
     end_date = Column(DateTime)
     description = Column(Text)
     # package_id = Column(Integer, nullable=False, index=True)
-    is_drop_ship = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
-    is_pending = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
+    # is_drop_ship = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
+    status = Column(Enum('New','Handling','Done','Cancelled'), nullable=False, server_default=text("'New'"))
     staff_id = Column(ForeignKey('users.id'), nullable=True)
 
 

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Col, Layout, Row, Space, Table, Input} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useHandleFilterOrders} from "../hooks/orderHooks";
+import {useHandleOrders} from "../hooks/orderHooks";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
@@ -11,7 +11,7 @@ const {Search} = Input;
 
 const OrderHistoryPage = () => {
     const {authStore: {userRole}} = useStores();
-    const [handleFilterOrders, {orders, filtering}] = useHandleFilterOrders();
+    const [handleFilterOrders, handleCancelOrder, {orders, filtering}] = useHandleOrders();
 
     useEffect(() => {
         handleFilterOrders();
@@ -43,17 +43,16 @@ const OrderHistoryPage = () => {
                             <Column title="Start Date" dataIndex="start_date"/>
                             <Column title="End Date" dataIndex="end_date"/>
                             <Column title="Description" dataIndex="description"/>
-                            <Column title="Status"
-                                dataIndex="is_pending"
-                                render={(text) =>
-                                    <span>{text == "Y" ? "Pending" : "Completed"}</span>
-                                }
-                            />
+                            <Column title="Status" dataIndex="status"/>
                             {(userRole === USER_ROLE.STAFF || userRole === USER_ROLE.CUSTOMER) &&
                              <Column title="Action" key="action" render={(text, record) => (
                                 <Space size="middle">
                                     {userRole === USER_ROLE.STAFF && <a>Edit</a>}
-                                    <a>Delete</a>
+                                    {record.status != "Cancelled" &&
+                                        <a onClick={() => handleCancelOrder(record.id)}>
+                                            Withdraw
+                                        </a>
+                                    }
                                 </Space>
                             )}/>}
                         </Table>
