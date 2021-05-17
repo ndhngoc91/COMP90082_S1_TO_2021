@@ -29,11 +29,12 @@ const NavigationBar = observer(() => {
 
     const [handleLogin, {handling}] = useHandleLogin();
 
-    const {authStore: {firstName, lastName, userRole, logout}} = useStores();
+    const {authStore: {firstName, lastName, userRole, logout}, shoppingCartStore: {clearShoppingCart}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
+            clearShoppingCart();
             history.push("/");
         } else if (key.startsWith("/")) {
             history.push(key)
