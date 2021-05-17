@@ -39,15 +39,30 @@ class Customer(Base):
 class Extra(Base):
     __tablename__ = 'extra'
 
-    idextra = Column(Integer, primary_key=True)
-    extracol = Column(VARCHAR(45))
+    id = Column(Integer, primary_key=True)
+    name = Column(VARCHAR(45))
+    age_group_id = Column(Integer, nullable=False, index=True)
+    base_price = Column(Integer, nullable=False)
+    price_levels = Column(Text, nullable=False)
+    sell_code = Column(VARCHAR(20), nullable=False)
 
 
 class OrderDetail(Base):
     __tablename__ = 'order_details'
 
-    order_id = Column(Integer, primary_key=True, index=True)
-    item_id = Column(VARCHAR(45))
+    id = Column(Integer, primary_key=True)
+    order_id = Column(Integer, nullable=False, index=True)
+    package_id = Column(Integer, nullable=False, index=True)
+    trail_id = Column(Integer, nullable=False, index=True)
+    user_id = Column(Integer, nullable=False, index=True)
+
+
+class OrderExtra(Base):
+    __tablename__ = 'order_extras'
+
+    id = Column(Integer, primary_key=True)
+    order_details_id = Column(Integer, nullable=False, index=True)
+    extra_id = Column(Integer, nullable=False, index=True)
 
 
 class Order(Base):
@@ -58,7 +73,6 @@ class Order(Base):
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     description = Column(Text)
-    package_id = Column(Integer, nullable=False, index=True)
     is_drop_ship = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
     is_pending = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
 
@@ -122,16 +136,6 @@ class UserType(Base):
     type = Column(VARCHAR(10), nullable=False)
 
 
-class Extraprice(Base):
-    __tablename__ = 'extraprice'
-
-    idextra = Column(ForeignKey('extra.idextra'), primary_key=True, nullable=False, index=True)
-    daynumber = Column(Integer, primary_key=True, nullable=False)
-    extraprice = Column(Float, server_default=text("'0'"))
-
-    extra = relationship('Extra')
-
-
 t_order_receipts = Table(
     'order_receipts', metadata,
     Column('orders_id', ForeignKey('orders.id'), nullable=False, index=True),
@@ -147,8 +151,10 @@ class Package(Base):
     skill_level_id = Column(ForeignKey('skill_levels.id'), nullable=False, index=True)
     age_group_id = Column(ForeignKey('age_groups.id'), nullable=False, index=True)
     name = Column(VARCHAR(45))
-    description = Column(VARCHAR(45))
+    description = Column(Text)
     image_key = Column(VARCHAR(45))
+    base_price = Column(Integer, nullable=False)
+    price_levels = Column(Text, nullable=False)
 
     age_group = relationship('AgeGroup')
     category = relationship('Category')
@@ -179,7 +185,7 @@ class User(Base):
     password = Column(VARCHAR(255), nullable=False)
     height = Column(DECIMAL(5, 2))
     weight = Column(DECIMAL(5, 2))
-    foot_size = Column(Integer)
+    foot_size = Column(DECIMAL(3, 1))
     first_name = Column(VARCHAR(127))
     last_name = Column(VARCHAR(127))
     gender = Column(VARCHAR(45))
@@ -228,13 +234,3 @@ class PackageTtypesPair(Base):
 
     package = relationship('Package')
     trail_type = relationship('TrailType')
-
-
-class PriceLevel(Base):
-    __tablename__ = 'price_levels'
-
-    package_id = Column(ForeignKey('packages.id'), primary_key=True, nullable=False, index=True)
-    number_of_days = Column(Integer, primary_key=True, nullable=False)
-    price = Column(Float, server_default=text("'0'"))
-
-    package = relationship('Package')
