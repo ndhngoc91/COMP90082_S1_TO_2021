@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import HTTPException
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -21,7 +22,8 @@ def get_user_by_username(username: str, db: Session):
 
 
 def filter_users(query: Optional[str], db: Session):
-    return db.query(models.User).filter(models.User.username.like(f"%{query}%")).all()
+    return db.query(models.User).filter(or_(models.User.username.like(f"%{query}%"),
+                                            models.User.email.like(f"%{query}%"))).all()
 
 
 def authenticate(username: str, password: str, db: Session):
