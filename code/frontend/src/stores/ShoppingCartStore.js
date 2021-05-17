@@ -6,17 +6,21 @@ import {UserType} from "../consts/UserType";
 
 export class ShoppingCartStore {
     @persist("list") cartItems;
+    @persist intendedNumberOfHiringDays;
 
     constructor() {
         makeObservable(this, {
             cartItems: observable,
+            intendedNumberOfHiringDays: observable,
             lastId: computed,
             totalCost: computed,
             addNewCartItem: action,
             deleteCartItem: action,
-            clearShoppingCart: action
+            clearShoppingCart: action,
+            setIntendedNumberOfHiringDays: action
         });
         this.cartItems = [];
+        this.intendedNumberOfHiringDays = 0;
     }
 
     get lastId() {
@@ -25,7 +29,7 @@ export class ShoppingCartStore {
 
     get totalCost() {
         return this.cartItems.reduce((previousValue, currentItem) => {
-            return previousValue + currentItem.cost;
+            return previousValue + currentItem.base_price * this.intendedNumberOfHiringDays;
         }, 0);
     }
 
@@ -40,5 +44,9 @@ export class ShoppingCartStore {
 
     clearShoppingCart = () => {
         this.cartItems = [];
+    }
+
+    setIntendedNumberOfHiringDays = (intendedNumberOfHiringDays) => {
+        this.intendedNumberOfHiringDays = intendedNumberOfHiringDays;
     }
 }

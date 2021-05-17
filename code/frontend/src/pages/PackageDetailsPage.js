@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import NavigatorBar from "../components/NavigationBar/NavigationBar";
 import {BrowserRouter, useHistory, useParams} from "react-router-dom";
 import {
@@ -12,14 +12,15 @@ import {
     notification,
     Row,
     Space,
-    Typography
+    Typography,
+    Checkbox
 } from "antd";
 import {usePackage} from "../hooks/PackageHooks";
 import {useStores} from "../stores";
 import imageComing from "../assets/imageComing.png";
 
 const {Content} = Layout;
-const {Title, Paragraph} = Typography;
+const {Title, Paragraph, Text} = Typography;
 
 const layout = {
     labelCol: {span: 16},
@@ -36,27 +37,39 @@ const initialValues = {
     4: 0,
     5: 0,
     6: 0
-}
+};
 
 const PackageDetailsPage = () => {
     const params = useParams();
 
+    const [selectedExtraItems, setSelectedExtraItems] = useState([]);
     const [package_] = usePackage(parseInt(params["packageId"]));
 
     const history = useHistory();
 
     const {shoppingCartStore: {addNewCartItem}} = useStores();
 
+    const selectExtraItems = values => {
+        setSelectedExtraItems(values);
+    };
+
     const onFinish = values => {
         const total = Object.values(values).reduce((previousValue, currentValue) => previousValue + currentValue);
         if (total >= 1) {
+            const extraItems = [];
+            package_["extra_items"].forEach(extraItem => {
+                extraItem.selected = selectedExtraItems.includes(extraItem["id"]);
+                extraItems.push(extraItem);
+            });
+
             Object.keys(values).forEach(key => {
                 if (values[key] > 0) {
                     addNewCartItem({
-                        name: package_.name,
+                        name: package_["name"],
                         trailTypeId: key,
                         quantity: values[key],
-                        cost: values[key] * 50
+                        base_price: package_["base_price"],
+                        extraItems: extraItems
                     });
                 }
             });
@@ -78,7 +91,10 @@ const PackageDetailsPage = () => {
                         </Col>
                         <Col span={12}>
                             <Space direction="vertical">
-                                <Title level={2}>{package_["name"]}</Title>
+                                <Row justify="space-between">
+                                    <Text strong style={{fontSize: "2em"}}>{package_["name"]}</Text>
+                                    <Text strong style={{fontSize: "2em"}}>${package_["base_price"]}</Text>
+                                </Row>
                                 <Descriptions bordered>
                                     <Descriptions.Item label="Status" span={3}>
                                         Available
@@ -90,18 +106,39 @@ const PackageDetailsPage = () => {
                                     </Descriptions.Item>
                                 </Descriptions>
                                 <Divider/>
-                                {package_["trail_types"] &&
-                                <Form {...layout} name="basic" initialValues={initialValues} onFinish={onFinish}>
-                                    {package_["trail_types"].map((trailType, key) => {
-                                        return <Form.Item label={trailType.name} key={key}
-                                                          name={trailType.id}>
-                                            <InputNumber size={"large"}/>
-                                        </Form.Item>
-                                    })}
-                                    <Form.Item {...tailLayout}>
-                                        <Button type="primary" htmlType="submit" size="large">Add to Cart</Button>
-                                    </Form.Item>
-                                </Form>}
+                                <Row>
+                                    <Col span={12}>
+                                        {package_["extra_items"] &&
+                                        <>
+                                            <Row><Title level={2}>Extra Items</Title></Row>
+                                            <Checkbox.Group name="extra_items" onChange={selectExtraItems}>
+                                                {package_["extra_items"].map((extraItem, key) => {
+                                                    return <Row key={key}>
+                                                        <Checkbox value={extraItem["id"]}>
+                                                            {extraItem["name"]}
+                                                        </Checkbox>
+                                                    </Row>;
+                                                })}
+                                            </Checkbox.Group>
+                                        </>}
+                                    </Col>
+                                    <Col span={12}>
+                                        {package_["trail_types"] &&
+                                        <Form {...layout} name="basic" initialValues={initialValues}
+                                              onFinish={onFinish}>
+                                            {package_["trail_types"].map((trailType, key) => {
+                                                return <Form.Item label={trailType.name} key={key}
+                                                                  name={trailType.id}>
+                                                    <InputNumber size={"large"}/>
+                                                </Form.Item>
+                                            })}
+                                            <Form.Item {...tailLayout}>
+                                                <Button type="primary" htmlType="submit" size="large">Add to
+                                                    Cart</Button>
+                                            </Form.Item>
+                                        </Form>}
+                                    </Col>
+                                </Row>
                             </Space>
                         </Col>
                     </Row>}
