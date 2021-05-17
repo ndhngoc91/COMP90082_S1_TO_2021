@@ -2,6 +2,7 @@ from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import aliased
 from typing import Optional
+from sqlalchemy.sql.elements import or_
 
 from starlette import status
 from app.api import models, schemas
@@ -29,7 +30,13 @@ def filter_orders(query: Optional[str], db: Session):
         staff.last_name.label("staff_last_name"),
     )
 
-    sql_query = sql_query.filter(models.Order.description.like(f"%{query}%"))
+    sql_query = sql_query.filter(
+        or_(
+            models.Order.description.like(f"%{query}%"),
+            user.first_name.like(f"%{query}%"),
+            user.last_name.like(f"%{query}%")
+        )
+    )
     sql_query = sql_query.outerjoin(user, user.id == models.Order.user_id)
     sql_query = sql_query.outerjoin(staff, staff.id == models.Order.staff_id)
 
