@@ -13,7 +13,8 @@ export class ShoppingCartStore {
             lastId: computed,
             totalCost: computed,
             addNewCartItem: action,
-            deleteCartItem: action
+            deleteCartItem: action,
+            clearShoppingCart: action
         });
         this.cartItems = [];
     }
@@ -34,8 +35,10 @@ export class ShoppingCartStore {
     }
 
     deleteCartItem = (cartItemId) => {
-        console.log(cartItemId);
-        console.log(this.cartItems.filter(cartItem => cartItem.id !== cartItemId));
         this.cartItems = [...this.cartItems.filter(cartItem => cartItem.id !== cartItemId)];
+    }
+
+    clearShoppingCart = () => {
+        this.cartItems = [];
     }
 }
