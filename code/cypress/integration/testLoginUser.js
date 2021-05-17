@@ -1,18 +1,18 @@
 export const testLoginUser = [
     {
         summary: "Login as customer successfully",
-        username:"user1",
-        password:"squizz"
+        username:"test0",
+        password:"123456sS"
     },
     {
         summary: "Login failed for the wrong password",
-        username:"user1",
+        username:"test0",
         password:"iTesting"
     },
     {
         summary: "Login as staff successfully",
-        username:"ruby",
-        password:"squizz"
+        username:"test5",
+        password:"123456sS"
     },
     {
         summary: "Login failed for the unexisted username",
