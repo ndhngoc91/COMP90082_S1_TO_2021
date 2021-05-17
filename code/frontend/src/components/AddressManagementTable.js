@@ -46,6 +46,7 @@ const UserManagementPage = () => {
                             <Link onClick={() => {
                                 handleDeleteAddress(record.id, () => {
                                     notification.success({message: "Delete address successfully!"});
+                                    location.reload();
                                 });
                             }}>Delete</Link>
                         </Space>
