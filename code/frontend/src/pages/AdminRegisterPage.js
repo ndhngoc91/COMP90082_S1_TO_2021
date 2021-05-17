@@ -93,6 +93,42 @@ const AdminRegisterPage = () => {
                                        placeholder="Your email address"
                                        className="email"/>
                             </Form.Item>
+                            <Row justify="space-between" gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item name={"first_name"}
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: "Please input your first name!",
+                                                   }
+                                               ]}
+                                               style={{
+                                                   width: "100%",
+                                               }}>
+                                        <Input placeholder="Enter your first name"
+                                               style={{
+                                                   width: "100%",
+                                               }}/>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item name={"last_name"}
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: "Please input your last name!",
+                                                   }
+                                               ]}
+                                               style={{
+                                                   width: "100%",
+                                               }}>
+                                        <Input placeholder="Enter your last name"
+                                               style={{
+                                                   width: "100%",
+                                               }}/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                             <Form.Item name="phone"
                                        rules={[
                                            {
