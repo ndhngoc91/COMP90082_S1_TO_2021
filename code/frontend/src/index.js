@@ -13,6 +13,7 @@ import UserManagementPage from "./pages/UserManagementPage";
 import PackagePage from "./pages/PackagePage/PackagePage";
 import PackageDetailsPage from "./pages/PackageDetailsPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -65,6 +66,10 @@ createStore().then(store => {
                             USER_ROLE.STAFF
                         ]}/>
                         <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
+                            USER_ROLE.STAFF
+                        ]}/>
+                        <AuthRoute path="/order-history" exact Component={OrderHistoryPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
                             USER_ROLE.STAFF
                         ]}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>
