@@ -11,6 +11,10 @@ def get_all_packages(db: Session):
     return db.query(models.Package).all()
 
 
+def get_package(package_id: int, db: Session):
+    return db.query(models.Package).filter(models.Package.id == package_id).first()
+
+
 def filter_packages(query: Optional[str],
                     category_id: Optional[int],
                     skill_level_id: Optional[int],
@@ -67,7 +71,6 @@ def delete_package(package_id: int, db: Session):
 
 def update_package(package_id: int, request: schemas.Package, db: Session):
     request_dict = dict(request)
-    request_dict.pop("product_group_ids")  # temporarily ignore this value
     package_to_update = db.query(models.Package).filter(models.Package.id == package_id)
     if not package_to_update.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {package_id} not found")

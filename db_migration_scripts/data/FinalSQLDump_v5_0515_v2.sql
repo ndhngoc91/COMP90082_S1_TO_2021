@@ -1,3 +1,4 @@
+DROP SCHEMA IF EXISTS `squizz_app`;
 DROP DATABASE IF exists `squizz_app`;
 CREATE DATABASE `squizz_app`;
 USE `squizz_app`;
@@ -137,6 +138,7 @@ INSERT INTO `customers` VALUES (1,'THETASMANIANGIFTWR','Mr.','John','Wick','0441
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
 --
 -- Table structure for table `extra`
 --
@@ -145,10 +147,12 @@ DROP TABLE IF EXISTS `extra`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `extra` (
-  `idextra` int NOT NULL,
-  `extracol` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`idextra`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+                         `idextra` int NOT NULL auto_increment,
+                         `extracol` varchar(45) DEFAULT NULL,
+						 `age_group_id` int NOT NULL,
+                         PRIMARY KEY (`idextra`),
+                         KEY `fk_table2_agegroup` (`age_group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,7 +161,19 @@ CREATE TABLE `extra` (
 
 LOCK TABLES `extra` WRITE;
 /*!40000 ALTER TABLE `extra` DISABLE KEYS */;
-INSERT INTO `extra` VALUES (1,'Pants or Parka Adult'),(2,'Pants and Parka Adult'),(3,'Pants or Parka U14'),(4,'Pants and Parka U14'),(5,'Pants or Parka U6'),(6,'Pants and Parka/suit U6'),(7,'Apres Boots Adults'),(8,'Apres Boots U14'),(9,'Helmet Adults'),(10,'Helmet U14');
+INSERT INTO `extra` VALUES
+(1,'Pants or Parka Adult',3),
+(2,'Pants and Parka Adult',3),
+(3,'Pants or Parka U14',2),
+(4,'Pants and Parka U14',2),
+(5,'Pants or Parka U6',1),
+(6,'Pants and Parka/suit U6',1),
+(7,'Apres Boots Adults',3),
+(8,'Apres Boots U14',2),
+(9,'Apres Boots U14',1),
+(10,'Helmet Adults',3),
+(11,'Helmet U14',2),
+(12,'Helmet U14',1);
 /*!40000 ALTER TABLE `extra` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +185,7 @@ DROP TABLE IF EXISTS `extraprice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `extraprice` (
-  `idextra` int NOT NULL,
+  `idextra` int NOT NULL auto_increment,
   `daynumber` int NOT NULL,
   `extraprice` float DEFAULT '0',
   PRIMARY KEY (`daynumber`,`idextra`),
@@ -196,11 +212,17 @@ DROP TABLE IF EXISTS `order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
-  `order_id` int NOT NULL,
-  `item_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`order_id`),
-  KEY `orderId` (`order_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+                                 `id` int NOT NULL auto_increment,
+                                 `order_id` int NOT NULL,
+                                 `package_id` int NOT NULL,
+                                 `trail_id` int NOT NULL,
+                                 `user_id` int NOT NULL,
+                                 PRIMARY KEY (`id`),
+                                 KEY `fk_orderdetails_orders1_idx` (`order_id`),
+                                 KEY `fk_orderdetails_package1_idx` (`package_id`),
+                                 KEY `fk_orderdetails_trailtypes1_idx` (`trail_id`),
+                                 KEY `fk_orderdetails_users1_idx` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,9 +231,38 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` VALUES (18,'orderdetails18'),(19,'orderdetails19');
+INSERT INTO `order_details` VALUES (13,14,1,1,4),(14,14,1,2,3),(15,15,1,1,2),(16,15,2,1,1);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `order_details`
+--
+
+DROP TABLE IF EXISTS `order_extras`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_extras` (
+                                 `id` int NOT NULL auto_increment,
+                                 `order_details_id` int NOT NULL,
+                                 `extra_id` int NOT NULL,
+                                 PRIMARY KEY (`id`),
+                                 KEY `fk_orderextras_orderdetails1_idx` (`order_details_id`),
+                                 KEY `fk_orderextras_extra1_idx` (`extra_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_details`
+--
+
+LOCK TABLES `order_extras` WRITE;
+/*!40000 ALTER TABLE `order_extras` DISABLE KEYS */;
+INSERT INTO `order_extras` VALUES (18,14,1),(19,15,1),(20,15,2),(21,15,3);
+/*!40000 ALTER TABLE `order_extras` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 
 --
 -- Table structure for table `order_receipts`
@@ -221,11 +272,11 @@ DROP TABLE IF EXISTS `order_receipts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_receipts` (
-  `orders_id` int NOT NULL,
-  `receipt` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  KEY `fk_orderreceipts_orders1_idx` (`orders_id`),
-  CONSTRAINT `fk_orderreceipts_orders1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+                                  `orders_id` int NOT NULL,
+                                  `receipt` varchar(45) DEFAULT NULL,
+                                  KEY `fk_orderreceipts_orders1_idx` (`orders_id`),
+                                  CONSTRAINT `fk_orderreceipts_orders1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -234,6 +285,7 @@ CREATE TABLE `order_receipts` (
 
 LOCK TABLES `order_receipts` WRITE;
 /*!40000 ALTER TABLE `order_receipts` DISABLE KEYS */;
+INSERT INTO `order_receipts` VALUES (14,'this is a link to recerpts -14'),(15,'this is a link to recerpts -15');
 /*!40000 ALTER TABLE `order_receipts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -245,18 +297,16 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `start_date` datetime DEFAULT NULL,
-  `end_date` datetime DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `package_id` int NOT NULL,
-  `is_drop_ship` enum('Y','N') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N',
-  `is_pending` enum('Y','N') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `fk_orders_users1_idx` (`user_id`),
-  KEY `fk_orders_package1_idx` (`package_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+                          `id` int NOT NULL AUTO_INCREMENT,
+                          `user_id` int NOT NULL,
+                          `start_date` datetime DEFAULT NULL,
+                          `end_date` datetime DEFAULT NULL,
+                          `description` text,
+                          `is_drop_ship` enum('Y','N') NOT NULL DEFAULT 'N',
+                          `is_pending` enum('Y','N') NOT NULL DEFAULT 'N',
+                          PRIMARY KEY (`id`) USING BTREE,
+                          KEY `fk_orders_users1_idx` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,13 +315,9 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order',1,'Y','Y'),(15,4,NULL,NULL,'this is the second order',2,'N','Y');
+INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order','Y','Y'),(15,4,NULL,NULL,'this is the second order','N','Y');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `organizations`
---
 
 DROP TABLE IF EXISTS `organizations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
