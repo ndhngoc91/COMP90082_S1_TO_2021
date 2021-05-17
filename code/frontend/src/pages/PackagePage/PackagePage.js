@@ -1,25 +1,19 @@
 import React from "react";
 import {Col, Button, Image, Layout, Row, Space, Typography} from "antd";
-import {BrowserRouter, Switch, useHistory} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {usePackagePageStyles} from "./styles";
 import {usePackages} from "../../hooks/PackageHooks";
-import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.png";
 import PageFooter from "../../components/PageFooter/PageFooter";
+import imageComing from "../../assets/imageComing.png";
 
-const {Title} = Typography;
+const {Title, Link} = Typography;
 const {Content} = Layout;
 
 const PackagePage = () => {
-    const history = useHistory();
-
     const [packages] = usePackages();
 
     const {packageItemCls} = usePackagePageStyles();
-
-    const goToPackageDetailsPage = () => {
-        history.push("/package-details");
-    };
 
     return (
         <Layout style={{minHeight: "100vh"}}>
@@ -31,12 +25,17 @@ const PackagePage = () => {
                             {packages.map(package_ => {
                                 return <Col span={6}>
                                     <Space className={packageItemCls} direction="vertical">
-                                        <Image style={{width: "100%"}} src={bikePhoto} preview={false}/>
-                                        <Title level={4}>{package_.name}</Title>
+                                        <Image style={{width: "100%", minHeight: "238px"}}
+                                               src={package_["image_url"]}
+                                               fallback={imageComing}
+                                               preview={false}/>
+                                        <Title level={4}>{package_["name"]}</Title>
                                         <Space>
-                                            <Button type="primary" onClick={goToPackageDetailsPage}>
-                                                View Details
-                                            </Button>
+                                            <Link href={`/package-details/${package_["id"]}`}>
+                                                <Button type="primary">
+                                                    View Details
+                                                </Button>
+                                            </Link>
                                             <Button>
                                                 Add to Shopping Cart
                                             </Button>

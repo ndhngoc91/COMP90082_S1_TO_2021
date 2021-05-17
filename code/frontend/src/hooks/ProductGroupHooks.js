@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
 export const useProductGroups = () => {
     const [productGroups, setProductGroups] = useState([]);
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/product-groups", {
+        axios.get(`${BACKEND_ENDPOINT}product-groups`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
             if (response.status === 200) {

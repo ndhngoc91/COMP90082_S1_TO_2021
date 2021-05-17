@@ -13,20 +13,25 @@ import {StateData, CityData} from "../../consts/StateData";
 import {useSkillLevels} from "../../hooks/SkillLevelHooks";
 import {useHandleEditProfile} from "../../hooks/UserHooks";
 import {useStores} from "../../stores";
+import {SkierCode} from "../../utils/SkierCode";
+import moment from "moment";
 
 const {Option} = Select;
 
 const UserProfileForm = () => {
-    const {authStore: {values: initialValues, din, login}} = useStores();
+    const {authStore: {values: initialValues, login}} = useStores();
 
-    const [height, setHeight] = useState(0);
-    const [weight, setWeight] = useState(0);
-    const [footSize, setFootSize] = useState(0);
-    const [estimatedDin, setEstimatedDin] = useState(0);
+    const [height, setHeight] = useState(initialValues.height);
+    const [weight, setWeight] = useState(initialValues.weight);
+    const [footSize, setFootSize] = useState(initialValues.foot_size);
+    const [skill_level_id, setSkillLevel] = useState(initialValues.skill_level_id);
+    const [birthday, setBirthday] = useState(initialValues.birthday);
+    const [estimateDin, setEstimatedDin] = useState(initialValues.din === null ? 0 : initialValues.din);
     const [cities, setCities] = useState(CityData[StateData[0]]);
     const [selectedState, setSelectedState] = useState(StateData[0]);
     const [selectedCity, setSelectedCity] = useState(CityData[StateData[0]]);
     const [editing, setEditing] = useState(false);
+    const [age, setAge] = useState(moment().year()-initialValues.birthday.year())
 
     const [form] = Form.useForm();
 
@@ -35,8 +40,14 @@ const UserProfileForm = () => {
     const [handleEditProfile, {handling}] = useHandleEditProfile();
 
     useEffect(() => {
-        setEstimatedDin(height * 2 + weight * 3 + footSize * 4);
-    }, [weight, height, footSize]);
+        console.log("weight",weight);
+        console.log("height",height);
+        console.log("footsize",footSize);
+        console.log(age);
+        console.log("skill",skill_level_id);
+        setEstimatedDin(parseInt(SkierCode({weight, height, skill_level_id, age, footSize})));
+        console.log("din",estimateDin);
+    }, [weight, height, skill_level_id,age,footSize]);
 
     const onStateChange = value => {
         setCities(CityData[value]);
@@ -51,11 +62,14 @@ const UserProfileForm = () => {
     const onFinish = values => {
         values.birthday = values.birthday.format("YYYY-MM-DD");
         values = Object.assign(initialValues, values)
+        values.din = estimateDin;
         handleEditProfile(values, () => {
             notification.success({message: "Edit profile successfully!"});
             login(values); // reset store
+            console.log(values)
         }, () => {
-            notification.success({message: "Failed to edit profile!"});
+            notification.error({message: "Failed to edit profile!"});
+            console.log(values.din)
         });
     };
 
@@ -96,7 +110,15 @@ const UserProfileForm = () => {
                         <Col span={4}>
                             <Form.Item label="Birthday" name="birthday"
                                        rules={[{required: true, message: "Required"}]}>
-                                <DatePicker size="large" disabled={editing === false}/>
+                                <DatePicker size="large" disabled={editing === false}
+                                            value={birthday}
+                                            onChange={
+                                                e => {
+                                                    setBirthday(e);
+                                                    const period = moment().year()-e._d.getFullYear();
+                                                    setAge(period);
+                                                }
+                                            }/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -135,7 +157,7 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item label="Foot Size" name="foot_size"
+                            <Form.Item label="Foot Size (mm)" name="foot_size"
                                        rules={[{required: true, message: "Required!"}]}>
                                 <Input type={"number"} size="large" value={footSize} readOnly={editing === false}
                                        onChange={e => setFootSize(parseInt(e.currentTarget.value))}/>
@@ -145,7 +167,9 @@ const UserProfileForm = () => {
                             <Form.Item label="Skill Level"
                                        name="skill_level_id"
                                        rules={[{required: true, message: "Required!"}]}>
-                                <Select placeholder="Select Skill Level" disabled={editing === false}>
+                                <Select placeholder="Select Skill Level" disabled={editing === false}
+                                        size="large" value={skill_level_id}
+                                        onChange={e => setSkillLevel(parseInt(e))}>
                                     {skillLevels.map((skillLevel, index) => {
                                         return (
                                             <Option key={index} value={skillLevel.id}>{skillLevel.name}</Option>
@@ -155,12 +179,13 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item label="DIN">
-                                <Tag color="green" style={{
+                            <Form.Item label="DIN" name="din">
+                                <Tag color="green" size="large"
+                                     style={{
                                     fontSize: "25px",
                                     padding: "5px"
                                 }}>
-                                    {estimatedDin ? estimatedDin : din}
+                                    {estimateDin}
                                 </Tag>
                             </Form.Item>
                         </Col>

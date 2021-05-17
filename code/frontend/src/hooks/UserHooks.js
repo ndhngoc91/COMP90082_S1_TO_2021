@@ -1,6 +1,7 @@
 import {useCallback, useState} from "react";
 import axios from "axios";
 import {UserType} from "../consts/UserType";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
 export const useHandleFilterUsers = () => {
     const [users, setUsers] = useState([]);
@@ -8,7 +9,7 @@ export const useHandleFilterUsers = () => {
 
     const handleFilterUsers = useCallback((query = "") => {
         setFiltering(true);
-        axios.get("http://localhost:8000/users/filter", {
+        axios.get(`${BACKEND_ENDPOINT}users/filter`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
             params: {query: query}
         }).then((response) => {
@@ -131,6 +132,7 @@ export const useHandleEditProfile = () => {
                                                gender,
                                                birthday,
                                                phone,
+                                               email,
                                                din,
                                                skill_level_id,
                                                user_type_id
@@ -147,6 +149,7 @@ export const useHandleEditProfile = () => {
             gender: gender,
             birthday: birthday,
             phone: phone,
+            email:email,
             din: din,
             skill_level_id: skill_level_id,
             user_type_id: user_type_id

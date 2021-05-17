@@ -7,11 +7,12 @@ import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
-import CustomersPage from "./pages/CustomersPage";
-import HiringFormPage from './pages/HiringFormPage';
-import HiringPaymentResultPage from './pages/HiringPaymentResultPage';
 import RegisterPage from "./pages/RegisterPage";
 import AdminRegisterPage from "./pages/AdminRegisterPage";
+import UserManagementPage from "./pages/UserManagementPage";
+import PackagePage from "./pages/PackagePage/PackagePage";
+import PackageDetailsPage from "./pages/PackageDetailsPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -19,10 +20,6 @@ import "./index.css";
 import {createStore, StoreContext} from "./stores";
 import AuthRoute from "./navigation/AuthRole";
 import {USER_ROLE} from "./consts/UserRole";
-import UserManagementPage from "./pages/UserManagementPage";
-import PackagePage from "./pages/PackagePage/PackagePage";
-import PackageDetailsPage from "./pages/PackageDetailsPage";
-import ShoppingCartPage from "./pages/ShoppingCartPage";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -31,9 +28,6 @@ createStore().then(store => {
                 <BrowserRouter>
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
-                        <Route path="/hiringForm" exact component={HiringFormPage}/>
-                        <Route path="/hiringPaymentResult" exact component={HiringPaymentResultPage}/>
-                        <Route path="/customers" exact component={CustomersPage}/>
                         <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
@@ -52,7 +46,7 @@ createStore().then(store => {
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.GUEST
                         ]}/>
-                        <AuthRoute path="/package-details" Component={PackageDetailsPage} requiredRoles={[
+                        <AuthRoute path="/package-details/:packageId" Component={PackageDetailsPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.GUEST
                         ]}/>
