@@ -34,11 +34,21 @@ const OrderHistoryPage = () => {
                     <Content>
                         <Table dataSource={orders} loading={filtering}>
                             <Column title="Order ID" dataIndex="id"/>
-                            <Column title="User ID" dataIndex="user_id"/>
+                            <Column title="Customer Name"
+                                dataIndex="customer_first_name"
+                                render={(text, record) =>
+                                    <span>{record.customer_last_name}, {text}</span>
+                                }
+                            />
                             <Column title="Start Date" dataIndex="start_date"/>
                             <Column title="End Date" dataIndex="end_date"/>
                             <Column title="Description" dataIndex="description"/>
-                            <Column title="Status" dataIndex="status"/>
+                            <Column title="Status"
+                                dataIndex="is_pending"
+                                render={(text) =>
+                                    <span>{text == "Y" ? "Pending" : "Completed"}</span>
+                                }
+                            />
                             {(userRole === USER_ROLE.STAFF || userRole === USER_ROLE.CUSTOMER) &&
                              <Column title="Action" key="action" render={(text, record) => (
                                 <Space size="middle">

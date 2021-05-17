@@ -4,12 +4,12 @@ import {BACKEND_ENDPOINT} from "../../appSettings";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
-export const useHandleFilterOrders = () => {
-    const [orders, setOrders] = useState([]);
+export const useHandleFilterContracts = () => {
+    const [contracts, setContracts] = useState([]);
     const [filtering, setFiltering] = useState(false);
     const {authStore: {id: user_id, userRole}} = useStores();
 
-    const handleFilterOrders = useCallback((query = "") => {
+    const handleFilterContracts = useCallback((query = "") => {
         setFiltering(true);
         if (userRole == USER_ROLE.STAFF) {
             axios.get(`${BACKEND_ENDPOINT}orders/filter`, {
@@ -20,7 +20,7 @@ export const useHandleFilterOrders = () => {
                     response.data.forEach((dataItem, index) => {
                         dataItem.key = index
                     });
-                    setOrders(response.data);
+                    setContracts(response.data);
                 }
             }).finally(() => {
                 setFiltering(false);
@@ -34,7 +34,7 @@ export const useHandleFilterOrders = () => {
                     response.data.forEach((dataItem, index) => {
                         dataItem.key = index
                     });
-                    setOrders(response.data);
+                    setContracts(response.data);
                 }
             }).finally(() => {
                 setFiltering(false);
@@ -42,5 +42,5 @@ export const useHandleFilterOrders = () => {
         };
     }, []);
 
-    return [handleFilterOrders, {orders, filtering}];
+    return [handleFilterContracts, {contracts, filtering}];
 };

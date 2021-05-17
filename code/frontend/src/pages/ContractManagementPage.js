@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Col, Layout, Row, Space, Table, Input} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useHandleFilterOrders} from "../hooks/ContractHooks";
+import {useHandleFilterContracts} from "../hooks/ContractHooks";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
@@ -9,12 +9,12 @@ const {Content} = Layout;
 const {Column} = Table;
 const {Search} = Input;
 
-const OrderHistoryPage = () => {
+const ContractManagementPage = () => {
     const {authStore: {userRole}} = useStores();
-    const [handleFilterOrders, {orders, filtering}] = useHandleFilterOrders();
+    const [handleFilterContracts, {contracts, filtering}] = useHandleFilterContracts();
 
     useEffect(() => {
-        handleFilterOrders();
+        handleFilterContracts();
     }, []);
 
     return (
@@ -28,12 +28,37 @@ const OrderHistoryPage = () => {
                                     allowClear
                                     enterButton="Search"
                                     loading={filtering}
-                                    size="large" onSearch={value => handleFilterOrders(value)}/>
+                                    size="large" onSearch={value => handleFilterContracts(value)}/>
                         </Col>
                     </Row>
                     <Content>
-                        <Table dataSource={orders} loading={filtering}>
-                            <Column title="User ID" dataIndex="user_id"/>
+                        <Table dataSource={contracts} loading={filtering}>
+                            <Column title="Customer Name"
+                                dataIndex="customer_first_name"
+                                render={(customer_first_name, record) =>
+                                    <span>{
+                                        record.customer_last_name ?
+                                            record.customer_last_name + ", " + customer_first_name :
+                                            customer_first_name
+                                    }</span>
+                                }
+                            />
+                            <Column title="Customer Contact"
+                                dataIndex="customer_phone"
+                                render={(text, record) =>
+                                    <span>{text}<br></br>{record.customer_email}</span>
+                                }
+                            />
+                            <Column title="Staff Name"
+                                dataIndex="staff_first_name"
+                                render={(staff_first_name, record) =>
+                                    <span>{
+                                        record.staff_last_name ?
+                                            record.staff_last_name + ", " + staff_first_name :
+                                            staff_first_name
+                                    }</span>
+                                }
+                            />
                             <Column title="Order ID" dataIndex="id"/>
                             <Column title="Start Date" dataIndex="start_date"/>
                             <Column title="End Date" dataIndex="end_date"/>
@@ -54,4 +79,4 @@ const OrderHistoryPage = () => {
     );
 };
 
-export default OrderHistoryPage;
+export default ContractManagementPage;
