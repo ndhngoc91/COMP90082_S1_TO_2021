@@ -15,10 +15,16 @@ import {
 } from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {BrowserRouter, useHistory} from "react-router-dom";
-import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.png";
 import {useStores} from "../../stores";
 import {useShoppingCartPageStyles} from "./styles";
 import {observer} from "mobx-react-lite";
+import {USER_ROLE} from "../../consts/UserRole";
+import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.png";
+import * as pdfMake from "pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import {exportReceipt} from "../../utils/ReceiptExporter";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const {Content} = Layout;
 const {Title} = Typography;
@@ -27,7 +33,20 @@ const {RangePicker} = DatePicker;
 const ShoppingCartPage = observer(() => {
     const history = useHistory();
 
-    const {shoppingCartStore: {totalCost, cartItems, deleteCartItem}} = useStores();
+    const {
+        authStore: {firstName, lastName, userRole},
+        shoppingCartStore: {totalCost, cartItems, deleteCartItem}
+    } = useStores();
+
+    const onCheckoutButtonClick = () => {
+        exportReceipt({
+            customerName: `${firstName} ${lastName}`,
+            date: new Date(),
+            cartItems: cartItems,
+            totalCost: totalCost
+        });
+        notification.success({message: `Checking out: ${JSON.stringify(cartItems)}`});
+    };
 
     const {tagCls, fullWidthCls} = useShoppingCartPageStyles();
 
@@ -89,14 +108,22 @@ const ShoppingCartPage = observer(() => {
                         </Col>
                         <Col span={6}>
                             <Space direction="vertical" className={fullWidthCls}>
-                                <Button className={fullWidthCls} type="primary" size="large" onClick={() => {
-                                    notification.success({message: `Checking out: ${JSON.stringify(cartItems)}`});
-                                }}>
+                                {userRole === USER_ROLE.CUSTOMER &&
+                                <Button className={fullWidthCls} type="primary" size="large"
+                                        onClick={onCheckoutButtonClick}>
                                     Proceed to checkout
-                                </Button>
+                                </Button>}
+                                {userRole === USER_ROLE.GUEST &&
+                                <Button className={fullWidthCls} type="primary" size="large" onClick={() => {
+                                    history.push("/login");
+                                }}>
+                                    Please login to checkout
+                                </Button>}
                                 <Button className={fullWidthCls} size="large" onClick={() => {
                                     history.push("/packages");
-                                }}>Continue booking</Button>
+                                }}>
+                                    Continue ordering
+                                </Button>
                             </Space>
                         </Col>
                     </Row>
