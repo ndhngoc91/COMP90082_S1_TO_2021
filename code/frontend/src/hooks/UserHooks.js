@@ -2,6 +2,7 @@ import {useCallback, useState} from "react";
 import axios from "axios";
 import {UserType} from "../consts/UserType";
 import {BACKEND_ENDPOINT} from "../../appSettings";
+import CryptoJs from 'crypto-js';
 
 export const useHandleFilterUsers = () => {
     const [users, setUsers] = useState([]);
@@ -50,7 +51,7 @@ export const useHandleRegisterCustomer = () => {
         axios.post('http://127.0.0.1:8000/users', {
             username: username,
             email: email,
-            password: password,
+            password: CryptoJs.MD5(password+username).toString(),
             first_name: first_name,
             last_name: last_name,
             phone: phone,
@@ -69,11 +70,17 @@ export const useHandleRegisterCustomer = () => {
         }).then(response => {
             if (response.status === 201) {
                 success();
+            } else if (response.status === 409){
+                failure(response.data['detail']);
             } else {
-                failure();
+                failure()
             }
-        }).catch(() => {
-            failure();
+        }).catch(e => {
+            if (e.response.status === 409){
+                failure(e.response.data['detail']);
+            } else {
+                failure("Failed to create an account!")
+            } //failure();
         }).finally(() => {
             setHandling(false);
         });
@@ -97,7 +104,7 @@ export const useHandleRegisterAdmin = () => {
             username: username,
             email: email,
             phone: phone,
-            password: password,
+            password: CryptoJs.MD5(password+username).toString(),
             user_type_id: UserType.STAFF,
             address_list: []
         }, {
@@ -105,11 +112,17 @@ export const useHandleRegisterAdmin = () => {
         }).then(response => {
             if (response.status === 201) {
                 success();
+            } else if (response.status === 409){
+                failure(response.data);
             } else {
-                failure();
+                failure()
             }
-        }).catch(() => {
-            failure();
+        }).catch((e) => {
+            if (e.response.status === 409){
+                failure(e.response.data['detail']);
+            } else {
+                failure("Failed to create an admin account!")
+            } //failure();
         }).finally(() => {
             setHandling(false);
         });
@@ -135,7 +148,8 @@ export const useHandleEditProfile = () => {
                                                email,
                                                din,
                                                skill_level_id,
-                                               user_type_id
+                                               user_type_id,
+                                               is_enabled
                                            }, success, failure = () => {
     }) => {
         setHandling(true);
@@ -152,7 +166,8 @@ export const useHandleEditProfile = () => {
             email:email,
             din: din,
             skill_level_id: skill_level_id,
-            user_type_id: user_type_id
+            user_type_id: user_type_id,
+            is_enabled: is_enabled,
         }, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {

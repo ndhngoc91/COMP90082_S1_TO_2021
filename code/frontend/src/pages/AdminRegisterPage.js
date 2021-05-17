@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Button, Col, Form, Image, Input, Row, Typography, notification, Select
+    Button, Col, Form, Image, Input, Row, Typography, notification, Select, message
 } from "antd";
 import {
     LockOutlined,
@@ -24,12 +24,17 @@ const AdminRegisterPage = () => {
 
     const onFinish = values => {
         handleRegisterAdmin(values, () => {
-            notification.success({message: "Create a new admin account successfully!"});
-            history.push("/");
-            form.resetFields();
-        }, () => {
-            notification.error({message: "Failed to create an admin account!"});
+                notification.success({message: "Create a new admin account successfully!"});
+                form.resetFields();
+                history.push("/");
+            }, async (errorMessage) => {
+            message.error(errorMessage);
         });
+        /*
+            , () => {
+            notification.error({message: "Failed to create an admin account!"});
+        },
+        */
     };
 
     const prefixSelector = (
