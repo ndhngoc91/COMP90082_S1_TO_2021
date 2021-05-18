@@ -1,35 +1,43 @@
 import {action, computed, makeObservable, observable} from "mobx";
 import {persist} from "mobx-persist";
-import {USER_ROLE} from "../consts/UserRole";
 import moment from "moment";
-import {UserType} from "../consts/UserType";
 
 export class ShoppingCartStore {
     @persist("list") cartItems;
-    @persist intendedNumberOfHiringDays;
+    @persist startDate;
+    @persist endDate;
 
     constructor() {
         makeObservable(this, {
             cartItems: observable,
-            intendedNumberOfHiringDays: observable,
+            startDate: observable,
+            endDate: observable,
             lastId: computed,
+            intendedNumberOfHiringDays: computed,
             totalCost: computed,
             addNewCartItem: action,
             deleteCartItem: action,
             clearShoppingCart: action,
-            setIntendedNumberOfHiringDays: action
+            setDates: action
         });
         this.cartItems = [];
-        this.intendedNumberOfHiringDays = 0;
+        this.startDate = "";
+        this.endDate = "";
     }
 
     get lastId() {
         return this.cartItems.length + 1;
     }
 
+    get intendedNumberOfHiringDays() {
+        const startDate = moment(this.startDate, "YYYY-MM-DD hh:mm:ss");
+        const endDate = moment(this.endDate, "YYYY-MM-DD hh:mm:ss");
+        return endDate.diff(startDate, "days");
+    }
+
     get totalCost() {
         return this.cartItems.reduce((previousValue, currentItem) => {
-            return previousValue + currentItem.base_price * this.intendedNumberOfHiringDays;
+            return previousValue + currentItem.basePrice + parseInt(currentItem.priceLevels[this.intendedNumberOfHiringDays]);
         }, 0);
     }
 
@@ -46,7 +54,8 @@ export class ShoppingCartStore {
         this.cartItems = [];
     }
 
-    setIntendedNumberOfHiringDays = (intendedNumberOfHiringDays) => {
-        this.intendedNumberOfHiringDays = intendedNumberOfHiringDays;
+    setDates = ({startDate, endDate}) => {
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

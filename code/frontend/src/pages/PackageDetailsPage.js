@@ -68,7 +68,8 @@ const PackageDetailsPage = () => {
                         name: package_["name"],
                         trailTypeId: key,
                         quantity: values[key],
-                        base_price: package_["base_price"],
+                        basePrice: package_["base_price"],
+                        priceLevels: package_["price_levels"].split(","),
                         extraItems: extraItems
                     });
                 }
