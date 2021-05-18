@@ -6,11 +6,11 @@ export const rockyValleyLogoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhE
 export function exportReceipt({customerName, cartItems, totalCost}) {
     const data = [];
     cartItems.forEach(cartItem => {
-        data.push([cartItem.quantity, cartItem.name, {
+        data.push([cartItem.id, cartItem.name, {
             text: cartItem.trailTypeId,
             italics: true,
             color: "gray"
-        }, cartItem.cost]);
+        }, cartItem.basePrice]);
     });
 
     const dd = {
@@ -50,10 +50,10 @@ export function exportReceipt({customerName, cartItems, totalCost}) {
                     widths: [50, "*", 100, 70],
                     body: [
                         [
-                            {text: "QTY", style: "tableHeader"},
+                            {text: "ID", style: "tableHeader"},
                             {text: "DSC", style: "tableHeader"},
                             {text: "Trail Type", style: "tableHeader"},
-                            {text: "AMT", style: "tableHeader"}
+                            {text: "Base Price", style: "tableHeader"}
                         ],
                         ...data
                     ]

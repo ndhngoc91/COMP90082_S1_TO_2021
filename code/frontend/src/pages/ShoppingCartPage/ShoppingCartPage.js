@@ -23,6 +23,7 @@ import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.pn
 import * as pdfMake from "pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import {exportReceipt} from "../../utils/ReceiptExporter";
+import moment from "moment";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -35,8 +36,18 @@ const ShoppingCartPage = observer(() => {
 
     const {
         authStore: {firstName, lastName, userRole},
-        shoppingCartStore: {totalCost, cartItems, deleteCartItem}
+        shoppingCartStore: {cartItems, startDate, endDate, totalCost, deleteCartItem, setDates}
     } = useStores();
+
+    const onRangePickerSelect = (dates, dateStrings) => {
+        const intendedNumberOfHiringDays = dates[1].diff(dates[0], "days");
+        if (intendedNumberOfHiringDays >= 7) {
+            notification.error({message: "You cannot hire for more than 7 days!"});
+        } else {
+            const [selectedStartDate, selectedEndDate] = dateStrings;
+            setDates({startDate: selectedStartDate, endDate: selectedEndDate});
+        }
+    };
 
     const onCheckoutButtonClick = () => {
         exportReceipt({
@@ -59,7 +70,9 @@ const ShoppingCartPage = observer(() => {
                         <Col span={18}>
                             <Title level={2}>Shopping Cart</Title>
                             <Divider/>
-                            <RangePicker renderExtraFooter={() => 'extra footer'} showTime/>
+                            <RangePicker renderExtraFooter={() => "extra footer"} showTime
+                                         value={[moment(startDate, "YYYY-MM-DD hh:mm:ss"), moment(endDate, "YYYY-MM-DD hh:mm:ss")]}
+                                         onChange={onRangePickerSelect}/>
                             <Divider/>
                             {cartItems.map((cartItem, key) => {
                                 return <div key={key}>
@@ -83,7 +96,7 @@ const ShoppingCartPage = observer(() => {
                                             </Descriptions>
                                         </Col>
                                         <Col span={2}>
-                                            <Title level={1}>{cartItem.cost}$</Title>
+                                            <Title level={1}>{cartItem.basePrice}$</Title>
                                         </Col>
                                         <Col span={2}>
                                             <Button size="large" onClick={() => deleteCartItem(cartItem.id)}>
