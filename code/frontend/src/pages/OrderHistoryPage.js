@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Col, Layout, Row, Space, Table, Input} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useHandleOrders} from "../hooks/orderHooks";
+import {useHandleOrders} from "../hooks/OrderHooks";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
@@ -48,7 +48,7 @@ const OrderHistoryPage = () => {
                              <Column title="Action" key="action" render={(text, record) => (
                                 <Space size="middle">
                                     {userRole === USER_ROLE.STAFF && <a>Edit</a>}
-                                    {record.status != "Cancelled" &&
+                                    {record.status !== "Cancelled" &&
                                         <a onClick={() => handleCancelOrder(record.id)}>
                                             Withdraw
                                         </a>
