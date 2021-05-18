@@ -69,12 +69,14 @@ class Order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False, index=True)
+    user_id = Column(ForeignKey('users.id'), nullable=False, index=True)
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     description = Column(Text)
-    is_drop_ship = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
-    is_pending = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
+    # package_id = Column(Integer, nullable=False, index=True)
+    # is_drop_ship = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
+    status = Column(Enum('New','Handling','Done','Cancelled','Executing'), nullable=False, server_default=text("'New'"))
+    staff_id = Column(ForeignKey('users.id'), nullable=True)
 
 
 class Organization(Base):
