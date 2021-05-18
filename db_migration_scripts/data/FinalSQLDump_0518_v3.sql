@@ -273,6 +273,7 @@ INSERT INTO `order_receipts` VALUES (14,'this is a link to recerpts -14'),(15,'t
 /*!40000 ALTER TABLE `order_receipts` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
 --
 -- Table structure for table `orders`
 --
@@ -286,8 +287,8 @@ CREATE TABLE `orders` (
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
   `description` text,
-  `is_drop_ship` enum('Y','N') NOT NULL DEFAULT 'N',
-  `is_pending` enum('Y','N') NOT NULL DEFAULT 'N',
+  `status` enum('New','Handling','Done','Cancelled') NOT NULL DEFAULT 'New',
+  `staff_id` int default null,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `fk_orders_users1_idx` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
@@ -299,7 +300,9 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order','Y','Y'),(15,4,NULL,NULL,'this is the second order','N','Y');
+INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order','New',null),
+(15,4,NULL,NULL,'this is the second order','Done',null),
+(16,3,NULL,NULL,'this is the third order','Cancelled',null);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -672,4 +675,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-18  0:55:12
+-- Dump completed on 2021-05-18  22:55:12
