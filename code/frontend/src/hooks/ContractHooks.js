@@ -3,8 +3,10 @@ import axios from "axios";
 import {BACKEND_ENDPOINT} from "../../appSettings";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
+import {exportContract} from "../utils/ContractExporter";
 
-export const useHandleFilterContracts = () => {
+
+export const useHandleContracts = () => {
     const [contracts, setContracts] = useState([]);
     const [filtering, setFiltering] = useState(false);
     const {authStore: {id: user_id, userRole}} = useStores();
@@ -42,5 +44,18 @@ export const useHandleFilterContracts = () => {
         };
     }, []);
 
-    return [handleFilterContracts, {contracts, filtering}];
+    const handlePrintContract = useCallback((order_id) => {
+        setFiltering(true);
+        axios.get(`${BACKEND_ENDPOINT}orders/order-details/${order_id}`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then((response) => {
+            if (response.status === 200) {
+                exportContract(response.data);
+            }
+        }).finally(() => {
+            setFiltering(false);
+        });
+    })
+
+    return [handleFilterContracts, handlePrintContract, {contracts, filtering}];
 };

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Col, Layout, Row, Space, Table, Input} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useHandleFilterContracts} from "../hooks/ContractHooks";
+import {useHandleContracts} from "../hooks/ContractHooks";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
@@ -11,7 +11,7 @@ const {Search} = Input;
 
 const ContractManagementPage = () => {
     const {authStore: {userRole}} = useStores();
-    const [handleFilterContracts, {contracts, filtering}] = useHandleFilterContracts();
+    const [handleFilterContracts, handlePrintContract, {contracts, filtering}] = useHandleContracts();
 
     useEffect(() => {
         handleFilterContracts();
@@ -63,13 +63,9 @@ const ContractManagementPage = () => {
                             <Column title="Start Date" dataIndex="start_date"/>
                             <Column title="End Date" dataIndex="end_date"/>
                             <Column title="Description" dataIndex="description"/>
-                            {(userRole === USER_ROLE.STAFF || userRole === USER_ROLE.CUSTOMER) &&
-                             <Column title="Action" key="action" render={(text, record) => (
-                                <Space size="middle">
-                                    {userRole === USER_ROLE.STAFF && <a>Edit</a>}
-                                    <a>Delete</a>
-                                </Space>
-                            )}/>}
+                            <Column title="Action" key="action" render={(text, record) =>
+                                <a onClick={() => handlePrintContract(record.id)}>Print</a>
+                            }/>
                         </Table>
                     </Content>
                 </Layout>
