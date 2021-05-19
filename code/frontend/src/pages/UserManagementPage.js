@@ -74,9 +74,9 @@ const UserManagementPage = () => {
                                                     setData([...data]);
                                                     console.log("users",users[index])
                                                     handleEditProfile(users[index], () => {
-                                                        notification.success({message: "Edit profile successfully!"});
+                                                        notification.success({message: "Change account access right successfully!"});
                                                     }, () => {
-                                                        notification.error({message: "Failed to edit profile!"});
+                                                        notification.error({message: "Failed to edit account access right!"});
                                                     })
                                                 }}
                                                 loading = {handling}
