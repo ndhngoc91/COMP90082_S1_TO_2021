@@ -60,7 +60,6 @@ def cancel_order(order_id: int, db: Session):
 
 def get_order_details(order_id: int, db: Session):
     customer = aliased(models.User)
-    guest = aliased(models.User)
     staff = aliased(models.User)
 
     order = db.query(
@@ -93,11 +92,13 @@ def get_order_details(order_id: int, db: Session):
         models.Order.id,
         models.OrderDetail.id.label("order_detail_id"),
         models.Package,
+        models.OrderPackage.cost.label("package_cost"),
         models.TrailType,
         models.Extra,
-        guest.id.label("guest_id"),
-        guest.first_name.label("guest_first_name"),
-        guest.last_name.label("guest_last_name"),
+        models.OrderExtra.cost.label("extra_cost"),
+        models.Recipient.id.label("recipient_id"),
+        models.Recipient.first_name.label("recipient_first_name"),
+        models.Recipient.last_name.label("recipient_last_name"),
     ).filter(
         models.Order.id == order_id
     ).order_by(
@@ -105,13 +106,15 @@ def get_order_details(order_id: int, db: Session):
     ).outerjoin(
         models.OrderDetail, models.OrderDetail.order_id == models.Order.id
     ).outerjoin(
-        models.Package, models.Package.id == models.OrderDetail.package_id
+        models.OrderPackage, models.OrderPackage.order_details_id == models.OrderDetail.id
     ).outerjoin(
-        models.TrailType, models.TrailType.id == models.OrderDetail.trail_id
+        models.Package, models.Package.id == models.OrderPackage.package_id
     ).outerjoin(
-        guest, guest.id == models.OrderDetail.user_id
+        models.TrailType, models.TrailType.id == models.OrderPackage.trail_id
     ).outerjoin(
-        models.OrderExtra, models.OrderExtra.order_details_id == models.OrderDetail.id
+        models.Recipient, models.Recipient.id == models.OrderDetail.recipient_id
+    ).outerjoin(
+        models.OrderExtra, models.OrderExtra.order_packages_id == models.OrderPackage.id
     ).outerjoin(
         models.Extra, models.Extra.id == models.OrderExtra.extra_id
     ).all()

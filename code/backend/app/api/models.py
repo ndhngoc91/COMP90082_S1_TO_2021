@@ -98,6 +98,7 @@ class Order(Base):
     end_date = Column(DateTime)
     description = Column(Text)
     status = Column(Enum('New','Handling','Done','Cancelled','Executing'), nullable=False, server_default=text("'New'"))
+    staff_id = Column(ForeignKey('users.id'), nullable=True)
 
 
 class Organization(Base):
