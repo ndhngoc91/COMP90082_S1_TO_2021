@@ -85,15 +85,15 @@ export const exportContract = (orderDetails) => {
                         ],
                         ...((() => {
                             const packagesByGuest = orderDetails.packages.reduce((a, p) => {
-                                if (!(p.guest_id in a)) {
-                                    a[p.guest_id] = [];
+                                if (!(p.recipient_id in a)) {
+                                    a[p.recipient_id] = [];
                                 }
-                                a[p.guest_id].push(p);
+                                a[p.recipient_id].push(p);
                                 return a;
                             }, {});
-                            return Object.keys(packagesByGuest).reduce((a, guest_id) => {
-                                const packages = packagesByGuest[guest_id];
-                                const guestName = `${packages[0].guest_last_name}, ${packages[0].guest_first_name}`;
+                            return Object.keys(packagesByGuest).reduce((a, recipient_id) => {
+                                const packages = packagesByGuest[recipient_id];
+                                const guestName = `${packages[0].recipient_last_name}, ${packages[0].recipient_first_name}`;
                                 const packagesByOrderDetailId = packages.reduce((a, p) => {
                                     if (!(p.order_detail_id in a)) {
                                         a[p.order_detail_id] = []
@@ -104,21 +104,20 @@ export const exportContract = (orderDetails) => {
 
                                 const rows = Object.keys(packagesByOrderDetailId).reduce((a, orderDetailId) => {
                                     const p = packagesByOrderDetailId[orderDetailId][0];
-                                    const price = p.Package.base_price + parseFloat(p.Package.price_levels.split(",")[interval - 1]);
+                                    const price = p.package_cost || 0;
                                     totalPrice += price;
                                     return a.concat([
                                         [
                                             "",
-                                            p.Package.name,
-                                            p.TrailType.name,
+                                            p.Package && p.Package.name,
+                                            p.TrailType && p.TrailType.name,
                                             `$${price.toFixed(2)}`
                                         ]
                                     ]).concat(p.Extra ? [
                                         ["", { text: "Extra Name", colSpan: 3, style: "tableHeader" }, "", ""],
                                         ...(packagesByOrderDetailId[orderDetailId].map((p) => {
-                                            const price =
-                                                p.Extra.base_price + parseFloat(p.Extra.price_levels.split(",")[interval - 1])
-                                            totalPrice += price
+                                            const price = p.extra_cost || 0;
+                                            totalPrice += price;
                                             return [
                                                 "",
                                                 { text: `${p.Extra.name}`, colSpan: 2 }, "",

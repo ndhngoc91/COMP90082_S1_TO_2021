@@ -60,7 +60,6 @@ def cancel_order(order_id: int, db: Session):
 
 def get_order_details(order_id: int, db: Session):
     customer = aliased(models.User)
-    guest = aliased(models.User)
     staff = aliased(models.User)
 
     order = db.query(
@@ -93,11 +92,13 @@ def get_order_details(order_id: int, db: Session):
         models.Order.id,
         models.OrderDetail.id.label("order_detail_id"),
         models.Package,
+        models.OrderPackage.cost.label("package_cost"),
         models.TrailType,
         models.Extra,
-        guest.id.label("guest_id"),
-        guest.first_name.label("guest_first_name"),
-        guest.last_name.label("guest_last_name"),
+        models.OrderExtra.cost.label("extra_cost"),
+        models.Recipient.id.label("recipient_id"),
+        models.Recipient.first_name.label("recipient_first_name"),
+        models.Recipient.last_name.label("recipient_last_name"),
     ).filter(
         models.Order.id == order_id
     ).order_by(
@@ -105,13 +106,15 @@ def get_order_details(order_id: int, db: Session):
     ).outerjoin(
         models.OrderDetail, models.OrderDetail.order_id == models.Order.id
     ).outerjoin(
-        models.Package, models.Package.id == models.OrderDetail.package_id
+        models.OrderPackage, models.OrderPackage.order_details_id == models.OrderDetail.id
     ).outerjoin(
-        models.TrailType, models.TrailType.id == models.OrderDetail.trail_id
+        models.Package, models.Package.id == models.OrderPackage.package_id
     ).outerjoin(
-        guest, guest.id == models.OrderDetail.user_id
+        models.TrailType, models.TrailType.id == models.OrderPackage.trail_id
     ).outerjoin(
-        models.OrderExtra, models.OrderExtra.order_details_id == models.OrderDetail.id
+        models.Recipient, models.Recipient.id == models.OrderDetail.recipient_id
+    ).outerjoin(
+        models.OrderExtra, models.OrderExtra.order_packages_id == models.OrderPackage.id
     ).outerjoin(
         models.Extra, models.Extra.id == models.OrderExtra.extra_id
     ).all()
@@ -120,3 +123,52 @@ def get_order_details(order_id: int, db: Session):
         "order": order,
         "packages": packages
     }
+
+
+def create_new_order(order: schemas.Order, db: Session):
+    new_order = models.Order(
+        user_id=order.customer_id,
+        start_date=order.start_date,
+        end_date=order.end_date,
+        description=order.description
+    )
+    db.add(new_order)
+    db.commit()
+
+    for order_detail in order.order_details:
+        new_recipient = models.Recipient(
+            first_name=order_detail.recipient.first_name,
+            last_name=order_detail.recipient.last_name,
+            birthday=order_detail.recipient.dob,
+            height=order_detail.recipient.height,
+            weight=order_detail.recipient.weight,
+            foot_size=order_detail.recipient.foot_size,
+            skill_level_id=order_detail.recipient.skill_level_id
+        )
+        db.add(new_recipient)
+        db.commit()
+
+        new_order_detail = models.OrderDetail(
+            order_id=new_order.id,
+            recipient_id=new_recipient.id
+        )
+        db.add(new_order_detail)
+        db.commit()
+
+        new_order_package = models.OrderPackage(
+            order_details_id=new_order_detail.id,
+            package_id=order_detail.package_id,
+            trail_id=order_detail.trail_id,
+            cost=order_detail.package_cost
+        )
+        db.add(new_order_package)
+        db.commit()
+
+        for order_extra in order_detail.extras:
+            new_order_extra = models.OrderExtra(
+                order_packages_id=new_order_package.id,
+                extra_id=order_extra.id,
+                cost=order_extra.cost
+            )
+            db.add(new_order_extra)
+            db.commit()

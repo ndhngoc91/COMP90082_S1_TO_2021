@@ -36,7 +36,8 @@ export const useHandleContracts = () => {
                     response.data.forEach((dataItem, index) => {
                         dataItem.key = index
                     });
-                    setContracts(response.data.filter((dataItem) => dataItem.status == "Executing"));
+                    // setContracts(response.data.filter((dataItem) => dataItem.status == "Executing"));
+                    setContracts(response.data);
                 }
             }).finally(() => {
                 setFiltering(false);
