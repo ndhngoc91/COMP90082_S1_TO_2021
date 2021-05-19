@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Button, Col, Form, Image, Input, Row, Typography, notification, Select
+    Button, Col, Form, Image, Input, Row, Typography, notification, Select, message
 } from "antd";
 import {
     LockOutlined,
@@ -24,12 +24,17 @@ const AdminRegisterPage = () => {
 
     const onFinish = values => {
         handleRegisterAdmin(values, () => {
-            notification.success({message: "Create a new admin account successfully!"});
-            history.push("/");
-            form.resetFields();
-        }, () => {
-            notification.error({message: "Failed to create an admin account!"});
+                notification.success({message: "Create a new admin account successfully!"});
+                form.resetFields();
+                history.push("/");
+            }, async (errorMessage) => {
+            message.error(errorMessage);
         });
+        /*
+            , () => {
+            notification.error({message: "Failed to create an admin account!"});
+        },
+        */
     };
 
     const prefixSelector = (
@@ -88,6 +93,42 @@ const AdminRegisterPage = () => {
                                        placeholder="Your email address"
                                        className="email"/>
                             </Form.Item>
+                            <Row justify="space-between" gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item name={"first_name"}
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: "Please input your first name!",
+                                                   }
+                                               ]}
+                                               style={{
+                                                   width: "100%",
+                                               }}>
+                                        <Input placeholder="Enter your first name"
+                                               style={{
+                                                   width: "100%",
+                                               }}/>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item name={"last_name"}
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: "Please input your last name!",
+                                                   }
+                                               ]}
+                                               style={{
+                                                   width: "100%",
+                                               }}>
+                                        <Input placeholder="Enter your last name"
+                                               style={{
+                                                   width: "100%",
+                                               }}/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                             <Form.Item name="phone"
                                        rules={[
                                            {

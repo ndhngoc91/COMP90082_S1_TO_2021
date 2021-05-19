@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Form, Input, Button, Space, notification} from 'antd';
 import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import {useHandleAddUserGroup} from "../../hooks/UserGroupHooks";
@@ -17,6 +17,7 @@ const AddUserGroupForm = () => {
         handleAddUserGroup(values, () => {
             form.resetFields();
             notification.success({message: "Create new user group successfully!"});
+            location.reload();
         });
     };
 

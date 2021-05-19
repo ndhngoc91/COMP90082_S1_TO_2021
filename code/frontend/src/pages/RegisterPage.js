@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {
-    Button, Col, Form, Image, Input, Row, Select, Typography, DatePicker, notification
+    Button, Col, Form, Image, Input, Row, Select, Typography, DatePicker, notification, message
 } from "antd";
 import {
     LockOutlined,
@@ -55,9 +55,9 @@ const RegisterPage = () => {
             notification.success({message: "Create a new account successfully!"});
             history.push("/");
             form.resetFields();
-        }, () => {
-            notification.error({message: "Failed to create an account!"});
-        })
+        }, async (errorMessage) => {
+            message.error(errorMessage);
+        });
     };
 
     return (
