@@ -12,6 +12,8 @@ import AdminRegisterPage from "./pages/AdminRegisterPage";
 import UserManagementPage from "./pages/UserManagementPage";
 import PackagePage from "./pages/PackagePage/PackagePage";
 import PackageDetailsPage from "./pages/PackageDetailsPage";
+import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
+import FinishPage from "./pages/FinishPage/FinishPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ContractManagementPage from "./pages/ContractManagementPage";
@@ -53,6 +55,14 @@ createStore().then(store => {
                             USER_ROLE.GUEST
                         ]}/>
                         <AuthRoute path="/shopping-cart" Component={ShoppingCartPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/checkout" Component={CheckoutPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/finish" Component={FinishPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.GUEST
                         ]}/>
