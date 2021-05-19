@@ -1,5 +1,6 @@
-from sqlalchemy import BigInteger, Column, DECIMAL, DateTime, Enum, Float, ForeignKey, Integer, String, Table, Text, \
-    text, Date, DATE, BOOLEAN, VARCHAR
+from typing import Tuple
+from sqlalchemy import Column, DECIMAL, DateTime, Enum, ForeignKey, Integer, Table, Text, \
+    text, Date, BOOLEAN, VARCHAR
 from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.orm import relationship
 from app.api.database import Base
@@ -47,22 +48,45 @@ class Extra(Base):
     sell_code = Column(VARCHAR(20), nullable=False)
 
 
+class Recipient(Base):
+    __tablename__ = 'recipients'
+
+    id = Column(Integer, primary_key=True)
+    first_name = Column(VARCHAR(127))
+    last_name = Column(VARCHAR(127))
+    birthday = Column(Date)
+    height = Column(DECIMAL(5, 2))
+    weight = Column(DECIMAL(5, 2))
+    foot_size = Column(DECIMAL(3, 1))
+    din = Column(DECIMAL(5, 2), nullable=True)
+    skill_level_id = Column(ForeignKey('skill_levels.id'))
+
+
 class OrderDetail(Base):
     __tablename__ = 'order_details'
 
     id = Column(Integer, primary_key=True)
-    order_id = Column(Integer, nullable=False, index=True)
-    package_id = Column(Integer, nullable=False, index=True)
-    trail_id = Column(Integer, nullable=False, index=True)
-    user_id = Column(Integer, nullable=False, index=True)
+    order_id = Column(ForeignKey('orders.id'), nullable=False, index=True)
+    recipient_id = Column(ForeignKey('recipients.id'), nullable=False, index=True)
+
+
+class OrderPackage(Base):
+    __tablename__ = 'order_packages'
+
+    id = Column(Integer, primary_key=True)
+    order_details_id = Column(ForeignKey('order_details.id'), nullable=False, index=True)
+    package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
+    trail_id = Column(ForeignKey('trail_types.id'), nullable=False, index=True)
+    cost = Column(DECIMAL(6,2), nullable=False)
 
 
 class OrderExtra(Base):
     __tablename__ = 'order_extras'
 
     id = Column(Integer, primary_key=True)
-    order_details_id = Column(Integer, nullable=False, index=True)
-    extra_id = Column(Integer, nullable=False, index=True)
+    order_packages_id = Column(ForeignKey('order_packages.id'), nullable=False, index=True)
+    extra_id = Column(ForeignKey('extra.id'), nullable=False, index=True)
+    cost = Column(DECIMAL(6,2), nullable=False)
 
 
 class Order(Base):
@@ -73,10 +97,7 @@ class Order(Base):
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     description = Column(Text)
-    # package_id = Column(Integer, nullable=False, index=True)
-    # is_drop_ship = Column(Enum('Y', 'N'), nullable=False, server_default=text("'N'"))
     status = Column(Enum('New','Handling','Done','Cancelled','Executing'), nullable=False, server_default=text("'New'"))
-    staff_id = Column(ForeignKey('users.id'), nullable=True)
 
 
 class Organization(Base):

@@ -1,7 +1,7 @@
+from app.api import schemas
 from sqlalchemy.orm import Session
 from typing import Optional
 from app.api.repository import order_repo
-from app.api.resource.order_resource import OrderResource
 
 
 def get_all_orders(db: Session):
@@ -20,5 +20,5 @@ def get_order_details(order_id: int, db: Session):
     return order_repo.get_order_details(order_id=order_id, db=db)
 
 
-def create_order(packages):
-    return OrderResource().create_order(packages)
+def create_new_order(order: schemas.Order, db: Session):
+    return order_repo.create_new_order(order=order, db=db)

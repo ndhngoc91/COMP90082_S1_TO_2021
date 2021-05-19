@@ -120,3 +120,52 @@ def get_order_details(order_id: int, db: Session):
         "order": order,
         "packages": packages
     }
+
+
+def create_new_order(order: schemas.Order, db: Session):
+    new_order = models.Order(
+        user_id=order.customer_id,
+        start_date=order.start_date,
+        end_date=order.end_date,
+        description=order.description
+    )
+    db.add(new_order)
+    db.commit()
+
+    for order_detail in order.order_details:
+        new_recipient = models.Recipient(
+            first_name=order_detail.recipient.first_name,
+            last_name=order_detail.recipient.last_name,
+            birthday=order_detail.recipient.dob,
+            height=order_detail.recipient.height,
+            weight=order_detail.recipient.weight,
+            foot_size=order_detail.recipient.foot_size,
+            skill_level_id=order_detail.recipient.skill_level_id
+        )
+        db.add(new_recipient)
+        db.commit()
+
+        new_order_detail = models.OrderDetail(
+            order_id=new_order.id,
+            recipient_id=new_recipient.id
+        )
+        db.add(new_order_detail)
+        db.commit()
+
+        new_order_package = models.OrderPackage(
+            order_details_id=new_order_detail.id,
+            package_id=order_detail.package_id,
+            trail_id=order_detail.trail_id,
+            cost=order_detail.package_cost
+        )
+        db.add(new_order_package)
+        db.commit()
+
+        for order_extra in order_detail.extras:
+            new_order_extra = models.OrderExtra(
+                order_packages_id=new_order_package.id,
+                extra_id=order_extra.id,
+                cost=order_extra.cost
+            )
+            db.add(new_order_extra)
+            db.commit()

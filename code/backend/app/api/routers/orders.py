@@ -37,6 +37,6 @@ def filter_orders(order_id: int = None, db: Session = Depends(get_db)):
     return order_service.cancel_order(order_id=order_id, db=db)
 
 
-@router.post("/hiring", status_code=status.HTTP_201_CREATED)
-def submit_order(orders: schemas.Order):
-    return order_service.create_order(orders.packages)
+@router.post("", status_code=status.HTTP_201_CREATED)
+def create_new_order(order: schemas.Order, db: Session = Depends(get_db)):
+    return order_service.create_new_order(order, db=db)
