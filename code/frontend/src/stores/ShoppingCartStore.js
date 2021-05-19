@@ -18,11 +18,12 @@ export class ShoppingCartStore {
             addNewCartItem: action,
             deleteCartItem: action,
             clearShoppingCart: action,
-            setDates: action
+            setDates: action,
+            toggleExtraItem: action
         });
         this.cartItems = [];
-        this.startDate = "";
-        this.endDate = "";
+        this.startDate = moment().format("YYYY-MM-DD hh:mm:ss");
+        this.endDate = moment().add(8, "hours").format("YYYY-MM-DD hh:mm:ss");
     }
 
     get lastId() {
@@ -36,8 +37,16 @@ export class ShoppingCartStore {
     }
 
     get totalCost() {
-        return this.cartItems.reduce((previousValue, currentItem) => {
-            return previousValue + currentItem.basePrice + parseInt(currentItem.priceLevels[this.intendedNumberOfHiringDays]);
+        return this.cartItems.reduce((previousValue, cartItem) => {
+            const extraCost = cartItem.extraItems.reduce((previousValue, extraItem) => {
+                if (extraItem.selected) {
+                    return previousValue + extraItem.basePrice + parseInt(extraItem.priceLevels[this.intendedNumberOfHiringDays]);
+                } else {
+                    return previousValue;
+                }
+            }, 0)
+
+            return previousValue + cartItem.basePrice + parseInt(cartItem.priceLevels[this.intendedNumberOfHiringDays]) + extraCost;
         }, 0);
     }
 
@@ -57,5 +66,21 @@ export class ShoppingCartStore {
     setDates = ({startDate, endDate}) => {
         this.startDate = startDate;
         this.endDate = endDate;
+        const _startDate = moment(startDate, "YYYY-MM-DD hh:mm:ss");
+        const _endDate = moment(endDate, "YYYY-MM-DD hh:mm:ss");
+        const level = _endDate.diff(_startDate, "days");
+        this.cartItems.forEach(cartItem => {
+            cartItem.cost = cartItem.basePrice + parseInt(cartItem.priceLevels[level]);
+            cartItem.extraItems.forEach(extraItem => {
+                extraItem.cost = extraItem.basePrice + parseInt(extraItem.priceLevels[level]);
+            });
+        });
+    }
+
+    toggleExtraItem = (cartId, extraItemId) => {
+        const cartItem = this.cartItems.find(cartItem => cartItem.id === cartId);
+        const extraItem = cartItem.extraItems.find(extraItem => extraItem.id === extraItemId);
+        extraItem.selected = !extraItem.selected;
+        this.cartItems = [...this.cartItems];
     }
 }

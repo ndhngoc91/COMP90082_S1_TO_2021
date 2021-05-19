@@ -58,20 +58,28 @@ const PackageDetailsPage = () => {
         if (total >= 1) {
             const extraItems = [];
             package_["extra_items"].forEach(extraItem => {
-                extraItem.selected = selectedExtraItems.includes(extraItem["id"]);
-                extraItems.push(extraItem);
+                extraItems.push({
+                    id: extraItem["id"],
+                    name: extraItem["name"],
+                    basePrice: extraItem["base_price"],
+                    priceLevels: extraItem["price_levels"].split(","),
+                    cost: extraItem["base_price"],
+                    selected: selectedExtraItems.includes(extraItem["id"])
+                });
             });
 
             Object.keys(values).forEach(key => {
                 if (values[key] > 0) {
-                    addNewCartItem({
-                        name: package_["name"],
-                        trailTypeId: key,
-                        quantity: values[key],
-                        basePrice: package_["base_price"],
-                        priceLevels: package_["price_levels"].split(","),
-                        extraItems: extraItems
-                    });
+                    for (let i = 0; i < values[key]; i++) {
+                        addNewCartItem({
+                            name: package_["name"],
+                            trailType: package_["trail_types"].find(trailType => trailType["id"] === parseInt(key)),
+                            basePrice: package_["base_price"],
+                            priceLevels: package_["price_levels"].split(","),
+                            cost: package_["base_price"],
+                            extraItems: extraItems
+                        });
+                    }
                 }
             });
             history.push("/shopping-cart");

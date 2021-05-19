@@ -11,7 +11,7 @@ import {
     Typography,
     DatePicker,
     Tag,
-    notification
+    notification, Table
 } from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {BrowserRouter, useHistory} from "react-router-dom";
@@ -30,13 +30,14 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const {Content} = Layout;
 const {Title} = Typography;
 const {RangePicker} = DatePicker;
+const {Column} = Table;
 
 const ShoppingCartPage = observer(() => {
     const history = useHistory();
 
     const {
         authStore: {firstName, lastName, userRole},
-        shoppingCartStore: {cartItems, startDate, endDate, totalCost, deleteCartItem, setDates}
+        shoppingCartStore: {cartItems, startDate, endDate, totalCost, deleteCartItem, setDates, toggleExtraItem}
     } = useStores();
 
     const onRangePickerSelect = (dates, dateStrings) => {
@@ -68,7 +69,18 @@ const ShoppingCartPage = observer(() => {
                 <Content style={{padding: "3em", backgroundColor: "#FFFFFF"}}>
                     <Row justify="space-between" gutter={80}>
                         <Col span={18}>
-                            <Title level={2}>Shopping Cart</Title>
+                            <Row gutter={16}>
+                                <Col span={4}>
+                                    <Title level={2}>Shopping Cart</Title>
+                                </Col>
+                                <Col span={16}>
+                                </Col>
+                                <Col span={4}>
+                                    <Tag className={tagCls} color="green">
+                                        Total Cost: ${totalCost}
+                                    </Tag>
+                                </Col>
+                            </Row>
                             <Divider/>
                             <RangePicker renderExtraFooter={() => "extra footer"} showTime
                                          value={[moment(startDate, "YYYY-MM-DD hh:mm:ss"), moment(endDate, "YYYY-MM-DD hh:mm:ss")]}
@@ -87,16 +99,25 @@ const ShoppingCartPage = observer(() => {
                                                     {cartItem.name}
                                                 </Descriptions.Item>
                                             </Descriptions>
-                                            <Title level={3}>Trail Type: {cartItem.trailTypeId}</Title>
-                                            <Descriptions>
-                                                <Descriptions.Item span={3}>
-                                                    <Tag className={tagCls}
-                                                         color="blue">{cartItem.quantity} item(s)</Tag>
-                                                </Descriptions.Item>
-                                            </Descriptions>
+                                            <Title level={3}>{cartItem["trailType"]["name"]}</Title>
+                                            <Table dataSource={cartItem.extraItems} rowKey={record => {
+                                                return record["id"];
+                                            }} pagination={false}>
+                                                <Column title="Name" dataIndex="name"/>
+                                                <Column title="Cost" dataIndex="cost" render={text => {
+                                                    return `$${text}`;
+                                                }}/>
+                                                <Column title="Selected" dataIndex="selected" render={(selected, record) => {
+                                                    return <Tag color={selected ? "green" : "red"} onClick={() => {
+                                                        toggleExtraItem(cartItem["id"], record["id"]);
+                                                    }}>
+                                                        {selected ? "Selected" : "Not Selected"}
+                                                    </Tag>;
+                                                }}/>
+                                            </Table>
                                         </Col>
                                         <Col span={2}>
-                                            <Title level={1}>{cartItem.basePrice}$</Title>
+                                            <Title level={1}>${cartItem.cost}</Title>
                                         </Col>
                                         <Col span={2}>
                                             <Button size="large" onClick={() => deleteCartItem(cartItem.id)}>
@@ -107,17 +128,6 @@ const ShoppingCartPage = observer(() => {
                                     <Divider/>
                                 </div>
                             })}
-                            <Row gutter={16}>
-                                <Col span={4}>
-                                </Col>
-                                <Col span={16}>
-                                </Col>
-                                <Col span={4}>
-                                    <Tag className={tagCls} color="green">
-                                        Total Price: {totalCost}$
-                                    </Tag>
-                                </Col>
-                            </Row>
                         </Col>
                         <Col span={6}>
                             <Space direction="vertical" className={fullWidthCls}>
