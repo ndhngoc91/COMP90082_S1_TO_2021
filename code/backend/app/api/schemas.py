@@ -21,34 +21,35 @@ class Product(BaseModel):
     quantity: int
 
 
-class CustomerInfo(BaseModel):
-    firstName: str
-    lastName: str
-    dob: str
-    height: int
-    shoeSize: int
-    skierLevel: int
-    tyreSize: int
-    weight: int
+class Recipient(BaseModel):
+    first_name: str
+    last_name: str
+    dob: date
+    height: float
+    weight: float
+    foot_size: float
+    skill_level_id: int
 
 
-class PackageInfo(BaseModel):
-    customer: CustomerInfo
-    category_id: int
+class OrderExtra(BaseModel):
+    id: int
+    cost: float
+
+
+class OrderDetail(BaseModel):
     package_id: int
-    extras: List[int]
-    start_date: str
-    end_date: str
-    user_id: int
+    trail_id: int
+    package_cost: float
+    extras: List[OrderExtra]
+    recipient: Recipient
 
 
 class Order(BaseModel):
     customer_id: int
-    delivery_addr_id: str
-    billing_addr_id: str
-    lines: List[Product]
-    instruction: str
-    packages: List[PackageInfo]
+    start_date: date
+    end_date: date
+    description: str
+    order_details: List[OrderDetail]
 
 
 class Address(BaseModel):
