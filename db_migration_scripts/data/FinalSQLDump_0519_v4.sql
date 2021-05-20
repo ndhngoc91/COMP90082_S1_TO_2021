@@ -530,7 +530,7 @@ CREATE TABLE `recipients` (
   `id` int NOT NULL AUTO_INCREMENT,
   `height` decimal(5,2) DEFAULT NULL,
   `weight` decimal(5,2) DEFAULT NULL,
-  `foot_size` decimal(3,1) DEFAULT NULL,
+  `foot_size` int DEFAULT NULL,
   `first_name` varchar(127) DEFAULT NULL,
   `last_name` varchar(127) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
@@ -547,7 +547,7 @@ CREATE TABLE `recipients` (
 --
 LOCK TABLES `recipients` WRITE;
 /*!40000 ALTER TABLE `recipients` DISABLE KEYS */;
-INSERT INTO `recipients` VALUES (1,180,80,44,'Alice','Hack',null,4.0,1),(2,170,60,42,'Bob','Ni',null,3.5,2);
+INSERT INTO `recipients` VALUES (1,180,80,300,'Alice','Hack',null,4.0,1),(2,170,60,270,'Bob','Ni',null,3.5,2);
 /*!40000 ALTER TABLE `recipients` ENABLE KEYS */;
 UNLOCK TABLES;
 
