@@ -3,7 +3,7 @@ import {
     Button, Layout, Col, Row, Space, Steps, Divider, Result
 } from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
-import {useHistory} from "react-router-dom";
+import CheckoutProgressBar from "../../components/CheckoutProgressBar/CheckoutProgressBar";
 import {useStores} from "../../stores";
 import {useFinishPageStyles} from "./styles";
 import {observer} from "mobx-react-lite";
@@ -14,26 +14,19 @@ import {exportReceipt} from "../../utils/ReceiptExporter";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const {Content} = Layout;
-const {Step} = Steps;
 
 const FinishPage = observer(() => {
-    const history = useHistory();
-
     const {
         authStore: {firstName, lastName},
         shoppingCartStore: {cartItems, totalCost}
     } = useStores();
 
-    console.log(JSON.stringify(cartItems));
-
     const printReceipt = () => {
-        console.log(JSON.stringify(cartItems));
-        // exportReceipt({
-        //     customerName: `${firstName} ${lastName}`,
-        //     date: new Date(),
-        //     cartItems: cartItems,
-        //     totalCost: totalCost
-        // });
+        exportReceipt({
+            customerName: `${firstName} ${lastName}`,
+            cartItems: cartItems,
+            totalCost: totalCost
+        });
     };
 
     const {fullWidthCls} = useFinishPageStyles();
@@ -44,12 +37,7 @@ const FinishPage = observer(() => {
             <Content style={{padding: "3em", backgroundColor: "#FFFFFF"}}>
                 <Row justify="space-between" gutter={80}>
                     <Col span={18}>
-                        <Steps progressDot current={3}>
-                            <Step title="Booking"/>
-                            <Step title="Input Customer Details"/>
-                            <Step title="Input Contacts"/>
-                            <Step title="Done"/>
-                        </Steps>
+                        <CheckoutProgressBar current={2}/>
                         <Divider/>
                         <Result status="success"
                                 title="Successfully Ordered!"
@@ -60,11 +48,6 @@ const FinishPage = observer(() => {
                             <Button className={fullWidthCls} type="primary" size="large"
                                     onClick={printReceipt}>
                                 Print Receipt
-                            </Button>
-                            <Button className={fullWidthCls} size="large" onClick={() => {
-                                history.push("/packages");
-                            }}>
-                                Go back
                             </Button>
                         </Space>
                     </Col>

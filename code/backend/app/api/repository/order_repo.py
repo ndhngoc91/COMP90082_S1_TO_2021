@@ -126,7 +126,7 @@ def get_order_details(order_id: int, db: Session):
 
 def create_new_order(order: schemas.Order, db: Session):
     new_order = models.Order(
-        user_id=order.customer_id,
+        user_id=order.user_id,
         start_date=order.start_date,
         end_date=order.end_date,
         description=order.description

@@ -6,11 +6,24 @@ export const rockyValleyLogoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhE
 export function exportReceipt({customerName, cartItems, totalCost}) {
     const data = [];
     cartItems.forEach(cartItem => {
-        data.push([cartItem.id, cartItem.name, {
-            text: cartItem.trailTypeId,
-            italics: true,
-            color: "gray"
-        }, cartItem.basePrice]);
+        data.push([
+            cartItem.id,
+            [
+                cartItem.name,
+                {
+                    ul: cartItem.extraItems.reduce((previousValue, extraItem) => {
+                        if (extraItem.selected) {
+                            previousValue.push(`${extraItem.name} - $${extraItem.cost}`);
+                        }
+                        return previousValue;
+                    }, []),
+                }
+            ], {
+                text: cartItem.trailType.name,
+                italics: true,
+                color: "gray"
+            }, `$${cartItem.cost}`
+        ]);
     });
 
     const dd = {
@@ -53,7 +66,7 @@ export function exportReceipt({customerName, cartItems, totalCost}) {
                             {text: "ID", style: "tableHeader"},
                             {text: "DSC", style: "tableHeader"},
                             {text: "Trail Type", style: "tableHeader"},
-                            {text: "Base Price", style: "tableHeader"}
+                            {text: "Cost", style: "tableHeader"}
                         ],
                         ...data
                     ]
@@ -113,5 +126,5 @@ export function exportReceipt({customerName, cartItems, totalCost}) {
         }
     };
 
-    pdfMake.createPdf(dd).download();
+    pdfMake.createPdf(dd).download("receipt");
 }

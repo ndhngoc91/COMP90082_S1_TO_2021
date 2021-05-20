@@ -72,6 +72,7 @@ const PackageDetailsPage = () => {
                 if (values[key] > 0) {
                     for (let i = 0; i < values[key]; i++) {
                         addNewCartItem({
+                            packageId: package_["id"],
                             name: package_["name"],
                             trailType: package_["trail_types"].find(trailType => trailType["id"] === parseInt(key)),
                             basePrice: package_["base_price"],

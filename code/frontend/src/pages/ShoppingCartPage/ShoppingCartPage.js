@@ -21,20 +21,33 @@ import {observer} from "mobx-react-lite";
 import {USER_ROLE} from "../../consts/UserRole";
 import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.png";
 import moment from "moment";
+import CheckoutProgressBar from "../../components/CheckoutProgressBar/CheckoutProgressBar";
 
 const {Content} = Layout;
 const {Title} = Typography;
 const {RangePicker} = DatePicker;
 const {Column} = Table;
-const {Step} = Steps;
 
 const ShoppingCartPage = observer(() => {
-    const history = useHistory();
-
     const {
         authStore: {userRole},
-        shoppingCartStore: {cartItems, startDate, endDate, totalCost, deleteCartItem, setDates, toggleExtraItem}
+        shoppingCartStore: {
+            cartItems,
+            startDate,
+            endDate,
+            totalCost,
+            isCheckedOut,
+            deleteCartItem,
+            setDates,
+            toggleExtraItem
+        }
     } = useStores();
+
+    const history = useHistory();
+
+    if (isCheckedOut) {
+        history.push("/finish");
+    }
 
     const onRangePickerSelect = (dates, dateStrings) => {
         const intendedNumberOfHiringDays = dates[1].diff(dates[0], "days");
@@ -58,7 +71,6 @@ const ShoppingCartPage = observer(() => {
             <Content style={{padding: "3em", backgroundColor: "#FFFFFF"}}>
                 <Row justify="space-between" gutter={80}>
                     <Col span={18}>
-
                         <Row gutter={16}>
                             <Col span={4}>
                                 <Title level={2}>Shopping Cart</Title>
@@ -73,11 +85,7 @@ const ShoppingCartPage = observer(() => {
                         </Row>
                         <Divider/>
                         <Row>
-                            <Steps progressDot current={0}>
-                                <Step title="Booking"/>
-                                <Step title="Input Contacts"/>
-                                <Step title="Done"/>
-                            </Steps>
+                            <CheckoutProgressBar current={0}/>
                         </Row>
                         <Divider/>
                         <RangePicker renderExtraFooter={() => "extra footer"} showTime
@@ -133,7 +141,7 @@ const ShoppingCartPage = observer(() => {
                             {userRole === USER_ROLE.CUSTOMER &&
                             <Button className={fullWidthCls} type="primary" size="large"
                                     onClick={onCheckoutButtonClick}>
-                                Proceed to checkout
+                                Input Recipients
                             </Button>}
                             {userRole === USER_ROLE.GUEST &&
                             <Button className={fullWidthCls} type="primary" size="large" onClick={() => {
