@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {
-    Button, Layout, Col, Row, Space, Table, Steps, Divider, Tag, Modal
+    Button, Layout, Col, Row, Space, Table, Steps, Divider, Tag, Modal, notification
 } from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {useHistory} from "react-router-dom";
@@ -14,17 +14,21 @@ const {Step} = Steps;
 const {Column} = Table;
 
 const CheckoutPage = observer(() => {
-    const [isRecipientFormVisible, setIsRecipientFormVisible] = useState(true);
+    const [isRecipientFormVisible, setIsRecipientFormVisible] = useState(false);
     const [selectedCartItemId, setSelectedCartItemId] = useState(-1);
 
     const history = useHistory();
 
     const {
-        shoppingCartStore: {cartItems}
+        shoppingCartStore: {cartItems, recipients, ableToCheckout}
     } = useStores();
 
     const onCheckoutButtonClick = () => {
-        history.push("/finish");
+        if (ableToCheckout) {
+            history.push("/finish");
+        } else {
+            notification.error({message: "Please input enough recipients!"});
+        }
     };
 
     const {fullWidthCls} = useCheckoutPageStyles();
@@ -59,16 +63,16 @@ const CheckoutPage = observer(() => {
                             }}/>
                             <Column title="Action"
                                     render={record => {
+                                        const cartItemId = record["id"];
                                         return <Space size="middle">
                                             <a onClick={() => {
                                                 setIsRecipientFormVisible(true);
-                                                setSelectedCartItemId(record["id"]);
+                                                setSelectedCartItemId(cartItemId);
                                             }}>
-                                                Add Recipient
+                                                {recipients[cartItemId] === undefined ? "Add Recipient" : "Edit Recipient"}
                                             </a>
                                         </Space>;
-                                    }}
-                            />
+                                    }}/>
                         </Table>
                     </Col>
                     <Col span={6}>
@@ -92,7 +96,7 @@ const CheckoutPage = observer(() => {
                onCancel={() => {
                    setIsRecipientFormVisible(false);
                }}>
-            <RecipientForm cartItemId={selectedCartItemId}/>
+            <RecipientForm cartItemId={selectedCartItemId} onClose={() => setIsRecipientFormVisible(false)}/>
         </Modal>
     </Layout>;
 });

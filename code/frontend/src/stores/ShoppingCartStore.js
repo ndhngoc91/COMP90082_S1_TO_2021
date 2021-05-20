@@ -6,24 +6,29 @@ export class ShoppingCartStore {
     @persist("list") cartItems;
     @persist startDate;
     @persist endDate;
+    @persist("object") recipients;
 
     constructor() {
         makeObservable(this, {
             cartItems: observable,
             startDate: observable,
             endDate: observable,
+            recipients: observable,
             lastId: computed,
             intendedNumberOfHiringDays: computed,
             totalCost: computed,
+            ableToCheckout: computed,
             addNewCartItem: action,
             deleteCartItem: action,
             clearShoppingCart: action,
             setDates: action,
-            toggleExtraItem: action
+            toggleExtraItem: action,
+            addRecipientForCartItem: action
         });
         this.cartItems = [];
         this.startDate = moment().format("YYYY-MM-DD hh:mm:ss");
         this.endDate = moment().add(8, "hours").format("YYYY-MM-DD hh:mm:ss");
+        this.recipients = {};
     }
 
     get lastId() {
@@ -48,6 +53,10 @@ export class ShoppingCartStore {
 
             return previousValue + cartItem.basePrice + parseInt(cartItem.priceLevels[this.intendedNumberOfHiringDays]) + extraCost;
         }, 0);
+    }
+
+    get ableToCheckout() {
+        return this.cartItems.length === Object.keys(this.recipients).length;
     }
 
     addNewCartItem = (cartItem) => {
@@ -82,5 +91,9 @@ export class ShoppingCartStore {
         const extraItem = cartItem.extraItems.find(extraItem => extraItem.id === extraItemId);
         extraItem.selected = !extraItem.selected;
         this.cartItems = [...this.cartItems];
+    }
+
+    addRecipientForCartItem = (recipient, cartItemId) => {
+        this.recipients[cartItemId] = recipient;
     }
 }
