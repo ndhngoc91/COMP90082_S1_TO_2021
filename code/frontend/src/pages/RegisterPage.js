@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {
-    Button, Col, Form, Image, Input, Row, Select, Typography, DatePicker, notification
+    Button, Col, Form, Image, Input, Row, Select, Typography, DatePicker, notification, message
 } from "antd";
 import {
     LockOutlined,
@@ -12,7 +12,7 @@ import {CityData, StateData} from "../consts/StateData";
 import rockyValleyLogo from "../assets/rocky_valley.svg";
 import {useHandleRegisterCustomer} from "../hooks/UserHooks";
 import {useForm} from "antd/es/form/Form";
-
+import {useHistory} from "react-router-dom";
 
 const {Link, Title} = Typography;
 const {Option} = Select;
@@ -25,6 +25,7 @@ const RegisterPage = () => {
     const [handleRegisterCustomer, {handling}] = useHandleRegisterCustomer();
 
     const [form] = useForm();
+    const history = useHistory();
 
     const onStateChange = value => {
         setCities(CityData[value]);
@@ -49,12 +50,14 @@ const RegisterPage = () => {
     );
 
     const onFinish = values => {
+        values.birthday = values.birthday.format("YYYY-MM-DD");
         handleRegisterCustomer(values, () => {
             notification.success({message: "Create a new account successfully!"});
+            history.push("/");
             form.resetFields();
-        }, () => {
-            notification.error({message: "Failed to create an account!"});
-        })
+        }, async (errorMessage) => {
+            message.error(errorMessage);
+        });
     };
 
     return (
@@ -153,7 +156,7 @@ const RegisterPage = () => {
                             </Form.Item>
                             <Row gutter={16}>
                                 <Col span={12}>
-                                    <Form.Item name="birthdate"
+                                    <Form.Item name="birthday"
                                                rules={[
                                                    {
                                                        required: true,
@@ -237,7 +240,7 @@ const RegisterPage = () => {
                                            },
                                            () => ({
                                                validator(_, value) {
-                                                   if (!value || value.length > 8) {
+                                                   if (!value || value.length > 7) {
                                                        return Promise.resolve();
                                                    }
                                                    return Promise.reject(new Error("Must have at least 8 characters!"));

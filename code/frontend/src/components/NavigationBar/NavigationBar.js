@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useHistory} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom"
 import {Button, Form, Input, Layout, Menu, Modal, notification} from "antd";
 import {
     HistoryOutlined,
@@ -16,30 +16,25 @@ import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import {USER_ROLE} from "../../consts/UserRole";
 import {useHandleLogin} from "../../hooks/AuthHooks";
+import LoginForm from "../LoginForm";
 
 const {Header} = Layout;
 const {SubMenu} = Menu;
 
-const loginFormLayout = {
-    labelCol: {span: 6},
-    wrapperCol: {span: 18},
-};
-const loginFormTailLayout = {
-    wrapperCol: {offset: 6, span: 18},
-};
-
 const NavigationBar = observer(() => {
-    const [isLoginModelVisible, setIsLoginModelVisible] = useState(false);
+    const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
 
     const history = useHistory();
+    const location = useLocation();
 
     const [handleLogin, {handling}] = useHandleLogin();
 
-    const {authStore: {username, userRole, logout}} = useStores();
+    const {authStore: {firstName, lastName, userRole, logout}, shoppingCartStore: {clearShoppingCart}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
+            clearShoppingCart();
             history.push("/");
         } else if (key.startsWith("/")) {
             history.push(key)
@@ -48,8 +43,10 @@ const NavigationBar = observer(() => {
 
     const onFinish = values => {
         handleLogin(values, () => {
-            setIsLoginModelVisible(false);
-            notification.success({message: "Login successfully"});
+            setIsLoginModalVisible(false);
+            notification.success({message: "Login successfully!"});
+        }, errorMessage => {
+            notification.error({message: errorMessage});
         });
     };
 
@@ -57,82 +54,54 @@ const NavigationBar = observer(() => {
 
     return (
         <Header style={{width: "100%", padding: 0}}>
-            <Menu onClick={handleClick} mode="horizontal" theme={"dark"}>
+            <Menu onClick={handleClick} mode="horizontal" theme={"dark"} defaultSelectedKeys={[location.pathname]}>
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
+                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/packages">Packages</Menu.Item>}
+                {userRole === USER_ROLE.STAFF &&
                 <>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/productList">Products</Menu.Item>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/customers">Customers</Menu.Item>
-                </>}
-                {userRole === USER_ROLE.CUSTOMER &&
-                <>
-                    <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/history">
-                        Order History
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/user-management">
+                        User Management
                     </Menu.Item>
-                    <Menu.Item className={leftItemCls} icon={<ShoppingCartOutlined/>} key="/order">Order</Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
+                        Booking Management
+                    </Menu.Item>
                 </>}
-                {userRole === USER_ROLE.ADMIN &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
-                    Booking Management
-                </Menu.Item>}
-                {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
                     Calendar
                 </Menu.Item>}
-                {userRole === USER_ROLE.ADMIN &&
+                {userRole === USER_ROLE.STAFF &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
                     Package Management
                 </Menu.Item>}
                 {userRole === USER_ROLE.GUEST &&
-                    <>
-                        <Menu.Item key="login"
-                                   className={rightItemCls}
-                                   onClick={() => setIsLoginModelVisible(true)}
-                                   icon={<LoginOutlined/>}
-                        >
-                            Login
-                        </Menu.Item>
-                        <Menu.Item className={rightItemCls} key="/user-create" icon={<UserAddOutlined/>}>
-                            Register
-                        </Menu.Item>
-                    </>
-                }
-                {[USER_ROLE.CUSTOMER, USER_ROLE.ADMIN].includes(userRole) &&
-                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>} title={username}>
+                <>
+                    <Menu.Item key="login"
+                               className={rightItemCls}
+                               onClick={() => setIsLoginModalVisible(true)}
+                               icon={<LoginOutlined/>}>
+                        Login
+                    </Menu.Item>
+                    <Menu.Item className={rightItemCls} key="/register" icon={<UserAddOutlined/>}>
+                        Register
+                    </Menu.Item>
+                </>}
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
+                <SubMenu className={rightItemCls} key="SubMenu" icon={<SettingOutlined/>}
+                         title={`${firstName} ${lastName}`}>
                     {userRole === USER_ROLE.CUSTOMER &&
                     <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
-                    {userRole === USER_ROLE.ADMIN &&
-                    <Menu.Item key="/admin-profile" icon={<ContainerOutlined/>}>User Management</Menu.Item>}
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
-                </SubMenu>
-                }
+                </SubMenu>}
+                <Menu.Item className={rightItemCls} icon={<ShopOutlined/>} key="/shopping-cart">Shopping Cart</Menu.Item>
             </Menu>
-            <Modal title="Login " visible={isLoginModelVisible}
+            <Modal title="Login" visible={isLoginModalVisible}
                    footer={null} closable={false}
                    onCancel={() => {
-                       setIsLoginModelVisible(false);
+                       setIsLoginModalVisible(false);
                    }}>
-                <Form {...loginFormLayout}
-                      name="basic"
-                      initialValues={{remember: true}}
-                      onFinish={onFinish}>
-                    <Form.Item label="Username"
-                               name="username"
-                               rules={[{required: true, message: 'Please input your username!'}]}>
-                        <Input/>
-                    </Form.Item>
-
-                    <Form.Item label="Password"
-                               name="password"
-                               rules={[{required: true, message: 'Please input your password!'}]}>
-                        <Input.Password/>
-                    </Form.Item>
-                    <Form.Item {...loginFormTailLayout}>
-                        <Button type="primary" htmlType="submit" loading={handling}>
-                            Login
-                        </Button>
-                    </Form.Item>
-                </Form>
+                <LoginForm handling={handling} onFinish={onFinish}/>
             </Modal>
         </Header>
     );

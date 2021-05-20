@@ -1,5 +1,6 @@
 from sqlalchemy import BigInteger, Column, DECIMAL, DateTime, Enum, Float, ForeignKey, Integer, String, Table, Text, \
     text, Date, DATE, BOOLEAN, VARCHAR
+from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.orm import relationship
 from app.api.database import Base
 
@@ -147,6 +148,7 @@ class Package(Base):
     age_group_id = Column(ForeignKey('age_groups.id'), nullable=False, index=True)
     name = Column(VARCHAR(45))
     description = Column(VARCHAR(45))
+    image_key = Column(VARCHAR(45))
 
     age_group = relationship('AgeGroup')
     category = relationship('Category')
@@ -177,7 +179,7 @@ class User(Base):
     password = Column(VARCHAR(255), nullable=False)
     height = Column(DECIMAL(5, 2))
     weight = Column(DECIMAL(5, 2))
-    foot_size = Column(DECIMAL(3, 1))
+    foot_size = Column(Integer)
     first_name = Column(VARCHAR(127))
     last_name = Column(VARCHAR(127))
     gender = Column(VARCHAR(45))
@@ -185,6 +187,7 @@ class User(Base):
     phone = Column(VARCHAR(20))
     email = Column(VARCHAR(255), unique=True)
     din = Column(DECIMAL(5, 2))
+    is_enabled = Column(TINYINT, server_default=text("'1'"))
     skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
     organization_id = Column(ForeignKey('organizations.id'), index=True)
     user_type_id = Column(ForeignKey('user_types.id'), index=True)

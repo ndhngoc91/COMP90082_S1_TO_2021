@@ -72,7 +72,12 @@ const UserGroupList = () => {
                                     <Popconfirm title="Are you sure？"
                                                 okText="Yes"
                                                 cancelText="No"
-                                                onConfirm={() => handleDeleteUserGroup(userGroup.id)}>
+                                                onConfirm={
+                                                    () => {
+                                                        handleDeleteUserGroup(userGroup.id)
+                                                        location.reload();
+                                                    }
+                                                }>
                                         <Button type="primary" ghost>
                                             <DeleteOutlined/>
                                             Delete
@@ -163,7 +168,7 @@ const UserGroupList = () => {
                 </Row>
             </Drawer>
         </>
-    );
+    )
 };
 
 export default UserGroupList;

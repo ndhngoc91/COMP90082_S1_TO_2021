@@ -1,7 +1,12 @@
 from typing import Optional
+
 from fastapi import HTTPException
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
-from app.api import models, schemas, hashing
+from starlette import status
+
+from app.api import models, schemas
+from app.api.hashing import get_password_hash, verify_password
 
 
 def get_all_users(db: Session):
@@ -12,18 +17,42 @@ def get_user_by_id(user_id: int, db: Session):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
+def get_user_by_username(username: str, db: Session):
+    return db.query(models.User).filter(models.User.username == username).first()
+
+
 def filter_users(query: Optional[str], db: Session):
-    return db.query(models.User).filter(models.User.username.like(f"%{query}%")).all()
+    return db.query(models.User).filter(or_(models.User.username.like(f"%{query}%"),
+                                            models.User.email.like(f"%{query}%"))).all()
 
 
 def authenticate(username: str, password: str, db: Session):
-    query = db.query(models.User)
+    user = get_user_by_username(username, db)
+    if not user:
+        return None
+    if not verify_password(password, user.password):
+        return None
+    return user
+
+
+def is_enable(username: str, db: Session):
+    query = db.query(models.User.is_enabled)
     query = query.filter(models.User.username == username)
-    query = query.filter(models.User.password == password)
+    query = query.filter(models.User.is_enabled == 1)
     return query.first()
 
 
 def create_new_user(request: schemas.UserWithAddresses, db: Session):
+    is_username_exist = db.query(models.User).filter(models.User.username == request.username).first()
+    if is_username_exist:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail="Username already exists")
+
+    is_email_exist = db.query(models.User).filter(models.User.email == request.email).first()
+    if is_email_exist:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail="Email already exists")
+
     new_user = models.User(username=request.username,
                            height=request.height,
                            weight=request.weight,
@@ -33,10 +62,11 @@ def create_new_user(request: schemas.UserWithAddresses, db: Session):
                            gender=request.gender,
                            birthday=request.birthday,
                            phone=request.phone,
+                           email=request.email,
                            din=request.din,
                            skill_level_id=request.skill_level_id,
                            user_type_id=request.user_type_id,
-                           password=request.password)
+                           password=get_password_hash(request.password))
 
     new_addresses = []
     for address in request.address_list:
