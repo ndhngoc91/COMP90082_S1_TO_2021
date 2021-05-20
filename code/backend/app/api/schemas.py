@@ -45,7 +45,7 @@ class OrderDetail(BaseModel):
 
 
 class Order(BaseModel):
-    customer_id: int
+    user_id: int
     start_date: date
     end_date: date
     description: str

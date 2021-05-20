@@ -78,7 +78,7 @@ const RecipientForm = ({cartItemId, onClose}) => {
         </Form.Item>
 
         <Form.Item label="Skill Level"
-                   name="skillLevel"
+                   name="skillLevelId"
                    rules={[{required: true, message: "Please input your first name!"}]}>
             <Select style={{width: "100%"}}>
                 <Option key={-1} value={-1}>Select Skill Level</Option>

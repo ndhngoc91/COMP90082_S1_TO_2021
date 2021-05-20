@@ -1,35 +1,49 @@
 import React, {useState} from "react";
 import {
-    Button, Layout, Col, Row, Space, Table, Steps, Divider, Tag, Modal, notification
+    Button, Layout, Col, Row, Space, Table, Divider, Tag, Modal, notification
 } from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
+import CheckoutProgressBar from "../../components/CheckoutProgressBar/CheckoutProgressBar";
 import {useHistory} from "react-router-dom";
 import {useStores} from "../../stores";
 import {useCheckoutPageStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import RecipientForm from "../../components/RecipientForms/RecipientForm";
+import {useHandleAddOrder} from "../../hooks/OrderHooks";
 
 const {Content} = Layout;
-const {Step} = Steps;
 const {Column} = Table;
 
 const CheckoutPage = observer(() => {
     const [isRecipientFormVisible, setIsRecipientFormVisible] = useState(false);
     const [selectedCartItemId, setSelectedCartItemId] = useState(-1);
 
-    const history = useHistory();
+    const [handleAddOrder, {handling}] = useHandleAddOrder();
 
     const {
-        shoppingCartStore: {cartItems, recipients, ableToCheckout}
+        shoppingCartStore: {cartItems, recipients, ableToCheckout, orderPostData, isCheckedOut, checkout}
     } = useStores();
+
+    const history = useHistory();
+
+    if (isCheckedOut) {
+        history.push("/finish");
+    }
 
     const onCheckoutButtonClick = () => {
         if (ableToCheckout) {
-            history.push("/finish");
+            handleAddOrder(orderPostData, () => {
+                checkout();
+                history.push("/finish");
+            });
         } else {
             notification.error({message: "Please input enough recipients!"});
         }
     };
+
+    const onGoBackButtonClick = () => {
+        history.push("/shopping-cart");
+    }
 
     const {fullWidthCls} = useCheckoutPageStyles();
 
@@ -39,11 +53,7 @@ const CheckoutPage = observer(() => {
             <Content style={{padding: "3em", backgroundColor: "#FFFFFF"}}>
                 <Row justify="space-between" gutter={80}>
                     <Col span={18}>
-                        <Steps progressDot current={1}>
-                            <Step title="Booking"/>
-                            <Step title="Input Contacts"/>
-                            <Step title="Done"/>
-                        </Steps>
+                        <CheckoutProgressBar current={1}/>
                         <Divider/>
                         <Table dataSource={cartItems} rowKey={record => {
                             return record["id"];
@@ -77,13 +87,11 @@ const CheckoutPage = observer(() => {
                     </Col>
                     <Col span={6}>
                         <Space direction="vertical" className={fullWidthCls}>
-                            <Button className={fullWidthCls} type="primary" size="large"
+                            <Button className={fullWidthCls} type="primary" size="large" loading={handling}
                                     onClick={onCheckoutButtonClick}>
                                 Checkout
                             </Button>
-                            <Button className={fullWidthCls} size="large" onClick={() => {
-                                history.goBack();
-                            }}>
+                            <Button className={fullWidthCls} size="large" onClick={onGoBackButtonClick}>
                                 Go back
                             </Button>
                         </Space>
