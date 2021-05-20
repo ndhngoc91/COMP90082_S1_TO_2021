@@ -77,7 +77,7 @@ class OrderPackage(Base):
     order_details_id = Column(ForeignKey('order_details.id'), nullable=False, index=True)
     package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
     trail_id = Column(ForeignKey('trail_types.id'), nullable=False, index=True)
-    cost = Column(DECIMAL(6,2), nullable=False)
+    cost = Column(DECIMAL(6, 2), nullable=False)
 
 
 class OrderExtra(Base):
@@ -86,7 +86,7 @@ class OrderExtra(Base):
     id = Column(Integer, primary_key=True)
     order_packages_id = Column(ForeignKey('order_packages.id'), nullable=False, index=True)
     extra_id = Column(ForeignKey('extra.id'), nullable=False, index=True)
-    cost = Column(DECIMAL(6,2), nullable=False)
+    cost = Column(DECIMAL(6, 2), nullable=False)
 
 
 class Order(Base):
@@ -97,7 +97,8 @@ class Order(Base):
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     description = Column(Text)
-    status = Column(Enum('New','Handling','Done','Cancelled','Executing'), nullable=False, server_default=text("'New'"))
+    status = Column(Enum('New', 'Handling', 'Done', 'Cancelled', 'Executing'), nullable=False,
+                    server_default=text("'New'"))
     staff_id = Column(ForeignKey('users.id'), nullable=True)
 
 

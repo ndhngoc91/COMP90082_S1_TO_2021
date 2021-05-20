@@ -35,7 +35,7 @@ class CustomerResource(SimpleModelResource):
 
         cur_page = (page_id - 1) * page_size
         count_query = "SELECT COUNT(*) AS count FROM customers " + \
-            obj_filter
+                      obj_filter
         count = self.run_query(
             count_query,
             obj_filter_values,

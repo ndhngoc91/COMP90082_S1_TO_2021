@@ -3,6 +3,7 @@ from app.api import models, schemas
 from app.api.repository import customer_repo
 from app.api.resource.customer_resource import CustomerResource
 
+
 def get_all_customers(db: Session):
     return customer_repo.get_all_customers(db=db)
 

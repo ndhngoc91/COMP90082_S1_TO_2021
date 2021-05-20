@@ -22,7 +22,6 @@ API_ORG_KEY = "3a62ea5aa2d8845a72dd030369dd571d5123567f70fa76b5bc3bcdf103e3307cc
 # multiple organizations, it would be better to create a table in the database and retrieve from there.
 SUPPLIER_ORG_ID = "11EAF2251136B090BB69B6800B5BCB6D"
 
-
 # This HOST is for local deployment (the old way)
 HOST = "localhost:3306"
 

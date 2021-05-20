@@ -20,11 +20,7 @@ import {useShoppingCartPageStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import {USER_ROLE} from "../../consts/UserRole";
 import bikePhoto from "../../assets/packages/Ski Packages/Performance Package.png";
-import * as pdfMake from "pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import moment from "moment";
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const {Content} = Layout;
 const {Title} = Typography;
