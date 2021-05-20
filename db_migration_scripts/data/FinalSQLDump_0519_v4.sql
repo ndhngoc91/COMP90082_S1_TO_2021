@@ -172,7 +172,7 @@ CREATE TABLE `guests` (
   `id` int NOT NULL AUTO_INCREMENT,
   `height` decimal(5,2) DEFAULT NULL,
   `weight` decimal(5,2) DEFAULT NULL,
-  `foot_size` decimal(3,1) DEFAULT NULL,
+  `foot_size` int DEFAULT NULL,
   `first_name` varchar(127) DEFAULT NULL,
   `last_name` varchar(127) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
