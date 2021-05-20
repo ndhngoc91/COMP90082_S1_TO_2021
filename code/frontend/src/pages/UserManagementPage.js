@@ -1,21 +1,33 @@
 import React, {useEffect, useState} from "react";
-import {Col, Layout, Row, Space, Table, Input, notification, Button} from "antd";
+import {Col, Layout, Row, Space, Table, Input, notification, Button, Modal, Form, Select} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleEditProfile, useHandleFilterUsers} from "../hooks/UserHooks";
+import {USER_ROLE} from "../consts/UserRole";
 
 const {Content} = Layout;
 const {Column} = Table;
 const {Search} = Input;
+const {Option} = Select;
 
 const UserManagementPage = () => {
     const [handleFilterUsers, {users, filtering}] = useHandleFilterUsers();
     const tempData = JSON.parse(JSON.stringify(users));
     const [data, setData] = useState(tempData);
     const [handleEditProfile, {handling}] = useHandleEditProfile();
+    const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
 
     useEffect(() => {
         handleFilterUsers();
     }, []);
+
+    const onFinish = values => {
+        handleEditProfile(values, () => {
+            setIsRoleModalVisible(false);
+            notification.success({message: "Edit successfully!"});
+        }, errorMessage => {
+            notification.error({message: errorMessage});
+        });
+    };
 
     return (
         <>
@@ -48,6 +60,43 @@ const UserManagementPage = () => {
                             <Column title="Email" dataIndex="email"/>
                             <Column title="Gender" dataIndex="gender"/>
                             <Column title="DIN" dataIndex="din"/>
+                            <Column title="User Role" key="user_type_id" dataIndex="user_type_id"
+                                    render={(user_type_id, record, index) => (
+                                        <Space size="middle">
+                                            <a
+                                                key = "user_type_id"
+                                                onClick={() => {
+                                                    let bool_value;
+                                                    let final_Value;
+                                                    if (user_type_id === 1){
+                                                        bool_value = true;
+                                                    }else if (user_type_id === 2){
+                                                        bool_value = false;
+                                                    }
+                                                    let temp = !bool_value;
+                                                    if (temp){
+                                                        final_Value = 1;
+                                                    }else if (temp == false){
+                                                        final_Value = 2;
+                                                    }
+                                                    /*console.log("user_type_id",user_type_id)
+                                                    console.log("final_Value",final_Value)
+                                                    console.log("users",users)*/
+                                                    users[index].user_type_id = final_Value;
+                                                    setData([...data]);
+                                                    console.log("users",users[index])
+                                                    handleEditProfile(users[index], () => {
+                                                        notification.success({message: "Change user role successfully!"});
+                                                    }, () => {
+                                                        notification.error({message: "Failed to change user role!"});
+                                                    })
+                                                }}
+                                            >
+                                                {user_type_id === 1 ? "Customer" : "Staff"}
+                                            </a>
+                                        </Space>
+                                    )}/>
+
                             <Column title="Action" key="is_enabled" dataIndex="is_enabled"
                                     render={(is_enabled, record, index) => (
                                         <Space size="middle">
@@ -85,6 +134,7 @@ const UserManagementPage = () => {
                                             </a>
                                         </Space>
                                     )}/>
+
                         </Table>
                     </Content>
                 </Layout>
