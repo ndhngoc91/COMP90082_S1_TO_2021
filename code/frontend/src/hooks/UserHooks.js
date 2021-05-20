@@ -2,7 +2,6 @@ import {useCallback, useState} from "react";
 import axios from "axios";
 import {UserType} from "../consts/UserType";
 import {BACKEND_ENDPOINT} from "../../appSettings";
-import CryptoJs from 'crypto-js';
 
 export const useHandleFilterUsers = () => {
     const [users, setUsers] = useState([]);
@@ -51,7 +50,7 @@ export const useHandleRegisterCustomer = () => {
         axios.post('http://127.0.0.1:8000/users', {
             username: username,
             email: email,
-            password: CryptoJs.MD5(password+username).toString(),
+            password: password,
             first_name: first_name,
             last_name: last_name,
             phone: phone,
@@ -108,7 +107,7 @@ export const useHandleRegisterAdmin = () => {
             first_name: first_name,
             last_name: last_name,
             phone: phone,
-            password: CryptoJs.MD5(password+username).toString(),
+            password: password,
             user_type_id: UserType.STAFF,
             address_list: []
         }, {
