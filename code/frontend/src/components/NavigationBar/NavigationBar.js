@@ -29,11 +29,12 @@ const NavigationBar = observer(() => {
 
     const [handleLogin, {handling}] = useHandleLogin();
 
-    const {authStore: {firstName, lastName, userRole, logout}} = useStores();
+    const {authStore: {firstName, lastName, userRole, logout}, shoppingCartStore: {clearShoppingCart}} = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
+            clearShoppingCart();
             history.push("/");
         } else if (key.startsWith("/")) {
             history.push(key)
@@ -56,10 +57,7 @@ const NavigationBar = observer(() => {
             <Menu onClick={handleClick} mode="horizontal" theme={"dark"} defaultSelectedKeys={[location.pathname]}>
                 <Menu.Item className={leftItemCls} icon={<HomeOutlined/>} key="/">Home</Menu.Item>
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
-                <>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/packages">Packages</Menu.Item>
-                    <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/package-details">Package Details</Menu.Item>
-                </>}
+                <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/packages">Packages</Menu.Item>}
                 {userRole === USER_ROLE.STAFF &&
                 <>
                     <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/user-management">
@@ -77,6 +75,15 @@ const NavigationBar = observer(() => {
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/package-management">
                     Package Management
                 </Menu.Item>}
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/order-history">
+                    Order History
+                </Menu.Item>}
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
+                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/contract-management">
+                    Contracts
+                </Menu.Item>}
+                
                 {userRole === USER_ROLE.GUEST &&
                 <>
                     <Menu.Item key="login"

@@ -1,7 +1,7 @@
 import axios from "axios";
 import {useCallback, useState} from "react";
-import {message as antdMessage} from "antd";
 import {useStores} from "../stores";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
 export const useHandleLogin = () => {
     const [handling, setHandling] = useState(false);
@@ -13,7 +13,7 @@ export const useHandleLogin = () => {
         const formData = new FormData();
         formData.set("username", username);
         formData.set("password", password);
-        axios.post("http://localhost:8000/auth/login", formData, {
+        axios.post(`${BACKEND_ENDPOINT}auth/login`, formData, {
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
         }).then(response => {
             if (response.status === 200) {
@@ -23,7 +23,9 @@ export const useHandleLogin = () => {
         }).catch(e => {
             if (e.response.status === 404) {
                 failure(e.response.data['detail']);
-            } else {
+            } else if (e.response.status === 401){
+                failure(e.response.data['detail']);
+            } else{
                 failure("Failed to login!");
             }
         }).finally(() => {

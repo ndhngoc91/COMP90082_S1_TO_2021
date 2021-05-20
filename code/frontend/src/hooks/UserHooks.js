@@ -1,6 +1,7 @@
 import {useCallback, useState} from "react";
 import axios from "axios";
 import {UserType} from "../consts/UserType";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
 export const useHandleFilterUsers = () => {
     const [users, setUsers] = useState([]);
@@ -8,7 +9,7 @@ export const useHandleFilterUsers = () => {
 
     const handleFilterUsers = useCallback((query = "") => {
         setFiltering(true);
-        axios.get("http://localhost:8000/users/filter", {
+        axios.get(`${BACKEND_ENDPOINT}users/filter`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
             params: {query: query}
         }).then((response) => {
@@ -68,11 +69,17 @@ export const useHandleRegisterCustomer = () => {
         }).then(response => {
             if (response.status === 201) {
                 success();
+            } else if (response.status === 409){
+                failure(response.data['detail']);
             } else {
-                failure();
+                failure()
             }
-        }).catch(() => {
-            failure();
+        }).catch(e => {
+            if (e.response.status === 409){
+                failure(e.response.data['detail']);
+            } else {
+                failure("Failed to create an account!")
+            } //failure();
         }).finally(() => {
             setHandling(false);
         });
@@ -87,6 +94,8 @@ export const useHandleRegisterAdmin = () => {
     const handleRegisterAdmin = useCallback(({
                                                  username,
                                                  email,
+                                                 first_name,
+                                                 last_name,
                                                  phone,
                                                  password
                                              }, success, failure = () => {
@@ -95,6 +104,8 @@ export const useHandleRegisterAdmin = () => {
         axios.post('http://127.0.0.1:8000/users', {
             username: username,
             email: email,
+            first_name: first_name,
+            last_name: last_name,
             phone: phone,
             password: password,
             user_type_id: UserType.STAFF,
@@ -104,11 +115,17 @@ export const useHandleRegisterAdmin = () => {
         }).then(response => {
             if (response.status === 201) {
                 success();
+            } else if (response.status === 409){
+                failure(response.data);
             } else {
-                failure();
+                failure()
             }
-        }).catch(() => {
-            failure();
+        }).catch((e) => {
+            if (e.response.status === 409){
+                failure(e.response.data['detail']);
+            } else {
+                failure("Failed to create an admin account!")
+            } //failure();
         }).finally(() => {
             setHandling(false);
         });
@@ -134,7 +151,8 @@ export const useHandleEditProfile = () => {
                                                email,
                                                din,
                                                skill_level_id,
-                                               user_type_id
+                                               user_type_id,
+                                               is_enabled
                                            }, success, failure = () => {
     }) => {
         setHandling(true);
@@ -151,7 +169,8 @@ export const useHandleEditProfile = () => {
             email:email,
             din: din,
             skill_level_id: skill_level_id,
-            user_type_id: user_type_id
+            user_type_id: user_type_id,
+            is_enabled: is_enabled,
         }, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then(response => {

@@ -7,9 +7,16 @@ import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
-import CustomersPage from "./pages/CustomersPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminRegisterPage from "./pages/AdminRegisterPage";
+import UserManagementPage from "./pages/UserManagementPage";
+import PackagePage from "./pages/PackagePage/PackagePage";
+import PackageDetailsPage from "./pages/PackageDetailsPage";
+import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
+import FinishPage from "./pages/FinishPage/FinishPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
+import ContractManagementPage from "./pages/ContractManagementPage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -17,10 +24,6 @@ import "./index.css";
 import {createStore, StoreContext} from "./stores";
 import AuthRoute from "./navigation/AuthRole";
 import {USER_ROLE} from "./consts/UserRole";
-import UserManagementPage from "./pages/UserManagementPage";
-import PackagePage from "./pages/PackagePage/PackagePage";
-import PackageDetailsPage from "./pages/PackageDetailsPage";
-import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
 
 createStore().then(store => {
     ReactDOM.render(
@@ -29,7 +32,6 @@ createStore().then(store => {
                 <BrowserRouter>
                     <Switch>
                         <Route path="/" exact component={HomePage}/>
-                        <Route path="/customers" exact component={CustomersPage}/>
                         <AuthRoute path="/login" exact Component={LoginPage} requiredRoles={[
                             USER_ROLE.GUEST
                         ]}/>
@@ -56,6 +58,14 @@ createStore().then(store => {
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.GUEST
                         ]}/>
+                        <AuthRoute path="/checkout" Component={CheckoutPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
+                        <AuthRoute path="/finish" Component={FinishPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.GUEST
+                        ]}/>
                         <AuthRoute path="/user-management" exact Component={UserManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
@@ -67,6 +77,14 @@ createStore().then(store => {
                             USER_ROLE.STAFF
                         ]}/>
                         <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
+                            USER_ROLE.STAFF
+                        ]}/>
+                        <AuthRoute path="/order-history" exact Component={OrderHistoryPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
+                            USER_ROLE.STAFF
+                        ]}/>
+                        <AuthRoute path="/contract-management" exact Component={ContractManagementPage} requiredRoles={[
+                            USER_ROLE.CUSTOMER,
                             USER_ROLE.STAFF
                         ]}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>

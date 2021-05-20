@@ -1,4 +1,6 @@
-CREATE DATABASE  IF NOT EXISTS `squizz_app` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+DROP SCHEMA IF EXISTS `squizz_app`;
+DROP DATABASE IF exists `squizz_app`;
+CREATE DATABASE  IF NOT EXISTS `squizz_app` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `squizz_app`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
 --
@@ -37,7 +39,7 @@ CREATE TABLE `addresses` (
   KEY `fk_addresses_orders1_idx` (`order_id`),
   KEY `fk_addresses_users1_idx1` (`user_id`),
   CONSTRAINT `fk_addresses_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +48,7 @@ CREATE TABLE `addresses` (
 
 LOCK TABLES `addresses` WRITE;
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
-INSERT INTO `addresses` VALUES (1,'VIC','Melbourne','3053','125 Swanston st',1,NULL);
+INSERT INTO `addresses` VALUES (1,'VIC','Melbourne','3053','125 Swanston st',1,NULL),(27,'VIC','Melbourne','3053','126 Swanston st',1,NULL),(28,'VIC','Melbourne','3053','127 Swanston st',1,NULL);
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,10 +140,15 @@ DROP TABLE IF EXISTS `extra`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `extra` (
-  `idextra` int NOT NULL,
-  `extracol` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`idextra`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `age_group_id` int NOT NULL,
+  `base_price` int NOT NULL,
+  `price_levels` text NOT NULL,
+  `sell_code` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_table2_agegroup` (`age_group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,36 +157,40 @@ CREATE TABLE `extra` (
 
 LOCK TABLES `extra` WRITE;
 /*!40000 ALTER TABLE `extra` DISABLE KEYS */;
-INSERT INTO `extra` VALUES (1,'Pants or Parka Adult'),(2,'Pants and Parka Adult'),(3,'Pants or Parka U14'),(4,'Pants and Parka U14'),(5,'Pants or Parka U6'),(6,'Pants and Parka/suit U6'),(7,'Apres Boots Adults'),(8,'Apres Boots U14'),(9,'Helmet Adults'),(10,'Helmet U14');
+INSERT INTO `extra` VALUES (1,'Pants Adult',3,20,'0,10,15,20,25,30,35','P'),(2,'Pants and Parka Adult',3,30,'0,10,15,20,25,30,35','PP'),(3,'Apres Boots Adults',3,10,'0,5,10,15,20,25,25','A'),(4,'Helmet',3,10,'0,5,10,13,16,19,21','H'),(5,'Pants or Parka U14',2,18,'0,5,9,13,17,21,25','PY'),(6,'Pants and Parka U14',2,24,'0,10,15,20,25,29,33','PPY'),(7,'Apres Boots U14',2,8,'0,4,7,9,11,13,15','AK'),(8,'Helmet kids',2,0,'0,0,0,0,0,0,0','HK'),(9,'Pants and Parka/suit U6',1,18,'0,5,9,13,17,21,25','PPK'),(10,'Pants or Parka U6',1,14,'0,5,9,13,17,21,25','PK'),(11,'Apres Boots U14',1,8,'0,4,7,9,11,13,15','AK'),(12,'Helmet kids',1,0,'0,0,0,0,0,0,0','HK'),(13,'Pants Adult',4,20,'0,10,15,20,25,30,35','P'),(14,'Pants and Parka Adult',4,30,'0,10,15,20,25,30,35','PP'),(15,'Apres Boots Adults',4,10,'0,5,10,15,20,25,25','A'),(16,'Helmet',4,10,'0,5,10,13,16,19,21','H');
 /*!40000 ALTER TABLE `extra` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `extraprice`
+-- Table structure for table `guests`
 --
 
-DROP TABLE IF EXISTS `extraprice`;
+DROP TABLE IF EXISTS `guests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `extraprice` (
-  `idextra` int NOT NULL,
-  `daynumber` int NOT NULL,
-  `extraprice` float DEFAULT '0',
-  PRIMARY KEY (`daynumber`,`idextra`),
-  KEY `fk_extraprice_extra1_idx` (`idextra`),
-  CONSTRAINT `fk_extraprice_extra1` FOREIGN KEY (`idextra`) REFERENCES `extra` (`idextra`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `guests` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `height` decimal(5,2) DEFAULT NULL,
+  `weight` decimal(5,2) DEFAULT NULL,
+  `foot_size` decimal(3,1) DEFAULT NULL,
+  `first_name` varchar(127) DEFAULT NULL,
+  `last_name` varchar(127) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `din` decimal(5,2) DEFAULT NULL,
+  `skill_level_id` int DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_guests_user_groups_idx` (`group_id`),
+  KEY `fk_guests_skill_levels_idx` (`skill_level_id`),
+  CONSTRAINT `fk_guests_skill_levels` FOREIGN KEY (`skill_level_id`) REFERENCES `skill_levels` (`id`),
+  CONSTRAINT `fk_guests_user_groups` FOREIGN KEY (`group_id`) REFERENCES `user_groups` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `extraprice`
+-- Dumping data for table `guests`
 --
 
-LOCK TABLES `extraprice` WRITE;
-/*!40000 ALTER TABLE `extraprice` DISABLE KEYS */;
-INSERT INTO `extraprice` VALUES (1,1,20),(2,1,30),(3,1,18),(4,1,24),(5,1,14),(6,1,18),(7,1,10),(8,1,8),(9,1,10),(10,1,0),(1,2,30),(2,2,40),(3,2,23),(4,2,34),(5,2,19),(6,2,23),(7,2,15),(8,2,12),(9,2,15),(10,2,0),(1,3,35),(2,3,45),(3,3,27),(4,3,39),(5,3,23),(6,3,27),(7,3,20),(8,3,15),(9,3,20),(10,3,0),(1,4,40),(2,4,50),(3,4,31),(4,4,44),(5,4,27),(6,4,31),(7,4,25),(8,4,17),(9,4,23),(10,4,0),(1,5,45),(2,5,55),(3,5,35),(4,5,49),(5,5,31),(6,5,35),(7,5,30),(8,5,19),(9,5,26),(10,5,0),(1,6,50),(2,6,60),(3,6,39),(4,6,53),(5,6,35),(6,6,39),(7,6,35),(8,6,21),(9,6,29),(10,6,0),(1,7,55),(2,7,65),(3,7,43),(4,7,57),(5,7,39),(6,7,43),(7,7,35),(8,7,23),(9,7,31),(10,7,0);
-/*!40000 ALTER TABLE `extraprice` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `order_details`
@@ -189,11 +200,13 @@ DROP TABLE IF EXISTS `order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `order_id` int NOT NULL,
-  `item_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`order_id`),
-  KEY `orderId` (`order_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+  `recipient_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_orderdetails_orders1_idx` (`order_id`),
+  KEY `fk_orderdetails_recipients1_idx` (`recipient_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,8 +215,66 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` VALUES (18,'orderdetails18'),(19,'orderdetails19');
+INSERT INTO `order_details` VALUES (13,14,4),(14,14,3),(15,15,2),(16,15,1);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_extras`
+--
+
+DROP TABLE IF EXISTS `order_extras`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_extras` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_details_id` int NOT NULL,
+  `extra_id` int NOT NULL,
+  `cost` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_orderextras_orderdetails1_idx` (`order_details_id`),
+  KEY `fk_orderextras_extra1_idx` (`extra_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_extras`
+--
+
+LOCK TABLES `order_extras` WRITE;
+/*!40000 ALTER TABLE `order_extras` DISABLE KEYS */;
+INSERT INTO `order_extras` VALUES (18,14,1,120),(19,15,1,160),(20,15,2,80),(21,15,3,240);
+/*!40000 ALTER TABLE `order_extras` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_packages`
+--
+
+DROP TABLE IF EXISTS `order_packages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_packages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_details_id` int NOT NULL,
+  `package_id` int NOT NULL,
+  `trail_id` int NOT NULL,
+  `cost` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_order_packages_order_details1_idx` (`order_details_id`),
+  KEY `fk_order_packages_package1_idx` (`package_id`),
+  KEY `fk_order_packages_trailtypes1_idx` (`trail_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_packages`
+--
+
+LOCK TABLES `order_packages` WRITE;
+/*!40000 ALTER TABLE `order_packages` DISABLE KEYS */;
+INSERT INTO `order_packages` VALUES (13,1,1,1,40),(14,2,1,2,30),(15,3,1,1,40),(16,4,2,1,50);
+/*!40000 ALTER TABLE `order_packages` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -215,10 +286,10 @@ DROP TABLE IF EXISTS `order_receipts`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_receipts` (
   `orders_id` int NOT NULL,
-  `receipt` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `receipt` varchar(45) DEFAULT NULL,
   KEY `fk_orderreceipts_orders1_idx` (`orders_id`),
   CONSTRAINT `fk_orderreceipts_orders1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,8 +298,10 @@ CREATE TABLE `order_receipts` (
 
 LOCK TABLES `order_receipts` WRITE;
 /*!40000 ALTER TABLE `order_receipts` DISABLE KEYS */;
+INSERT INTO `order_receipts` VALUES (14,'this is a link to recerpts -14'),(15,'this is a link to recerpts -15');
 /*!40000 ALTER TABLE `order_receipts` ENABLE KEYS */;
 UNLOCK TABLES;
+
 
 --
 -- Table structure for table `orders`
@@ -242,14 +315,12 @@ CREATE TABLE `orders` (
   `user_id` int NOT NULL,
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `package_id` int NOT NULL,
-  `is_drop_ship` enum('Y','N') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N',
-  `is_pending` enum('Y','N') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N',
+  `description` text,
+  `status` enum('New','Handling','Done','Cancelled','Executing') NOT NULL DEFAULT 'New',
+  `staff_id` int default null,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `fk_orders_users1_idx` (`user_id`),
-  KEY `fk_orders_package1_idx` (`package_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+  KEY `fk_orders_users1_idx` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -258,7 +329,9 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order',1,'Y','Y'),(15,4,NULL,NULL,'this is the second order',2,'N','Y');
+INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order','New',null),
+(15,4,NULL,NULL,'this is the second order','Done',null),
+(16,3,NULL,NULL,'this is the third order','Cancelled',null);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -360,7 +433,10 @@ CREATE TABLE `packages` (
   `skill_level_id` int NOT NULL,
   `age_group_id` int NOT NULL,
   `name` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `description` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `image_key` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `base_price` int NOT NULL,
+  `price_levels` text COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idpackage_UNIQUE` (`id`),
   KEY `fk_table2_category1_idx` (`category_id`),
@@ -378,35 +454,9 @@ CREATE TABLE `packages` (
 
 LOCK TABLES `packages` WRITE;
 /*!40000 ALTER TABLE `packages` DISABLE KEYS */;
-INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','Beginner Package - Adult'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','Beginner Package - Child 6 - 14 yrs'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','Beginner Package - Child Under 6 yrs'),(4,1,2,4,'Intermediate Package','Intermediate Package'),(5,1,3,4,'Performance Package','Performance Package'),(6,2,1,3,'Beginner - Adult','Beginner - Adult'),(7,2,1,2,'Beginner - Child 6 -14 yrs','Beginner - Child 6 -14 yrs'),(8,2,1,1,'Beginner - Child U6','Beginner - Child U6'),(9,2,2,4,'Intermediate Ski Only','Intermediate Ski Only'),(10,2,3,4,'Performance Ski Only','Performance Ski Only'),(11,3,1,3,'Beginner - Adult','Beginner - Adult'),(12,3,1,2,'Beginner - Child 6 - 14yrs','Beginner - Child 6 - 14yrs'),(13,3,1,1,'Beginner - Child Under 6yrs','Beginner - Child Under 6yrs'),(14,3,2,4,'Intermediate Boot','Intermediate Boot'),(15,3,3,4,'Back Country Touring Boot','Back Country Touring Boot'),(16,4,1,3,'Beginner Package - Adult','Beginner Package - Adult'),(17,4,1,2,'Beginner Child 6-14 yrs','Beginner Child 6-14 yrs');
+INSERT INTO `packages` VALUES
+(1,1,1,3,'Beginner Package - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/1.png',50,'0,35,50,65,75,80,85'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/2.png',40,'0,28,40,52,60,64,68'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/3.png',25,'0,17,25,33,38,40,43'),(4,1,2,4,'Intermediate Package','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/4.png',70,'0,40,60,70,80,90,95'),(5,1,3,4,'Performance Package','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/5.png',85,'0,45,65,80,85,95,105'),(6,2,1,3,'Beginner - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/6.png',40,'0,35,50,65,75,80,85'),(7,2,1,2,'Beginner - Child 6 -14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/7.png',32,'0,28,40,52,60,64,68'),(8,2,1,1,'Beginner - Child U6','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/8.png',20,'0,17,25,32,37,40,43'),(9,2,2,4,'Intermediate Ski Only','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/9.png',60,'0,40,60,75,85,95,105'),(10,2,3,4,'Performance Ski Only','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/10.png',70,'0,40,60,70,80,90,95'),(11,3,1,3,'Beginner - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/11.png',20,'0,15,25,30,35,40,45'),(12,3,1,2,'Beginner - Child 6 - 14yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/12.png',15,'0,10,15,20,25,30,35'),(13,3,1,1,'Beginner - Child Under 6yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/13.png',10,'0,5,10,15,20,25,30'),(14,3,2,4,'Intermediate Boot','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/14.png',30,'0,10,20,25,30,35,40'),(15,3,3,4,'Back Country Touring Boot','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/15.png',35,'0,20,35,45,55,65,75'),(16,4,1,3,'Beginner Package - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/16.png',50,'0,35,50,65,75,80,85'),(17,4,1,2,'Beginner Child 6-14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/17.png',40,'0,35,50,65,75,80,85');
 /*!40000 ALTER TABLE `packages` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `price_levels`
---
-
-DROP TABLE IF EXISTS `price_levels`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `price_levels` (
-  `package_id` int NOT NULL,
-  `number_of_days` int NOT NULL,
-  `price` float DEFAULT '0',
-  PRIMARY KEY (`package_id`,`number_of_days`),
-  KEY `fk_price_package1_idx` (`package_id`),
-  CONSTRAINT `fk_price_package1` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `price_levels`
---
-
-LOCK TABLES `price_levels` WRITE;
-/*!40000 ALTER TABLE `price_levels` DISABLE KEYS */;
-INSERT INTO `price_levels` VALUES (1,1,50),(1,2,85),(1,3,100),(1,4,115),(1,5,125),(1,6,130),(1,7,135),(2,1,50),(2,2,85),(2,3,100),(2,4,115),(2,5,125),(2,6,130),(2,7,135),(3,1,93),(3,2,17),(3,3,74),(3,4,37),(3,5,52),(3,6,96),(3,7,7),(4,1,39),(4,2,2),(4,3,79),(4,4,5),(4,5,71),(4,6,47),(4,7,72),(5,1,19),(5,2,42),(5,3,77),(5,4,45),(5,5,73),(5,6,23),(5,7,71),(6,1,70),(6,2,73),(6,3,81),(6,4,13),(6,5,26),(6,6,22),(6,7,35),(7,1,89),(7,2,16),(7,3,71),(7,4,19),(7,5,44),(7,6,97),(7,7,83),(8,1,8),(8,2,1),(8,3,37),(8,4,96),(8,5,58),(8,6,86),(8,7,16),(9,1,59),(9,2,72),(9,3,53),(9,4,54),(9,5,90),(9,6,19),(9,7,89),(10,1,15),(10,2,64),(10,3,41),(10,4,94),(10,5,95),(10,6,85),(10,7,64),(11,1,31),(11,2,25),(11,3,6),(11,4,75),(11,5,3),(11,6,11),(11,7,46),(12,1,99),(12,2,80),(12,3,34),(12,4,28),(12,5,30),(12,6,98),(12,7,81),(13,1,31),(13,2,77),(13,3,76),(13,4,77),(13,5,91),(13,6,3),(13,7,63),(14,1,68),(14,2,33),(14,3,53),(14,4,13),(14,5,88),(14,6,3),(14,7,21),(15,1,43),(15,2,67),(15,3,28),(15,4,42),(15,5,48),(15,6,71),(15,7,34),(16,1,99),(16,2,54),(16,3,23),(16,4,67),(16,5,92),(16,6,29),(16,7,90),(17,1,15),(17,2,30),(17,3,60),(17,4,80),(17,5,90),(17,6,92),(17,7,68);
-/*!40000 ALTER TABLE `price_levels` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -470,6 +520,38 @@ INSERT INTO `products` VALUES (1,'helmetP1',0,'something',250.00,1,'{\"size\":\"
 UNLOCK TABLES;
 
 --
+-- Table structure for table `recipients`
+--
+
+DROP TABLE IF EXISTS `recipients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recipients` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `height` decimal(5,2) DEFAULT NULL,
+  `weight` decimal(5,2) DEFAULT NULL,
+  `foot_size` decimal(3,1) DEFAULT NULL,
+  `first_name` varchar(127) DEFAULT NULL,
+  `last_name` varchar(127) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `din` decimal(5,2) DEFAULT NULL,
+  `skill_level_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_recipients_skill_levels_idx` (`skill_level_id`),
+  CONSTRAINT `fk_recipients_skill_levels` FOREIGN KEY (`skill_level_id`) REFERENCES `skill_levels` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recipients`
+--
+LOCK TABLES `recipients` WRITE;
+/*!40000 ALTER TABLE `recipients` DISABLE KEYS */;
+INSERT INTO `recipients` VALUES (1,180,80,44,'Alice','Hack',null,4.0,1),(2,170,60,42,'Bob','Ni',null,3.5,2);
+/*!40000 ALTER TABLE `recipients` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sessions`
 --
 
@@ -485,7 +567,7 @@ CREATE TABLE `sessions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `userId` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -494,7 +576,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES (63,'868A09D4D61EC60F6DE75F09DCDFDD0F','2021-05-02 15:43:07',1,1),(64,'CB67B42623A1D67195CF9D86C43AA3EF','2021-05-02 15:53:17',1,1),(65,'4478461D6F30B3682F664E00BAE7988F','2021-05-02 16:39:28',1,1),(66,'EDEF6DA6CACC59DCED967C868537A133','2021-05-03 00:20:21',1,1),(67,'234F3E4D019A5198A0680CDD0F518A6E','2021-05-03 02:13:15',1,1),(68,'2561ED95753271688D4A50CA025918C6','2021-05-03 02:17:11',1,1),(69,'5AE58E7118FED4C4A132F372DBEFDABA','2021-05-11 23:08:57',1,1),(70,'4EFDFA590CF814484EF9D5C130E3F113','2021-05-11 23:09:17',1,1),(71,'CAD3F9C8CEB523503168A2BD94B63955','2021-05-11 23:32:13',1,1),(72,'FBFFE3617941FF0C612F4615E4CE28A9','2021-05-11 23:34:21',1,1),(73,'1A6F53F6B0AC024D477E183B6A446CE7','2021-05-11 23:35:00',1,1),(74,'D1938D12501D0ADAC117113E2EEB873D','2021-05-11 23:35:13',1,1),(75,'84D8CA59DCD4451D99F517AFEC156C39','2021-05-11 23:36:27',1,1),(76,'3A76E4A18016A5DFFF8102A6950D7B85','2021-05-11 23:39:15',1,1),(77,'52175266C4169B798C6A9CF37C0E458A','2021-05-12 02:48:56',1,1),(78,'97DD686559CAE524972E906AAA247C56','2021-05-12 19:54:46',1,1),(79,'EBE81A5AC082EA3535295E075BAEBFAC','2021-05-12 19:59:28',1,1),(80,'4FC4AA92DE1AEE3110941700E46DFF9D','2021-05-12 19:59:48',1,1),(81,'C24A4F0E1313F7453D28009349890E6A','2021-05-12 20:00:28',1,1),(82,'4EBCBF6E2E766FE95FD7BF54C48594DA','2021-05-12 20:00:40',1,1),(83,'427C5BBB2EEC9F4C26D85FE7623D7753','2021-05-12 20:01:18',1,1),(84,'F5A7C15B0CCA417BE36EA1F711873723','2021-05-12 20:02:30',1,1),(85,'D810F81FE6ADB6D74D743809F3E33DC3','2021-05-12 20:03:08',1,1),(86,'C9F3189AAA522AC1C4883E1EA55A485E','2021-05-12 20:03:11',1,1),(87,'45F157B518B5CB9561DCF961ED350688','2021-05-12 20:03:16',1,1),(88,'B87B3EAFB5956FB8EA5033C267C4A42D','2021-05-12 20:03:31',1,1),(89,'3094B81A98FF196637BC519099D24571','2021-05-12 20:03:49',1,1),(90,'7B97AD56B943BAA0F584E7CD0D93FFDD','2021-05-12 20:04:05',1,1),(91,'79DFCEB4B487E9F6DEEFCEF738131AF3','2021-05-12 20:05:20',1,1),(92,'876F8D269CF9342B88964D1E3E98D7A9','2021-05-12 20:05:33',1,1),(93,'D3EDA706325A5DBD5A260DC35A9B3850','2021-05-12 20:07:54',1,1),(94,'FC42091B1197F4CEC1011090AD346746','2021-05-12 20:08:14',1,1),(95,'F583CF5A499E1E30E29394F6D4318263','2021-05-12 20:08:47',1,1),(96,'90C4D32CD3C455A5A2A12A188BAE390B','2021-05-12 20:09:24',1,1),(97,'A9A922E6BD92BB3C917B8C67FC0D80BD','2021-05-12 20:09:52',1,1),(98,'3D40E3DE559951508D01BA9B0C623BE0','2021-05-12 20:10:16',1,1),(99,'D614BCC5F0D64DF7E779A70DEB3C5C53','2021-05-12 20:10:37',1,1),(100,'52DA97AFC60BFE59501BA6ADD57CDD90','2021-05-12 20:10:42',1,1),(101,'D0A58A71B691DC5B03362FD28F67AD00','2021-05-12 20:12:02',1,1),(102,'FD348922E37D1E4F9E5BAE4603E3CF51','2021-05-12 20:12:50',1,1),(103,'CCDA463EBF02797E2979B16F22DCD608','2021-05-12 20:13:35',1,1),(104,'91652EB117C12071B8C541CEAFEADC4D','2021-05-12 20:13:49',1,1),(105,'8396B1768E2BDD9D74F23829BE822D5A','2021-05-12 20:14:16',1,1),(106,'14CA1790ED2A869011C02B7BC6636C5F','2021-05-12 20:14:25',1,1),(107,'ABA87711A516219C8C44AF58E5FC6457','2021-05-12 20:14:34',1,1),(108,'D501F4992474AA0BF7630E4EDFF1806D','2021-05-12 20:14:36',1,1),(109,'A5023D4D95364D39B3F15CC50DB17643','2021-05-12 20:14:42',1,1),(110,'4F5CFD22C62C693C824B1BE85392BDA1','2021-05-12 20:17:59',1,1),(111,'8F429851741659CF9B4C2040490B04FE','2021-05-12 20:19:52',1,1),(112,'2CC5224A994A756133E3E5B216901E62','2021-05-12 20:20:47',1,1),(113,'A177AE27D313113B370B1C76DF4BB243','2021-05-12 20:22:23',1,1),(114,'409E7EA6EC64E1E249F20D65996E7840','2021-05-12 20:22:53',1,1),(115,'187DA9CB6DB8E4F75CB5EE574764B8E9','2021-05-12 20:26:48',1,1),(116,'877D2C4F650AC6AE8D8277EB7B19DAE0','2021-05-12 20:28:00',1,1),(117,'1DEA519D9F0B4E82C023C69D91C0B557','2021-05-12 20:28:37',1,1),(118,'0D947FFC5CA58A28B31823807A96FC1B','2021-05-12 20:28:50',1,1),(119,'3F371D1F53D55D4E8385C88543509B7E','2021-05-12 20:36:49',1,1),(120,'046A129A60ED8DCB72EFFC3BF4A6119A','2021-05-12 20:49:12',1,1),(121,'FA469A2E5F616F09BBC2EEE36A5AE3B9','2021-05-13 00:00:28',1,1),(122,'7268191D609AD4843DAC268987FE41B1','2021-05-13 01:44:01',1,1),(123,'4CA463109FB6251D26802B65D95AE89B','2021-05-13 02:06:07',1,1),(124,'45D287B89EEC909A60A5B5822065CD44','2021-05-13 15:01:52',1,1);
+INSERT INTO `sessions` VALUES (63,'868A09D4D61EC60F6DE75F09DCDFDD0F','2021-05-02 15:43:07',1,1),(64,'CB67B42623A1D67195CF9D86C43AA3EF','2021-05-02 15:53:17',1,1),(65,'4478461D6F30B3682F664E00BAE7988F','2021-05-02 16:39:28',1,1),(66,'EDEF6DA6CACC59DCED967C868537A133','2021-05-03 00:20:21',1,1),(67,'234F3E4D019A5198A0680CDD0F518A6E','2021-05-03 02:13:15',1,1),(68,'2561ED95753271688D4A50CA025918C6','2021-05-03 02:17:11',1,1),(69,'5AE58E7118FED4C4A132F372DBEFDABA','2021-05-11 23:08:57',1,1),(70,'4EFDFA590CF814484EF9D5C130E3F113','2021-05-11 23:09:17',1,1),(71,'CAD3F9C8CEB523503168A2BD94B63955','2021-05-11 23:32:13',1,1),(72,'FBFFE3617941FF0C612F4615E4CE28A9','2021-05-11 23:34:21',1,1),(73,'1A6F53F6B0AC024D477E183B6A446CE7','2021-05-11 23:35:00',1,1),(74,'D1938D12501D0ADAC117113E2EEB873D','2021-05-11 23:35:13',1,1),(75,'84D8CA59DCD4451D99F517AFEC156C39','2021-05-11 23:36:27',1,1),(76,'3A76E4A18016A5DFFF8102A6950D7B85','2021-05-11 23:39:15',1,1),(77,'52175266C4169B798C6A9CF37C0E458A','2021-05-12 02:48:56',1,1),(78,'97DD686559CAE524972E906AAA247C56','2021-05-12 19:54:46',1,1),(79,'EBE81A5AC082EA3535295E075BAEBFAC','2021-05-12 19:59:28',1,1),(80,'4FC4AA92DE1AEE3110941700E46DFF9D','2021-05-12 19:59:48',1,1),(81,'C24A4F0E1313F7453D28009349890E6A','2021-05-12 20:00:28',1,1),(82,'4EBCBF6E2E766FE95FD7BF54C48594DA','2021-05-12 20:00:40',1,1),(83,'427C5BBB2EEC9F4C26D85FE7623D7753','2021-05-12 20:01:18',1,1),(84,'F5A7C15B0CCA417BE36EA1F711873723','2021-05-12 20:02:30',1,1),(85,'D810F81FE6ADB6D74D743809F3E33DC3','2021-05-12 20:03:08',1,1),(86,'C9F3189AAA522AC1C4883E1EA55A485E','2021-05-12 20:03:11',1,1),(87,'45F157B518B5CB9561DCF961ED350688','2021-05-12 20:03:16',1,1),(88,'B87B3EAFB5956FB8EA5033C267C4A42D','2021-05-12 20:03:31',1,1),(89,'3094B81A98FF196637BC519099D24571','2021-05-12 20:03:49',1,1),(90,'7B97AD56B943BAA0F584E7CD0D93FFDD','2021-05-12 20:04:05',1,1),(91,'79DFCEB4B487E9F6DEEFCEF738131AF3','2021-05-12 20:05:20',1,1),(92,'876F8D269CF9342B88964D1E3E98D7A9','2021-05-12 20:05:33',1,1),(93,'D3EDA706325A5DBD5A260DC35A9B3850','2021-05-12 20:07:54',1,1),(94,'FC42091B1197F4CEC1011090AD346746','2021-05-12 20:08:14',1,1),(95,'F583CF5A499E1E30E29394F6D4318263','2021-05-12 20:08:47',1,1),(96,'90C4D32CD3C455A5A2A12A188BAE390B','2021-05-12 20:09:24',1,1),(97,'A9A922E6BD92BB3C917B8C67FC0D80BD','2021-05-12 20:09:52',1,1),(98,'3D40E3DE559951508D01BA9B0C623BE0','2021-05-12 20:10:16',1,1),(99,'D614BCC5F0D64DF7E779A70DEB3C5C53','2021-05-12 20:10:37',1,1),(100,'52DA97AFC60BFE59501BA6ADD57CDD90','2021-05-12 20:10:42',1,1),(101,'D0A58A71B691DC5B03362FD28F67AD00','2021-05-12 20:12:02',1,1),(102,'FD348922E37D1E4F9E5BAE4603E3CF51','2021-05-12 20:12:50',1,1),(103,'CCDA463EBF02797E2979B16F22DCD608','2021-05-12 20:13:35',1,1),(104,'91652EB117C12071B8C541CEAFEADC4D','2021-05-12 20:13:49',1,1),(105,'8396B1768E2BDD9D74F23829BE822D5A','2021-05-12 20:14:16',1,1),(106,'14CA1790ED2A869011C02B7BC6636C5F','2021-05-12 20:14:25',1,1),(107,'ABA87711A516219C8C44AF58E5FC6457','2021-05-12 20:14:34',1,1),(108,'D501F4992474AA0BF7630E4EDFF1806D','2021-05-12 20:14:36',1,1),(109,'A5023D4D95364D39B3F15CC50DB17643','2021-05-12 20:14:42',1,1),(110,'4F5CFD22C62C693C824B1BE85392BDA1','2021-05-12 20:17:59',1,1),(111,'8F429851741659CF9B4C2040490B04FE','2021-05-12 20:19:52',1,1),(112,'2CC5224A994A756133E3E5B216901E62','2021-05-12 20:20:47',1,1),(113,'A177AE27D313113B370B1C76DF4BB243','2021-05-12 20:22:23',1,1),(114,'409E7EA6EC64E1E249F20D65996E7840','2021-05-12 20:22:53',1,1),(115,'187DA9CB6DB8E4F75CB5EE574764B8E9','2021-05-12 20:26:48',1,1),(116,'877D2C4F650AC6AE8D8277EB7B19DAE0','2021-05-12 20:28:00',1,1),(117,'1DEA519D9F0B4E82C023C69D91C0B557','2021-05-12 20:28:37',1,1),(118,'0D947FFC5CA58A28B31823807A96FC1B','2021-05-12 20:28:50',1,1),(119,'3F371D1F53D55D4E8385C88543509B7E','2021-05-12 20:36:49',1,1),(120,'046A129A60ED8DCB72EFFC3BF4A6119A','2021-05-12 20:49:12',1,1),(121,'FA469A2E5F616F09BBC2EEE36A5AE3B9','2021-05-13 00:00:28',1,1),(122,'7268191D609AD4843DAC268987FE41B1','2021-05-13 01:44:01',1,1),(123,'4CA463109FB6251D26802B65D95AE89B','2021-05-13 02:06:07',1,1),(124,'45D287B89EEC909A60A5B5822065CD44','2021-05-13 15:01:52',1,1),(125,'7DC43868D308A32C85CEC7009EBC4732','2021-05-13 18:10:44',1,1),(126,'88EB88CACF4B42C86C2AE4E2889E59C4','2021-05-13 18:11:07',1,1),(127,'3CCBB7D39CE844F4F2A2498928A2C292','2021-05-13 18:13:35',1,1),(128,'2AE4B1861A235A37A9BD3EA8FA703DB2','2021-05-13 18:13:51',1,1),(129,'A8D651A5A9C67BD399AA2802F27C403E','2021-05-13 20:48:36',1,1),(130,'5C872D93189AC17A75BDA062813F2BE5','2021-05-13 21:04:58',1,1),(131,'7839D6206BC598C18D4473B9C8C82C31','2021-05-13 21:05:47',1,1),(132,'1C9460EB2D99B026A85FDC4CC6D0A17F','2021-05-13 21:10:52',4,1),(133,'BE3D750183BDD8344855A378E6452E82','2021-05-13 21:13:12',4,1),(134,'9EC9ECFF257D47232D372C4DA48BD7DB','2021-05-13 21:14:58',1,1),(135,'F740FE6C724BA9C44F15ECE6D540AF07','2021-05-13 22:02:21',1,1),(136,'729BEA1513B739107EAE792C1B32C989','2021-05-13 23:47:45',4,1),(137,'4323BFBB44D67C89F3682F7F019C2786','2021-05-13 23:48:11',1,1),(138,'73E709DBE8AB3FD4A43D08D2D0DAADCC','2021-05-14 01:02:16',4,1),(139,'1D4A0616D855B94DDAEFB0E4341ED68F','2021-05-14 01:11:25',1,1),(140,'4895417636D96E714D7AFC9314CB99A8','2021-05-14 01:11:37',4,1),(141,'8A72E51BCC2288B0C9D76486B50A05EA','2021-05-14 01:12:38',4,1),(142,'8846A2D7009F3A230B58629AF9F55241','2021-05-14 01:17:05',4,1),(143,'A6D121F5FF93F7DDC08F80C42709D795','2021-05-14 01:33:30',4,1),(144,'00DE596867FC14C936980D3B3BD04ED7','2021-05-14 01:36:33',4,1),(145,'8430B6EBE4DC6A474A2248770FF43D97','2021-05-14 01:42:57',1,1),(146,'E1178E7D1D2A0A2D3F59F8EAAD8CD41C','2021-05-14 10:11:47',1,1),(147,'B191FE532687391C1006DBFE4DAD1C97','2021-05-16 19:10:27',1,1),(148,'A8AD402A793F423D1F7501A353F9E85C','2021-05-16 19:10:57',1,1),(149,'9303B1541D3B964C5E0DD59B4B658076','2021-05-16 20:38:00',1,1),(150,'26BE00C5D9B8B66AE4E4245C867D3D14','2021-05-16 20:38:33',1,1),(151,'969A62C3A91A1C0AE028B67D4DCCB226','2021-05-18 00:53:56',1,1);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -556,12 +638,12 @@ DROP TABLE IF EXISTS `user_groups`;
 CREATE TABLE `user_groups` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `contacts` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `user_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `group_id_UNIQUE` (`id`),
-  KEY `fk_user_groups_users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `fk_user_groups_users` (`user_id`),
+  CONSTRAINT `fk_user_groups_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -570,7 +652,7 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
-INSERT INTO `user_groups` VALUES (1,'Family','[{\"name\": \"Ruby\"}, {\"name\": \"Kiet\"}]',1),(2,'Close Friends','[{\"name\": \"Ruby\"}, {\"name\": \"Kiet\"}]',1);
+INSERT INTO `user_groups` VALUES (1,'Family',1),(2,'Close Friends',1);
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -620,6 +702,7 @@ CREATE TABLE `users` (
   `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `din` decimal(5,2) DEFAULT NULL,
+  `is_enabled` tinyint DEFAULT '1',
   `skill_level_id` int DEFAULT NULL,
   `organization_id` int DEFAULT NULL,
   `user_type_id` int DEFAULT NULL,
@@ -641,7 +724,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'user1','squizz',178.00,75.00,42.0,'Ruby','Nguyen','Male','1995-05-05','0434117998','ruby.nguyen@gmail.com',0.01,1,1,1),(2,'randy','0000',170.00,66.00,42.0,'Randy','Tsai','Male','1995-05-05','0434117998','mail1@gmail.com',0.01,1,2,1),(3,'andrea','0000',169.00,66.00,37.0,'Andrea','Law','Female','1995-05-05','0434117998','mail2@gmail.com',0.01,1,2,1),(4,'ruby','0000',168.00,55.00,41.0,'Ruby','Nguyen','Male','1995-05-05','0434117998','mail3@gmail.com',0.01,1,3,1),(5,'kiet','0000',167.00,33.00,44.0,'Kiet','To','Male','1995-05-05','0434117998','mail4@gmail.com',0.01,1,2,1),(6,'kai','0000',165.00,78.00,38.0,'Kai','Jin','Male','1995-05-05','0434117998','mail5@gmail.com',0.01,1,3,1);
+INSERT INTO `users` VALUES (1,'user1','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',170.00,75.00,42.0,'Ruby','Nguyen 1','Male','1995-05-28','0434117998','ruby.nguyen@gmail.com',0.01,1,1,1,1),(2,'randy','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',170.00,66.00,42.0,'Randy','Tsai','Male','1995-05-05','0434117998','mail1@gmail.com',0.01,1,1,2,1),(3,'andrea','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',169.00,66.00,37.0,'Andrea','Law','Female','1995-05-05','0434117998','mail2@gmail.com',0.01,1,1,2,1),(4,'ruby','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',168.00,55.00,41.0,'Ruby','Nguyen','Male','1995-05-05','0434117998','mail3@gmail.com',0.01,1,1,3,2),(5,'kiet','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',167.00,33.00,44.0,'Kiet','To','Male','1995-05-05','0434117998','mail4@gmail.com',0.01,1,1,2,1),(6,'kai','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',165.00,78.00,38.0,'Kai','Jin','Male','1995-05-05','0434117998','mail5@gmail.com',0.01,1,1,3,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -654,4 +737,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-13 15:23:52
+-- Dump completed on 2021-05-19  16:42:12

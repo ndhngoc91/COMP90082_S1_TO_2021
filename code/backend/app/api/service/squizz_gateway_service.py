@@ -11,6 +11,7 @@ class SquizzGatewayService:
     """
     This class represents a connection, or session, to the SQUIZZ Platform API
     """
+
     def __init__(self, base_url: str, org_id: str, api_org_key: str, api_org_pw: str, supplier_org_id: str):
         self.base_url = base_url
         self.org_id = org_id

@@ -14,3 +14,5 @@ jose~=1.0.0
 sqlacodegen
 starlette==0.13.6
 pip==21.1.1
+boto3
+bcrypt
