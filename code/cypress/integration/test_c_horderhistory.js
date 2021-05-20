@@ -11,7 +11,7 @@ describe('Test the order history Page', () => {
         cy.get('#normal_login').submit();
     })
 
-    it('Checkout to print Page', () => {
+    it('order history Page', () => {
         cy.get('.ant-menu').contains('Order History').click()
         cy.url().should('contain', '/order-history')
         cy.get('.ant-input').clear().type('Ruby')
