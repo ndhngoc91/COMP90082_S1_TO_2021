@@ -13,7 +13,7 @@ export const useHandleLogin = () => {
         setHandling(true);
         const formData = new FormData();
         formData.set("username", username);
-        formData.set("password", CryptoJs.MD5(password).toString());
+        formData.set("password", password);
         axios.post("http://localhost:8000/auth/login", formData, {
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
         }).then(response => {

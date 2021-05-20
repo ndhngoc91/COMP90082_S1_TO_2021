@@ -47,7 +47,6 @@ const UserProfileForm = () => {
         console.log("skill",skill_level_id);
         setEstimatedDin(SkierCode({weight, height, skill_level_id, age, footSize}));
         console.log("din",estimatedDin);
-        const pwd = CryptoJs.MD5(password).toString();
     }, [weight, height, skill_level_id,age,footSize]);
 
     const onStateChange = value => {
@@ -155,7 +154,7 @@ const UserProfileForm = () => {
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item label="Foot Size (mm)" name="foot_size"
+                            <Form.Item label="Foot Size (EUR)" name="foot_size"
                                        rules={[{required: true, message: "Required!"}]}>
                                 <Input type={"number"} size="large" value={footSize} readOnly={editing === false}
                                        onChange={e => setFootSize(parseInt(e.currentTarget.value))}/>

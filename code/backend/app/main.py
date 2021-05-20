@@ -14,6 +14,7 @@ from app.api.routers import product_groups
 from app.api.routers import products
 from app.api.routers import skill_levels
 from app.api.routers import squizz
+import uvicorn
 
 tags_metadata = [
     {
@@ -56,3 +57,6 @@ app.include_router(skill_levels.router)
 app.include_router(squizz.router)
 app.include_router(user_groups.router)
 app.include_router(users.router)
+
+if __name__ == '__main__':
+    uvicorn.run(app=app,host="127.0.0.1",port=8000)

@@ -18,6 +18,7 @@ import {useHandleDeleteUserGroup, useHandleEditUserGroup, useUserGroups} from ".
 import {useStores} from "../stores";
 import AddUserGroupForm from "./UserGroupList/AddUserGroupForm";
 import EditUserGroupForm from "./UserGroupList/EditUserGroupForm";
+import {useHandleFilterUsers} from "../hooks/UserHooks";
 
 const {Title, Link} = Typography;
 const {Panel} = Collapse;
@@ -35,6 +36,7 @@ const UserGroupList = () => {
     const [userGroups] = useUserGroups(id);
 
     const [handleDeleteUserGroup] = useHandleDeleteUserGroup();
+    const [handleFilterUsers, {users, filtering}] = useHandleFilterUsers();
 
     return (
         <>
@@ -85,8 +87,9 @@ const UserGroupList = () => {
                                                  actions={[
                                                      <Link key={`a-${contact.name}`}
                                                            onClick={() => {
-                                                               setSelectedContact(contact);
                                                                setDrawVisible(true);
+                                                               handleFilterUsers(contact.name);
+                                                               setSelectedContact(users);
                                                            }}>
                                                          <SearchOutlined/> View Profile
                                                      </Link>,
@@ -113,43 +116,49 @@ const UserGroupList = () => {
                    }}>
                 <EditUserGroupForm fieldsValue={selectedUserGroup}/>
             </Modal>
-            <Drawer width={640}
+            <Drawer width={400}
                     placement="right"
                     closable={false}
                     onClose={() => setDrawVisible(false)}
                     visible={drawVisible}>
+
                 <p >
                     User Profile
                 </p>
                 <Row>
                     <Col span={12}>
                         <p>Username：</p>
+                        {selectedContact.height}
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <p>First Name：</p>
-                    </Col>
-                    <Col span={12}>
-                        <p>Last Name：</p>
+                        {selectedContact.first_name}
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <p>Birthday：</p>
+                        <p>Last Name：</p>
+                        {selectedContact.last_name}
                     </Col>
+                </Row>
+                <Row>
                     <Col span={12}>
                         <p>Gender：</p>
+                        {selectedContact.gender}
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <p>Phone：</p>
+                        {selectedContact.phone}
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
                         <p>Email：</p>
+                        {selectedContact.email}
                     </Col>
                 </Row>
             </Drawer>

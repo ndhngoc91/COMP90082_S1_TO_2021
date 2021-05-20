@@ -50,7 +50,7 @@ export const useHandleRegisterCustomer = () => {
         axios.post('http://127.0.0.1:8000/users', {
             username: username,
             email: email,
-            password: CryptoJs.MD5(password).toString(),
+            password: password,
             first_name: first_name,
             last_name: last_name,
             phone: phone,
@@ -97,7 +97,7 @@ export const useHandleRegisterAdmin = () => {
             username: username,
             email: email,
             phone: phone,
-            password: CryptoJs.MD5(password).toString(),
+            password: password,
             user_type_id: UserType.STAFF,
             address_list: []
         }, {

@@ -66,166 +66,166 @@ export function SkierCode({weight,height,skillLevel,age,footSize}){
 
     switch (skierCode){
         case 'A':
-            if (footSize<=270){
+            if (footSize<=44){
                 din = 0.75;
             }else{
                 din = 0;
             }
             break;
         case 'B':
-            if (footSize<=230){
+            if (footSize<=36){
                 din = 1;
-            }else if (footSize>230&&footSize<291){
+            }else if (footSize>36&&footSize<48){
                 din = 0.75;
             }else{
                 din = 0;
             }
             break;
         case 'C':
-            if (footSize<=230){
+            if (footSize<=36){
                 din = 1.5;
-            }else if (footSize>230&&footSize<271){
+            }else if (footSize>36&&footSize<44){
                 din = 1.25;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 1;
             }else{
                 din = 0;
             }
             break;
         case 'D':
-            if (footSize<=230){
+            if (footSize<=36){
                 din = 2;
-            }else if (footSize>230&&footSize<251){
+            }else if (footSize>36&&footSize<40){
                 din = 1.75;
-            }else if (footSize>=251&&footSize<291){
+            }else if (footSize>=40&&footSize<48){
                 din = 1.5;
-            }else if (footSize>=291&&footSize<311){
+            }else if (footSize>=48&&footSize<52){
                 din = 1.25;
             }else{
                 din = 0;
             }
             break;
         case 'E':
-            if (footSize<=230){
+            if (footSize<=36){
                 din = 2.5;
-            }else if (footSize>230&&footSize<251){
+            }else if (footSize>36&&footSize<40){
                 din = 2.25;
-            }else if (footSize>=251&&footSize<271){
+            }else if (footSize>=40&&footSize<44){
                 din = 2;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 1.75;
-            }else if (footSize>=291&&footSize<331){
+            }else if (footSize>=48&&footSize<56){
                 din = 1.5;
             }else {
                 din = 0;
             }
             break;
         case 'F':
-            if (footSize<=230){
+            if (footSize<=36){
                 din = 3;
-            }else if (footSize>230&&footSize<251){
+            }else if (footSize>36&&footSize<40){
                 din = 2.75;
-            }else if (footSize>=251&&footSize<271){
+            }else if (footSize>=40&&footSize<44){
                 din = 2.5;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 2.25;
-            }else if (footSize>=291&&footSize<311){
+            }else if (footSize>=48&&footSize<52){
                 din = 2;
-            }else if (footSize>=311&&footSize<351){
+            }else if (footSize>=52&&footSize<60){
                 din = 1.75;
             }else{
                 din = 0;
             }
             break;
         case 'G':
-            if (footSize>230&&footSize<251){
+            if (footSize>36&&footSize<40){
                 din = 3.5;
-            }else if (footSize>=251&&footSize<271){
+            }else if (footSize>=40&&footSize<44){
                 din = 3;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 2.75;
-            }else if (footSize>=291&&footSize<311){
+            }else if (footSize>=48&&footSize<52){
                 din = 2.5;
-            }else if (footSize>=311&&footSize<331){
+            }else if (footSize>=52&&footSize<56){
                 din = 2.25;
-            }else if (footSize>=331&&footSize<351){
+            }else if (footSize>=56&&footSize<60){
                 din = 2;
             }else {
                 din = 0;
             }
             break;
         case 'H':
-            if (footSize>=251&&footSize<271){
+            if (footSize>=40&&footSize<44){
                 din = 3.5;
-            }else if (footSize>=271&&footSize<311){
+            }else if (footSize>=44&&footSize<52){
                 din = 3;
-            }else if (footSize>=311&&footSize<331){
+            }else if (footSize>=52&&footSize<56){
                 din = 2.75;
-            }else if (footSize>=331&&footSize<351){
+            }else if (footSize>=56&&footSize<60){
                 din = 2.5;
             }else {
                 din = 0;
             }
             break;
         case 'I':
-            if (footSize>=251&&footSize<271){
+            if (footSize>=40&&footSize<44){
                 din = 4.5;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 4;
-            }else if (footSize>=291&&footSize<331){
+            }else if (footSize>=48&&footSize<56){
                 din = 3.5;
-            }else if (footSize>=331&&footSize<351){
+            }else if (footSize>=56&&footSize<60){
                 din = 3;
             }else {
                 din = 0;
             }
             break;
         case 'J':
-            if (footSize>=251&&footSize<271){
+            if (footSize>=40&&footSize<44){
                 din = 5.5;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 5;
-            }else if (footSize>=291&&footSize<311){
+            }else if (footSize>=48&&footSize<52){
                 din = 4.5;
-            }else if (footSize>=311&&footSize<331){
+            }else if (footSize>=52&&footSize<56){
                 din = 4;
-            }else if (footSize>=331&&footSize<351){
+            }else if (footSize>=56&&footSize<60){
                 din = 3.5;
-            }else if (footSize>=351){
+            }else if (footSize>=60){
                 din = 3;
             }else{
                 din = 0;
             }
             break;
         case 'K':
-            if (footSize>=251&&footSize<271){
+            if (footSize>=40&&footSize<44){
                 din = 6.5;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 6;
-            }else if (footSize>=291&&footSize<311){
+            }else if (footSize>=48&&footSize<52){
                 din = 5.5;
-            }else if (footSize>=311&&footSize<331){
+            }else if (footSize>=52&&footSize<56){
                 din = 5;
-            }else if (footSize>=331&&footSize<351){
+            }else if (footSize>=56&&footSize<60){
                 din = 4.5;
-            }else if (footSize>=351){
+            }else if (footSize>=60){
                 din = 4;
             }else{
                 din = 0;
             }
             break;
         case 'L':
-            if (footSize>=251&&footSize<271){
+            if (footSize>=40&&footSize<44){
                 din = 7.5;
-            }else if (footSize>=271&&footSize<291){
+            }else if (footSize>=44&&footSize<48){
                 din = 7;
-            }else if (footSize>=291&&footSize<311){
+            }else if (footSize>=48&&footSize<52){
                 din = 6.5;
-            }else if (footSize>=311&&footSize<331){
+            }else if (footSize>=52&&footSize<56){
                 din = 6;
-            }else if (footSize>=331&&footSize<351){
+            }else if (footSize>=56&&footSize<60){
                 din = 5.5;
-            }else if (footSize>=351){
+            }else if (footSize>=60){
                 din = 5;
             }else{
                 din = 0;
