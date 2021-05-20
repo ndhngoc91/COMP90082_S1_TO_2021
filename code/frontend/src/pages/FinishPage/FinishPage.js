@@ -27,12 +27,13 @@ const FinishPage = observer(() => {
     console.log(JSON.stringify(cartItems));
 
     const printReceipt = () => {
-        exportReceipt({
-            customerName: `${firstName} ${lastName}`,
-            date: new Date(),
-            cartItems: cartItems,
-            totalCost: totalCost
-        });
+        console.log(JSON.stringify(cartItems));
+        // exportReceipt({
+        //     customerName: `${firstName} ${lastName}`,
+        //     date: new Date(),
+        //     cartItems: cartItems,
+        //     totalCost: totalCost
+        // });
     };
 
     const {fullWidthCls} = useFinishPageStyles();
@@ -43,8 +44,9 @@ const FinishPage = observer(() => {
             <Content style={{padding: "3em", backgroundColor: "#FFFFFF"}}>
                 <Row justify="space-between" gutter={80}>
                     <Col span={18}>
-                        <Steps progressDot current={2}>
+                        <Steps progressDot current={3}>
                             <Step title="Booking"/>
+                            <Step title="Input Customer Details"/>
                             <Step title="Input Contacts"/>
                             <Step title="Done"/>
                         </Steps>

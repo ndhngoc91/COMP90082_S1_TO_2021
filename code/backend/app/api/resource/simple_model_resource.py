@@ -7,7 +7,6 @@ from werkzeug.exceptions import HTTPException
 from app.api.resource.database_base import DatabaseBase
 from app.api.exception.exceptions import *
 
-
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
@@ -272,4 +271,3 @@ class SimpleModelResource(DatabaseBase):
         except Exception as e:
             logger.error(f'Unexpected error while executing query: {self.cursor._last_executed}\n%s', e)
             raise OtherException(cls())
-

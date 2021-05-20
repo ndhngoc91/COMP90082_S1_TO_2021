@@ -44,8 +44,7 @@ def filter_orders(query: Optional[str], db: Session):
 
 
 def cancel_order(order_id: int, db: Session):
-    order_to_cancel = db.query(models.Order).filter(
-        models.Order.id == order_id)
+    order_to_cancel = db.query(models.Order).filter(models.Order.id == order_id)
     if not order_to_cancel.first():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

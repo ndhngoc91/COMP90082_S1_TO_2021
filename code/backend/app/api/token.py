@@ -34,4 +34,3 @@ def verify_token(token: str):
         return schemas.TokenData(username=username, org_id=org_id, session_id=session_id)
     except JWTError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
-

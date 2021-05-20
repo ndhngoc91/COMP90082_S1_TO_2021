@@ -1,5 +1,6 @@
 from app.api.model.model import Model
 
+
 class OrderExtra(Model):
     def __init__(self, json=None, pk=None):
         self.id = None

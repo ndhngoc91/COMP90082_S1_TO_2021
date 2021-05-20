@@ -1,25 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import {
-    Button, Layout, Col, Row, Space, Table, Steps, Divider, Tag
+    Button, Layout, Col, Row, Space, Table, Steps, Divider, Tag, Modal
 } from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {useHistory} from "react-router-dom";
 import {useStores} from "../../stores";
 import {useCheckoutPageStyles} from "./styles";
 import {observer} from "mobx-react-lite";
+import RecipientForm from "../../components/RecipientForms/RecipientForm";
 
 const {Content} = Layout;
 const {Step} = Steps;
 const {Column} = Table;
 
 const CheckoutPage = observer(() => {
+    const [isRecipientFormVisible, setIsRecipientFormVisible] = useState(true);
+    const [selectedCartItemId, setSelectedCartItemId] = useState(-1);
+
     const history = useHistory();
 
     const {
         shoppingCartStore: {cartItems}
     } = useStores();
-
-    console.log(JSON.stringify(cartItems));
 
     const onCheckoutButtonClick = () => {
         history.push("/finish");
@@ -48,25 +50,31 @@ const CheckoutPage = observer(() => {
                             }}/>
                             <Column title="Extra items" render={record => {
                                 return <>
-                                    {record.extraItems.map(extraItem => {
+                                    {record.extraItems.map((extraItem, key) => {
                                         if (extraItem.selected) {
-                                            return <Tag color="green">{extraItem.name}</Tag>
+                                            return <Tag color="green" key={key}>{extraItem.name}</Tag>
                                         }
                                     })}
                                 </>;
                             }}/>
                             <Column title="Action"
-                                    render={record => (
-                                        <Space size="middle">
-                                            <a>Add Contact</a>
-                                        </Space>
-                                    )}
+                                    render={record => {
+                                        return <Space size="middle">
+                                            <a onClick={() => {
+                                                setIsRecipientFormVisible(true);
+                                                setSelectedCartItemId(record["id"]);
+                                            }}>
+                                                Add Recipient
+                                            </a>
+                                        </Space>;
+                                    }}
                             />
                         </Table>
                     </Col>
                     <Col span={6}>
                         <Space direction="vertical" className={fullWidthCls}>
-                            <Button className={fullWidthCls} type="primary" size="large" onClick={onCheckoutButtonClick}>
+                            <Button className={fullWidthCls} type="primary" size="large"
+                                    onClick={onCheckoutButtonClick}>
                                 Checkout
                             </Button>
                             <Button className={fullWidthCls} size="large" onClick={() => {
@@ -79,6 +87,13 @@ const CheckoutPage = observer(() => {
                 </Row>
             </Content>
         </Layout>
+        <Modal title="Add Recipient" visible={isRecipientFormVisible}
+               footer={null} closable={false}
+               onCancel={() => {
+                   setIsRecipientFormVisible(false);
+               }}>
+            <RecipientForm cartItemId={selectedCartItemId}/>
+        </Modal>
     </Layout>;
 });
 
