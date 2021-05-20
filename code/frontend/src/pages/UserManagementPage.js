@@ -1,33 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {Col, Layout, Row, Space, Table, Input, notification, Button, Modal, Form, Select} from "antd";
+import {Col, Layout, Row, Space, Table, Input, notification, Button} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleEditProfile, useHandleFilterUsers} from "../hooks/UserHooks";
-import {USER_ROLE} from "../consts/UserRole";
 
 const {Content} = Layout;
 const {Column} = Table;
 const {Search} = Input;
-const {Option} = Select;
 
 const UserManagementPage = () => {
     const [handleFilterUsers, {users, filtering}] = useHandleFilterUsers();
     const tempData = JSON.parse(JSON.stringify(users));
     const [data, setData] = useState(tempData);
     const [handleEditProfile, {handling}] = useHandleEditProfile();
-    const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
 
     useEffect(() => {
         handleFilterUsers();
     }, []);
-
-    const onFinish = values => {
-        handleEditProfile(values, () => {
-            setIsRoleModalVisible(false);
-            notification.success({message: "Edit successfully!"});
-        }, errorMessage => {
-            notification.error({message: errorMessage});
-        });
-    };
 
     return (
         <>
