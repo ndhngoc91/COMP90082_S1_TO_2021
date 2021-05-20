@@ -18,11 +18,6 @@ def get_all_packages(db: Session = Depends(get_db)):
     return package_service.get_all_packages(db=db)
 
 
-@router.get("/{package_id}")
-def get_package(package_id: int, db: Session = Depends(get_db)):
-    return package_service.get_package(package_id=package_id, db=db)
-
-
 @router.get("/filter")
 def filter_packages(query: Optional[str] = "",
                     category_id: Optional[int] = None,
@@ -34,6 +29,11 @@ def filter_packages(query: Optional[str] = "",
                                            skill_level_id=skill_level_id,
                                            age_group_id=age_group_id,
                                            db=db)
+
+
+@router.get("/{package_id}")
+def get_package(package_id: int, db: Session = Depends(get_db)):
+    return package_service.get_package(package_id=package_id, db=db)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
