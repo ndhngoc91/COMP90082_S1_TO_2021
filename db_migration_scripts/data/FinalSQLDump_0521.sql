@@ -1,5 +1,3 @@
-DROP SCHEMA IF EXISTS `squizz_app`;
-DROP DATABASE IF exists `squizz_app`;
 CREATE DATABASE  IF NOT EXISTS `squizz_app` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `squizz_app`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
@@ -162,35 +160,39 @@ INSERT INTO `extra` VALUES (1,'Pants Adult',3,20,'0,10,15,20,25,30,35','P'),(2,'
 UNLOCK TABLES;
 
 --
--- Table structure for table `guests`
+-- Table structure for table `members`
 --
 
-DROP TABLE IF EXISTS `guests`;
+DROP TABLE IF EXISTS `members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `guests` (
+CREATE TABLE `members` (
   `id` int NOT NULL AUTO_INCREMENT,
   `height` decimal(5,2) DEFAULT NULL,
   `weight` decimal(5,2) DEFAULT NULL,
-  `foot_size` decimal(3,1) DEFAULT NULL,
+  `foot_size` int DEFAULT NULL,
   `first_name` varchar(127) DEFAULT NULL,
   `last_name` varchar(127) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `din` decimal(5,2) DEFAULT NULL,
   `skill_level_id` int DEFAULT NULL,
-  `group_id` int DEFAULT NULL,
+  `user_group_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_guests_user_groups_idx` (`group_id`),
+  KEY `fk_guests_user_groups_idx` (`user_group_id`),
   KEY `fk_guests_skill_levels_idx` (`skill_level_id`),
   CONSTRAINT `fk_guests_skill_levels` FOREIGN KEY (`skill_level_id`) REFERENCES `skill_levels` (`id`),
-  CONSTRAINT `fk_guests_user_groups` FOREIGN KEY (`group_id`) REFERENCES `user_groups` (`id`)
+  CONSTRAINT `fk_guests_user_groups` FOREIGN KEY (`user_group_id`) REFERENCES `user_groups` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `guests`
+-- Dumping data for table `members`
 --
 
+LOCK TABLES `members` WRITE;
+/*!40000 ALTER TABLE `members` DISABLE KEYS */;
+/*!40000 ALTER TABLE `members` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `order_details`
@@ -228,11 +230,11 @@ DROP TABLE IF EXISTS `order_extras`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_extras` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `order_details_id` int NOT NULL,
+  `order_packages_id` int NOT NULL,
   `extra_id` int NOT NULL,
-  `cost` int NOT NULL,
+  `cost` decimal(6,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_orderextras_orderdetails1_idx` (`order_details_id`),
+  KEY `fk_orderextras_orderpackages1_idx` (`order_packages_id`),
   KEY `fk_orderextras_extra1_idx` (`extra_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -243,7 +245,7 @@ CREATE TABLE `order_extras` (
 
 LOCK TABLES `order_extras` WRITE;
 /*!40000 ALTER TABLE `order_extras` DISABLE KEYS */;
-INSERT INTO `order_extras` VALUES (18,14,1,120),(19,15,1,160),(20,15,2,80),(21,15,3,240);
+INSERT INTO `order_extras` VALUES (18,14,1,20.00),(19,15,1,20.00),(20,15,2,40.00),(21,15,3,0.00);
 /*!40000 ALTER TABLE `order_extras` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,7 +261,7 @@ CREATE TABLE `order_packages` (
   `order_details_id` int NOT NULL,
   `package_id` int NOT NULL,
   `trail_id` int NOT NULL,
-  `cost` int NOT NULL,
+  `cost` decimal(6,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_order_packages_order_details1_idx` (`order_details_id`),
   KEY `fk_order_packages_package1_idx` (`package_id`),
@@ -273,7 +275,7 @@ CREATE TABLE `order_packages` (
 
 LOCK TABLES `order_packages` WRITE;
 /*!40000 ALTER TABLE `order_packages` DISABLE KEYS */;
-INSERT INTO `order_packages` VALUES (13,1,1,1,40),(14,2,1,2,30),(15,3,1,1,40),(16,4,2,1,50);
+INSERT INTO `order_packages` VALUES (13,1,1,1,40.00),(14,2,1,2,30.00),(15,3,1,1,40.00),(16,4,2,1,50.00);
 /*!40000 ALTER TABLE `order_packages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -302,7 +304,6 @@ INSERT INTO `order_receipts` VALUES (14,'this is a link to recerpts -14'),(15,'t
 /*!40000 ALTER TABLE `order_receipts` ENABLE KEYS */;
 UNLOCK TABLES;
 
-
 --
 -- Table structure for table `orders`
 --
@@ -317,10 +318,10 @@ CREATE TABLE `orders` (
   `end_date` datetime DEFAULT NULL,
   `description` text,
   `status` enum('New','Handling','Done','Cancelled','Executing') NOT NULL DEFAULT 'New',
-  `staff_id` int default null,
+  `staff_id` int DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `fk_orders_users1_idx` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -329,9 +330,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order','New',null),
-(15,4,NULL,NULL,'this is the second order','Done',null),
-(16,3,NULL,NULL,'this is the third order','Cancelled',null);
+INSERT INTO `orders` VALUES (14,3,NULL,NULL,'this is the first order','New',NULL),(15,4,NULL,NULL,'this is the second order','Done',NULL),(16,3,NULL,NULL,'this is the third order','Cancelled',NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -436,7 +435,7 @@ CREATE TABLE `packages` (
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `image_key` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `base_price` int NOT NULL,
-  `price_levels` text COLLATE utf8mb4_general_ci NOT NULL,
+  `price_levels` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idpackage_UNIQUE` (`id`),
   KEY `fk_table2_category1_idx` (`category_id`),
@@ -454,8 +453,7 @@ CREATE TABLE `packages` (
 
 LOCK TABLES `packages` WRITE;
 /*!40000 ALTER TABLE `packages` DISABLE KEYS */;
-INSERT INTO `packages` VALUES
-(1,1,1,3,'Beginner Package - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/1.png',50,'0,35,50,65,75,80,85'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/2.png',40,'0,28,40,52,60,64,68'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/3.png',25,'0,17,25,33,38,40,43'),(4,1,2,4,'Intermediate Package','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/4.png',70,'0,40,60,70,80,90,95'),(5,1,3,4,'Performance Package','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/5.png',85,'0,45,65,80,85,95,105'),(6,2,1,3,'Beginner - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/6.png',40,'0,35,50,65,75,80,85'),(7,2,1,2,'Beginner - Child 6 -14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/7.png',32,'0,28,40,52,60,64,68'),(8,2,1,1,'Beginner - Child U6','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/8.png',20,'0,17,25,32,37,40,43'),(9,2,2,4,'Intermediate Ski Only','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/9.png',60,'0,40,60,75,85,95,105'),(10,2,3,4,'Performance Ski Only','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/10.png',70,'0,40,60,70,80,90,95'),(11,3,1,3,'Beginner - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/11.png',20,'0,15,25,30,35,40,45'),(12,3,1,2,'Beginner - Child 6 - 14yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/12.png',15,'0,10,15,20,25,30,35'),(13,3,1,1,'Beginner - Child Under 6yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/13.png',10,'0,5,10,15,20,25,30'),(14,3,2,4,'Intermediate Boot','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/14.png',30,'0,10,20,25,30,35,40'),(15,3,3,4,'Back Country Touring Boot','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/15.png',35,'0,20,35,45,55,65,75'),(16,4,1,3,'Beginner Package - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/16.png',50,'0,35,50,65,75,80,85'),(17,4,1,2,'Beginner Child 6-14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/17.png',40,'0,35,50,65,75,80,85');
+INSERT INTO `packages` VALUES (1,1,1,3,'Beginner Package - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/1.png',50,'0,35,50,65,75,80,85'),(2,1,1,2,'Beginner Package - Child 6 - 14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/2.png',40,'0,28,40,52,60,64,68'),(3,1,1,1,'Beginner Package - Child Under 6 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/3.png',25,'0,17,25,33,38,40,43'),(4,1,2,4,'Intermediate Package','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/4.png',70,'0,40,60,70,80,90,95'),(5,1,3,4,'Performance Package','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/5.png',85,'0,45,65,80,85,95,105'),(6,2,1,3,'Beginner - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/6.png',40,'0,35,50,65,75,80,85'),(7,2,1,2,'Beginner - Child 6 -14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/7.png',32,'0,28,40,52,60,64,68'),(8,2,1,1,'Beginner - Child U6','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/8.png',20,'0,17,25,32,37,40,43'),(9,2,2,4,'Intermediate Ski Only','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/9.png',60,'0,40,60,75,85,95,105'),(10,2,3,4,'Performance Ski Only','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/10.png',70,'0,40,60,70,80,90,95'),(11,3,1,3,'Beginner - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/11.png',20,'0,15,25,30,35,40,45'),(12,3,1,2,'Beginner - Child 6 - 14yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/12.png',15,'0,10,15,20,25,30,35'),(13,3,1,1,'Beginner - Child Under 6yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/13.png',10,'0,5,10,15,20,25,30'),(14,3,2,4,'Intermediate Boot','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/14.png',30,'0,10,20,25,30,35,40'),(15,3,3,4,'Back Country Touring Boot','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/15.png',35,'0,20,35,45,55,65,75'),(16,4,1,3,'Beginner Package - Adult','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/16.png',50,'0,35,50,65,75,80,85'),(17,4,1,2,'Beginner Child 6-14 yrs','Ski Package includes Ski\'s, Boots and Poles, for Downhill, XC Classic, or BC skiing./Skis and Boards are perfect for the novice skier./Downhill Boots range from rear entry to buckle./XC Boots and bindings use NNN System./BC Boots are 75mm and binding are cable binding.','package-photos/17.png',40,'0,35,50,65,75,80,85');
 /*!40000 ALTER TABLE `packages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -494,18 +492,23 @@ DROP TABLE IF EXISTS `products`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `model` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `idpackage` int NOT NULL DEFAULT '1',
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `price` decimal(10,2) NOT NULL,
+  `key_product_id` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `product_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `key_taxcode_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `key_sell_unit_id` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `is_price_tax_inclusive` tinyint(1) DEFAULT NULL,
+  `is_kitted` tinyint(1) DEFAULT NULL,
+  `internal_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `product_group_id` int DEFAULT NULL,
   `is_available` tinyint(1) DEFAULT '1',
-  `setting` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `group_id` int DEFAULT NULL,
+  `unavailable_from` datetime DEFAULT NULL,
+  `unavailable_to` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `fk_products_package1_idx` (`idpackage`),
-  KEY `group_id_idx` (`group_id`),
-  CONSTRAINT `groups_id` FOREIGN KEY (`group_id`) REFERENCES `product_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `group_id_idx` (`product_group_id`),
+  CONSTRAINT `fk_products_product_groups` FOREIGN KEY (`product_group_id`) REFERENCES `product_groups` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -515,7 +518,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'helmetP1',0,'something',250.00,1,'{\"size\":\"M\", \"skill_level\":\"DH\" }',1),(2,'helmetP2',0,'something',350.00,1,'{\"size\":\"L\", \"skill_level\":\"XC\" }',1),(3,'gloveG3',0,'something',0.00,1,'{\"size\":\"S\", \"brand\":\"fox\", \"width\":\"52\", \"skill_level\":\"DH\" }',16),(4,'Accelerator',0,'something',30.00,1,'{}',15),(5,'poleQ1',1,'something',40.00,1,'{}',2),(6,'poleQ2',1,'something',50.00,1,'{}',2),(7,'poleQ3',1,'something',100.00,1,'{}',2),(8,'gloveG4',1,'something',100.00,1,'{\"size\":\"M\", \"brand\":\"fox\", \"width\":\"52\", \"skill_level\":\"DH\" }',16),(10,'jacket',1,'something',80.00,1,'{\"size\":\"M\", \"length\":\"292\" }',13),(11,'skiboard',1,'something',110.00,1,'{\"brand\":\"fox\", \"length\":\"158\"}',15);
+INSERT INTO `products` VALUES (1,'0','0','4325032074121','DH Budget skis, boots, poles','DH Beg','1',1,0,'11EBB7AB0C0D4920987A6AF3476460FC',1,1,'1995-05-05 00:00:00','1995-05-05 00:00:00');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -530,7 +533,7 @@ CREATE TABLE `recipients` (
   `id` int NOT NULL AUTO_INCREMENT,
   `height` decimal(5,2) DEFAULT NULL,
   `weight` decimal(5,2) DEFAULT NULL,
-  `foot_size` decimal(3,1) DEFAULT NULL,
+  `foot_size` int DEFAULT NULL,
   `first_name` varchar(127) DEFAULT NULL,
   `last_name` varchar(127) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
@@ -539,15 +542,16 @@ CREATE TABLE `recipients` (
   PRIMARY KEY (`id`),
   KEY `fk_recipients_skill_levels_idx` (`skill_level_id`),
   CONSTRAINT `fk_recipients_skill_levels` FOREIGN KEY (`skill_level_id`) REFERENCES `skill_levels` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `recipients`
 --
+
 LOCK TABLES `recipients` WRITE;
 /*!40000 ALTER TABLE `recipients` DISABLE KEYS */;
-INSERT INTO `recipients` VALUES (1,180,80,44,'Alice','Hack',null,4.0,1),(2,170,60,42,'Bob','Ni',null,3.5,2);
+INSERT INTO `recipients` VALUES (1,180.00,80.00,300,'Alice','Hack',NULL,4.00,1),(2,170.00,60.00,270,'Bob','Ni',NULL,3.50,2);
 /*!40000 ALTER TABLE `recipients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -694,7 +698,7 @@ CREATE TABLE `users` (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `height` decimal(5,2) DEFAULT NULL,
   `weight` decimal(5,2) DEFAULT NULL,
-  `foot_size` decimal(3,1) DEFAULT NULL,
+  `foot_size` int DEFAULT NULL,
   `first_name` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `last_name` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `gender` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -724,7 +728,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'user1','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',170.00,75.00,42.0,'Ruby','Nguyen 1','Male','1995-05-28','0434117998','ruby.nguyen@gmail.com',0.01,1,1,1,1),(2,'randy','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',170.00,66.00,42.0,'Randy','Tsai','Male','1995-05-05','0434117998','mail1@gmail.com',0.01,1,1,2,1),(3,'andrea','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',169.00,66.00,37.0,'Andrea','Law','Female','1995-05-05','0434117998','mail2@gmail.com',0.01,1,1,2,1),(4,'ruby','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',168.00,55.00,41.0,'Ruby','Nguyen','Male','1995-05-05','0434117998','mail3@gmail.com',0.01,1,1,3,2),(5,'kiet','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',167.00,33.00,44.0,'Kiet','To','Male','1995-05-05','0434117998','mail4@gmail.com',0.01,1,1,2,1),(6,'kai','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',165.00,78.00,38.0,'Kai','Jin','Male','1995-05-05','0434117998','mail5@gmail.com',0.01,1,1,3,1);
+INSERT INTO `users` VALUES (1,'user1','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',170.00,75.00,310,'Ruby','Nguyen 1','Male','1995-05-28','0434117998','ruby.nguyen@gmail.com',0.01,1,1,1,1),(2,'randy','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',170.00,66.00,330,'Randy','Tsai','Male','1995-05-05','0434117998','mail1@gmail.com',0.01,1,1,2,1),(3,'andrea','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',169.00,66.00,300,'Andrea','Law','Female','1995-05-05','0434117998','mail2@gmail.com',0.01,1,1,2,1),(4,'ruby','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',168.00,55.00,270,'Ruby','Nguyen','Male','1995-05-05','0434117998','mail3@gmail.com',0.01,1,1,3,2),(5,'kiet','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',167.00,33.00,250,'Kiet','To','Male','1995-05-05','0434117998','mail4@gmail.com',0.01,1,1,2,1),(6,'kai','$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS',165.00,78.00,290,'Kai','Jin','Male','1995-05-05','0434117998','mail5@gmail.com',0.01,1,1,3,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -737,4 +741,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-19  16:42:12
+-- Dump completed on 2021-05-21 11:41:42
