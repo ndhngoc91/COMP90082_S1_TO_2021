@@ -66,6 +66,9 @@ const NavigationBar = observer(() => {
                     <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/booking-management">
                         Booking Management
                     </Menu.Item>
+                    <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/product-management">
+                        Product Management
+                    </Menu.Item>
                 </>}
                 {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
@@ -83,7 +86,7 @@ const NavigationBar = observer(() => {
                 <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/contract-management">
                     Contracts
                 </Menu.Item>}
-                
+
                 {userRole === USER_ROLE.GUEST &&
                 <>
                     <Menu.Item key="login"
