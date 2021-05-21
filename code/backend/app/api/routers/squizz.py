@@ -12,6 +12,6 @@ router = APIRouter(
 
 
 @router.post("/retrieve-products")
-def retrieve_products(db: Session = Depends(get_db), current_user: schemas.TokenData = Depends(get_current_user)):
-    product_service.sync_products(current_user.session_id)
+def retrieve_products(current_user: schemas.TokenData = Depends(get_current_user), db: Session = Depends(get_db)):
+    product_service.sync_products(session_id=current_user.session_id, db=db)
     return "Implementing ..."

@@ -174,10 +174,10 @@ class Product(Base):
     description = Column(Text)
     key_sell_unit_id = Column(VARCHAR(45, 'utf8mb4_general_ci'))
     is_price_tax_inclusive = Column(BOOLEAN)
-    is_kitted = Column(BOOLEAN)
+    is_kitted = Column(TINYINT(1))
     internal_id = Column(VARCHAR(45))
     product_group_id = Column(ForeignKey('product_groups.id'), index=True)
-    is_available = Column(BOOLEAN, server_default='1')
+    status = Column(Enum('AVAILABLE', 'HIRED', 'RESERVED'), server_default='AVAILABLE')
     unavailable_from = Column(DateTime)
     unavailable_to = Column(DateTime)
 
