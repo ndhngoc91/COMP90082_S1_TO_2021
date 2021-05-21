@@ -17,8 +17,16 @@ class Customer(BaseModel):
 
 
 class Product(BaseModel):
-    product_id: int
-    quantity: int
+    key_product_id: Optional[str]
+    product_code: Optional[str]
+    key_taxcode_id: Optional[str]
+    name: Optional[str]
+    description: Optional[str]
+    key_sell_unit_id: Optional[str]
+    is_price_tax_inclusive: Optional[bool]
+    is_kitted: Optional[bool]
+    internal_id: Optional[str]
+    product_group_id: Optional[str]
 
 
 class Recipient(BaseModel):
