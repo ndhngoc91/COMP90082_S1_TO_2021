@@ -4,13 +4,14 @@ import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleOrders} from "../hooks/OrderHooks";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
+import {OrderStatus} from "../consts/OrderStatus";
 
 const {Content} = Layout;
 const {Column} = Table;
 const {Search} = Input;
 
 const OrderHistoryPage = () => {
-    const {authStore: {userRole}} = useStores();
+    const {authStore: {userRole}, hiringEquipmentRegister: {pickupOrder}} = useStores();
     const [handleFilterOrders, handleCancelOrder, {orders, filtering}] = useHandleOrders();
 
     useEffect(() => {
@@ -35,26 +36,32 @@ const OrderHistoryPage = () => {
                         <Table dataSource={orders} loading={filtering}>
                             <Column title="Order ID" dataIndex="id"/>
                             <Column title="Customer Name"
-                                dataIndex="customer_first_name"
-                                render={(text, record) =>
-                                    <span>{record.customer_last_name}, {text}</span>
-                                }
-                            />
+                                    dataIndex="customer_first_name"
+                                    render={(text, record) =>
+                                        <span>{record.customer_last_name}, {text}</span>
+                                    }/>
                             <Column title="Start Date" dataIndex="start_date"/>
                             <Column title="End Date" dataIndex="end_date"/>
                             <Column title="Description" dataIndex="description"/>
                             <Column title="Status" dataIndex="status"/>
-                            {(userRole === USER_ROLE.STAFF || userRole === USER_ROLE.CUSTOMER) &&
-                             <Column title="Action" key="action" render={(text, record) => (
-                                <Space size="middle">
-                                    {userRole === USER_ROLE.STAFF && <a>Edit</a>}
-                                    {record.status !== "Cancelled" &&
-                                        <a onClick={() => handleCancelOrder(record.id)}>
-                                            Withdraw
-                                        </a>
-                                    }
-                                </Space>
-                            )}/>}
+                            <Column title="Cancel" key="action" render={(value, order) => {
+                                return <Space size="middle">
+                                    {order.status !== OrderStatus.CANCELLED ?
+                                        <a onClick={() => handleCancelOrder(order.id)}>
+                                            Cancel
+                                        </a> : '---'}
+                                </Space>;
+                            }}/>
+                            {userRole === USER_ROLE.STAFF &&
+                            <Column title="Pick up" key="action" render={(value, order) => {
+                                console.log(order);
+                                return <Space size="middle">
+                                    {order.status === OrderStatus.NEW ?
+                                        <a onClick={() => pickupOrder(order)}>
+                                            Pick Up
+                                        </a> : '---'}
+                                </Space>;
+                            }}/>}
                         </Table>
                     </Content>
                 </Layout>
