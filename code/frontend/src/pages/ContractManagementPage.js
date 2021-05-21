@@ -4,6 +4,7 @@ import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleContracts} from "../hooks/ContractHooks";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
+import moment from "moment";
 
 const {Content} = Layout;
 const {Column} = Table;
@@ -49,19 +50,9 @@ const ContractManagementPage = () => {
                                     <span>{text}<br></br>{record.customer_email}</span>
                                 }
                             />
-                            <Column title="Staff Name"
-                                dataIndex="staff_first_name"
-                                render={(staff_first_name, record) =>
-                                    <span>{
-                                        record.staff_last_name ?
-                                            record.staff_last_name + ", " + staff_first_name :
-                                            staff_first_name
-                                    }</span>
-                                }
-                            />
                             <Column title="Order ID" dataIndex="id"/>
-                            <Column title="Start Date" dataIndex="start_date"/>
-                            <Column title="End Date" dataIndex="end_date"/>
+                            <Column title="Start Date" dataIndex="start_date" render={(text) => moment(text).format("YYYY MMM DD")}/>
+                            <Column title="End Date" dataIndex="end_date" render={(text) => moment(text).format("YYYY MMM DD")}/>
                             <Column title="Description" dataIndex="description"/>
                             <Column title="Action" key="action" render={(text, record) =>
                                 <a onClick={() => handlePrintContract(record.id)}>Print</a>

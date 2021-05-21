@@ -51,26 +51,19 @@ class OrderDetail(Base):
     __tablename__ = 'order_details'
 
     id = Column(Integer, primary_key=True)
-    order_id = Column(Integer, nullable=False, index=True)
-    recipient_id = Column(Integer, nullable=False, index=True)
+    order_id = Column(ForeignKey('orders.id'), nullable=False, index=True)
+    recipient_id = Column(ForeignKey('recipients.id'), nullable=False, index=True)
+    package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
+    trail_id = Column(ForeignKey('trail_types.id'), nullable=False, index=True)
+    package_cost = Column(DECIMAL(6, 2))
 
 
 class OrderExtra(Base):
     __tablename__ = 'order_extras'
 
     id = Column(Integer, primary_key=True)
-    order_packages_id = Column(Integer, nullable=False, index=True)
-    extra_id = Column(Integer, nullable=False, index=True)
-    cost = Column(DECIMAL(6, 2))
-
-
-class OrderPackage(Base):
-    __tablename__ = 'order_packages'
-
-    id = Column(Integer, primary_key=True)
-    order_details_id = Column(Integer, nullable=False, index=True)
-    package_id = Column(Integer, nullable=False, index=True)
-    trail_id = Column(Integer, nullable=False, index=True)
+    order_details_id = Column(ForeignKey('order_details.id'), nullable=False, index=True)
+    extra_id = Column(ForeignKey('extra.id'), nullable=False, index=True)
     cost = Column(DECIMAL(6, 2))
 
 
@@ -84,7 +77,6 @@ class Order(Base):
     description = Column(Text)
     status = Column(Enum('New', 'Handling', 'Done', 'Cancelled', 'Executing'), nullable=False,
                     server_default='New')
-    staff_id = Column(Integer)
 
 
 class Organization(Base):
