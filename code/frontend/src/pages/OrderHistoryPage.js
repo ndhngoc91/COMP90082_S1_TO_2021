@@ -24,7 +24,8 @@ const OrderHistoryPage = () => {
         if (orderWithDetails) {
             const recipientMap = {};
             orderWithDetails.details.forEach(detail => {
-                const recipientId = detail["recipient_id"]
+                const recipientId = detail["recipient_id"];
+                const recipient = detail["recipient"];
 
                 const productGroups = [];
                 detail["product_groups"].map(productGroup => {
@@ -36,7 +37,8 @@ const OrderHistoryPage = () => {
 
                 recipientMap[recipientId] = {
                     productGroups: productGroups,
-                    selectedProducts: []
+                    selectedProducts: [],
+                    recipient: recipient
                 }
             });
             pickupOrder(orderWithDetails, recipientMap);

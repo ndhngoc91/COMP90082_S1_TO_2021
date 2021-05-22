@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage";
-import BookingManagementPage from "./pages/BookingManagementPage";
 import PackageManagementPage from "./pages/PackageManagementPage";
 import UserAccountPage from "./pages/UserAccountPage";
 import LoginPage from "./pages/LoginPage";
@@ -70,25 +69,22 @@ createStore().then(store => {
                         <AuthRoute path="/user-management" exact Component={UserManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
-                        <AuthRoute path="/booking-management" exact Component={BookingManagementPage} requiredRoles={[
-                            USER_ROLE.STAFF
-                        ]}/>
                         <AuthRoute path="/calendar" exact Component={CalendarPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
-                            USER_ROLE.STAFF
-                        ]}/>
-                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
-                            USER_ROLE.STAFF
-                        ]}/>
-                        <AuthRoute path="/product-management" exact Component={ProductManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
                         <AuthRoute path="/order-history" exact Component={OrderHistoryPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.STAFF
                         ]}/>
+                        <AuthRoute path="/product-management" exact Component={ProductManagementPage} requiredRoles={[
+                            USER_ROLE.STAFF
+                        ]}/>
                         <AuthRoute path="/contract-management" exact Component={ContractManagementPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
+                            USER_ROLE.STAFF
+                        ]}/>
+                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>

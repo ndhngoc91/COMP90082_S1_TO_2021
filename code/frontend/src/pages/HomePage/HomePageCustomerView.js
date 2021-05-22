@@ -8,10 +8,10 @@ const {Title, Text} = Typography;
 
 const HomePageCustomerView = () => {
     return <>
-        <Row style={{background: "#fff"}}>
+        <Row>
             <Image src={rockyValleyBanner} width={"100%"} preview={false}/>
         </Row>
-        <div style={{textAlign: "center", marginTop: "0vh", backgroundColor: "white", padding: "2em 0"}}>
+        <div style={{textAlign: "center", marginTop: "0vh", padding: "2em 0"}}>
             <Image src={rockyValleyLogo} preview={false} width={"700px"}/>
             <Row justify="center">
                 <Col span={16}>
@@ -35,26 +35,13 @@ const HomePageCustomerView = () => {
                 </Col>
                 <Col span={8}>
                     <Title level={4}>
-                        <UserSwitchOutlined/> Customer Level Pricing
+                        <UserSwitchOutlined/> Easy Ordering
                     </Title>
                     <Text type="secondary">
-                        View personalized customer-level pricing based on the selected customer
+                        Easy Ordering
                     </Text>
                 </Col>
             </Row>
-            <div style={{marginTop: "10vh"}}>
-                <Button type="primary"
-                        size="large"
-                        icon={<ShopOutlined/>}>
-                    Order Online
-                </Button>
-                <Button type="secondary"
-                        size="large"
-                        icon={<HistoryOutlined/>}
-                        style={{marginLeft: "1vw"}}>
-                    Learn More
-                </Button>
-            </div>
         </div>
     </>;
 };

@@ -7,16 +7,19 @@ import {USER_ROLE} from "../../consts/UserRole";
 import {observer} from "mobx-react-lite";
 import HomePageStaffView from "./HomePageStaffView";
 import HomePageCustomerView from "./HomePageCustomerView";
+import {useHomePageStyles} from "./styles";
 
 const {Content} = Layout;
 
 const HomePage = observer(() => {
     const {authStore: {userRole}} = useStores();
 
+    const {contentCls} = useHomePageStyles();
+
     return (
         <Layout style={{minHeight: "100vh"}}>
             <NavigationBar defaultSelected="/"/>
-            <Content style={{background: "#fff"}}>
+            <Content className={contentCls}>
                 {userRole === USER_ROLE.STAFF ? <HomePageStaffView/> : <HomePageCustomerView/>}
             </Content>
             <PageFooter/>
