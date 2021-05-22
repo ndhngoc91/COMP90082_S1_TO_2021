@@ -47,26 +47,6 @@ class Extra(Base):
     sell_code = Column(VARCHAR(20), nullable=False)
 
 
-class OrderDetail(Base):
-    __tablename__ = 'order_details'
-
-    id = Column(Integer, primary_key=True)
-    order_id = Column(ForeignKey('orders.id'), nullable=False, index=True)
-    recipient_id = Column(ForeignKey('recipients.id'), nullable=False, index=True)
-    package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
-    trail_id = Column(ForeignKey('trail_types.id'), nullable=False, index=True)
-    package_cost = Column(DECIMAL(6, 2))
-
-
-class OrderExtra(Base):
-    __tablename__ = 'order_extras'
-
-    id = Column(Integer, primary_key=True)
-    order_details_id = Column(ForeignKey('order_details.id'), nullable=False, index=True)
-    extra_id = Column(ForeignKey('extra.id'), nullable=False, index=True)
-    cost = Column(DECIMAL(6, 2))
-
-
 class Order(Base):
     __tablename__ = 'orders'
 
@@ -152,21 +132,20 @@ class Package(Base):
     age_group = relationship('AgeGroup')
     category = relationship('Category')
     skill_level = relationship('SkillLevel')
-    product_groups = relationship('ProductGroup', secondary='package_product_group')
 
 
 class Product(Base):
     __tablename__ = 'products'
 
     id = Column(Integer, primary_key=True, unique=True)
-    key_product_id = Column(VARCHAR(45, 'utf8mb4_general_ci'))
+    key_product_id = Column(VARCHAR(45))
     product_code = Column(VARCHAR(20))
     key_taxcode_id = Column(VARCHAR(45))
     name = Column(VARCHAR(50))
     description = Column(Text)
-    key_sell_unit_id = Column(VARCHAR(45, 'utf8mb4_general_ci'))
+    key_sell_unit_id = Column(VARCHAR(45))
     is_price_tax_inclusive = Column(BOOLEAN)
-    is_kitted = Column(TINYINT(1))
+    is_kitted = Column(BOOLEAN)
     internal_id = Column(VARCHAR(45))
     product_group_id = Column(ForeignKey('product_groups.id'), index=True)
     status = Column(Enum('AVAILABLE', 'HIRED', 'RESERVED'), server_default='AVAILABLE')
@@ -233,11 +212,32 @@ class Address(Base):
     user = relationship('User')
 
 
-t_package_product_group = Table(
-    'package_product_group', metadata,
-    Column('package_id', ForeignKey('packages.id'), primary_key=True, nullable=False),
-    Column('product_group_id', ForeignKey('product_groups.id'), primary_key=True, nullable=False, index=True)
-)
+class OrderDetail(Base):
+    __tablename__ = 'order_details'
+
+    id = Column(Integer, primary_key=True)
+    order_id = Column(ForeignKey('orders.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+    recipient_id = Column(ForeignKey('recipients.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False,
+                          index=True)
+    package_id = Column(ForeignKey('packages.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    trail_id = Column(ForeignKey('trail_types.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    package_cost = Column(DECIMAL(6, 2))
+
+    order = relationship('Order')
+    package = relationship('Package')
+    recipient = relationship('Recipient')
+    trail = relationship('TrailType')
+
+
+class PackageProductGroup(Base):
+    __tablename__ = 'package_product_group'
+
+    id = Column(Integer, primary_key=True)
+    package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
+    product_group_id = Column(ForeignKey('product_groups.id'), nullable=False, index=True)
+
+    package = relationship('Package')
+    product_group = relationship('ProductGroup')
 
 
 class PackageTtypesPair(Base):
@@ -277,3 +277,15 @@ class Member(Base):
 
     skill_level = relationship('SkillLevel')
     user_group = relationship('UserGroup')
+
+
+class OrderExtra(Base):
+    __tablename__ = 'order_extras'
+
+    id = Column(Integer, primary_key=True)
+    order_details_id = Column(ForeignKey('order_details.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False,
+                              index=True)
+    extra_id = Column(ForeignKey('extra.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    cost = Column(DECIMAL(6, 2))
+
+    extra = relationship('Extra')

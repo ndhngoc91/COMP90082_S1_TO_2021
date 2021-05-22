@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
-import {Col, Layout, Row, Space, Table, Input} from "antd";
+import {Col, Layout, Row, Space, Table, Input, notification} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useHandleOrders} from "../hooks/OrderHooks";
+import {useHandleOrders, useHandleRetrieveOrderWithDetails} from "../hooks/OrderHooks";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 import {OrderStatus} from "../consts/OrderStatus";
@@ -17,6 +17,33 @@ const OrderHistoryPage = () => {
     useEffect(() => {
         handleFilterOrders();
     }, []);
+
+    const [handleRetrieveOrderWithDetails, {orderWithDetails}] = useHandleRetrieveOrderWithDetails();
+
+    useEffect(() => {
+        if (orderWithDetails) {
+            const recipientMap = {};
+            orderWithDetails.details.forEach(detail => {
+                const recipientId = detail["recipient_id"]
+
+                const productGroups = [];
+                detail["product_groups"].map(productGroup => {
+                    productGroups.push({
+                        id: productGroup["id"],
+                        name: productGroup["name"],
+                        selected: false
+                    });
+                });
+
+                recipientMap[recipientId] = {
+                    productGroups: productGroups,
+                    checked: false,
+                }
+            });
+            pickupOrder(orderWithDetails, recipientMap);
+            notification.info({message: `Selected ${orderWithDetails["order"]["id"]}`});
+        }
+    }, [orderWithDetails])
 
     return (
         <>
@@ -49,17 +76,16 @@ const OrderHistoryPage = () => {
                                     {order.status !== OrderStatus.CANCELLED ?
                                         <a onClick={() => handleCancelOrder(order.id)}>
                                             Cancel
-                                        </a> : '---'}
+                                        </a> : "---"}
                                 </Space>;
                             }}/>
                             {userRole === USER_ROLE.STAFF &&
                             <Column title="Pick up" key="action" render={(value, order) => {
-                                console.log(order);
                                 return <Space size="middle">
                                     {order.status === OrderStatus.NEW ?
-                                        <a onClick={() => pickupOrder(order)}>
+                                        <a onClick={() => handleRetrieveOrderWithDetails(order.id)}>
                                             Pick Up
-                                        </a> : '---'}
+                                        </a> : "---"}
                                 </Space>;
                             }}/>}
                         </Table>

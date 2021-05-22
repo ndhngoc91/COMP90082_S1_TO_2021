@@ -26,7 +26,7 @@ def filter_users(query: Optional[str] = "", db: Session = Depends(get_db)):
 
 @router.get("/{user_id}", response_model=schemas.UserWithAddresses)
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
-    return user_service.get_user_by_id(user_id=user_id, db=db).__dict__
+    return user_service.get_user_by_id(user_id=user_id, db=db)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)

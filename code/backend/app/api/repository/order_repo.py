@@ -6,6 +6,7 @@ from sqlalchemy.sql.elements import or_
 
 from starlette import status
 from app.api import models, schemas
+from app.api.repository import product_group_repo
 
 
 def get_all_orders(db: Session):
@@ -48,7 +49,7 @@ def cancel_order(order_id: int, db: Session):
     return filter_orders("", db)
 
 
-def get_order_details(order_id: int, db: Session):
+def get_order_with_details(order_id: int, db: Session):
     order = db.query(
         models.Order.id,
         models.Order.start_date,
@@ -71,38 +72,14 @@ def get_order_details(order_id: int, db: Session):
             detail=f"order with id {order_id} not found"
         )
 
-    packages = db.query(
-        models.Order.id,
-        models.OrderDetail.id.label("order_detail_id"),
-        models.OrderDetail.package_cost,
-        models.Package,
-        models.TrailType,
-        models.Extra,
-        models.OrderExtra.cost.label("extra_cost"),
-        models.Recipient.id.label("recipient_id"),
-        models.Recipient.first_name.label("recipient_first_name"),
-        models.Recipient.last_name.label("recipient_last_name"),
-    ).filter(
-        models.Order.id == order_id
-    ).order_by(
-        models.Package.id
-    ).outerjoin(
-        models.OrderDetail, models.OrderDetail.order_id == models.Order.id
-    ).outerjoin(
-        models.Package, models.Package.id == models.OrderDetail.package_id
-    ).outerjoin(
-        models.TrailType, models.TrailType.id == models.OrderDetail.trail_id
-    ).outerjoin(
-        models.Recipient, models.Recipient.id == models.OrderDetail.recipient_id
-    ).outerjoin(
-        models.OrderExtra, models.OrderExtra.order_details_id == models.OrderDetail.id
-    ).outerjoin(
-        models.Extra, models.Extra.id == models.OrderExtra.extra_id
-    ).all()
+    details = db.query(models.OrderDetail).join(models.Order).filter(models.Order.id == order_id).all()
+    for detail in details:
+        product_groups = product_group_repo.get_product_groups_of_package(package_id=detail.package_id, db=db)
+        detail.product_groups = product_groups
 
     return {
         "order": order,
-        "packages": packages
+        "details": details
     }
 
 

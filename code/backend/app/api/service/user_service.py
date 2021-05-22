@@ -14,7 +14,11 @@ def get_all_users(db: Session):
 
 
 def get_user_by_id(user_id: int, db: Session):
-    return user_repo.get_user_by_id(user_id=user_id, db=db)
+    user = user_repo.get_user_by_id(user_id=user_id, db=db)
+    if user is None:
+        return None
+    else:
+        return user.__dict__
 
 
 def filter_users(query: Optional[str], db: Session):
