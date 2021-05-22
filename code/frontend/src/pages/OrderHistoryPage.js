@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Col, Layout, Row, Space, Table, Input} from "antd";
+import {Col, Layout, Row, Space, Table, Input, notification} from "antd";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 import {useHandleOrders, useHandleRetrieveOrderWithDetails} from "../hooks/OrderHooks";
 import {useStores} from "../stores";
@@ -22,7 +22,26 @@ const OrderHistoryPage = () => {
 
     useEffect(() => {
         if (orderWithDetails) {
-            pickupOrder(orderWithDetails);
+            const recipientMap = {};
+            orderWithDetails.details.forEach(detail => {
+                const recipientId = detail["recipient_id"]
+
+                const productGroups = [];
+                detail["product_groups"].map(productGroup => {
+                    productGroups.push({
+                        id: productGroup["id"],
+                        name: productGroup["name"],
+                        selected: false
+                    });
+                });
+
+                recipientMap[recipientId] = {
+                    productGroups: productGroups,
+                    checked: false,
+                }
+            });
+            pickupOrder(orderWithDetails, recipientMap);
+            notification.info({message: `Selected ${orderWithDetails["order"]["id"]}`});
         }
     }, [orderWithDetails])
 
@@ -57,7 +76,7 @@ const OrderHistoryPage = () => {
                                     {order.status !== OrderStatus.CANCELLED ?
                                         <a onClick={() => handleCancelOrder(order.id)}>
                                             Cancel
-                                        </a> : '---'}
+                                        </a> : "---"}
                                 </Space>;
                             }}/>
                             {userRole === USER_ROLE.STAFF &&
@@ -66,7 +85,7 @@ const OrderHistoryPage = () => {
                                     {order.status === OrderStatus.NEW ?
                                         <a onClick={() => handleRetrieveOrderWithDetails(order.id)}>
                                             Pick Up
-                                        </a> : '---'}
+                                        </a> : "---"}
                                 </Space>;
                             }}/>}
                         </Table>
