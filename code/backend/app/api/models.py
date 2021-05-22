@@ -55,7 +55,8 @@ class Order(Base):
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     description = Column(Text)
-    status = Column(Enum('New', 'Handling', 'Done', 'Cancelled', 'Executing'), nullable=False, server_default='New')
+    status = Column(Enum('New', 'Handling', 'Done', 'Cancelled', 'Executing'), nullable=False,
+                    server_default='New')
 
 
 class Organization(Base):
@@ -131,7 +132,6 @@ class Package(Base):
     age_group = relationship('AgeGroup')
     category = relationship('Category')
     skill_level = relationship('SkillLevel')
-    product_groups = relationship('ProductGroup', secondary='package_product_group')
 
 
 class Product(Base):
@@ -229,11 +229,15 @@ class OrderDetail(Base):
     trail = relationship('TrailType')
 
 
-t_package_product_group = Table(
-    'package_product_group', metadata,
-    Column('package_id', ForeignKey('packages.id'), primary_key=True, nullable=False),
-    Column('product_group_id', ForeignKey('product_groups.id'), primary_key=True, nullable=False, index=True)
-)
+class PackageProductGroup(Base):
+    __tablename__ = 'package_product_group'
+
+    id = Column(Integer, primary_key=True)
+    package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
+    product_group_id = Column(ForeignKey('product_groups.id'), nullable=False, index=True)
+
+    package = relationship('Package')
+    product_group = relationship('ProductGroup')
 
 
 class PackageTtypesPair(Base):
@@ -285,4 +289,3 @@ class OrderExtra(Base):
     cost = Column(DECIMAL(6, 2))
 
     extra = relationship('Extra')
-    order_details = relationship('OrderDetail')
