@@ -21,9 +21,8 @@ const OrderHistoryPage = () => {
     const [handleRetrieveOrderWithDetails, {orderWithDetails}] = useHandleRetrieveOrderWithDetails();
 
     useEffect(() => {
-        console.log(orderWithDetails);
         if (orderWithDetails) {
-            alert("FDASFSDAFDSA");
+            pickupOrder(orderWithDetails);
         }
     }, [orderWithDetails])
 

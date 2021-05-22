@@ -11,10 +11,10 @@ export class HiringEquipmentRegister {
         makeObservable(this, {
             order: observable
         });
-        this.order = null;
+        this.order = {};
     }
 
-    pickupOrder(order) {
+    pickupOrder = (order) => {
         this.order = order;
     }
 }
