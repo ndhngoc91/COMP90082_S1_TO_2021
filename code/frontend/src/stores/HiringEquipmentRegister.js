@@ -7,6 +7,7 @@ import {UserType} from "../consts/UserType";
 export class HiringEquipmentRegister {
     @persist("object") order
     @persist("object") recipientMap;
+    @persist selectedRecipient;
 
     constructor() {
         makeObservable(this, {
@@ -16,6 +17,7 @@ export class HiringEquipmentRegister {
         });
         this.order = {};
         this.recipientMap = {};
+
     }
 
     get isPickingProducts() {
@@ -35,5 +37,6 @@ export class HiringEquipmentRegister {
     pickupOrder = (order, recipientMap) => {
         this.order = order;
         this.recipientMap = recipientMap;
+        this.selectedRecipient = Object.keys(this.recipientMap)[0];
     }
 }

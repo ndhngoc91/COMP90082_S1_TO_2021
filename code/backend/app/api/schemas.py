@@ -121,7 +121,7 @@ class User(UserWithoutPassword):
 
 
 class UserWithAddresses(User):
-    addresses: Optional[List[Address]]
+    address_list: Optional[List[Address]]
 
 
 class UserGroup(BaseModel):
