@@ -76,6 +76,7 @@ def get_order_with_details(order_id: int, db: Session):
     for detail in details:
         product_groups = product_group_repo.get_product_groups_of_package(package_id=detail.package_id, db=db)
         detail.product_groups = product_groups
+        detail.recipient = db.query(models.Recipient).filter(models.Recipient.id == detail.recipient_id).first()
 
     return {
         "order": order,

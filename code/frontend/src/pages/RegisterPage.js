@@ -201,7 +201,7 @@ const RegisterPage = () => {
                             <Row gutter={16}>
                                 <Col span={12}>
                                     <Form.Item name="state">
-                                        <Select value={selectedState} onChange={onStateChange}>
+                                        <Select value={selectedState} onChange={onStateChange} placeholder="State">
                                             {StateData.map(state => (
                                                 <Option key={state} value={state}>{state}</Option>
                                             ))}
@@ -210,7 +210,7 @@ const RegisterPage = () => {
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item name="city">
-                                        <Select value={selectedCity} onChange={onCityChange}>
+                                        <Select value={selectedCity} onChange={onCityChange} placeholder="City">
                                             {cities.map(city => (
                                                 <Option key={city} value={city}>{city}</Option>
                                             ))}

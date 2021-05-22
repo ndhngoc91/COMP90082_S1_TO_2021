@@ -6,16 +6,14 @@ import {ProductStatus} from "../../consts/ProductStatus";
 import {useStores} from "../../stores";
 import Avatar from "antd/es/avatar/avatar";
 import {useProductManagementPageStyle} from "./styles";
+import {observer} from "mobx-react-lite";
 
 const {Content} = Layout;
 const {Column} = Table;
 
-const ProductManagementPage = () => {
-    const {hiringEquipmentRegister: {isPickingProducts}} = useStores();
+const ProductManagementPage = observer(() => {
+    const {hiringEquipmentRegister: {selectedRecipientId, recipients, isPickingProducts}} = useStores();
     const products = useProducts();
-
-    const data = [1, 2];
-    console.log(isPickingProducts);
 
     const {mainContentCls, recipientListCls} = useProductManagementPageStyle();
 
@@ -29,21 +27,25 @@ const ProductManagementPage = () => {
                             <Col span={6}>
                                 <List className={recipientListCls}
                                       itemLayout="horizontal"
-                                      dataSource={data}
-                                      renderItem={item => (
-                                          <List.Item>
+                                      dataSource={recipients}
+                                      renderItem={recipient => {
+                                          return <List.Item>
                                               <List.Item.Meta
                                                   avatar={<Avatar
                                                       src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                                                  title={<a href="https://ant.design">ABC</a>}
-                                                  description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                                  title={<a href="https://ant.design">
+                                                      {recipient.first_name} {recipient.last_name}
+                                                  </a>}
+                                                  description={selectedRecipientId === recipient.id ?
+                                                      <Tag color="green">Handling</Tag> :
+                                                      <Tag color="red">---</Tag>}
                                               />
-                                          </List.Item>
-                                      )}
+                                          </List.Item>;
+                                      }}
                                 />
                             </Col>
                             <Col span={18}>
-                                <Table dataSource={products}>
+                                <Table dataSource={products} rowKey="id">
                                     <Column title="Name" dataIndex="name"/>
                                     <Column title="Description" dataIndex="description"/>
                                     <Column title="Product Code" dataIndex="product_code"/>
@@ -73,6 +75,6 @@ const ProductManagementPage = () => {
             </Layout>
         </>
     );
-};
+});
 
 export default ProductManagementPage;
