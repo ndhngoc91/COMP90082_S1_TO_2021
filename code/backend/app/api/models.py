@@ -217,7 +217,8 @@ class OrderDetail(Base):
 
     id = Column(Integer, primary_key=True)
     order_id = Column(ForeignKey('orders.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
-    recipient_id = Column(ForeignKey('recipients.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    recipient_id = Column(ForeignKey('recipients.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False,
+                          index=True)
     package_id = Column(ForeignKey('packages.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
     trail_id = Column(ForeignKey('trail_types.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
     package_cost = Column(DECIMAL(6, 2))
@@ -278,7 +279,8 @@ class OrderExtra(Base):
     __tablename__ = 'order_extras'
 
     id = Column(Integer, primary_key=True)
-    order_details_id = Column(ForeignKey('order_details.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    order_details_id = Column(ForeignKey('order_details.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False,
+                              index=True)
     extra_id = Column(ForeignKey('extra.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
     cost = Column(DECIMAL(6, 2))
 

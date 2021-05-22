@@ -48,7 +48,7 @@ def cancel_order(order_id: int, db: Session):
     return filter_orders("", db)
 
 
-def get_order_details(order_id: int, db: Session):
+def get_order_with_details(order_id: int, db: Session):
     order = db.query(
         models.Order.id,
         models.Order.start_date,

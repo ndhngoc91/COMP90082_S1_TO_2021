@@ -16,8 +16,8 @@ def cancel_order(order_id: int, db: Session):
     return order_repo.cancel_order(order_id=order_id, db=db)
 
 
-def get_order_details(order_id: int, db: Session):
-    return order_repo.get_order_details(order_id=order_id, db=db)
+def get_order_with_details(order_id: int, db: Session):
+    return order_repo.get_order_with_details(order_id=order_id, db=db)
 
 
 def create_new_order(order: schemas.Order, db: Session):
