@@ -30,14 +30,13 @@ const OrderHistoryPage = () => {
                 detail["product_groups"].map(productGroup => {
                     productGroups.push({
                         id: productGroup["id"],
-                        name: productGroup["name"],
-                        selected: false
+                        name: productGroup["name"]
                     });
                 });
 
                 recipientMap[recipientId] = {
                     productGroups: productGroups,
-                    checked: false,
+                    selectedProducts: []
                 }
             });
             pickupOrder(orderWithDetails, recipientMap);
