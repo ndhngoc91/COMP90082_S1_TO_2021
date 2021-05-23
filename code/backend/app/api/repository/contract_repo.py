@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from app.api import models, schemas
+from app.api.repository import product_repo
 
 
 def get_all_contracts(db: Session):
@@ -22,3 +23,4 @@ def create_new_contract(contract: schemas.Contract, db: Session):
         )
         db.add(new_contract_detail)
         db.commit()
+        product_repo.update_product_status_to_hired(product_id=contract_detail.product_id, db=db)

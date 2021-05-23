@@ -132,10 +132,12 @@ class UserGroup(BaseModel):
 
 class ContractDetail(BaseModel):
     product_id: int
+    recipient_id: int
 
 
 class Contract(BaseModel):
     name: str
+    order_id: int
     created_at: date
     created_by: str
     contract_details: List[ContractDetail]

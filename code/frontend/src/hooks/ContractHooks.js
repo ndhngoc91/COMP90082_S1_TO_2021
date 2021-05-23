@@ -25,7 +25,7 @@ export const useHandleFilterContracts = () => {
 
 export const useHandleAddContract = () => {
     const [handling, setHandling] = useState(false);
-    const {authStore: {firstName, lastName, userRole}} = useStores();
+    const {authStore: {firstName, lastName, userRole}, hiringEquipmentRegister: {order}} = useStores();
 
     const handleAddContract = useCallback(({
                                                name,
@@ -36,6 +36,7 @@ export const useHandleAddContract = () => {
             setHandling(true);
             axios.post(`${BACKEND_ENDPOINT}contracts`, {
                 name: name,
+                order_id: order.id,
                 created_at: moment().format("YYYY-MM-DD"),
                 created_by: `${lastName}, ${firstName}`,
                 contract_details: contract_details

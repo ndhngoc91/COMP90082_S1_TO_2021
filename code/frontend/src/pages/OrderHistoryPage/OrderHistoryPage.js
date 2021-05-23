@@ -30,7 +30,7 @@ const OrderHistoryPage = observer(() => {
     useEffect(() => {
         if (orderWithDetails) {
             const recipientMap = {};
-            orderWithDetails.details.forEach(detail => {
+            orderWithDetails["details"].forEach(detail => {
                 const recipientId = detail["recipient_id"];
                 const recipient = detail["recipient"];
 
@@ -48,7 +48,7 @@ const OrderHistoryPage = observer(() => {
                     recipient: recipient
                 }
             });
-            pickupOrder(orderWithDetails, recipientMap);
+            pickupOrder(orderWithDetails["order"], orderWithDetails["details"], recipientMap);
             Modal.info({
                 title: `Loaded order ${orderWithDetails["order"]["id"]}`,
                 okCancel: true,
@@ -82,7 +82,7 @@ const OrderHistoryPage = observer(() => {
                         <Link href="/product-management">
                             {order &&
                             <Button icon={<ContainerOutlined/>} type="link" size="large">
-                                Go Handling {order.order.id}
+                                Go Handling {order.id}
                             </Button>}
                         </Link>
                     </Row>

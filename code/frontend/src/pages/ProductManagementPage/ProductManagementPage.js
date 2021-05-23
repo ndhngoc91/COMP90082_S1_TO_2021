@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Checkbox, Col, Divider, Layout, List, notification, Row, Table, Tag, Typography} from "antd";
+import {Button, Checkbox, Col, Divider, Layout, List, notification, Row, Space, Table, Tag, Typography} from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {useProducts} from "../../hooks/ProductHooks";
 import {ProductStatus} from "../../consts/ProductStatus";
@@ -73,10 +73,15 @@ const ProductManagementPage = observer(() => {
                                 {isReadyToMakeContract &&
                                 <>
                                     <Divider/>
-                                    <Button className={fullWidthCls} type="primary" size="large" loading={handling}
-                                            onClick={onCheckoutButtonClick}>
-                                        Checkout
-                                    </Button>
+                                    <Space direction="vertical" className={fullWidthCls}>
+                                        <Button className={fullWidthCls} type="primary" size="large" loading={handling}
+                                                onClick={onCheckoutButtonClick}>
+                                            Checkout
+                                        </Button>
+                                        <Button className={fullWidthCls} size="large">
+                                            Cancel
+                                        </Button>
+                                    </Space>
                                 </>}
                             </Col>
                             <Col span={18}>

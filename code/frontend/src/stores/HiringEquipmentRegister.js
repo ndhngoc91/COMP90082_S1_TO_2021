@@ -3,12 +3,14 @@ import {persist} from "mobx-persist";
 
 export class HiringEquipmentRegister {
     @persist("object") order
+    @persist("list") orderDetails;
     @persist("object") recipientMap;
     @persist selectedRecipientIndex;
 
     constructor() {
         makeObservable(this, {
             order: observable,
+            orderDetails: observable,
             recipientMap: observable,
             selectedRecipientIndex: observable,
             recipients: computed,
@@ -19,6 +21,7 @@ export class HiringEquipmentRegister {
             selectProduct: action
         });
         this.order = null;
+        this.orderDetails = [];
         this.recipientMap = {};
         this.selectedRecipientIndex = 0;
     }
@@ -54,16 +57,18 @@ export class HiringEquipmentRegister {
         Object.values(this.recipientMap).forEach(recipient => {
             recipient.selectedProducts.forEach(product => {
                 contractDetails.push({
+                    recipient_id: recipient.recipient.id,
                     product_id: product.id
-                })
+                });
             });
         });
 
         return contractDetails;
     }
 
-    pickupOrder = (order, recipientMap) => {
+    pickupOrder = (order, orderDetails, recipientMap) => {
         this.order = order;
+        this.orderDetails = orderDetails;
         this.recipientMap = recipientMap;
         this.selectedRecipientIndex = 0;
     }
@@ -80,6 +85,7 @@ export class HiringEquipmentRegister {
 
     clearEquipmentRegisterProcess = () => {
         this.order = null;
+        this.orderDetails = [];
         this.recipientMap = {};
         this.selectedRecipientIndex = 0;
     }
