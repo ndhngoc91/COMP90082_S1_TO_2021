@@ -1,34 +1,32 @@
 import {action, computed, makeObservable, observable} from "mobx";
 import {persist} from "mobx-persist";
-import {USER_ROLE} from "../consts/UserRole";
-import moment from "moment";
-import {UserType} from "../consts/UserType";
 
 export class HiringEquipmentRegister {
     @persist("object") order
     @persist("object") recipientMap;
-    @persist selectedRecipientId;
     @persist selectedRecipientIndex;
 
     constructor() {
         makeObservable(this, {
             order: observable,
             recipientMap: observable,
+            selectedRecipientIndex: observable,
             recipients: computed,
-            isPickingProducts: computed,
-            pickupOrder: action
+            isReadyToMakeContract: computed,
+            selectedRecipientId: computed,
+            pickupOrder: action,
+            selectProduct: action
         });
         this.order = {};
         this.recipientMap = {};
         this.selectedRecipientIndex = 0;
-        this.selectedRecipientId = -1;
     }
 
     get recipients() {
         return Object.values(this.recipientMap).map(recipient => recipient.recipient)
     }
 
-    get isPickingProducts() {
+    get isReadyToMakeContract() {
         let isPickingProducts = false;
         const recipients = Object.values(this.recipientMap);
         recipients.forEach(recipient => {
@@ -39,16 +37,26 @@ export class HiringEquipmentRegister {
             }
         });
 
-        return isPickingProducts;
+        return !isPickingProducts;
+    }
+
+    get selectedRecipientId() {
+        return parseInt(Object.keys(this.recipientMap)[this.selectedRecipientIndex]);
     }
 
     pickupOrder = (order, recipientMap) => {
         this.order = order;
         this.recipientMap = recipientMap;
         this.selectedRecipientIndex = 0;
-        this.selectedRecipientId = parseInt(Object.keys(this.recipientMap)[this.selectedRecipientIndex]);
     }
 
     selectProduct = (product) => {
+        const recipient = this.recipientMap[this.selectedRecipientId];
+        if (recipient.selectedProducts.length < recipient.productGroups.length) {
+            recipient.selectedProducts = [...recipient.selectedProducts, product];
+        }
+        if (recipient.selectedProducts.length === recipient.productGroups.length) {
+            this.selectedRecipientIndex = this.selectedRecipientIndex + 1;
+        }
     }
 }

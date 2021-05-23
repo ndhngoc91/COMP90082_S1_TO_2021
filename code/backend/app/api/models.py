@@ -289,3 +289,23 @@ class OrderExtra(Base):
     cost = Column(DECIMAL(6, 2))
 
     extra = relationship('Extra')
+
+
+class Contract(Base):
+    __tablename__ = 'contracts'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(VARCHAR(45))
+    created_at = Column(DateTime)
+    created_by = Column(VARCHAR(45))
+
+
+class ContractDetail(Base):
+    __tablename__ = 'contract_details'
+
+    id = Column(Integer, primary_key=True)
+    contract_id = Column(ForeignKey('contracts.id'), index=True)
+    product_id = Column(ForeignKey('products.id'), index=True)
+
+    contract = relationship('Contract')
+    product = relationship('Product')

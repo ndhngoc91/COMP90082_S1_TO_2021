@@ -14,7 +14,7 @@ import PackageDetailsPage from "./pages/PackageDetailsPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import FinishPage from "./pages/FinishPage/FinishPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
-import OrderHistoryPage from "./pages/OrderHistoryPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage/OrderHistoryPage";
 import ContractManagementPage from "./pages/ContractManagementPage";
 import ProductManagementPage from "./pages/ProductManagementPage/ProductManagementPage";
 

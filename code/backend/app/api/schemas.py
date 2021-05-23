@@ -128,3 +128,14 @@ class UserGroup(BaseModel):
     name: str
     contacts: str
     user_id: int
+
+
+class ContractDetail(BaseModel):
+    product_id: int
+
+
+class Contract(BaseModel):
+    name: str
+    created_at: date
+    created_by: str
+    contract_details: List[ContractDetail]
