@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Col, Layout, Row, Space, Table, Input, notification, Typography, Button, Tag} from "antd";
+import {Col, Layout, Row, Space, Table, Input, Typography, Button, Tag, Modal} from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {useHandleOrders, useHandleRetrieveOrderWithDetails} from "../../hooks/OrderHooks";
 import {useStores} from "../../stores";
@@ -8,6 +8,7 @@ import {OrderStatus} from "../../consts/OrderStatus";
 import {useOrderHistoryPageStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import {ContainerOutlined} from "@ant-design/icons";
+import {useHistory} from "react-router-dom";
 
 const {Content} = Layout;
 const {Column} = Table;
@@ -15,6 +16,8 @@ const {Search} = Input;
 const {Link, Text} = Typography;
 
 const OrderHistoryPage = observer(() => {
+    const history = useHistory();
+
     const {authStore: {userRole}, hiringEquipmentRegister: {order, pickupOrder}} = useStores();
     const [handleFilterOrders, handleCancelOrder, {orders, filtering}] = useHandleOrders();
 
@@ -46,7 +49,18 @@ const OrderHistoryPage = observer(() => {
                 }
             });
             pickupOrder(orderWithDetails, recipientMap);
-            notification.info({message: `Selected ${orderWithDetails["order"]["id"]}`, placement: "bottomRight"});
+            Modal.info({
+                title: `Loaded order ${orderWithDetails["order"]["id"]}`,
+                okCancel: true,
+                okText: "Go to Product Management page",
+                cancelText: "Cancel",
+                content: (
+                    <Text>Loaded order {orderWithDetails["order"]["id"]}</Text>
+                ),
+                onOk() {
+                    history.push("/product-management")
+                }
+            });
         }
     }, [orderWithDetails])
 
@@ -66,9 +80,10 @@ const OrderHistoryPage = observer(() => {
                                     size="large" onSearch={value => handleFilterOrders(value)}/>
                         </Col>
                         <Link href="/product-management">
+                            {order &&
                             <Button icon={<ContainerOutlined/>} type="link" size="large">
                                 Go Handling {order.order.id}
-                            </Button>
+                            </Button>}
                         </Link>
                     </Row>
                     <Content>
