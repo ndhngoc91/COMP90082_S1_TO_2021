@@ -7,6 +7,7 @@ from app.api.routers import user_groups
 from app.api.routers import users
 from app.api.routers import age_groups
 from app.api.routers import categories
+from app.api.routers import contracts
 from app.api.routers import customers
 from app.api.routers import orders
 from app.api.routers import packages
@@ -48,6 +49,7 @@ app.include_router(addresses.router)
 app.include_router(auth.router)
 app.include_router(age_groups.router)
 app.include_router(categories.router)
+app.include_router(contracts.router)
 app.include_router(customers.router)
 app.include_router(orders.router)
 app.include_router(packages.router)
