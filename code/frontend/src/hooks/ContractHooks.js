@@ -1,62 +1,55 @@
-import { useCallback, useState } from "react";
+import {useCallback, useState} from "react";
 import axios from "axios";
-import { BACKEND_ENDPOINT } from "../../appSettings";
-import { useStores } from "../stores";
-import { USER_ROLE } from "../consts/UserRole";
-import { exportContract } from "../utils/ContractExporter";
+import {BACKEND_ENDPOINT} from "../../appSettings";
 
-
-export const useHandleContracts = () => {
+export const useHandleFilterContracts = () => {
     const [contracts, setContracts] = useState([]);
     const [filtering, setFiltering] = useState(false);
-    const { authStore: { id: user_id, userRole } } = useStores();
 
-    const handleFilterContracts = useCallback((query = "") => {
+    const handleFilterPackages = useCallback(() => {
         setFiltering(true);
-        if (userRole == USER_ROLE.STAFF) {
-            axios.get(`${BACKEND_ENDPOINT}orders/filter`, {
-                headers: { "Content-Type": "application/JSON; charset=UTF-8" },
-                params: { query: query }
-            }).then((response) => {
-                if (response.status === 200) {
-                    response.data.forEach((dataItem, index) => {
-                        dataItem.key = index
-                    });
-                    setContracts(response.data);
-                }
-            }).finally(() => {
-                setFiltering(false);
-            });
-        } else if (userRole == USER_ROLE.CUSTOMER) {
-            axios.get(`${BACKEND_ENDPOINT}orders/filter?userId=${user_id}`, {
-                headers: { "Content-Type": "application/JSON; charset=UTF-8" },
-                params: { query: query }
-            }).then((response) => {
-                if (response.status === 200) {
-                    response.data.forEach((dataItem, index) => {
-                        dataItem.key = index
-                    });
-                    // setContracts(response.data.filter((dataItem) => dataItem.status == "Executing"));
-                    setContracts(response.data);
-                }
-            }).finally(() => {
-                setFiltering(false);
-            });
-        };
-    }, []);
-
-    const handlePrintContract = useCallback((order_id) => {
-        setFiltering(true);
-        axios.get(`${BACKEND_ENDPOINT}orders/order-details/${order_id}`, {
-            headers: { "Content-Type": "application/JSON; charset=UTF-8" }
+        axios.get(`${BACKEND_ENDPOINT}contracts`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then((response) => {
-            if (response.status === 200) {
-                exportContract(response.data);
-            }
+            setContracts(response.data);
         }).finally(() => {
             setFiltering(false);
         });
-    })
+    }, [])
 
-    return [handleFilterContracts, handlePrintContract, { contracts, filtering }];
+    return [handleFilterPackages, {contracts, filtering}];
+};
+
+export const useHandleAddContract = () => {
+    const [handling, setHandling] = useState(false);
+
+    const handleAddContract = useCallback(({
+                                              name,
+                                              created_at,
+                                              created_by,
+                                              contract_details
+                                          }, success, failure = () => {
+    }) => {
+        setHandling(true);
+        axios.post(`${BACKEND_ENDPOINT}contracts`, {
+            name: name,
+            created_at: created_at,
+            created_by: created_by,
+            contract_details: contract_details
+        }, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then(response => {
+            if (response.status === 201) {
+                success();
+            } else {
+                failure();
+            }
+        }).catch(() => {
+            failure();
+        }).finally(() => {
+            setHandling(false);
+        });
+    }, []);
+
+    return [handleAddContract, {handling}];
 };

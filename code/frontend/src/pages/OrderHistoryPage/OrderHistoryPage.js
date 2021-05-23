@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Col, Layout, Row, Space, Table, Input, notification, Typography, Button} from "antd";
+import {Col, Layout, Row, Space, Table, Input, notification, Typography, Button, Tag} from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {useHandleOrders, useHandleRetrieveOrderWithDetails} from "../../hooks/OrderHooks";
 import {useStores} from "../../stores";
@@ -12,7 +12,7 @@ import {ContainerOutlined} from "@ant-design/icons";
 const {Content} = Layout;
 const {Column} = Table;
 const {Search} = Input;
-const {Link} = Typography;
+const {Link, Text} = Typography;
 
 const OrderHistoryPage = observer(() => {
     const {authStore: {userRole}, hiringEquipmentRegister: {order, pickupOrder}} = useStores();
@@ -66,7 +66,9 @@ const OrderHistoryPage = observer(() => {
                                     size="large" onSearch={value => handleFilterOrders(value)}/>
                         </Col>
                         <Link href="/product-management">
-                            <Button icon={<ContainerOutlined/>} type="link">Go Handling {order.order.id}</Button>
+                            <Button icon={<ContainerOutlined/>} type="link" size="large">
+                                Go Handling {order.order.id}
+                            </Button>
                         </Link>
                     </Row>
                     <Content>
@@ -75,27 +77,30 @@ const OrderHistoryPage = observer(() => {
                             <Column title="Customer Name"
                                     dataIndex="customer_first_name"
                                     render={(text, record) =>
-                                        <span>{record.customer_last_name}, {text}</span>
+                                        <Text strong>{record.customer_last_name}, {text}</Text>
                                     }/>
                             <Column title="Start Date" dataIndex="start_date"/>
                             <Column title="End Date" dataIndex="end_date"/>
                             <Column title="Description" dataIndex="description"/>
-                            <Column title="Status" dataIndex="status"/>
+                            <Column title="Status" dataIndex="status"
+                                    render={value => <Tag color={value === "New" || value === "Done" ? "green" : "red"}
+                                                          style={{fontSize: "1em"}}>{value}</Tag>}/>
                             <Column title="Cancel" key="action" render={(value, order) => {
                                 return <Space size="middle">
                                     {order.status !== OrderStatus.CANCELLED ?
-                                        <a onClick={() => handleCancelOrder(order.id)}>
+                                        <Button onClick={() => handleCancelOrder(order.id)} size="large">
                                             Cancel
-                                        </a> : "---"}
+                                        </Button> : "---"}
                                 </Space>;
                             }}/>
                             {userRole === USER_ROLE.STAFF &&
                             <Column title="Handle" key="action" render={(value, order) => {
                                 return <Space size="middle">
                                     {order.status === OrderStatus.NEW ?
-                                        <a onClick={() => handleRetrieveOrderWithDetails(order.id)}>
+                                        <Button type="primary" onClick={() => handleRetrieveOrderWithDetails(order.id)}
+                                                size="large">
                                             Handle
-                                        </a> : "---"}
+                                        </Button> : "---"}
                                 </Space>;
                             }}/>}
                         </Table>

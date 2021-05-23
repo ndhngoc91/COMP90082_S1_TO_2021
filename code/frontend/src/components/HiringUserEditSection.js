@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Row, Col, Form, Input, Button, Divider } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import React, {useState} from "react";
+import {Row, Col, Form, Input, Button, Divider} from "antd";
+import {PlusOutlined} from "@ant-design/icons";
 import Searchbar from "./Searchbar";
 import EquipmentTable from "./EquipmentTable";
-import { uniqueId } from "lodash";
+import {uniqueId} from "lodash";
 
-const gutterInfo = { xs: 8, sm: 16, md: 24, lg: 32 };
+const gutterInfo = {xs: 8, sm: 16, md: 24, lg: 32};
 
 const keyFormatter = key => {
     const regex = /[A-Z]/g;
@@ -28,7 +28,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="title"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={6}>
@@ -38,7 +38,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="firstName"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={6}>
@@ -48,7 +48,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="lastName"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={6}>
@@ -58,7 +58,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="dateOfBirth"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={6}>
@@ -68,7 +68,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="phoneNumber"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={6}>
@@ -78,7 +78,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="email"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={6}>
@@ -88,7 +88,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="height"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={6}>
@@ -98,7 +98,7 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                         name="weight"
                         id={uniqueId()}
                         style={{frontSize: "16px"}}>
-                        <Input />
+                        <Input/>
                     </Form.Item>
                 </Col>
                 <Col key="equipment-button" className="gutter-row" span={6} offset={18}>
@@ -113,9 +113,9 @@ const HiringUserEditSection = ({userData, userIndex}) => {
                     </Button>
                 </Col>
             </Row>
-            <EquipmentTable />
+            <EquipmentTable/>
         </div>
-        
+
     )
 };
 

@@ -3,19 +3,19 @@ import ReactDOM from "react-dom";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage";
-import PackageManagementPage from "./pages/PackageManagementPage";
-import UserAccountPage from "./pages/UserAccountPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import AdminRegisterPage from "./pages/AdminRegisterPage";
-import UserManagementPage from "./pages/UserManagementPage";
+import PackageManagementPage from "./pages/PackageManagementPage/PackageManagementPage";
+import UserAccountPage from "./pages/UserAccountPage/UserAccountPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import AdminRegisterPage from "./pages/RegisterPage/AdminRegisterPage";
+import UserManagementPage from "./pages/UserManagementPage/UserManagementPage";
 import PackagePage from "./pages/PackagePage/PackagePage";
-import PackageDetailsPage from "./pages/PackageDetailsPage";
+import PackageDetailsPage from "./pages/PackageDetailsPage/PackageDetailsPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import FinishPage from "./pages/FinishPage/FinishPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage/OrderHistoryPage";
-import ContractManagementPage from "./pages/ContractManagementPage";
+import ContractManagementPage from "./pages/ContractManagementPage/ContractManagementPage";
 import ProductManagementPage from "./pages/ProductManagementPage/ProductManagementPage";
 
 // CSS

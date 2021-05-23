@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Modal, Form, Select, Input, InputNumber } from "antd";
-import { uniqueId } from 'lodash'
+import React from "react";
+import {Modal, Form, Select, Input} from "antd";
+import {uniqueId} from "lodash"
 
-const { Option } = Select;
+const {Option} = Select;
 
 const rules = [{
     required: true
@@ -10,25 +10,19 @@ const rules = [{
 
 const AddCustomerModal = props => {
     const [form] = Form.useForm();
-    const [visible] = useState(props.visible)
-
-    /*useResetFormOnCloseModal({
-        form,
-        visible
-    })*/
 
     return (
         <Modal visible={props.visible}
-            onOk={props.handleOk}
-            onCancel={props.handleCancel}>
+               onOk={props.handleOk}
+               onCancel={props.handleCancel}>
             <Form
-                form={form} 
+                form={form}
                 name="createAccompanyCustomerForm">
                 <Form.Item
-                label="Title"
-                name="title"
-                id={uniqueId()}
-                rules={rules}
+                    label="Title"
+                    name="title"
+                    id={uniqueId()}
+                    rules={rules}
                 >
                     <Select
                         placeholder="Your title"
@@ -45,7 +39,7 @@ const AddCustomerModal = props => {
                     id={uniqueId()}
                     rules={rules}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Last Name"
@@ -53,7 +47,7 @@ const AddCustomerModal = props => {
                     id={uniqueId()}
                     rules={rules}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Date of Birth"
@@ -61,7 +55,7 @@ const AddCustomerModal = props => {
                     id={uniqueId()}
                     rules={rules}
                 >
-                    <Input placeholder="mm/dd/yyyy" />
+                    <Input placeholder="mm/dd/yyyy"/>
                 </Form.Item>
                 <Form.Item
                     label="Phone Number"
@@ -77,7 +71,7 @@ const AddCustomerModal = props => {
                     id={uniqueId()}
                     rules={rules}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Height(cm)"
@@ -85,7 +79,7 @@ const AddCustomerModal = props => {
                     id={uniqueId()}
                     rules={rules}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Weight(kg)"
@@ -93,7 +87,7 @@ const AddCustomerModal = props => {
                     id={uniqueId()}
                     rules={rules}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
             </Form>
         </Modal>

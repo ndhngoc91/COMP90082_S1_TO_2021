@@ -8,9 +8,9 @@ import {
     MailOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {CityData, StateData} from "../consts/StateData";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
-import {useHandleRegisterCustomer} from "../hooks/UserHooks";
+import {CityData, StateData} from "../../consts/StateData";
+import rockyValleyLogo from "../../assets/rocky_valley.svg";
+import {useHandleRegisterCustomer} from "../../hooks/UserHooks";
 import {useForm} from "antd/es/form/Form";
 import {useHistory} from "react-router-dom";
 

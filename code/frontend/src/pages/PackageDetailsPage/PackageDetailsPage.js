@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import NavigatorBar from "../components/NavigationBar/NavigationBar";
+import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {BrowserRouter, useHistory, useParams} from "react-router-dom";
 import {
     Button,
@@ -15,9 +15,9 @@ import {
     Typography,
     Checkbox
 } from "antd";
-import {usePackage} from "../hooks/PackageHooks";
-import {useStores} from "../stores";
-import imageComing from "../assets/imageComing.png";
+import {usePackage} from "../../hooks/PackageHooks";
+import {useStores} from "../../stores";
+import imageComing from "../../assets/imageComing.png";
 
 const {Content} = Layout;
 const {Title, Paragraph, Text} = Typography;
