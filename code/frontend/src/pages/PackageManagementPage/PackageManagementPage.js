@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {Layout, Table, Space, Input, Select, Row, Col, Button, Modal, Tag} from "antd";
-import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useHandleFilterPackages} from "../hooks/PackageHooks";
-import AddPackageForm from "../components/PackageForms/AddPackageForm";
-import EditPackageForm from "../components/PackageForms/EditPackageForm";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import {useHandleFilterPackages} from "../../hooks/PackageHooks";
+import AddPackageForm from "../../components/PackageForms/AddPackageForm";
+import EditPackageForm from "../../components/PackageForms/EditPackageForm";
 import {EditOutlined} from "@ant-design/icons";
-import {useAgeGroups} from "../hooks/AgeGroupHooks";
-import {useCategories} from "../hooks/CategoryHooks";
-import {useSkillLevels} from "../hooks/SkillLevelHooks";
+import {useAgeGroups} from "../../hooks/AgeGroupHooks";
+import {useCategories} from "../../hooks/CategoryHooks";
+import {useSkillLevels} from "../../hooks/SkillLevelHooks";
 
 const {Content} = Layout;
 const {Search} = Input;
@@ -150,7 +150,7 @@ const PackageManagementPage = () => {
                             <Column title="Edit" key="action" width="5%"
                                     render={values => {
                                         return <Space size="middle">
-                                            <Button icon={<EditOutlined/>} type="default"
+                                            <Button icon={<EditOutlined/>} type="default" size="large"
                                                     onClick={() => {
                                                         console.log(values);
                                                         setEditFormFieldValues(values);

@@ -2,9 +2,9 @@ import React from 'react';
 import {Button, Form, Input, Row, Col, Image, Typography, message} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {useHandleLogin} from "../hooks/AuthHooks";
+import {useHandleLogin} from "../../hooks/AuthHooks";
 import {useHistory} from "react-router-dom";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
+import rockyValleyLogo from "../../assets/rocky_valley.svg";
 
 const {Title, Text, Link} = Typography;
 

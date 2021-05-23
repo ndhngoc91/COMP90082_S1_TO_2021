@@ -8,8 +8,8 @@ import {
     MailOutlined
 } from "@ant-design/icons";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import rockyValleyLogo from "../assets/rocky_valley.svg";
-import {useHandleRegisterAdmin} from "../hooks/UserHooks";
+import rockyValleyLogo from "../../assets/rocky_valley.svg";
+import {useHandleRegisterAdmin} from "../../hooks/UserHooks";
 import {useForm} from "antd/es/form/Form";
 import {useHistory} from "react-router-dom";
 
