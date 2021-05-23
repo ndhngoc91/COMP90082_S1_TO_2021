@@ -1,5 +1,5 @@
 import React from "react";
-import {Checkbox, Col, Layout, List, Row, Table, Tag} from "antd";
+import {Button, Checkbox, Col, Divider, Layout, List, Row, Space, Table, Tag} from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {useProducts} from "../../hooks/ProductHooks";
 import {ProductStatus} from "../../consts/ProductStatus";
@@ -11,11 +11,20 @@ import {observer} from "mobx-react-lite";
 const {Content} = Layout;
 const {Column} = Table;
 
+const avatarUrl = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
+
 const ProductManagementPage = observer(() => {
-    const {hiringEquipmentRegister: {selectedRecipientId, recipients, isPickingProducts}} = useStores();
+    const {
+        hiringEquipmentRegister: {
+            selectedRecipientId,
+            recipients,
+            isReadyToMakeContract,
+            selectProduct
+        }
+    } = useStores();
     const products = useProducts();
 
-    const {mainContentCls, recipientListCls} = useProductManagementPageStyle();
+    const {mainContentCls, fullWidthCls, recipientListCls} = useProductManagementPageStyle();
 
     return (
         <>
@@ -31,8 +40,7 @@ const ProductManagementPage = observer(() => {
                                       renderItem={recipient => {
                                           return <List.Item>
                                               <List.Item.Meta
-                                                  avatar={<Avatar
-                                                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
+                                                  avatar={<Avatar src={avatarUrl}/>}
                                                   title={<a href="https://ant.design">
                                                       {recipient.first_name} {recipient.last_name}
                                                   </a>}
@@ -41,8 +49,14 @@ const ProductManagementPage = observer(() => {
                                                       <Tag color="red">---</Tag>}
                                               />
                                           </List.Item>;
-                                      }}
-                                />
+                                      }}/>
+                                {isReadyToMakeContract &&
+                                <>
+                                    <Divider/>
+                                    <Button className={fullWidthCls} type="primary" size="large">
+                                        Checkout
+                                    </Button>
+                                </>}
                             </Col>
                             <Col span={18}>
                                 <Table dataSource={products} rowKey="id">
@@ -62,10 +76,12 @@ const ProductManagementPage = observer(() => {
                                                         return <Tag color="green">Available</Tag>;
                                                 }
                                             }}/>
-                                    {isPickingProducts &&
+                                    {!isReadyToMakeContract &&
                                     <Column title="Select"
-                                            render={() => {
-                                                return <Checkbox/>
+                                            render={record => {
+                                                return <Checkbox onClick={() => {
+                                                    selectProduct(record);
+                                                }}/>
                                             }}/>}
                                 </Table>
                             </Col>

@@ -1,17 +1,21 @@
 import React, {useEffect} from "react";
-import {Col, Layout, Row, Space, Table, Input, notification} from "antd";
-import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {useHandleOrders, useHandleRetrieveOrderWithDetails} from "../hooks/OrderHooks";
-import {useStores} from "../stores";
-import {USER_ROLE} from "../consts/UserRole";
-import {OrderStatus} from "../consts/OrderStatus";
+import {Col, Layout, Row, Space, Table, Input, notification, Typography, Button} from "antd";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import {useHandleOrders, useHandleRetrieveOrderWithDetails} from "../../hooks/OrderHooks";
+import {useStores} from "../../stores";
+import {USER_ROLE} from "../../consts/UserRole";
+import {OrderStatus} from "../../consts/OrderStatus";
+import {useOrderHistoryPageStyles} from "./styles";
+import {observer} from "mobx-react-lite";
+import {ContainerOutlined} from "@ant-design/icons";
 
 const {Content} = Layout;
 const {Column} = Table;
 const {Search} = Input;
+const {Link} = Typography;
 
-const OrderHistoryPage = () => {
-    const {authStore: {userRole}, hiringEquipmentRegister: {pickupOrder}} = useStores();
+const OrderHistoryPage = observer(() => {
+    const {authStore: {userRole}, hiringEquipmentRegister: {order, pickupOrder}} = useStores();
     const [handleFilterOrders, handleCancelOrder, {orders, filtering}] = useHandleOrders();
 
     useEffect(() => {
@@ -42,23 +46,28 @@ const OrderHistoryPage = () => {
                 }
             });
             pickupOrder(orderWithDetails, recipientMap);
-            notification.info({message: `Selected ${orderWithDetails["order"]["id"]}`});
+            notification.info({message: `Selected ${orderWithDetails["order"]["id"]}`, placement: "bottomRight"});
         }
     }, [orderWithDetails])
+
+    const {menuBarCls} = useOrderHistoryPageStyles();
 
     return (
         <>
             <Layout style={{minHeight: "100vh"}}>
                 <NavigationBar/>
                 <Layout style={{height: "100%"}}>
-                    <Row style={{margin: "2em 0"}} gutter={{lg: 24}}>
-                        <Col lg={8}>
+                    <Row className={menuBarCls} justify="space-between">
+                        <Col span={8}>
                             <Search placeholder="Search for orders"
                                     allowClear
                                     enterButton="Search"
                                     loading={filtering}
                                     size="large" onSearch={value => handleFilterOrders(value)}/>
                         </Col>
+                        <Link href="/product-management">
+                            <Button icon={<ContainerOutlined/>} type="link">Go Handling {order.order.id}</Button>
+                        </Link>
                     </Row>
                     <Content>
                         <Table dataSource={orders} loading={filtering}>
@@ -81,11 +90,11 @@ const OrderHistoryPage = () => {
                                 </Space>;
                             }}/>
                             {userRole === USER_ROLE.STAFF &&
-                            <Column title="Pick up" key="action" render={(value, order) => {
+                            <Column title="Handle" key="action" render={(value, order) => {
                                 return <Space size="middle">
                                     {order.status === OrderStatus.NEW ?
                                         <a onClick={() => handleRetrieveOrderWithDetails(order.id)}>
-                                            Pick Up
+                                            Handle
                                         </a> : "---"}
                                 </Space>;
                             }}/>}
@@ -96,6 +105,6 @@ const OrderHistoryPage = () => {
         </>
 
     );
-};
+});
 
 export default OrderHistoryPage;
