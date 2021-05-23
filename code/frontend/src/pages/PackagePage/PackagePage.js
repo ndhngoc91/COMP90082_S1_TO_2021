@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Card, Image, Layout, Row, Select, Typography, Divider} from "antd";
+import {Button, Col, Card, Image, Layout, Row, Select, Typography, Divider, Statistic} from "antd";
 import {BrowserRouter} from "react-router-dom";
 import {usePackages} from "../../hooks/PackageHooks";
 import {useCategories} from "../../hooks/CategoryHooks";
@@ -7,6 +7,10 @@ import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import PageFooter from "../../components/PageFooter/PageFooter";
 import imageComing from "../../assets/imageComing.png";
 import {usePackagePageStyles} from "./styles";
+import {
+    CaretRightOutlined,
+    LikeOutlined
+} from "@ant-design/icons";
 
 
 const {Meta} = Card;
@@ -54,29 +58,32 @@ const PackagePage = () => {
                                 </Select>
                             </Col>
                         </Row>
-                        <Row style={{margin: -10}}>
+                        <Row justify="space-between" gutter={[32, 32]}>
                             {filteredPackages.map(package_ => {
-                                return <Card
-                                    key={`package_${package_["id"]}`}
-                                    style={{width: 340, margin: 10}}
-                                    cover={
-                                        <Image style={{width: "100%", minHeight: "238px"}}
-                                               src={package_["image_url"]}
-                                               fallback={imageComing}
-                                               preview={false}
-                                               placeholder={true}
-                                        />
-                                    }>
-                                    <Meta title={package_["name"]}/>
-                                    <Divider/>
-                                    <Row justify="space-between">
-                                        <Link href={`/package-details/${package_["id"]}`}>
-                                            <Button type="primary">
-                                                View Details
-                                            </Button>
-                                        </Link>
-                                    </Row>
-                                </Card>
+                                return <Col span={6}>
+                                    <Card key={`package_${package_["id"]}`}
+                                          style={{width: "100%"}}
+                                          cover={
+                                              <Image style={{width: "100%", minHeight: "238px"}}
+                                                     src={package_["image_url"]}
+                                                     fallback={imageComing}
+                                                     preview={false}
+                                                     placeholder={true}/>
+                                          }>
+                                        <Meta title={package_["name"]}/>
+                                        <Divider/>
+                                        <Row justify="space-between">
+                                            <Link href={`/package-details/${package_["id"]}`}>
+                                                <Button type="link" size="large"
+                                                        icon={<CaretRightOutlined/>}>
+                                                    View Details
+                                                </Button>
+                                            </Link>
+                                            <Statistic value={Math.floor(Math.random() * 500)}
+                                                       prefix={<LikeOutlined/>}/>
+                                        </Row>
+                                    </Card>
+                                </Col>
                             })}
                         </Row>
                     </Content>

@@ -1,11 +1,9 @@
 import React, {useState} from "react";
 import {useHistory, useLocation} from "react-router-dom"
-import {Button, Form, Input, Layout, Menu, Modal, notification} from "antd";
+import {Layout, Menu, Modal, notification} from "antd";
 import {
-    HistoryOutlined,
     ShopOutlined,
     LogoutOutlined,
-    ShoppingCartOutlined,
     ContainerOutlined,
     SettingOutlined,
     AccountBookOutlined,
@@ -29,12 +27,17 @@ const NavigationBar = observer(() => {
 
     const [handleLogin, {handling}] = useHandleLogin();
 
-    const {authStore: {firstName, lastName, userRole, logout}, shoppingCartStore: {clearShoppingCart}} = useStores();
+    const {
+        authStore: {firstName, lastName, userRole, logout},
+        shoppingCartStore: {clearShoppingCart},
+        hiringEquipmentRegister: {clearEquipmentRegisterProcess}
+    } = useStores();
 
     const handleClick = ({key}) => {
         if (key === "/logout") {
             logout();
             clearShoppingCart();
+            clearEquipmentRegisterProcess();
             history.push("/");
         } else if (key.startsWith("/")) {
             history.push(key)
@@ -102,8 +105,10 @@ const NavigationBar = observer(() => {
                     <Menu.Item key="/profile" icon={<AccountBookOutlined/>}>Account</Menu.Item>}
                     <Menu.Item key="/logout" icon={<LogoutOutlined/>}>Logout</Menu.Item>
                 </SubMenu>}
-                <Menu.Item className={rightItemCls} icon={<ShopOutlined/>} key="/shopping-cart">Shopping
-                    Cart</Menu.Item>
+                {[USER_ROLE.GUEST, USER_ROLE.CUSTOMER].includes(userRole) &&
+                <Menu.Item className={rightItemCls} icon={<ShopOutlined/>} key="/shopping-cart">
+                    Shopping Cart
+                </Menu.Item>}
             </Menu>
             <Modal title="Login" visible={isLoginModalVisible}
                    footer={null} closable={false}

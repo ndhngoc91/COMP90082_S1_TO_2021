@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from app.api import models, schemas
+from app.api import consts
 
 
 def get_all_products(db: Session):
@@ -23,3 +24,12 @@ def create_new_product(request: schemas.Product, db: Session):
     db.commit()
     db.refresh(new_product)
     return new_product
+
+
+def update_product_status_to_hired(product_id: int, db: Session):
+    product_to_update = db.query(models.Product).filter(models.Product.id == product_id)
+    if not product_to_update.first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"data with id {product_id} not found")
+
+    product_to_update.update({"status": consts.ProductStatus.HIRED.value})
+    db.commit()

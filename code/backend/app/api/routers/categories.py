@@ -12,11 +12,5 @@ router = APIRouter(
 
 
 @router.get("")
-def get_all_categories():
-    return category_service.get_all_categories()
-
-
-@router.post("")
-async def list_category_details(days: int, category_id: int):
-    details = category_service.list_category_details(days, category_id)
-    return details
+def get_all_categories(db: Session = Depends(get_db)):
+    return category_service.get_all_categories(db=db)

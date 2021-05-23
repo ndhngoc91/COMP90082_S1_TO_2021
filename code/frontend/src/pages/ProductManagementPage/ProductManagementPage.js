@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Checkbox, Col, Divider, Layout, List, Row, Space, Table, Tag} from "antd";
+import {Button, Checkbox, Col, Divider, Layout, List, notification, Row, Space, Table, Tag, Typography} from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {useProducts} from "../../hooks/ProductHooks";
 import {ProductStatus} from "../../consts/ProductStatus";
@@ -7,9 +7,11 @@ import {useStores} from "../../stores";
 import Avatar from "antd/es/avatar/avatar";
 import {useProductManagementPageStyle} from "./styles";
 import {observer} from "mobx-react-lite";
+import {useHandleAddContract} from "../../hooks/ContractHooks";
 
 const {Content} = Layout;
 const {Column} = Table;
+const {Title} = Typography;
 
 const avatarUrl = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
 
@@ -19,10 +21,26 @@ const ProductManagementPage = observer(() => {
             selectedRecipientId,
             recipients,
             isReadyToMakeContract,
-            selectProduct
+            contractDetails,
+            selectProduct,
+            clearEquipmentRegisterProcess
         }
     } = useStores();
+
     const products = useProducts();
+    const [handleAddContract, {handling}] = useHandleAddContract();
+
+    const onCheckoutButtonClick = () => {
+        handleAddContract({
+            name: "",
+            contract_details: contractDetails
+        }, () => {
+            notification.success({
+                message: "Make a contract successfully!"
+            });
+            clearEquipmentRegisterProcess();
+        });
+    };
 
     const {mainContentCls, fullWidthCls, recipientListCls} = useProductManagementPageStyle();
 
@@ -34,6 +52,8 @@ const ProductManagementPage = observer(() => {
                     <Content className={mainContentCls}>
                         <Row justify="space-around" gutter={16}>
                             <Col span={6}>
+                                <Title level={3}>Recipient List</Title>
+                                <Divider/>
                                 <List className={recipientListCls}
                                       itemLayout="horizontal"
                                       dataSource={recipients}
@@ -45,17 +65,23 @@ const ProductManagementPage = observer(() => {
                                                       {recipient.first_name} {recipient.last_name}
                                                   </a>}
                                                   description={selectedRecipientId === recipient.id ?
-                                                      <Tag color="green">Handling</Tag> :
-                                                      <Tag color="red">---</Tag>}
+                                                      <Tag color="green" style={{fontSize: "1em"}}>Handling</Tag> :
+                                                      <Tag color="purple" style={{fontSize: "1em"}}>Processed</Tag>}
                                               />
                                           </List.Item>;
                                       }}/>
                                 {isReadyToMakeContract &&
                                 <>
                                     <Divider/>
-                                    <Button className={fullWidthCls} type="primary" size="large">
-                                        Checkout
-                                    </Button>
+                                    <Space direction="vertical" className={fullWidthCls}>
+                                        <Button className={fullWidthCls} type="primary" size="large" loading={handling}
+                                                onClick={onCheckoutButtonClick}>
+                                            Checkout
+                                        </Button>
+                                        <Button className={fullWidthCls} size="large">
+                                            Cancel
+                                        </Button>
+                                    </Space>
                                 </>}
                             </Col>
                             <Col span={18}>
@@ -69,11 +95,13 @@ const ProductManagementPage = observer(() => {
                                             render={status => {
                                                 switch (status) {
                                                     case ProductStatus.RESERVED:
-                                                        return <Tag color="red">Reserved</Tag>;
+                                                        return <Tag color="red"
+                                                                    style={{fontSize: "1em"}}>Reserved</Tag>;
                                                     case ProductStatus.HIRED:
-                                                        return <Tag color="red">Hired</Tag>;
+                                                        return <Tag color="red" style={{fontSize: "1em"}}>Hired</Tag>;
                                                     case ProductStatus.AVAILABLE:
-                                                        return <Tag color="green">Available</Tag>;
+                                                        return <Tag color="green"
+                                                                    style={{fontSize: "1em"}}>Available</Tag>;
                                                 }
                                             }}/>
                                     {!isReadyToMakeContract &&

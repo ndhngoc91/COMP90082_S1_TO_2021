@@ -2,29 +2,23 @@ import React from "react";
 import {Badge, Col, Descriptions, Progress, Row, Typography} from "antd";
 import {useStores} from "../../stores";
 
-const {Title} = Typography;
-
 const HomePageStaffView = () => {
     const {authStore: {username, email, phone}} = useStores();
 
     return <>
         <Row justify="space-around"
-             style={{textAlign: "center", padding: "2em 0"}}>
+             style={{textAlign: "center", padding: "5em 0"}}>
             <Col span={10}>
-                <Title level={3}>Troubleshooting Errors</Title>
-                <Progress percent={70} status="exception"/>
             </Col>
             <Col span={10}>
-                <Title level={3}>Orders Processed</Title>
-                <Progress type="circle" percent={75}/>
+                <Progress percent={75} status="normal"/>
             </Col>
         </Row>
         <Row justify="space-around">
             <Col span={10}>
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/w7ejDZ8SWv8"
-                        title="YouTube video player" frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen/>
+                <Row justify="space-around">
+                    <Progress type="circle" percent={75} width={400} format={percent => `${percent}% Orders`}/>
+                </Row>
             </Col>
             <Col span={10}>
                 <Descriptions layout="vertical" bordered>
