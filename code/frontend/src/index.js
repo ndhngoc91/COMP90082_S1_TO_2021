@@ -21,6 +21,7 @@ import ProductManagementPage from "./pages/ProductManagementPage/ProductManageme
 // CSS
 import "antd/dist/antd.css";
 import "./index.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import {createStore, StoreContext} from "./stores";
 import AuthRoute from "./navigation/AuthRole";
 import {USER_ROLE} from "./consts/UserRole";
