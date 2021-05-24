@@ -32,6 +32,6 @@ def delete_address(address_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{address_id}", status_code=status.HTTP_202_ACCEPTED)
-def update_package(address_id: int, request: schemas.Address, db: Session = Depends(get_db)):
+def update_address(address_id: int, request: schemas.Address, db: Session = Depends(get_db)):
     address_service.update_address(address_id=address_id, request=request, db=db)
     return 'UPDATED'
