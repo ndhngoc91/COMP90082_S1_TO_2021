@@ -13,7 +13,7 @@ describe('Test the account Page', () => {
 
     it('Edit account Page successfully', () => {
         cy.get('.ant-menu').contains('Ruby').click()
-        cy.get('#SubMenu\\$Menu').contains('Account').click()
+        cy.get('#user\\$Menu').contains('Account').click()
 
         cy.location('pathname').should('include', 'profile')
 
@@ -50,7 +50,7 @@ describe('Test the account Page', () => {
 
     it('Not edit Profile Page', () => {
         cy.get('.ant-menu').contains('Ruby').click()
-        cy.get('#SubMenu\\$Menu').contains('Account').click()
+        cy.get('#user\\$Menu').contains('Account').click()
 
         cy.get('.menu > .ant-menu').contains('Profile')
         cy.get('.ant-menu-item-selected > :nth-child(2) > a').click()

@@ -13,7 +13,7 @@ describe('Test the address Page', () => {
 
     it('Add address Page successfully', () => {
         cy.get('.ant-menu').contains('Ruby').click()
-        cy.get('#SubMenu\\$Menu').contains('Account').click()
+        cy.get('#user\\$Menu').contains('Account').click()
 
         cy.get('.menu > .ant-menu').contains('Addresses')
         cy.get(':nth-child(3) > :nth-child(2) > a').click()
@@ -33,7 +33,7 @@ describe('Test the address Page', () => {
 
     it('Delete address Page successfully', () => {
         cy.get('.ant-menu').contains('Ruby').click()
-        cy.get('#SubMenu\\$Menu').contains('Account').click()
+        cy.get('#user\\$Menu').contains('Account').click()
 
         cy.get('.menu > .ant-menu').contains('Addresses')
         cy.get(':nth-child(3) > :nth-child(2) > a').click()
@@ -47,7 +47,7 @@ describe('Test the address Page', () => {
 
     it('Edit address Page successfully', () => {
         cy.get('.ant-menu').contains('Ruby').click()
-        cy.get('#SubMenu\\$Menu').contains('Account').click()
+        cy.get('#user\\$Menu').contains('Account').click()
 
         cy.get('.menu > .ant-menu').contains('Addresses')
         cy.get(':nth-child(3) > :nth-child(2) > a').click()

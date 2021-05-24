@@ -19,21 +19,20 @@ describe('Test the package to shopping cart Page', () => {
     })
 
     it('Package to shopping cart Page', () => {
-        cy.get('.ant-menu').contains('Packages').click()
+        cy.get('.ant-menu > :nth-child(4)').click()
         cy.url().should('contain', '/packages')
 
-
-        cy.get('h4.ant-typography').each((item,index,$list) => {
+        cy.get('div.ant-card-meta-title').each((item,index,$list) => {
             cy.log(item.text(),index,$list)
             const temp = item.text()
             record.push(temp)
         })
         cy.log(record)
-        cy.get('button.ant-btn.ant-btn-primary').each((item,index,$list) => {
+        cy.get('button.ant-btn.ant-btn-link.ant-btn-lg').each((item,index,$list) => {
             //cy.log(item,index,$list)
             if ((index % 2 === 1) && (index < 12)){
-                cy.get(':nth-child('+index+') > .ant-space-vertical > :nth-child(3) > .ant-space > ' +
-                    '[style="margin-right: 8px;"] > .ant-typography > .ant-btn').click()
+                cy.get(':nth-child('+index+') > .ant-card > .ant-card-body > ' +
+                    '.ant-row-space-between > .ant-typography > .ant-btn').click()
                 //cy.log(index,record[index-1])
                 cy.get('body').should('contain',record[index-1])
                 orderlist.push(record[index-1])

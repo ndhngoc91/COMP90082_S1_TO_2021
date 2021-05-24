@@ -15,8 +15,8 @@ describe('Test the Checkout to print Page', () => {
     it('Checkout to print Page', () => {
         cy.get('.ant-menu').contains('Packages').click()
         cy.url().should('contain', '/packages')
-        cy.get(':nth-child(1) > .ant-space-vertical > :nth-child(3) > .ant-space > ' +
-            '[style="margin-right: 8px;"] > .ant-typography > .ant-btn').click()
+        cy.get(':nth-child(1) > .ant-card > .ant-card-body > ' +
+            '.ant-row-space-between > .ant-typography > .ant-btn').click()
         cy.get(':nth-child(1) > .ant-col-8 > .ant-form-item-control-input > ' +
             '.ant-form-item-control-input-content > .ant-input-number > ' +
             '.ant-input-number-handler-wrap > .ant-input-number-handler-up').click()
