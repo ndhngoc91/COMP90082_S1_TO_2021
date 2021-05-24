@@ -61,3 +61,17 @@ def test_delete_an_address_that_does_not_exit(test_app):
     invalid_address_id = str(0)
     delete_response = test_app.delete("/addresses/{address_id}".format(address_id=invalid_address_id))
     assert delete_response.status_code == 204
+
+
+def test_update_an_address_that_does_not_exist(test_app):
+    updated_address_data = json.dumps({
+        "state": "NSW",
+        "city": "Newcastle",
+        "postcode": "2267",
+        "address_line": "Test address line 2",
+        "user_id": 1,
+        "order_id": 0
+    })
+    put_response = test_app.put("/addresses/{address_id}".format(address_id="0"),
+                                data=updated_address_data)
+    assert put_response.status_code == 404
