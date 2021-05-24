@@ -32,6 +32,24 @@ export const useHandleAddOrder = () => {
     return [handleAddOrder, {handling}];
 };
 
+export const useHandleRetrieveOrderWithDetails = () => {
+    const [orderWithDetails, setOrderWithDetails] = useState(null);
+    const [retrieving, setRetrieving] = useState(false);
+
+    const handleRetrieveOrderWithDetails = useCallback(orderId => {
+        setRetrieving(true);
+        axios.get(`${BACKEND_ENDPOINT}orders/${orderId}/order-details`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then((response) => {
+            setOrderWithDetails(response.data);
+        }).finally(() => {
+            setRetrieving(false);
+        });
+    }, [])
+
+    return [handleRetrieveOrderWithDetails, {orderWithDetails, retrieving}];
+}
+
 export const useHandleOrders = () => {
     const [orders, setOrders] = useState([]);
     const [filtering, setFiltering] = useState(false);
@@ -72,7 +90,7 @@ export const useHandleOrders = () => {
 
     const handleCancelOrder = useCallback((order_id) => {
         setFiltering(true);
-        axios.put(`${BACKEND_ENDPOINT}orders/cancel/${order_id}`, {
+        axios.put(`${BACKEND_ENDPOINT}orders/${order_id}/cancel/`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"}
         }).then((response) => {
             if (response.status === 202) {

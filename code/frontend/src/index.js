@@ -2,21 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
-import CalendarPage from "./pages/CalendarPage";
-import BookingManagementPage from "./pages/BookingManagementPage";
-import PackageManagementPage from "./pages/PackageManagementPage";
-import UserAccountPage from "./pages/UserAccountPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import AdminRegisterPage from "./pages/AdminRegisterPage";
-import UserManagementPage from "./pages/UserManagementPage";
+import CalendarPage from "./pages/CalendarPage/CalendarPage";
+import PackageManagementPage from "./pages/PackageManagementPage/PackageManagementPage";
+import UserAccountPage from "./pages/UserAccountPage/UserAccountPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import AdminRegisterPage from "./pages/RegisterPage/AdminRegisterPage";
+import UserManagementPage from "./pages/UserManagementPage/UserManagementPage";
 import PackagePage from "./pages/PackagePage/PackagePage";
-import PackageDetailsPage from "./pages/PackageDetailsPage";
+import PackageDetailsPage from "./pages/PackageDetailsPage/PackageDetailsPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import FinishPage from "./pages/FinishPage/FinishPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage/ShoppingCartPage";
-import OrderHistoryPage from "./pages/OrderHistoryPage";
-import ContractManagementPage from "./pages/ContractManagementPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage/OrderHistoryPage";
+import ContractManagementPage from "./pages/ContractManagementPage/ContractManagementPage";
+import ProductManagementPage from "./pages/ProductManagementPage/ProductManagementPage";
 
 // CSS
 import "antd/dist/antd.css";
@@ -69,22 +69,22 @@ createStore().then(store => {
                         <AuthRoute path="/user-management" exact Component={UserManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
-                        <AuthRoute path="/booking-management" exact Component={BookingManagementPage} requiredRoles={[
-                            USER_ROLE.STAFF
-                        ]}/>
                         <AuthRoute path="/calendar" exact Component={CalendarPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
-                            USER_ROLE.STAFF
-                        ]}/>
-                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
                         <AuthRoute path="/order-history" exact Component={OrderHistoryPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
                             USER_ROLE.STAFF
                         ]}/>
+                        <AuthRoute path="/product-management" exact Component={ProductManagementPage} requiredRoles={[
+                            USER_ROLE.STAFF
+                        ]}/>
                         <AuthRoute path="/contract-management" exact Component={ContractManagementPage} requiredRoles={[
                             USER_ROLE.CUSTOMER,
+                            USER_ROLE.STAFF
+                        ]}/>
+                        <AuthRoute path="/package-management" exact Component={PackageManagementPage} requiredRoles={[
                             USER_ROLE.STAFF
                         ]}/>
                         <Route exact path="*" render={() => <Redirect to="/"/>}/>

@@ -17,8 +17,16 @@ class Customer(BaseModel):
 
 
 class Product(BaseModel):
-    product_id: int
-    quantity: int
+    key_product_id: Optional[str]
+    product_code: Optional[str]
+    key_taxcode_id: Optional[str]
+    name: Optional[str]
+    description: Optional[str]
+    key_sell_unit_id: Optional[str]
+    is_price_tax_inclusive: Optional[bool]
+    is_kitted: Optional[bool]
+    internal_id: Optional[str]
+    product_group_id: Optional[str]
 
 
 class Recipient(BaseModel):
@@ -80,6 +88,10 @@ class Package(BaseModel):
     skill_level_id: int
 
 
+class PackageToCreate(Package):
+    product_group_ids: Optional[List[int]]
+
+
 class Session(BaseModel):
     session_id: str
     date: datetime.datetime
@@ -120,3 +132,16 @@ class UserGroup(BaseModel):
     name: str
     contacts: str
     user_id: int
+
+
+class ContractDetail(BaseModel):
+    product_id: int
+    recipient_id: int
+
+
+class Contract(BaseModel):
+    name: str
+    order_id: int
+    created_at: date
+    created_by: str
+    contract_details: List[ContractDetail]

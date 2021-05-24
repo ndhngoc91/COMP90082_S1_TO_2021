@@ -1,6 +1,5 @@
 from typing import Tuple
-from sqlalchemy import Column, DECIMAL, DateTime, Enum, ForeignKey, Integer, Table, Text, \
-    text, Date, BOOLEAN, VARCHAR
+from sqlalchemy import Column, DECIMAL, DateTime, Enum, ForeignKey, Integer, Table, Text, Date, BOOLEAN, VARCHAR
 from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.orm import relationship
 from app.api.database import Base
@@ -48,58 +47,16 @@ class Extra(Base):
     sell_code = Column(VARCHAR(20), nullable=False)
 
 
-class Recipient(Base):
-    __tablename__ = 'recipients'
-
-    id = Column(Integer, primary_key=True)
-    first_name = Column(VARCHAR(127))
-    last_name = Column(VARCHAR(127))
-    birthday = Column(Date)
-    height = Column(DECIMAL(5, 2))
-    weight = Column(DECIMAL(5, 2))
-    foot_size = Column(DECIMAL(3, 1))
-    din = Column(DECIMAL(5, 2), nullable=True)
-    skill_level_id = Column(ForeignKey('skill_levels.id'))
-
-
-class OrderDetail(Base):
-    __tablename__ = 'order_details'
-
-    id = Column(Integer, primary_key=True)
-    order_id = Column(ForeignKey('orders.id'), nullable=False, index=True)
-    recipient_id = Column(ForeignKey('recipients.id'), nullable=False, index=True)
-
-
-class OrderPackage(Base):
-    __tablename__ = 'order_packages'
-
-    id = Column(Integer, primary_key=True)
-    order_details_id = Column(ForeignKey('order_details.id'), nullable=False, index=True)
-    package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
-    trail_id = Column(ForeignKey('trail_types.id'), nullable=False, index=True)
-    cost = Column(DECIMAL(6, 2), nullable=False)
-
-
-class OrderExtra(Base):
-    __tablename__ = 'order_extras'
-
-    id = Column(Integer, primary_key=True)
-    order_packages_id = Column(ForeignKey('order_packages.id'), nullable=False, index=True)
-    extra_id = Column(ForeignKey('extra.id'), nullable=False, index=True)
-    cost = Column(DECIMAL(6, 2), nullable=False)
-
-
 class Order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(ForeignKey('users.id'), nullable=False, index=True)
+    user_id = Column(Integer, nullable=False, index=True)
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     description = Column(Text)
     status = Column(Enum('New', 'Handling', 'Done', 'Cancelled', 'Executing'), nullable=False,
-                    server_default=text("'New'"))
-    staff_id = Column(ForeignKey('users.id'), nullable=True)
+                    server_default='New')
 
 
 class Organization(Base):
@@ -145,15 +102,6 @@ class TrailType(Base):
     name = Column(VARCHAR(45))
 
 
-class UserGroup(Base):
-    __tablename__ = 'user_groups'
-
-    id = Column(Integer, primary_key=True, unique=True)
-    name = Column(VARCHAR(50), nullable=False)
-    contacts = Column(Text)
-    user_id = Column(Integer, index=True)
-
-
 class UserType(Base):
     __tablename__ = 'user_types'
 
@@ -184,6 +132,7 @@ class Package(Base):
     age_group = relationship('AgeGroup')
     category = relationship('Category')
     skill_level = relationship('SkillLevel')
+
     product_groups = relationship('ProductGroup', secondary='package_product_group')
 
 
@@ -191,15 +140,37 @@ class Product(Base):
     __tablename__ = 'products'
 
     id = Column(Integer, primary_key=True, unique=True)
-    model = Column(VARCHAR(50))
-    idpackage = Column(Integer, nullable=False, index=True, server_default=text("'1'"))
+    key_product_id = Column(VARCHAR(45))
+    product_code = Column(VARCHAR(20))
+    key_taxcode_id = Column(VARCHAR(45))
+    name = Column(VARCHAR(50))
     description = Column(Text)
-    price = Column(DECIMAL(10, 2), nullable=False)
-    is_available = Column(BOOLEAN, server_default=text("'1'"))
-    setting = Column(Text)
-    group_id = Column(ForeignKey('product_groups.id', ondelete='CASCADE', onupdate='CASCADE'), index=True)
+    key_sell_unit_id = Column(VARCHAR(45))
+    is_price_tax_inclusive = Column(BOOLEAN)
+    is_kitted = Column(BOOLEAN)
+    internal_id = Column(VARCHAR(45))
+    product_group_id = Column(ForeignKey('product_groups.id'), index=True)
+    status = Column(Enum('AVAILABLE', 'HIRED', 'RESERVED'), server_default='AVAILABLE')
+    unavailable_from = Column(DateTime)
+    unavailable_to = Column(DateTime)
 
-    group = relationship('ProductGroup')
+    product_group = relationship('ProductGroup')
+
+
+class Recipient(Base):
+    __tablename__ = 'recipients'
+
+    id = Column(Integer, primary_key=True)
+    height = Column(DECIMAL(5, 2))
+    weight = Column(DECIMAL(5, 2))
+    foot_size = Column(Integer)
+    first_name = Column(VARCHAR(127))
+    last_name = Column(VARCHAR(127))
+    birthday = Column(Date)
+    din = Column(DECIMAL(5, 2))
+    skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
+
+    skill_level = relationship('SkillLevel')
 
 
 class User(Base):
@@ -218,7 +189,7 @@ class User(Base):
     phone = Column(VARCHAR(20))
     email = Column(VARCHAR(255), unique=True)
     din = Column(DECIMAL(5, 2))
-    is_enabled = Column(TINYINT, server_default=text("'1'"))
+    is_enabled = Column(TINYINT, server_default='1')
     skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
     organization_id = Column(ForeignKey('organizations.id'), index=True)
     user_type_id = Column(ForeignKey('user_types.id'), index=True)
@@ -243,11 +214,32 @@ class Address(Base):
     user = relationship('User')
 
 
-t_package_product_group = Table(
-    'package_product_group', metadata,
-    Column('package_id', ForeignKey('packages.id'), primary_key=True, nullable=False),
-    Column('product_group_id', ForeignKey('product_groups.id'), primary_key=True, nullable=False, index=True)
-)
+class OrderDetail(Base):
+    __tablename__ = 'order_details'
+
+    id = Column(Integer, primary_key=True)
+    order_id = Column(ForeignKey('orders.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+    recipient_id = Column(ForeignKey('recipients.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False,
+                          index=True)
+    package_id = Column(ForeignKey('packages.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    trail_id = Column(ForeignKey('trail_types.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    package_cost = Column(DECIMAL(6, 2))
+
+    order = relationship('Order')
+    package = relationship('Package')
+    recipient = relationship('Recipient')
+    trail = relationship('TrailType')
+
+
+class PackageProductGroup(Base):
+    __tablename__ = 'package_product_group'
+
+    id = Column(Integer, primary_key=True)
+    package_id = Column(ForeignKey('packages.id'), nullable=False, index=True)
+    product_group_id = Column(ForeignKey('product_groups.id'), nullable=False, index=True)
+
+    package = relationship('Package')
+    product_group = relationship('ProductGroup')
 
 
 class PackageTtypesPair(Base):
@@ -259,3 +251,63 @@ class PackageTtypesPair(Base):
 
     package = relationship('Package')
     trail_type = relationship('TrailType')
+
+
+class UserGroup(Base):
+    __tablename__ = 'user_groups'
+
+    id = Column(Integer, primary_key=True, unique=True)
+    name = Column(VARCHAR(50), nullable=False)
+    user_id = Column(ForeignKey('users.id'), index=True)
+
+    user = relationship('User')
+
+
+class Member(Base):
+    __tablename__ = 'members'
+
+    id = Column(Integer, primary_key=True)
+    height = Column(DECIMAL(5, 2))
+    weight = Column(DECIMAL(5, 2))
+    foot_size = Column(Integer)
+    first_name = Column(VARCHAR(127))
+    last_name = Column(VARCHAR(127))
+    birthday = Column(Date)
+    din = Column(DECIMAL(5, 2))
+    skill_level_id = Column(ForeignKey('skill_levels.id'), index=True)
+    user_group_id = Column(ForeignKey('user_groups.id'), index=True)
+
+    skill_level = relationship('SkillLevel')
+    user_group = relationship('UserGroup')
+
+
+class OrderExtra(Base):
+    __tablename__ = 'order_extras'
+
+    id = Column(Integer, primary_key=True)
+    order_details_id = Column(ForeignKey('order_details.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False,
+                              index=True)
+    extra_id = Column(ForeignKey('extra.id', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    cost = Column(DECIMAL(6, 2))
+
+    extra = relationship('Extra')
+
+
+class Contract(Base):
+    __tablename__ = 'contracts'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(VARCHAR(45))
+    created_at = Column(DateTime)
+    created_by = Column(VARCHAR(45))
+
+
+class ContractDetail(Base):
+    __tablename__ = 'contract_details'
+
+    id = Column(Integer, primary_key=True)
+    contract_id = Column(ForeignKey('contracts.id'), index=True)
+    product_id = Column(ForeignKey('products.id'), index=True)
+
+    contract = relationship('Contract')
+    product = relationship('Product')

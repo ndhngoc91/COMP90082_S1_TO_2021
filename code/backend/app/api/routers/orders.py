@@ -23,14 +23,14 @@ def filter_orders(query: Optional[str] = "", db: Session = Depends(get_db)):
     return order_service.filter_orders(query=query, db=db)
 
 
-@router.get("/order-details/{order_id}")
-def get_order_details(order_id: int = None, db: Session = Depends(get_db)):
+@router.get("/{order_id}/order-details")
+def get_order_with_details(order_id: int = None, db: Session = Depends(get_db)):
     if order_id is None:
         return None
-    return order_service.get_order_details(order_id=order_id, db=db)
+    return order_service.get_order_with_details(order_id=order_id, db=db)
 
 
-@router.put("/cancel/{order_id}", status_code=status.HTTP_202_ACCEPTED)
+@router.put("/{order_id}/cancel", status_code=status.HTTP_202_ACCEPTED)
 def filter_orders(order_id: int = None, db: Session = Depends(get_db)):
     if order_id is None:
         return None

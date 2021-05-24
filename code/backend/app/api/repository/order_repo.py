@@ -6,8 +6,7 @@ from sqlalchemy.sql.elements import or_
 
 from starlette import status
 from app.api import models, schemas
-from itertools import groupby
-from operator import attrgetter
+from app.api.repository import product_group_repo
 
 
 def get_all_orders(db: Session):
@@ -15,31 +14,24 @@ def get_all_orders(db: Session):
 
 
 def filter_orders(query: Optional[str], db: Session):
-    customer = aliased(models.User)
-    staff = aliased(models.User)
-
     return db.query(
         models.Order.id,
         models.Order.start_date,
         models.Order.end_date,
         models.Order.description,
         models.Order.status,
-        customer.first_name.label("customer_first_name"),
-        customer.last_name.label("customer_last_name"),
-        customer.phone.label("customer_phone"),
-        customer.email.label("customer_email"),
-        staff.first_name.label("staff_first_name"),
-        staff.last_name.label("staff_last_name"),
+        models.User.first_name.label("customer_first_name"),
+        models.User.last_name.label("customer_last_name"),
+        models.User.phone.label("customer_phone"),
+        models.User.email.label("customer_email")
     ).filter(
         or_(
             models.Order.description.like(f"%{query}%"),
-            customer.first_name.like(f"%{query}%"),
-            customer.last_name.like(f"%{query}%")
+            models.User.first_name.like(f"%{query}%"),
+            models.User.last_name.like(f"%{query}%")
         )
     ).outerjoin(
-        customer, customer.id == models.Order.user_id
-    ).outerjoin(
-        staff, staff.id == models.Order.staff_id
+        models.User, models.User.id == models.Order.user_id
     ).all()
 
 
@@ -57,28 +49,21 @@ def cancel_order(order_id: int, db: Session):
     return filter_orders("", db)
 
 
-def get_order_details(order_id: int, db: Session):
-    customer = aliased(models.User)
-    staff = aliased(models.User)
-
+def get_order_with_details(order_id: int, db: Session):
     order = db.query(
         models.Order.id,
         models.Order.start_date,
         models.Order.end_date,
         models.Order.description,
         models.Order.status,
-        customer.first_name.label("customer_first_name"),
-        customer.last_name.label("customer_last_name"),
-        customer.phone.label("customer_phone"),
-        customer.email.label("customer_email"),
-        staff.first_name.label("staff_first_name"),
-        staff.last_name.label("staff_last_name"),
+        models.User.first_name.label("customer_first_name"),
+        models.User.last_name.label("customer_last_name"),
+        models.User.phone.label("customer_phone"),
+        models.User.email.label("customer_email"),
     ).filter(
         models.Order.id == order_id
     ).outerjoin(
-        customer, customer.id == models.Order.user_id
-    ).outerjoin(
-        staff, staff.id == models.Order.staff_id
+        models.User, models.User.id == models.Order.user_id
     ).first()
 
     if not order:
@@ -87,40 +72,15 @@ def get_order_details(order_id: int, db: Session):
             detail=f"order with id {order_id} not found"
         )
 
-    packages = db.query(
-        models.Order.id,
-        models.OrderDetail.id.label("order_detail_id"),
-        models.Package,
-        models.OrderPackage.cost.label("package_cost"),
-        models.TrailType,
-        models.Extra,
-        models.OrderExtra.cost.label("extra_cost"),
-        models.Recipient.id.label("recipient_id"),
-        models.Recipient.first_name.label("recipient_first_name"),
-        models.Recipient.last_name.label("recipient_last_name"),
-    ).filter(
-        models.Order.id == order_id
-    ).order_by(
-        models.Package.id
-    ).outerjoin(
-        models.OrderDetail, models.OrderDetail.order_id == models.Order.id
-    ).outerjoin(
-        models.OrderPackage, models.OrderPackage.order_details_id == models.OrderDetail.id
-    ).outerjoin(
-        models.Package, models.Package.id == models.OrderPackage.package_id
-    ).outerjoin(
-        models.TrailType, models.TrailType.id == models.OrderPackage.trail_id
-    ).outerjoin(
-        models.Recipient, models.Recipient.id == models.OrderDetail.recipient_id
-    ).outerjoin(
-        models.OrderExtra, models.OrderExtra.order_packages_id == models.OrderPackage.id
-    ).outerjoin(
-        models.Extra, models.Extra.id == models.OrderExtra.extra_id
-    ).all()
+    details = db.query(models.OrderDetail).join(models.Order).filter(models.Order.id == order_id).all()
+    for detail in details:
+        product_groups = product_group_repo.get_product_groups_of_package(package_id=detail.package_id, db=db)
+        detail.product_groups = product_groups
+        detail.recipient = db.query(models.Recipient).filter(models.Recipient.id == detail.recipient_id).first()
 
     return {
         "order": order,
-        "packages": packages
+        "details": details
     }
 
 
@@ -149,23 +109,17 @@ def create_new_order(order: schemas.Order, db: Session):
 
         new_order_detail = models.OrderDetail(
             order_id=new_order.id,
-            recipient_id=new_recipient.id
+            recipient_id=new_recipient.id,
+            package_id=order_detail.package_id,
+            trail_id=order_detail.trail_id,
+            package_cost=order_detail.package_cost
         )
         db.add(new_order_detail)
         db.commit()
 
-        new_order_package = models.OrderPackage(
-            order_details_id=new_order_detail.id,
-            package_id=order_detail.package_id,
-            trail_id=order_detail.trail_id,
-            cost=order_detail.package_cost
-        )
-        db.add(new_order_package)
-        db.commit()
-
         for order_extra in order_detail.extras:
             new_order_extra = models.OrderExtra(
-                order_packages_id=new_order_package.id,
+                order_details_id=new_order_detail.id,
                 extra_id=order_extra.id,
                 cost=order_extra.cost
             )

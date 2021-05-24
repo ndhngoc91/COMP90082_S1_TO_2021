@@ -9,7 +9,8 @@ def get_all_packages(db: Session):
     packages = package_repo.get_all_packages(db=db)
     for package in packages:
         package.trail_types = trail_type_repo.get_trail_types_by_package_id(package_id=package.id, db=db)
-        package.image_url = aws_s3_service.generate_image_url(package.image_key)
+        package.image_url = aws_s3_service.generate_image_url(image_key=package.image_key)
+        package.product_groups = product_group_repo.get_product_groups_of_package(package_id=package.id, db=db)
     return packages
 
 
@@ -34,7 +35,7 @@ def filter_packages(query: Optional[str],
                                         db=db)
 
 
-def create_new_package(request: schemas.Package, db: Session):
+def create_new_package(request: schemas.PackageToCreate, db: Session):
     return package_repo.create_new_package(request=request, db=db)
 
 

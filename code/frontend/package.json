@@ -5,12 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.conf.js",
-    "build": "webpack --config webpack.prod.conf.js && webpack --mode production --config webpack.server.conf.js",
-    "test": "jest",
-    "express": "node ./dist/server.js"
+    "build": "webpack --config webpack.prod.conf.js && webpack --mode production --config webpack.server.conf.js"
   },
   "author": "Ruby Nguyen",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -18,7 +16,6 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "@testing-library/dom": "^7.26.4",
-    "@testing-library/jest-dom": "^5.8.0",
     "@testing-library/react": "^10.4.9",
     "@testing-library/user-event": "^12.1.10",
     "babel-loader": "^8.1.0",
@@ -28,10 +25,6 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.4.4",
     "html-webpack-plugin": "^4.2.0",
-    "jest": "^26.0.1",
-    "jest-dom": "^4.0.0",
-    "jest-localstorage-mock": "^2.4.2",
-    "jest-mock-axios": "^4.0.0",
     "node-fetch": "^2.6.0",
     "react-bulma-components": "^3.2.0",
     "react-test-renderer": "^16.14.0",
@@ -44,13 +37,11 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
-    "@types/jest": "^26.0.23",
     "@types/node": "^15.0.2",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "antd": "^4.6.5",
     "axios": "^0.19.2",
-    "babel-jest": "^26.0.1",
     "babel-polyfill": "^6.26.0",
     "express": "^4.17.1",
     "express-http-proxy": "^1.6.0",
@@ -77,25 +68,5 @@
     "underscore": "^1.13.1",
     "url-loader": "^4.1.0",
     "yarn": "^1.22.10"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      ".*\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js"
-    },
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "setupFiles": [
-      "<rootDir>/__mocks__/localStorageMock.js"
-    ],
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect",
-      "<rootDir>/src/setupTests.js"
-    ]
   }
 }

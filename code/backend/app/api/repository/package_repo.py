@@ -24,6 +24,7 @@ def filter_packages(query: Optional[str],
                          models.Package.age_group_id,
                          models.Package.category_id,
                          models.Package.skill_level_id,
+                         models.Package.base_price,
                          models.AgeGroup.name.label("age_group"),
                          models.Category.name.label("category"),
                          models.SkillLevel.name.label("skill_level"),
@@ -42,13 +43,15 @@ def filter_packages(query: Optional[str],
     return sql_query.all()
 
 
-def create_new_package(request: schemas.Package, db: Session):
+def create_new_package(request: schemas.PackageToCreate, db: Session):
     new_package = models.Package(
         name=request.name,
         description=request.description,
         category_id=request.category_id,
         age_group_id=request.age_group_id,
-        skill_level_id=request.skill_level_id
+        skill_level_id=request.skill_level_id,
+        base_price=0,  # hardcoded
+        price_levels=""  # hardcoded
     )
     product_groups = product_group_repo.get_product_groups_by_ids(ids=request.product_group_ids, db=db)
     for product_group in product_groups:

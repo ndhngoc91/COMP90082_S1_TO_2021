@@ -1,62 +1,84 @@
-import { useCallback, useState } from "react";
+import {useCallback, useState} from "react";
 import axios from "axios";
-import { BACKEND_ENDPOINT } from "../../appSettings";
-import { useStores } from "../stores";
-import { USER_ROLE } from "../consts/UserRole";
-import { exportContract } from "../utils/ContractExporter";
+import {BACKEND_ENDPOINT} from "../../appSettings";
+import {useStores} from "../stores";
+import moment from "moment";
+import {USER_ROLE} from "../consts/UserRole";
 
-
-export const useHandleContracts = () => {
+export const useHandleFilterContracts = () => {
     const [contracts, setContracts] = useState([]);
     const [filtering, setFiltering] = useState(false);
-    const { authStore: { id: user_id, userRole } } = useStores();
 
-    const handleFilterContracts = useCallback((query = "") => {
+    const handleFilterContracts = useCallback(() => {
         setFiltering(true);
-        if (userRole == USER_ROLE.STAFF) {
-            axios.get(`${BACKEND_ENDPOINT}orders/filter`, {
-                headers: { "Content-Type": "application/JSON; charset=UTF-8" },
-                params: { query: query }
-            }).then((response) => {
-                if (response.status === 200) {
-                    response.data.forEach((dataItem, index) => {
-                        dataItem.key = index
-                    });
-                    setContracts(response.data);
-                }
-            }).finally(() => {
-                setFiltering(false);
-            });
-        } else if (userRole == USER_ROLE.CUSTOMER) {
-            axios.get(`${BACKEND_ENDPOINT}orders/filter?userId=${user_id}`, {
-                headers: { "Content-Type": "application/JSON; charset=UTF-8" },
-                params: { query: query }
-            }).then((response) => {
-                if (response.status === 200) {
-                    response.data.forEach((dataItem, index) => {
-                        dataItem.key = index
-                    });
-                    // setContracts(response.data.filter((dataItem) => dataItem.status == "Executing"));
-                    setContracts(response.data);
-                }
-            }).finally(() => {
-                setFiltering(false);
-            });
-        };
-    }, []);
-
-    const handlePrintContract = useCallback((order_id) => {
-        setFiltering(true);
-        axios.get(`${BACKEND_ENDPOINT}orders/order-details/${order_id}`, {
-            headers: { "Content-Type": "application/JSON; charset=UTF-8" }
+        axios.get(`${BACKEND_ENDPOINT}contracts`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
         }).then((response) => {
-            if (response.status === 200) {
-                exportContract(response.data);
-            }
+            setContracts(response.data);
         }).finally(() => {
             setFiltering(false);
         });
-    })
+    }, [])
 
-    return [handleFilterContracts, handlePrintContract, { contracts, filtering }];
+    return [handleFilterContracts, {contracts, filtering}];
+};
+
+export const useHandleRetrieveContract = () => {
+    const [contract, setContract] = useState(null);
+    const [retrieving, setRetriving] = useState(false);
+
+    const handleGetContract = useCallback((contractId, success, failure = () => {
+    }) => {
+        setRetriving(true);
+        axios.get(`${BACKEND_ENDPOINT}contracts/${contractId}`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then((response) => {
+            if (response.status === 200) {
+                setContract(response.data);
+                success();
+            } else {
+                failure();
+            }
+        }).finally(() => {
+            setRetriving(false);
+        });
+    }, [])
+
+    return [handleGetContract, {contract, retrieving}];
+};
+
+export const useHandleAddContract = () => {
+    const [handling, setHandling] = useState(false);
+    const {authStore: {firstName, lastName, userRole}, hiringEquipmentRegister: {order}} = useStores();
+
+    const handleAddContract = useCallback(({
+                                               name,
+                                               contract_details
+                                           }, success, failure = () => {
+    }) => {
+        if (userRole === USER_ROLE.STAFF) {
+            setHandling(true);
+            axios.post(`${BACKEND_ENDPOINT}contracts`, {
+                name: name,
+                order_id: order.id,
+                created_at: moment().format("YYYY-MM-DD"),
+                created_by: `${lastName}, ${firstName}`,
+                contract_details: contract_details
+            }, {
+                headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            }).then(response => {
+                if (response.status === 201) {
+                    success();
+                } else {
+                    failure();
+                }
+            }).catch(() => {
+                failure();
+            }).finally(() => {
+                setHandling(false);
+            });
+        }
+    }, []);
+
+    return [handleAddContract, {handling}];
 };
