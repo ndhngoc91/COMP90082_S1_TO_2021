@@ -161,6 +161,7 @@ const ProductManagementPage = observer(() => {
                                         </Col>
                                     </Row>
                                     <Table dataSource={products} rowKey="id" loading={filtering}>
+                                        <Column title="Id" dataIndex="id"/>
                                         <Column title="Name" dataIndex="name"
                                                 render={value => <Text strong>{value}</Text>}/>
                                         <Column title="Description" dataIndex="description"/>
@@ -194,8 +195,10 @@ const ProductManagementPage = observer(() => {
                                         <Column title="Select"
                                                 render={record => {
                                                     if (record.status === ProductStatus.AVAILABLE) {
-                                                        return <Checkbox onClick={() => {
-                                                            selectProduct(record);
+                                                        return <Checkbox onChange={(event) => {
+                                                            if (event.target.checked) {
+                                                                selectProduct(record);
+                                                            }
                                                         }}/>
                                                     }
                                                 }}/>}

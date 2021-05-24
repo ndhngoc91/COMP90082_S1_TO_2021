@@ -10,7 +10,7 @@ def get_all_packages(db: Session):
     for package in packages:
         package.trail_types = trail_type_repo.get_trail_types_by_package_id(package_id=package.id, db=db)
         package.image_url = aws_s3_service.generate_image_url(image_key=package.image_key)
-        package.product_groups = product_group_repo.get_product_groups_of_package(package_id=package.id, db=db)
+        package.product_groups_of_package = product_group_repo.get_product_groups_of_package(package_id=package.id, db=db)
     return packages
 
 
