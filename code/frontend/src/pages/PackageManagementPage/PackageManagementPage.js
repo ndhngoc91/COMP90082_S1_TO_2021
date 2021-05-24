@@ -140,13 +140,15 @@ const PackageManagementPage = () => {
                             ),
                             rowExpandable: record => record.name !== "Not Expandable"
                         }} dataSource={packages} rowKey="id">
-                            <Column title="Name" dataIndex="name" key="name" width="50%"/>
+                            <Column title="Name" dataIndex="name" key="name" width="40%"/>
                             <Column title="Age Group" dataIndex="age_group" key="age_group" width="15%"
                                     render={value => <Tag style={{fontSize: "1em"}} color="green">{value}</Tag>}/>
                             <Column title="Category" dataIndex="category" key="category" width="15%"
                                     render={value => <Tag style={{fontSize: "1em"}} color="blue">{value}</Tag>}/>
                             <Column title="Skill Level" dataIndex="skill_level" key="skill_level" width="15%"
-                                    render={value => <Tag style={{fontSize: "1em"}} color="geekblue">{value}</Tag>}/>/>
+                                    render={value => <Tag style={{fontSize: "1em"}} color="geekblue">{value}</Tag>}/>
+                            <Column title="Base Price" dataIndex="base_price" key="skill_level" width="10%"
+                                    render={value => `$${value}`}/>
                             <Column title="Edit" key="action" width="5%"
                                     render={values => {
                                         return <Space size="middle">
