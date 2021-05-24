@@ -46,7 +46,7 @@ export const useHandleFilterPackages = () => {
     const [packages, setPackages] = useState([]);
     const [filtering, setFiltering] = useState(false);
 
-    const handleFilterPackages = useCallback((filterParams) => {
+    const handleFilterPackages = useCallback(filterParams => {
         setFiltering(true);
         axios.get(`${BACKEND_ENDPOINT}packages/filter`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},

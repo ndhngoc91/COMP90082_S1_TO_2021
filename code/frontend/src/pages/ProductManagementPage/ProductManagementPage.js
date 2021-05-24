@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     Checkbox,
@@ -12,10 +12,11 @@ import {
     Space,
     Table,
     Tag,
-    Typography
+    Typography,
+    Input
 } from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import {useProducts} from "../../hooks/ProductHooks";
+import {useHandleFilterProducts} from "../../hooks/ProductHooks";
 import {ProductStatus} from "../../consts/ProductStatus";
 import {useStores} from "../../stores";
 import Avatar from "antd/es/avatar/avatar";
@@ -25,12 +26,15 @@ import {useHandleAddContract} from "../../hooks/ContractHooks";
 
 const {Content} = Layout;
 const {Column} = Table;
-const {Title} = Typography;
+const {Title, Text} = Typography;
 const {Option} = Select;
+const {Search} = Input;
 
 const avatarUrl = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
 
 const ProductManagementPage = observer(() => {
+    const [query, setQuery] = useState("");
+    const [selectedProductStatus, setSelectedProductStatus] = useState(ProductStatus.AVAILABLE);
     const [isViewDetailsModalVisible, setIsViewDetailsModalVisible] = useState(false);
     const [selectedViewProducts, setSelectedViewProducts] = useState([]);
 
@@ -48,8 +52,19 @@ const ProductManagementPage = observer(() => {
         }
     } = useStores();
 
-    const products = useProducts();
+    const [handleFilterProducts, {products, filtering}] = useHandleFilterProducts();
     const [handleAddContract, {handling}] = useHandleAddContract();
+
+    useEffect(() => {
+        handleFilterProducts({
+            query: query,
+            product_status: selectedProductStatus
+        });
+    }, [query, selectedProductStatus]);
+
+    const onSearch = queryValue => {
+        setQuery(queryValue);
+    };
 
     const onCheckoutButtonClick = () => {
         handleAddContract({
@@ -114,17 +129,53 @@ const ProductManagementPage = observer(() => {
                             </Col>
                             <Col span={18}>
                                 <Space direction="vertical" style={{width: "100%"}}>
-                                    <Select defaultValue={ProductStatus.AVAILABLE} size="large">
-                                        <Option value={ProductStatus.AVAILABLE}>Available</Option>
-                                        <Option value={ProductStatus.RESERVED}>Reserved</Option>
-                                        <Option value={ProductStatus.HIRED}>Hired</Option>
-                                    </Select>
-                                    <Table dataSource={products} rowKey="id">
-                                        <Column title="Name" dataIndex="name"/>
+                                    <Row gutter={24}>
+                                        <Col lg={8}>
+                                            <Search placeholder="Search for products"
+                                                    allowClear
+                                                    enterButton="Search"
+                                                    size="large"
+                                                    onSearch={onSearch}
+                                                    loading={filtering}/>
+                                        </Col>
+                                        <Col span={4}>
+                                            <Select defaultValue={ProductStatus.AVAILABLE} size="large"
+                                                    style={{width: "100%"}}
+                                                    value={selectedProductStatus}
+                                                    onSelect={productStatus => {
+                                                        setSelectedProductStatus(productStatus);
+                                                    }}>
+                                                <Option value={ProductStatus.AVAILABLE}>Available</Option>
+                                                <Option value={ProductStatus.RESERVED}>Reserved</Option>
+                                                <Option value={ProductStatus.HIRED}>Hired</Option>
+                                            </Select>
+                                        </Col>
+                                        <Col>
+                                            <Button size="large"
+                                                    onClick={() => {
+                                                        setQuery("");
+                                                        setSelectedProductStatus(ProductStatus.AVAILABLE);
+                                                    }}>
+                                                Clear
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                    <Table dataSource={products} rowKey="id" loading={filtering}>
+                                        <Column title="Name" dataIndex="name"
+                                                render={value => <Text strong>{value}</Text>}/>
                                         <Column title="Description" dataIndex="description"/>
-                                        <Column title="Product Code" dataIndex="product_code"/>
-                                        <Column title="Key Product Id" dataIndex="key_product_id"/>
-                                        <Column title="Key Taxcode Id" dataIndex="key_taxcode_id"/>
+                                        <Column title="Product Code" dataIndex="product_code"
+                                                render={value => <Tag color="purple" style={{fontSize: "1em"}}>
+                                                    {value}
+                                                </Tag>}/>/>
+                                        <Column title="Key Product Id" dataIndex="key_product_id"
+                                                render={value => <Tag color="purple" style={{fontSize: "1em"}}>
+                                                    {value}
+                                                </Tag>}/>
+                                        <Column title="Key Taxcode Id" dataIndex="key_taxcode_id"
+                                                render={value => <Tag color="blue" style={{fontSize: "1em"}}>
+                                                    {value}
+                                                </Tag>}/>
                                         <Column title="Status" dataIndex="status"
                                                 render={status => {
                                                     switch (status) {
@@ -162,7 +213,7 @@ const ProductManagementPage = observer(() => {
                            setIsViewDetailsModalVisible(false);
                        }}>
                     <Table dataSource={selectedViewProducts} pagination={false}>
-                        <Column title="Name" dataIndex="name"/>
+                        <Column title="Name" dataIndex="name" render={value => <Text strong>{value}</Text>}/>
                         <Column title="Description" dataIndex="description"/>
                         <Column title="Key Taxcode Id" dataIndex="key_taxcode_id"/>
                     </Table>

@@ -9,10 +9,11 @@ export const useHandleFilterContracts = () => {
     const [contracts, setContracts] = useState([]);
     const [filtering, setFiltering] = useState(false);
 
-    const handleFilterPackages = useCallback(() => {
+    const handleFilterContracts = useCallback(() => {
         setFiltering(true);
         axios.get(`${BACKEND_ENDPOINT}contracts`, {
-            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"},
+            params: filterParams
         }).then((response) => {
             setContracts(response.data);
         }).finally(() => {
@@ -20,7 +21,7 @@ export const useHandleFilterContracts = () => {
         });
     }, [])
 
-    return [handleFilterPackages, {contracts, filtering}];
+    return [handleFilterContracts, {contracts, filtering}];
 };
 
 export const useHandleRetrieveContract = () => {
