@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
-import CalendarPage from "./pages/CalendarPage";
+import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import PackageManagementPage from "./pages/PackageManagementPage/PackageManagementPage";
 import UserAccountPage from "./pages/UserAccountPage/UserAccountPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
