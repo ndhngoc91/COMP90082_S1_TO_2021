@@ -15,11 +15,10 @@ describe('Test the order history Page', () => {
         cy.get('.ant-menu').contains('Order History').click()
         cy.url().should('contain', '/order-history')
         cy.get('.ant-input').clear().type('Ruby')
-        cy.get('.ant-input-group-addon > .ant-btn').click()
+        cy.get('.ant-btn').click()
         cy.get('body').should('not.contain','Law')
-        cy.get('[data-row-key="0"] > :nth-child(7) > .ant-space > ' +
-            '.ant-space-item > .ant-btn').click()
-        cy.get('.ant-table-thead > tr > :nth-child(6)').should('not.contain','Done')
+        cy.get(':nth-child(7) > .ant-space > .ant-space-item > a').click()
+        cy.get(':nth-child(6)').should('not.contain','New')
     });
 
 });

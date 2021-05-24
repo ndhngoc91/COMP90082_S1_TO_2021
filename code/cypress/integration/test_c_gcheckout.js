@@ -15,8 +15,8 @@ describe('Test the Checkout to print Page', () => {
     it('Checkout to print Page', () => {
         cy.get('.ant-menu').contains('Packages').click()
         cy.url().should('contain', '/packages')
-        cy.get(':nth-child(1) > .ant-card > .ant-card-body > ' +
-            '.ant-row-space-between > .ant-typography > .ant-btn').click()
+        cy.get(':nth-child(1) > .ant-space-vertical > :nth-child(3) > .ant-space > ' +
+            '[style="margin-right: 8px;"] > .ant-typography > .ant-btn').click()
         cy.get(':nth-child(1) > .ant-col-8 > .ant-form-item-control-input > ' +
             '.ant-form-item-control-input-content > .ant-input-number > ' +
             '.ant-input-number-handler-wrap > .ant-input-number-handler-up').click()
@@ -43,3 +43,41 @@ describe('Test the Checkout to print Page', () => {
     });
 
 });
+
+
+/*
+
+describe('Test the Navigation Bar', () =>{
+
+    for (const user of testLoginUser){
+        it(user.summary, function()
+        {
+            cy.visit('/');
+
+            cy.contains('Login').click();
+
+            //fill in username
+            cy.get('#basic_username')
+                .type(user.username)
+                .should("have.value",user.username);
+
+            //fill in psw
+            cy.get('#basic_password')
+                .type(user.password)
+                .should("have.value",user.password);
+
+            //submit form and assertion
+            cy.get('form#basic').submit();
+            if (user.username === 'test0'){
+                cy.get('body').should('contain', 'Customer Level Pricing')
+            }else if (user.username === 'test5'){
+                cy.get('body').should('contain', 'Orders Processed')
+            }else {
+                cy.get('body').should('not.contain', 'Calendar')
+            }
+            // 直接截图整个页面
+            cy.screenshot()
+        })
+    }
+});
+* */

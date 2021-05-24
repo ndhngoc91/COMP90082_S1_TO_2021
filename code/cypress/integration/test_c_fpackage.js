@@ -19,20 +19,21 @@ describe('Test the package to shopping cart Page', () => {
     })
 
     it('Package to shopping cart Page', () => {
-        cy.get('.ant-menu > :nth-child(4)').click()
+        cy.get('.ant-menu').contains('Packages').click()
         cy.url().should('contain', '/packages')
 
-        cy.get('div.ant-card-meta-title').each((item,index,$list) => {
+
+        cy.get('h4.ant-typography').each((item,index,$list) => {
             cy.log(item.text(),index,$list)
             const temp = item.text()
             record.push(temp)
         })
         cy.log(record)
-        cy.get('button.ant-btn.ant-btn-link.ant-btn-lg').each((item,index,$list) => {
+        cy.get('button.ant-btn.ant-btn-primary').each((item,index,$list) => {
             //cy.log(item,index,$list)
             if ((index % 2 === 1) && (index < 12)){
-                cy.get(':nth-child('+index+') > .ant-card > .ant-card-body > ' +
-                    '.ant-row-space-between > .ant-typography > .ant-btn').click()
+                cy.get(':nth-child('+index+') > .ant-space-vertical > :nth-child(3) > .ant-space > ' +
+                    '[style="margin-right: 8px;"] > .ant-typography > .ant-btn').click()
                 //cy.log(index,record[index-1])
                 cy.get('body').should('contain',record[index-1])
                 orderlist.push(record[index-1])
@@ -73,6 +74,18 @@ describe('Test the package to shopping cart Page', () => {
                     itemsdetail.push(temp)
                 })
 
+                /*
+                let temp1;
+                cy.get('div.ant-col.ant-col-16.ant-form-item-label').each(((item3,index3,$list3) => {
+                    //cy.log(item3.text(),index3,$list3)
+                    temp1 = item3.text()
+                    cy.log(temp1)
+                    details.push(temp1)
+                    cy.log(details[0])
+                }))
+                cy.log(details[0])
+                * */
+
                 cy.get('input.ant-checkbox-input').each(((item1, index1, $list1) => {
                     if (index1 % 2 === 1){
                         cy.get(':nth-child('+index1+') > .ant-checkbox-wrapper > .ant-checkbox > .ant-checkbox-input').click()
@@ -105,8 +118,47 @@ describe('Test the package to shopping cart Page', () => {
                 cy.get('body').contains(orderlist[length])
                 cy.log(orderlist[length])
             }
+            //cy.get('[style="margin-bottom: 8px;"] > .ant-btn').click()
         })
 
     })
 
 });
+
+
+/*
+
+describe('Test the Navigation Bar', () =>{
+
+    for (const user of testLoginUser){
+        it(user.summary, function()
+        {
+            cy.visit('/');
+
+            cy.contains('Login').click();
+
+            //fill in username
+            cy.get('#basic_username')
+                .type(user.username)
+                .should("have.value",user.username);
+
+            //fill in psw
+            cy.get('#basic_password')
+                .type(user.password)
+                .should("have.value",user.password);
+
+            //submit form and assertion
+            cy.get('form#basic').submit();
+            if (user.username === 'test0'){
+                cy.get('body').should('contain', 'Customer Level Pricing')
+            }else if (user.username === 'test5'){
+                cy.get('body').should('contain', 'Orders Processed')
+            }else {
+                cy.get('body').should('not.contain', 'Calendar')
+            }
+            // 直接截图整个页面
+            cy.screenshot()
+        })
+    }
+});
+* */

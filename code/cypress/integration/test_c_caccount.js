@@ -13,7 +13,7 @@ describe('Test the account Page', () => {
 
     it('Edit account Page successfully', () => {
         cy.get('.ant-menu').contains('Ruby').click()
-        cy.get('#user\\$Menu').contains('Account').click()
+        cy.get('#SubMenu\\$Menu').contains('Account').click()
 
         cy.location('pathname').should('include', 'profile')
 
@@ -50,7 +50,7 @@ describe('Test the account Page', () => {
 
     it('Not edit Profile Page', () => {
         cy.get('.ant-menu').contains('Ruby').click()
-        cy.get('#user\\$Menu').contains('Account').click()
+        cy.get('#SubMenu\\$Menu').contains('Account').click()
 
         cy.get('.menu > .ant-menu').contains('Profile')
         cy.get('.ant-menu-item-selected > :nth-child(2) > a').click()
@@ -66,3 +66,41 @@ describe('Test the account Page', () => {
     })
 
 });
+
+
+/*
+
+describe('Test the Navigation Bar', () =>{
+
+    for (const user of testLoginUser){
+        it(user.summary, function()
+        {
+            cy.visit('/');
+
+            cy.contains('Login').click();
+
+            //fill in username
+            cy.get('#basic_username')
+                .type(user.username)
+                .should("have.value",user.username);
+
+            //fill in psw
+            cy.get('#basic_password')
+                .type(user.password)
+                .should("have.value",user.password);
+
+            //submit form and assertion
+            cy.get('form#basic').submit();
+            if (user.username === 'test0'){
+                cy.get('body').should('contain', 'Customer Level Pricing')
+            }else if (user.username === 'test5'){
+                cy.get('body').should('contain', 'Orders Processed')
+            }else {
+                cy.get('body').should('not.contain', 'Calendar')
+            }
+            // 直接截图整个页面
+            cy.screenshot()
+        })
+    }
+});
+* */
