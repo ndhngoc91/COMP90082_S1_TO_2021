@@ -1,7 +1,7 @@
 import {testRegisterUser} from "./testRegisterUser";
 import {testRegisterStaff} from "./testRegisterUser";
 
-describe("Home Page to Register Page", function () {
+describe("Home Page to Register Page", () => {
     it("test", () => {
         cy.visit("/");
         cy.get(".ant-menu > :nth-child(8)").click();
@@ -20,12 +20,12 @@ describe("Home Page to Register Page", function () {
     })
 })
 
-describe("Register Staff Page", function () {
+describe("Register Staff Page", () => {
     beforeEach(() => {
         cy.visit("/register-as-a-admin");
     })
     for (const staff of testRegisterStaff) {
-        it(staff.summary, function () {
+        it(staff.summary, () => {
             cy.get("#username").type(staff.username).should("have.value", staff.username);
 
             cy.get("#password").type(staff.password).should("have.value", staff.password);
@@ -64,13 +64,13 @@ describe("Register Staff Page", function () {
     }
 })
 
-describe("Register Customer Page", function () {
+describe("Register Customer Page", () => {
     beforeEach(() => {
         cy.visit("/register")
     })
 
     for (const user of testRegisterUser) {
-        it(user.summary, function () {
+        it(user.summary, () => {
             cy.get("#username.ant-input").type(user.username).should("have.value", user.username);
 
             cy.get("#password.ant-input").type(user.password).should("have.value", user.password);
