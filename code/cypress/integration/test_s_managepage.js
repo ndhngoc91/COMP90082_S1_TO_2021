@@ -1,5 +1,5 @@
 
-describe('Test the Calendar page view', function() {
+describe('Test the Management page view', function() {
     beforeEach(() => {
         cy.visit('/login')  // this is Staff username and psw, might need to be changed in the future
         //fill in username
@@ -11,6 +11,44 @@ describe('Test the Calendar page view', function() {
         //submit form and assertion
         cy.get('#normal_login').submit();
     });
+
+
+    it('Click the User Management button and view related content', ()=>{
+
+        //find OrderHistory button and click
+        cy.get('ul[role=menu] li').contains(/Management Pages/).trigger('mouseover');
+        cy.get('ul[role=menu] li').should('contain','User Management').click() ; //here has problem
+        //check url redirection
+        cy.url().should('contain','/user-management');
+        //check page content
+        cy.get('body').should('contain','Username')
+            .and('contain','First Name')
+            .and('contain','Last Name')
+            .and('contain','Phone')
+            .and('contain','Email')
+            .and('contain','Gender');
+    });
+
+
+    it('Click the Package Management button and view related content', ()=>{
+
+        //find OrderHistory button and click
+        cy.get('ul[role=menu] li').contains(/Management Pages/).trigger('mouseover');
+        cy.get('ul[role=menu] li').should('contain','Package Management').click() ; //here has problem
+        //check url redirection
+        cy.url().should('contain','/package-management');
+        //check page content
+        cy.get('body').should('contain','Name')
+            .and('contain','Age Group')
+            .and('contain','Category')
+            .and('contain','Skill Level')
+            .and('contain','Base Price')
+            .and('contain','Beginner')
+            .and('contain','Adult');
+    });
+
+
+
 
 
 
