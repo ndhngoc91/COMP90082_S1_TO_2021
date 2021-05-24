@@ -21,6 +21,13 @@ describe('Test the Calendar page view', function() {
         //check page content
         cy.get('body').should('contain','Items');
         cy.get('body').should('contain','Package');
+        cy.get('main').should('contain','Su')
+            .and('contain', 'Mo')
+            .and('contain', 'Tu')
+            .and('contain', 'We')
+            .and('contain', 'Th')
+            .and('contain', 'Fr')
+            .and('contain', 'Sa');
 
     });
 
