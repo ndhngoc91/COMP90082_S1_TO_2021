@@ -13,7 +13,6 @@ export const useHandleFilterContracts = () => {
         setFiltering(true);
         axios.get(`${BACKEND_ENDPOINT}contracts`, {
             headers: {"Content-Type": "application/JSON; charset=UTF-8"},
-            params: filterParams
         }).then((response) => {
             setContracts(response.data);
         }).finally(() => {
@@ -36,6 +35,9 @@ export const useHandleRetrieveContract = () => {
         }).then((response) => {
             if (response.status === 200) {
                 setContract(response.data);
+                success();
+            } else {
+                failure();
             }
         }).finally(() => {
             setRetriving(false);
