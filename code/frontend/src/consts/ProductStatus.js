@@ -1,5 +1,5 @@
 export const ProductStatus = {
-    AVAILABLE: 'AVAILABLE',
-    RESERVED: 'RESERVED',
-    HIRED: 'HIRED'
+    AVAILABLE: "AVAILABLE",
+    RESERVED: "RESERVED",
+    HIRED: "HIRED"
 };

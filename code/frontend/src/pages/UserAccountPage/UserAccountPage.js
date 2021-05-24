@@ -1,11 +1,11 @@
 import {Layout} from "antd";
 import React from "react";
 import {BrowserRouter, Route, Switch, useRouteMatch} from "react-router-dom";
-import UserProfileSideMenu from "../../components/UserProfileSideMenu";
+import UserProfileSideMenu from "../../components/UserProfileForm/UserProfileSideMenu";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import UserProfileForm from "../../components/UserProfileForm/UserProfileForm";
-import UserGroupList from "../../components/UserGroupList";
-import AddressManagementTable from "../../components/AddressManagementTable";
+import UserGroupList from "../../components/UserGroupList/UserGroupList";
+import AddressManagementTable from "../../components/UserProfileForm/AddressManagementTable";
 
 const {Sider, Content} = Layout;
 

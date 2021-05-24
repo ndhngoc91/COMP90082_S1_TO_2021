@@ -14,7 +14,7 @@ import {useNavigationBarStyles} from "./styles";
 import {observer} from "mobx-react-lite";
 import {USER_ROLE} from "../../consts/UserRole";
 import {useHandleLogin} from "../../hooks/AuthHooks";
-import LoginForm from "../LoginForm";
+import LoginForm from "../LoginForm/LoginForm";
 
 const {Header} = Layout;
 const {SubMenu} = Menu;

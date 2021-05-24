@@ -40,13 +40,7 @@ const UserProfileForm = () => {
     const [handleEditProfile, {handling}] = useHandleEditProfile();
 
     useEffect(() => {
-        console.log("weight",weight);
-        console.log("height",height);
-        console.log("footsize",footSize);
-        console.log(age);
-        console.log("skill",skill_level_id);
         setEstimatedDin(parseInt(SkierCode({weight, height, skill_level_id, age, footSize})));
-        console.log("din",estimateDin);
     }, [weight, height, skill_level_id,age,footSize]);
 
     const onStateChange = value => {

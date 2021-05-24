@@ -14,11 +14,14 @@ export class HiringEquipmentRegister {
             recipientMap: observable,
             selectedRecipientIndex: observable,
             recipients: computed,
+            isMakingContract: computed,
             isReadyToMakeContract: computed,
             selectedRecipientId: computed,
             contractDetails: computed,
             pickupOrder: action,
-            selectProduct: action
+            selectProduct: action,
+            cancelSelection: action,
+            clearEquipmentRegisterProcess: action
         });
         this.order = null;
         this.orderDetails = [];
@@ -28,6 +31,14 @@ export class HiringEquipmentRegister {
 
     get recipients() {
         return Object.values(this.recipientMap).map(recipient => recipient.recipient)
+    }
+
+    get isMakingContract() {
+        if (this.order === null) {
+            return false;
+        }
+
+        return !this.isReadyToMakeContract;
     }
 
     get isReadyToMakeContract() {
@@ -81,6 +92,13 @@ export class HiringEquipmentRegister {
         if (recipient.selectedProducts.length === recipient.productGroups.length) {
             this.selectedRecipientIndex = this.selectedRecipientIndex + 1;
         }
+    }
+
+    cancelSelection = () => {
+        Object.values(this.recipientMap).forEach(recipient => {
+            recipient.selectedProducts = [];
+        });
+        this.selectedRecipientIndex = 0;
     }
 
     clearEquipmentRegisterProcess = () => {

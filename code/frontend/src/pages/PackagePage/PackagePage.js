@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Card, Image, Layout, Row, Select, Typography, Divider, Statistic} from "antd";
+import {Button, Col, Card, Image, Layout, Row, Select, Typography, Divider, Statistic, Tag} from "antd";
 import {BrowserRouter} from "react-router-dom";
 import {usePackages} from "../../hooks/PackageHooks";
 import {useCategories} from "../../hooks/CategoryHooks";
@@ -79,6 +79,9 @@ const PackagePage = () => {
                                                     View Details
                                                 </Button>
                                             </Link>
+                                            <Row align="middle">
+                                                <Tag color="green" style={{fontSize: "1em"}}>Available</Tag>
+                                            </Row>
                                             <Statistic value={Math.floor(Math.random() * 500)}
                                                        prefix={<LikeOutlined/>}/>
                                         </Row>

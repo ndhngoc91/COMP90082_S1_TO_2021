@@ -1,5 +1,19 @@
 import React from "react";
-import {Button, Checkbox, Col, Divider, Layout, List, notification, Row, Space, Table, Tag, Typography} from "antd";
+import {
+    Button,
+    Checkbox,
+    Col,
+    Divider,
+    Layout,
+    List,
+    notification,
+    Row,
+    Select,
+    Space,
+    Table,
+    Tag,
+    Typography
+} from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {useProducts} from "../../hooks/ProductHooks";
 import {ProductStatus} from "../../consts/ProductStatus";
@@ -12,6 +26,7 @@ import {useHandleAddContract} from "../../hooks/ContractHooks";
 const {Content} = Layout;
 const {Column} = Table;
 const {Title} = Typography;
+const {Option} = Select;
 
 const avatarUrl = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
 
@@ -20,9 +35,11 @@ const ProductManagementPage = observer(() => {
         hiringEquipmentRegister: {
             selectedRecipientId,
             recipients,
+            isMakingContract,
             isReadyToMakeContract,
             contractDetails,
             selectProduct,
+            cancelSelection,
             clearEquipmentRegisterProcess
         }
     } = useStores();
@@ -60,13 +77,14 @@ const ProductManagementPage = observer(() => {
                                       renderItem={recipient => {
                                           return <List.Item>
                                               <List.Item.Meta
+                                                  style={{padding: ".5em"}}
                                                   avatar={<Avatar src={avatarUrl}/>}
                                                   title={<a href="https://ant.design">
                                                       {recipient.first_name} {recipient.last_name}
                                                   </a>}
                                                   description={selectedRecipientId === recipient.id ?
-                                                      <Tag color="green" style={{fontSize: "1em"}}>Handling</Tag> :
-                                                      <Tag color="purple" style={{fontSize: "1em"}}>Processed</Tag>}
+                                                      <Tag color="blue" style={{fontSize: "1em"}}>Handling</Tag> :
+                                                      <Tag color="green" style={{fontSize: "1em"}}>Processed</Tag>}
                                               />
                                           </List.Item>;
                                       }}/>
@@ -78,40 +96,50 @@ const ProductManagementPage = observer(() => {
                                                 onClick={onCheckoutButtonClick}>
                                             Checkout
                                         </Button>
-                                        <Button className={fullWidthCls} size="large">
+                                        <Button className={fullWidthCls} size="large" onClick={cancelSelection}>
                                             Cancel
                                         </Button>
                                     </Space>
                                 </>}
                             </Col>
                             <Col span={18}>
-                                <Table dataSource={products} rowKey="id">
-                                    <Column title="Name" dataIndex="name"/>
-                                    <Column title="Description" dataIndex="description"/>
-                                    <Column title="Product Code" dataIndex="product_code"/>
-                                    <Column title="Key Product Id" dataIndex="key_product_id"/>
-                                    <Column title="Key Taxcode Id" dataIndex="key_taxcode_id"/>
-                                    <Column title="Status" dataIndex="status"
-                                            render={status => {
-                                                switch (status) {
-                                                    case ProductStatus.RESERVED:
-                                                        return <Tag color="red"
-                                                                    style={{fontSize: "1em"}}>Reserved</Tag>;
-                                                    case ProductStatus.HIRED:
-                                                        return <Tag color="red" style={{fontSize: "1em"}}>Hired</Tag>;
-                                                    case ProductStatus.AVAILABLE:
-                                                        return <Tag color="green"
-                                                                    style={{fontSize: "1em"}}>Available</Tag>;
-                                                }
-                                            }}/>
-                                    {!isReadyToMakeContract &&
-                                    <Column title="Select"
-                                            render={record => {
-                                                return <Checkbox onClick={() => {
-                                                    selectProduct(record);
+                                <Space direction="vertical" style={{width: "100%"}}>
+                                    <Select defaultValue={ProductStatus.AVAILABLE} size="large">
+                                        <Option value={ProductStatus.AVAILABLE}>Available</Option>
+                                        <Option value={ProductStatus.RESERVED}>Reserved</Option>
+                                        <Option value={ProductStatus.HIRED}>Hired</Option>
+                                    </Select>
+                                    <Table dataSource={products} rowKey="id">
+                                        <Column title="Name" dataIndex="name"/>
+                                        <Column title="Description" dataIndex="description"/>
+                                        <Column title="Product Code" dataIndex="product_code"/>
+                                        <Column title="Key Product Id" dataIndex="key_product_id"/>
+                                        <Column title="Key Taxcode Id" dataIndex="key_taxcode_id"/>
+                                        <Column title="Status" dataIndex="status"
+                                                render={status => {
+                                                    switch (status) {
+                                                        case ProductStatus.RESERVED:
+                                                            return <Tag color="red"
+                                                                        style={{fontSize: "1em"}}>Reserved</Tag>;
+                                                        case ProductStatus.HIRED:
+                                                            return <Tag color="red"
+                                                                        style={{fontSize: "1em"}}>Hired</Tag>;
+                                                        case ProductStatus.AVAILABLE:
+                                                            return <Tag color="green"
+                                                                        style={{fontSize: "1em"}}>Available</Tag>;
+                                                    }
                                                 }}/>
-                                            }}/>}
-                                </Table>
+                                        {isMakingContract &&
+                                        <Column title="Select"
+                                                render={record => {
+                                                    if (record.status === ProductStatus.AVAILABLE) {
+                                                        return <Checkbox onClick={() => {
+                                                            selectProduct(record);
+                                                        }}/>
+                                                    }
+                                                }}/>}
+                                    </Table>
+                                </Space>
                             </Col>
                         </Row>
                     </Content>

@@ -14,10 +14,10 @@ import {
     DeleteOutlined, EditOutlined,
     PlusOutlined, SearchOutlined,
 } from "@ant-design/icons";
-import {useHandleDeleteUserGroup, useHandleEditUserGroup, useUserGroups} from "../hooks/UserGroupHooks";
-import {useStores} from "../stores";
-import AddUserGroupForm from "./UserGroupList/AddUserGroupForm";
-import EditUserGroupForm from "./UserGroupList/EditUserGroupForm";
+import {useHandleDeleteUserGroup, useHandleEditUserGroup, useUserGroups} from "../../hooks/UserGroupHooks";
+import {useStores} from "../../stores";
+import AddUserGroupForm from "./AddUserGroupForm";
+import EditUserGroupForm from "./EditUserGroupForm";
 
 const {Title, Link} = Typography;
 const {Panel} = Collapse;
