@@ -1,37 +1,28 @@
 import React from "react";
 import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
 import NavigationBar from "../components/NavigationBar/NavigationBar";
-import {Calendar, Badge, Checkbox, Layout, Row, Col, DatePicker, Space, Typography, Divider, Select} from "antd";
+import {Calendar, Badge, Layout} from "antd";
 import {useStores} from "../stores";
 import {USER_ROLE} from "../consts/UserRole";
 
-const {Content, Sider} = Layout;
-const {Title} = Typography;
+const {Content} = Layout;
 
 const getListData = (value) => {
     let listData;
     switch (value.date()) {
-        case 8:
+        case 25:
             listData = [
-                {type: "warning", content: "This is warning event."},
-                {type: "success", content: "This is usual event."},
+                {type: "warning", content: "Return products!"}
             ];
             break;
-        case 10:
+        case 27:
             listData = [
-                {type: "warning", content: "This is warning event."},
-                {type: "success", content: "This is usual event."},
-                {type: "error", content: "This is error event."},
+                {type: "warning", content: "Return products!"}
             ];
             break;
-        case 15:
+        case 28:
             listData = [
-                {type: "warning", content: "This is warning event"},
-                {type: "success", content: "This is very long usual event。。...."},
-                {type: "error", content: "This is error event 1."},
-                {type: "error", content: "This is error event 2."},
-                {type: "error", content: "This is error event 3."},
-                {type: "error", content: "This is error event 4."},
+                {type: "warning", content: "Return products!"}
             ];
             break;
         default:
@@ -70,53 +61,12 @@ const monthCellRender = (value) => {
     ) : null;
 };
 
-const options = [
-    {label: "All", value: "All"},
-    {label: "Ski", value: "Ski"},
-    {label: "Poles", value: "Poles"},
-    {label: "Snowboard", value: "Snowboard"},
-    {label: "Helmet", value: "Helmet"},
-    {label: "Suit", value: "Suit"},
-    {label: "Jacket", value: "Jacket"},
-    {label: "Pants", value: "Pants"},
-    {label: "Boots", value: "Boots"}
-];
-
-
 const CalendarPage = () => {
     const {authStore: {userRole}} = useStores();
 
     return <Layout style={{minHeight: "100vh"}}>
         <NavigationBar/>
         <Layout style={{height: "100%"}}>
-            <Sider style={{backgroundColor: "white", padding: "20px"}} width={300}>
-                <Title level={3}>Filter</Title>
-                <Divider/>
-                <Space direction="vertical" size={20}>
-                    <Row justify="start">
-                        <DatePicker placeholder="Start date" size="large"/>
-                    </Row>
-                    <Row justify="start">
-                        <DatePicker placeholder="End date" size="large"/>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Title level={5}>Type</Title>
-                            <Checkbox.Group options={options} defaultValue={["Pear"]}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Title level={5}>Availability</Title>
-                            <Select defaultValue={2} style={{width: "200px"}}>
-                                <Select.Option value={0}>Available</Select.Option>
-                                <Select.Option value={1}>Not available</Select.Option>
-                                <Select.Option value={2}>Any</Select.Option>
-                            </Select>
-                        </Col>
-                    </Row>
-                </Space>
-            </Sider>
             <Content>
                 {userRole === USER_ROLE.STAFF &&
                 <GanttTimeline/>}

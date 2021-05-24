@@ -30,7 +30,6 @@ const GanttTimeline = () => {
     const [timelineMode, setTimelineMode] = useState('month');
 
     const onSelectItem = (selectedItem) => {
-        console.log(selectedItem);
         alert(123);
         setSelectedItem(selectedItem);
     };

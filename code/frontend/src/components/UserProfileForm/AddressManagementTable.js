@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {Col, Row, Space, Table, Button, Typography, Modal, notification} from "antd";
 import {PlusOutlined} from "@ant-design/icons";
-import {useHandleDeleteAddress, usePersonalAddresses} from "../hooks/AddressHooks";
-import AddAddressForm from "./AddressForms/AddAddressForm";
-import EditAddressForm from "./AddressForms/EditAddressForm";
+import {useHandleDeleteAddress, usePersonalAddresses} from "../../hooks/AddressHooks";
+import AddAddressForm from "../AddressForms/AddAddressForm";
+import EditAddressForm from "../AddressForms/EditAddressForm";
 
 const {Column} = Table;
 const {Title, Link} = Typography;
@@ -68,7 +68,6 @@ const UserManagementPage = () => {
                 <EditAddressForm fieldsValue={selectedRecord}/>
             </Modal>
         </>
-
     );
 };
 
