@@ -15,7 +15,7 @@ describe('Test the Management page view', function() {
 
     it('Click the User Management button and view related content', ()=>{
 
-        //find OrderHistory button and click
+        //find Management button and click
         cy.get('ul[role=menu] li').contains(/Management Pages/).trigger('mouseover');
         cy.get('ul[role=menu] li').should('contain','User Management').click() ; //here has problem
         //check url redirection
@@ -32,7 +32,7 @@ describe('Test the Management page view', function() {
 
     it('Click the Package Management button and view related content', ()=>{
 
-        //find OrderHistory button and click
+        //find Management button and click
         cy.get('ul[role=menu] li').contains(/Management Pages/).trigger('mouseover');
         cy.get('ul[role=menu] li').should('contain','Package Management').click() ; //here has problem
         //check url redirection
@@ -48,7 +48,22 @@ describe('Test the Management page view', function() {
     });
 
 
+    it('Click the Product Management button and view related content', ()=>{
 
+        //find Management button and click
+        cy.get('ul[role=menu] li').contains(/Management Pages/).trigger('mouseover');
+        cy.get('ul[role=menu] li').should('contain','Product Management').click() ; //here has problem
+        //check url redirection
+        cy.url().should('contain','/product-management');
+        //check page content
+        cy.get('body').should('contain','Name')
+            .and('contain','Description')
+            .and('contain','Product Code')
+            .and('contain','Key Product id')
+            .and('contain','Key Taxcode id')
+            .and('contain','Recipient List');
+
+    });
 
 
 
