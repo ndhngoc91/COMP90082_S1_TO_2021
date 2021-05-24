@@ -1,17 +1,7 @@
 import React from "react";
 import {
-    Button,
-    Col,
-    Descriptions,
-    Divider,
-    Image,
-    Layout,
-    Row,
-    Space,
-    Typography,
-    DatePicker,
-    Tag,
-    notification, Table, Steps
+    Button, Row, Col, Descriptions, Divider, Image, Layout, Space, Typography, DatePicker,
+    Tag, Table, Checkbox, notification, message
 } from "antd";
 import NavigatorBar from "../../components/NavigationBar/NavigationBar";
 import {useHistory} from "react-router-dom";
@@ -115,11 +105,14 @@ const ShoppingCartPage = observer(() => {
                                             }}/>
                                             <Column title="Selected" dataIndex="selected"
                                                     render={(selected, record) => {
-                                                        return <Tag color={selected ? "green" : "red"} onClick={() => {
-                                                            toggleExtraItem(cartItem["id"], record["id"]);
-                                                        }}>
-                                                            {selected ? "Selected" : "Not Selected"}
-                                                        </Tag>;
+                                                        return <Checkbox checked={selected} onChange={e => {
+                                                            toggleExtraItem(cartItem["id"], record["id"])
+                                                            if (e.target.checked) {
+                                                                message.success(`Added ${record["name"]}`).then();
+                                                            } else {
+                                                                message.error(`Removed ${record["name"]}`).then();
+                                                            }
+                                                        }}/>;
                                                     }}/>
                                         </Table>
                                     </Col>
