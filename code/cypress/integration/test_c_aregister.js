@@ -6,16 +6,16 @@ describe('Home Page to Register Page', function() {
         cy.visit('/')
         cy.get('.ant-menu > :nth-child(8)').click()
 
-        // 判断页面跳转到 http://127.0.0.1:3000/register
+        // go to http://127.0.0.1:3000/register
         cy.url().should('include', '/register')
-        // and '欢迎您：user1' in page
+
         cy.get('body').should('contain', 'Already')
 
-        //输出为空，网站不存在cookie
+
         cy.getCookies().each((cookie) => {
             cy.log(cookie.name,cookie.value);
         })
-        // 直接截图整个页面
+
         cy.screenshot()
     })
 })
@@ -27,10 +27,10 @@ describe('Register Staff Page', function() {
     for (const staff of testRegisterStaff){
         it(staff.summary, function()
         {
-            // 输入用户名
+
             cy.get('#username').type(staff.username)
                 .should('have.value', staff.username)
-            // 输入密码
+
             cy.get('#password').type(staff.password)
                 .should('have.value', staff.password)
             if (staff.username == 'test6'){
@@ -50,11 +50,11 @@ describe('Register Staff Page', function() {
             if (staff.username == 'test7'){
                 cy.get('body').should('contain', 'valid')
             }
-            // 提交表单
+
             cy.get('.ant-form').submit()
-            // 判断页面跳转到 http://127.0.0.1:3000/
+
             cy.url().should('include', '/')
-            // and '欢迎您：ruby' in page
+
             cy.log(staff.username)
             if (staff.username == 'ruby'){
                 cy.get('body').should('contain', 'Username')
@@ -64,11 +64,11 @@ describe('Register Staff Page', function() {
                 cy.get('body').should('contain', 'Email')
             }
 
-            //输出为空，网站不存在cookie
+            
             cy.getCookies().each((cookie) => {
                 cy.log(cookie.name,cookie.value);
             })
-            // 直接截图整个页面
+
             cy.screenshot()
         })
     }
