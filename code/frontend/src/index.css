@@ -111,3 +111,7 @@ ul {
 .ant-checkbox-group-item {
     display: flex;
 }
+
+.ant-collapse-content-box {
+    padding: 0 !important;
+}

@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
 import {Col, Layout, Row, Space, Table, Input} from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
-import {useHandleFilterContracts} from "../../hooks/ContractHooks";
+import {useHandleFilterContracts, useHandleRetrieveContract} from "../../hooks/ContractHooks";
+import {exportContract} from "../../utils/ContractExporter";
 
 const {Content} = Layout;
 const {Column} = Table;
@@ -9,10 +10,17 @@ const {Search} = Input;
 
 const ContractManagementPage = () => {
     const [handleFilterContracts, {contracts, filtering}] = useHandleFilterContracts();
+    const [handleRetrieveContract, {contract}] = useHandleRetrieveContract();
 
     useEffect(() => {
         handleFilterContracts();
     }, []);
+
+    useEffect(() => {
+        if (contract) {
+            exportContract(contract);
+        }
+    }, [contract]);
 
     return (
         <>
@@ -29,12 +37,16 @@ const ContractManagementPage = () => {
                         </Col>
                     </Row>
                     <Content>
-                        <Table dataSource={contracts} loading={filtering}>
+                        <Table dataSource={contracts} loading={filtering} rowKey={"id"}>
                             <Column title="Name" dataIndex="name"/>
                             <Column title="Created At" dataIndex="created_at"/>
                             <Column title="Created_By" dataIndex="created_by"/>
-                            <Column title="Action" key="action" render={(text, record) =>
-                                <a onClick={() => alert("print contract")}>Print</a>
+                            <Column title="Action" key="action" render={record =>
+                                <a onClick={() => {
+                                    handleRetrieveContract(record["id"], () => {
+                                        console.log(contract);
+                                    });
+                                }}>Print</a>
                             }/>
                         </Table>
                     </Content>

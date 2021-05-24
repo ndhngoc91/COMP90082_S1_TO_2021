@@ -1,34 +1,48 @@
 import React, {useState} from "react";
 import {
-    Avatar,
-    Collapse,
-    Button,
-    List,
-    Col,
-    Row,
-    Space,
-    Typography,
-    Popconfirm, Drawer, Modal
+    Collapse, Button, Col, Row, Space, Typography, Popconfirm, Drawer, Modal, Table, Tag
 } from "antd";
 import {
-    DeleteOutlined, EditOutlined,
-    PlusOutlined, SearchOutlined,
+    DeleteOutlined, EditOutlined, PlusOutlined
 } from "@ant-design/icons";
-import {useHandleDeleteUserGroup, useHandleEditUserGroup, useUserGroups} from "../../hooks/UserGroupHooks";
+import {useHandleDeleteUserGroup, useUserGroups} from "../../hooks/UserGroupHooks";
 import {useStores} from "../../stores";
 import AddUserGroupForm from "./AddUserGroupForm";
 import EditUserGroupForm from "./EditUserGroupForm";
 
-const {Title, Link} = Typography;
+const {Title} = Typography;
 const {Panel} = Collapse;
+const {Column} = Table;
 
-const SampleAvatar = () => <Avatar src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"/>;
+const data = [
+    {
+        key: '1',
+        name: 'John Brown',
+        age: 32,
+        address: 'New York No. 1 Lake Park',
+        tags: ['nice', 'developer'],
+    },
+    {
+        key: '2',
+        name: 'Jim Green',
+        age: 42,
+        address: 'London No. 1 Lake Park',
+        tags: ['loser'],
+    },
+    {
+        key: '3',
+        name: 'Joe Black',
+        age: 32,
+        address: 'Sidney No. 1 Lake Park',
+        tags: ['cool', 'teacher'],
+    },
+];
 
 const UserGroupList = () => {
     const [drawVisible, setDrawVisible] = useState(false);
     const [addUserGroupFormVisible, setAddUserGroupFormVisible] = useState(false);
     const [editUserGroupFormVisible, setEditUserGroupFormVisible] = useState(false);
-    const [selectedContact, setSelectedContact] = useState({});
+    const [selectedContact] = useState({});
     const [selectedUserGroup, setSelectedUserGroup] = useState({});
 
     const {authStore: {id}} = useStores();
@@ -84,24 +98,26 @@ const UserGroupList = () => {
                                 </div>
                             </Space>
                         }>
-                            <List dataSource={userGroup.contacts}
-                                  renderItem={contact => (
-                                      <List.Item key={contact.name}
-                                                 actions={[
-                                                     <Link key={`a-${contact.name}`}
-                                                           onClick={() => {
-                                                               setSelectedContact(contact);
-                                                               setDrawVisible(true);
-                                                           }}>
-                                                         <SearchOutlined/> View Profile
-                                                     </Link>,
-                                                 ]}>
-                                          <List.Item.Meta avatar={<SampleAvatar/>}
-                                                          title={contact.name}
-                                                          description={contact.name}
-                                                          key={contact.name}/>
-                                      </List.Item>
-                                  )}/>
+                            <Table dataSource={data} pagination={false}>
+                                <Column title="Name" dataIndex="name" key="name" render={text => <a>{text}</a>}/>
+                                <Column title="Age" dataIndex="age" key="age"/>
+                                <Column title="Address" dataIndex="address" key="address"/>
+                                <Column title="Tags" dataIndex="tags" key="tags" render={tags =>
+                                    <>
+                                        {tags.map(tag => {
+                                            let color = tag.length > 5 ? 'geekblue' : 'green';
+                                            if (tag === 'loser') {
+                                                color = 'volcano';
+                                            }
+                                            return (
+                                                <Tag color={color} key={tag}>
+                                                    {tag.toUpperCase()}
+                                                </Tag>
+                                            );
+                                        })}
+                                    </>}
+                                />
+                            </Table>
                         </Panel>
                     )
                 })}

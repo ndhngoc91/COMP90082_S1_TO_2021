@@ -7,6 +7,14 @@ def get_all_products(db: Session):
     return db.query(models.Product).all()
 
 
+def get_products_of_contract(contract_id: int, db: Session):
+    return db.query(models.Product.id, models.Product.name, models.Product.key_product_id).join(
+        models.ContractDetail
+    ).filter(
+        models.ContractDetail.contract_id == contract_id
+    ).all()
+
+
 def create_new_product(request: schemas.Product, db: Session):
     new_product = models.Product(
         key_product_id=request.key_product_id,

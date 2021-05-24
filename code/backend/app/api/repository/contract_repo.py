@@ -7,6 +7,10 @@ def get_all_contracts(db: Session):
     return db.query(models.Contract).all()
 
 
+def get_contract(contract_id: int, db: Session):
+    return db.query(models.Contract).filter(models.Contract.id == contract_id).first()
+
+
 def create_new_contract(contract: schemas.Contract, db: Session):
     new_contract = models.Contract(
         name=contract.name,

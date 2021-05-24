@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Button,
     Checkbox,
     Col,
     Divider,
     Layout,
-    List,
+    List, Modal,
     notification,
     Row,
     Select,
@@ -31,10 +31,14 @@ const {Option} = Select;
 const avatarUrl = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
 
 const ProductManagementPage = observer(() => {
+    const [isViewDetailsModalVisible, setIsViewDetailsModalVisible] = useState(false);
+    const [selectedViewProducts, setSelectedViewProducts] = useState([]);
+
     const {
         hiringEquipmentRegister: {
             selectedRecipientId,
             recipients,
+            recipientMap,
             isMakingContract,
             isReadyToMakeContract,
             contractDetails,
@@ -75,18 +79,24 @@ const ProductManagementPage = observer(() => {
                                       itemLayout="horizontal"
                                       dataSource={recipients}
                                       renderItem={recipient => {
-                                          return <List.Item>
-                                              <List.Item.Meta
-                                                  style={{padding: ".5em"}}
-                                                  avatar={<Avatar src={avatarUrl}/>}
-                                                  title={<a href="https://ant.design">
-                                                      {recipient.first_name} {recipient.last_name}
-                                                  </a>}
-                                                  description={selectedRecipientId === recipient.id ?
-                                                      <Tag color="blue" style={{fontSize: "1em"}}>Handling</Tag> :
-                                                      <Tag color="green" style={{fontSize: "1em"}}>Processed</Tag>}
-                                              />
-                                          </List.Item>;
+                                          const selectedProducts = recipientMap[recipient.id].selectedProducts;
+                                          return <List.Item actions={[
+                                              selectedProducts.length > 0 && <Button type="primary" onClick={() => {
+                                                  setSelectedViewProducts(selectedProducts);
+                                                  setIsViewDetailsModalVisible(true);
+                                              }}>View Details</Button>
+                                          ]}>
+                                              <List.Item.Meta style={{padding: ".5em"}}
+                                                              avatar={<Avatar src={avatarUrl}/>}
+                                                              title={<a href="https://ant.design">
+                                                                  {recipient.first_name} {recipient.last_name}
+                                                              </a>}
+                                                              description={selectedRecipientId === recipient.id ?
+                                                                  <Tag color="blue"
+                                                                       style={{fontSize: "1em"}}>Handling</Tag> :
+                                                                  <Tag color="green"
+                                                                       style={{fontSize: "1em"}}>Processed</Tag>}/>
+                                          </List.Item>
                                       }}/>
                                 {isReadyToMakeContract &&
                                 <>
@@ -144,6 +154,19 @@ const ProductManagementPage = observer(() => {
                         </Row>
                     </Content>
                 </Layout>
+                <Modal visible={isViewDetailsModalVisible} closable={false}
+                       onCancel={() => {
+                           setIsViewDetailsModalVisible(false);
+                       }}
+                       onOk={() => {
+                           setIsViewDetailsModalVisible(false);
+                       }}>
+                    <Table dataSource={selectedViewProducts} pagination={false}>
+                        <Column title="Name" dataIndex="name"/>
+                        <Column title="Description" dataIndex="description"/>
+                        <Column title="Key Taxcode Id" dataIndex="key_taxcode_id"/>
+                    </Table>
+                </Modal>
             </Layout>
         </>
     );

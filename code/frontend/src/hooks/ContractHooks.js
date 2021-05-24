@@ -23,6 +23,27 @@ export const useHandleFilterContracts = () => {
     return [handleFilterPackages, {contracts, filtering}];
 };
 
+export const useHandleRetrieveContract = () => {
+    const [contract, setContract] = useState(null);
+    const [retrieving, setRetriving] = useState(false);
+
+    const handleGetContract = useCallback((contractId, success, failure = () => {
+    }) => {
+        setRetriving(true);
+        axios.get(`${BACKEND_ENDPOINT}contracts/${contractId}`, {
+            headers: {"Content-Type": "application/JSON; charset=UTF-8"}
+        }).then((response) => {
+            if (response.status === 200) {
+                setContract(response.data);
+            }
+        }).finally(() => {
+            setRetriving(false);
+        });
+    }, [])
+
+    return [handleGetContract, {contract, retrieving}];
+};
+
 export const useHandleAddContract = () => {
     const [handling, setHandling] = useState(false);
     const {authStore: {firstName, lastName, userRole}, hiringEquipmentRegister: {order}} = useStores();
