@@ -35,7 +35,7 @@ def filter_packages(query: Optional[str],
                                         db=db)
 
 
-def create_new_package(request: schemas.Package, db: Session):
+def create_new_package(request: schemas.PackageToCreate, db: Session):
     return package_repo.create_new_package(request=request, db=db)
 
 
