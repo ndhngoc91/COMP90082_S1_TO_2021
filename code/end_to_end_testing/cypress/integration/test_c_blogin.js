@@ -2,7 +2,7 @@ import {testLoginUser} from "./testLoginUser";
 
 describe("Visit Home Page, test the Login Modal", () => {
     for (const user of testLoginUser) {
-        it(user.summary, function () {
+        it(user.summary, () => {
             cy.visit("/");
 
             cy.contains("Login").click();
@@ -28,13 +28,13 @@ describe("Visit Home Page, test the Login Modal", () => {
     }
 });
 
-describe("The Login page", function () {
+describe("The Login page", () => {
     beforeEach(() => {
         cy.visit("/login")
     });
 
     for (const user of testLoginUser) {
-        it(user.summary, function () {
+        it(user.summary, () => {
             //fill in username
             cy.get("#normal_login_username").type(user.username).should("have.value", user.username);
             //fill in psw
@@ -57,9 +57,6 @@ describe("The Login page", function () {
             }
 
             cy.screenshot();
-            // cy.getCookies().each((cookie) => {
-            //     cy.log(cookie.name,cookie.value);
-            // })
         })
     }
 

@@ -1,9 +1,9 @@
-let record = []
-let itemsdetail = []
-let extraItems = []
-let desc = []
-let count = []
-let orderlist = []
+let record = [];
+let itemsdetail = [];
+let extraItems = [];
+let desc = [];
+let count = [];
+let orderlist = [];
 
 describe("Test the package to Shopping Cart page", () => {
     beforeEach(() => {
@@ -24,8 +24,8 @@ describe("Test the package to Shopping Cart page", () => {
             cy.log(item.text(), index, $list);
             const temp = item.text();
             record.push(temp);
-        })
-        cy.log(JSON.stringify(record));
+        });
+
         cy.get("button.ant-btn.ant-btn-link.ant-btn-lg").each((item, index) => {
             //cy.log(item,index,$list)
             if ((index % 2 === 1) && (index < 12)) {
@@ -42,17 +42,14 @@ describe("Test the package to Shopping Cart page", () => {
                     cy.get(":nth-child(" + temp1 + ") > .ant-col-16 > label").each((item) => {
                         cy.log(item.text());
                         desc.push(item.text());
-                    })
+                    });
                     cy.log("label detail：" + item3.text().toString());
-                    //desc.push(item3.text())
-                    //cy.log(desc)
                 });
 
                 cy.log("detail..............:" + desc);
 
                 cy.get(".ant-form-item-label > label").each((item2, index2) => {
                     if (index2 % 2 === 1) {
-
                         cy.log("detail[0]: " + desc[0]);
                         cy.get(":nth-child(" + index2 + ") > .ant-col-8 > .ant-form-item-control-input > " +
                             ".ant-form-item-control-input-content > .ant-input-number > " +
@@ -60,7 +57,6 @@ describe("Test the package to Shopping Cart page", () => {
                         count.push(index2);
                         cy.log(JSON.stringify(index2));
                         count.push(desc[index2 - 1]);
-                        cy.log(JSON.stringify(cy.get(":nth-child(1) > .ant-col-16 > label")));
                     }
                 });
                 cy.log(JSON.stringify(count));
