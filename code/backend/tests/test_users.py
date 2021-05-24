@@ -126,4 +126,3 @@ def test_update_user(test_app):
     put_response = test_app.put("/users/{user_id}".format(user_id=user_id_created),
                                 data=updated_user_data)
     assert put_response.status_code == 202
-
