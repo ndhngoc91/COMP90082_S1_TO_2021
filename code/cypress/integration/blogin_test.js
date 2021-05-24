@@ -28,6 +28,9 @@ describe('Visit Home Page, test the Login Modal', () =>{
             }else {
                 cy.get('body').should('not.contain', 'Calendar')
             }
+
+            cy.url().should('eq', Cypress.config().baseUrl); //redirection
+
             // 直接截图整个页面
             cy.screenshot()
         })
