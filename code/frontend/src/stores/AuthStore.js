@@ -123,7 +123,9 @@ export class AuthStore {
     login = (data) => {
         this.setData(data);
         const {user_type_id} = data;
-        if (user_type_id === UserType.STAFF) {
+        if (user_type_id === UserType.SUPER) {
+            this.userRole = USER_ROLE.SUPER;
+        } else if (user_type_id === UserType.STAFF) {
             this.userRole = USER_ROLE.STAFF;
         } else {
             this.userRole = USER_ROLE.CUSTOMER;

@@ -1,0 +1,16 @@
+{
+  "reporter": "mochawesome",
+  "reporterOptions": {
+    "reportDir": "cypress/results",
+    "overwrite": false,
+    "html": false,
+    "json": true
+  },
+  "baseUrl": "http://localhost:3000/",
+  "env": {
+    "login_url": "/login",
+    "register_url": "/register",
+    "register_admin_url": "/register-as-a-admin",
+    "products_url": "/products"
+  }
+}

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
-import CalendarPage from "./pages/CalendarPage";
+import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import PackageManagementPage from "./pages/PackageManagementPage/PackageManagementPage";
 import UserAccountPage from "./pages/UserAccountPage/UserAccountPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -21,6 +21,7 @@ import ProductManagementPage from "./pages/ProductManagementPage/ProductManageme
 // CSS
 import "antd/dist/antd.css";
 import "./index.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import {createStore, StoreContext} from "./stores";
 import AuthRoute from "./navigation/AuthRole";
 import {USER_ROLE} from "./consts/UserRole";

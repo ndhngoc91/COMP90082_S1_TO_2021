@@ -13,11 +13,13 @@ import {
     Row,
     Space,
     Typography,
-    Checkbox
+    Checkbox, Modal
 } from "antd";
 import {usePackage} from "../../hooks/PackageHooks";
 import {useStores} from "../../stores";
 import imageComing from "../../assets/imageComing.png";
+import BigCalendar from "../../components/BigCalendar/BigCalendar";
+import {CalendarOutlined} from "@ant-design/icons";
 
 const {Content} = Layout;
 const {Title, Paragraph, Text} = Typography;
@@ -42,6 +44,7 @@ const initialValues = {
 const PackageDetailsPage = () => {
     const params = useParams();
 
+    const [viewCalendar, setViewCalendar] = useState(false);
     const [selectedExtraItems, setSelectedExtraItems] = useState([]);
     const [package_] = usePackage(parseInt(params["packageId"]));
 
@@ -98,6 +101,11 @@ const PackageDetailsPage = () => {
                     <Row justify="space-between" gutter={80}>
                         <Col span={12}>
                             <Image style={{width: "100%"}} src={package_["image_url"]} fallback={imageComing}/>
+                            <Button onClick={() => setViewCalendar(true)}
+                                    style={{width: "100%", marginTop: "1em", fontSize: "3em"}}
+                                    size="large" type="link" icon={<CalendarOutlined/>}>
+                                Check Availability
+                            </Button>
                         </Col>
                         <Col span={12}>
                             <Space direction="vertical">
@@ -153,6 +161,15 @@ const PackageDetailsPage = () => {
                         </Col>
                     </Row>}
                 </Content>
+                <Modal visible={viewCalendar} closable={false}
+                       onOk={() => {
+                           setViewCalendar(false);
+                       }}
+                       onCancel={() => {
+                           setViewCalendar(false);
+                       }}>
+                    <BigCalendar/>
+                </Modal>
             </Layout>
         </BrowserRouter>
     </Layout>

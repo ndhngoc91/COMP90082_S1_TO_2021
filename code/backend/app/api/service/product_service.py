@@ -1,11 +1,16 @@
 import requests
-from app.api.repository import product_repo, product_group_repo
+from typing import Optional
 from sqlalchemy.orm import Session
-from app.api import models, schemas, config
+from app.api import models, schemas, config, consts
+from app.api.repository import product_repo, product_group_repo
 
 
 def get_all_products(db: Session):
     return product_repo.get_all_products(db=db)
+
+
+def filter_products(query: Optional[str], product_status: Optional[consts.ProductStatus], db: Session):
+    return product_repo.filter_products(query=query, product_status=product_status, db=db)
 
 
 def sync_products(session_id: str, db: Session):

@@ -1,9 +1,6 @@
 import React from "react";
-import GanttTimeline from "../components/GanttTimeline/GanttTimeline";
-import NavigationBar from "../components/NavigationBar/NavigationBar";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {Calendar, Badge, Layout} from "antd";
-import {useStores} from "../stores";
-import {USER_ROLE} from "../consts/UserRole";
 
 const {Content} = Layout;
 
@@ -62,16 +59,11 @@ const monthCellRender = (value) => {
 };
 
 const CalendarPage = () => {
-    const {authStore: {userRole}} = useStores();
-
     return <Layout style={{minHeight: "100vh"}}>
         <NavigationBar/>
         <Layout style={{height: "100%"}}>
             <Content>
-                {userRole === USER_ROLE.STAFF &&
-                <GanttTimeline/>}
-                {userRole === USER_ROLE.CUSTOMER &&
-                <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender}/>}
+                <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender}/>
             </Content>
         </Layout>
     </Layout>

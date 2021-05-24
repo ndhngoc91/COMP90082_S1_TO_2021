@@ -7,7 +7,7 @@ import {
     ContainerOutlined,
     SettingOutlined,
     AccountBookOutlined,
-    HomeOutlined, LoginOutlined, UserAddOutlined
+    HomeOutlined, LoginOutlined, UserAddOutlined, WalletOutlined, CalendarOutlined, HistoryOutlined
 } from "@ant-design/icons";
 import {useStores} from "../../stores";
 import {useNavigationBarStyles} from "./styles";
@@ -62,7 +62,7 @@ const NavigationBar = observer(() => {
                 {(userRole === USER_ROLE.GUEST || userRole === USER_ROLE.CUSTOMER) &&
                 <Menu.Item className={leftItemCls} icon={<ShopOutlined/>} key="/packages">Packages</Menu.Item>}
                 {userRole === USER_ROLE.STAFF &&
-                <SubMenu className={leftItemCls} key="management" icon={<SettingOutlined/>}
+                <SubMenu className={leftItemCls} key="management" icon={<ContainerOutlined/>}
                          title="Management Pages">
                     <Menu.Item icon={<ContainerOutlined/>} key="/user-management">
                         User Management
@@ -75,15 +75,15 @@ const NavigationBar = observer(() => {
                     </Menu.Item>
                 </SubMenu>}
                 {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/order-history">
+                <Menu.Item className={leftItemCls} icon={<HistoryOutlined/>} key="/order-history">
                     Order History
                 </Menu.Item>}
                 {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/contract-management">
+                <Menu.Item className={leftItemCls} icon={<WalletOutlined/>} key="/contract-management">
                     Contracts
                 </Menu.Item>}
-                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
-                <Menu.Item className={leftItemCls} icon={<ContainerOutlined/>} key="/calendar">
+                {[USER_ROLE.CUSTOMER].includes(userRole) &&
+                <Menu.Item className={leftItemCls} icon={<CalendarOutlined/>} key="/calendar">
                     Calendar
                 </Menu.Item>}
                 {userRole === USER_ROLE.GUEST &&
@@ -98,7 +98,7 @@ const NavigationBar = observer(() => {
                         Register
                     </Menu.Item>
                 </>}
-                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF, USER_ROLE.SUPER].includes(userRole) &&
                 <SubMenu className={rightItemCls} key="user" icon={<SettingOutlined/>}
                          title={`${firstName} ${lastName}`}>
                     {userRole === USER_ROLE.CUSTOMER &&

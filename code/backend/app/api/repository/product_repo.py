@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy.orm import Session
 from app.api import models, schemas
 from app.api import consts
@@ -5,6 +6,15 @@ from app.api import consts
 
 def get_all_products(db: Session):
     return db.query(models.Product).all()
+
+
+def filter_products(query: Optional[str], product_status: Optional[consts.ProductStatus], db: Session):
+    sql_query = db.query(models.Product)
+    if query is not None:
+        sql_query = sql_query.filter(models.Product.name.like(f"%{query}%"))
+    if product_status is not None:
+        sql_query = sql_query.filter(models.Product.status == product_status.value)
+    return sql_query.all()
 
 
 def get_products_of_contract(contract_id: int, db: Session):
