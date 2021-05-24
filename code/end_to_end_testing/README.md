@@ -1,10 +1,14 @@
-the whole cypress file are as screenshot all file located as same directory within our"code" folder
+the whole cypress file are as screenshot all file located as same directory within our "code" folder
 
 then
-
+``
 cd Cypress
+``
 
-To run the test: cd to ./node_modules/.bin $npm run cypress:open
+To run the test: cd to ./node_modules/.bin 
+``
+npm run cypress:open
+``
 
 all the main testing script.js files are within the integration folder
 
@@ -14,4 +18,7 @@ edit the package.json file :
 
 { "scripts": { "cypress:open": "cypress open" } }
 
-then run again $ npm run cypress:open
+then run again
+``
+npm run cypress:open
+``
