@@ -126,3 +126,98 @@ def test_update_user(test_app):
     put_response = test_app.put("/users/{user_id}".format(user_id=user_id_created),
                                 data=updated_user_data)
     assert put_response.status_code == 202
+
+
+def test_create_a_user_that_username_or_email_exists(test_app):
+    user_data = json.dumps({
+        "username": "TestUsername3",
+        "height": 180,
+        "weight": 75,
+        "foot_size": 300,
+        "first_name": "TestFirstName",
+        "last_name": "TestLastName",
+        "gender": "Male",
+        "birthday": "1990-01-01",
+        "phone": "0481111111",
+        "email": "test3@gmail.com",
+        "din": 1,
+        "is_enabled": 1,
+        "skill_level_id": 1,
+        "user_type_id": 1,
+        "password": "TestPassword3",
+        "address_list": [
+            {
+                "state": "VIC",
+                "city": "Melbourne",
+                "postcode": "3053",
+                "address_line": "Test address line 3",
+                "user_id": 0,
+                "order_id": 0
+            }
+        ]
+    })
+    response = test_app.post("/users", data=user_data)
+    assert response.status_code == 201
+    assert response.json()["username"] == "TestUsername3"
+
+    duplicated_username_user_data = json.dumps({
+        "username": "TestUsername3",
+        "height": 180,
+        "weight": 75,
+        "foot_size": 300,
+        "first_name": "TestFirstName",
+        "last_name": "TestLastName",
+        "gender": "Male",
+        "birthday": "1990-01-01",
+        "phone": "0481111111",
+        "email": "test4@gmail.com",
+        "din": 1,
+        "is_enabled": 1,
+        "skill_level_id": 1,
+        "user_type_id": 1,
+        "password": "TestPassword4",
+        "address_list": [
+            {
+                "state": "VIC",
+                "city": "Melbourne",
+                "postcode": "3053",
+                "address_line": "Test address line 4",
+                "user_id": 0,
+                "order_id": 0
+            }
+        ]
+    })
+
+    response = test_app.post("/users", data=duplicated_username_user_data)
+    assert response.status_code == 409
+
+    duplicated_email_user_data = json.dumps({
+        "username": "TestUsername5",
+        "height": 180,
+        "weight": 75,
+        "foot_size": 300,
+        "first_name": "TestFirstName",
+        "last_name": "TestLastName",
+        "gender": "Male",
+        "birthday": "1990-01-01",
+        "phone": "0481111111",
+        "email": "test3@gmail.com",
+        "din": 1,
+        "is_enabled": 1,
+        "skill_level_id": 1,
+        "user_type_id": 1,
+        "password": "TestPassword5",
+        "address_list": [
+            {
+                "state": "VIC",
+                "city": "Melbourne",
+                "postcode": "3053",
+                "address_line": "Test address line 5",
+                "user_id": 0,
+                "order_id": 0
+            }
+        ]
+    })
+
+    response = test_app.post("/users", data=duplicated_email_user_data)
+    assert response.status_code == 409

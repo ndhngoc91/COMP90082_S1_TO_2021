@@ -1,5 +1,9 @@
 from typing import Optional
+
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from starlette import status
+
 from app.api import models, schemas
 
 
@@ -32,7 +36,7 @@ def delete_address(address_id: int, db: Session):
     address_to_delete = db.query(models.Address).filter(models.Address.id == address_id)
     if not address_to_delete:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"data with id {package_id} not found, delete failure")
+                            detail=f"data with id {address_id} not found, delete failure")
 
     address_to_delete.delete(synchronize_session=False)
     db.commit()
