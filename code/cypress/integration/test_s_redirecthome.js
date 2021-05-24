@@ -12,6 +12,18 @@ describe('Test the Calendar page view', function() {
         cy.get('#normal_login').submit();
     });
 
+    it('Click the Home button and check redirection', ()=>{
+
+        //find Management button and click
+        cy.get('ul[role=menu] li').contains(/Home/).click();
+        //check url redirection
+        cy.url().should('eq', Cypress.config().baseUrl);
+
+
+
+    });
+
+
 
 
 
