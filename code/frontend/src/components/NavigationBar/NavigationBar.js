@@ -98,7 +98,7 @@ const NavigationBar = observer(() => {
                         Register
                     </Menu.Item>
                 </>}
-                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF].includes(userRole) &&
+                {[USER_ROLE.CUSTOMER, USER_ROLE.STAFF, USER_ROLE.SUPER].includes(userRole) &&
                 <SubMenu className={rightItemCls} key="user" icon={<SettingOutlined/>}
                          title={`${firstName} ${lastName}`}>
                     {userRole === USER_ROLE.CUSTOMER &&
