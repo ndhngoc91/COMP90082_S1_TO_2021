@@ -56,3 +56,8 @@ def test_create_update_and_delete_address(test_app):
     delete_response = test_app.delete("/addresses/{address_id}".format(address_id=address_id_created))
     assert delete_response.status_code == 204
 
+
+def test_delete_an_address_that_does_not_exit(test_app):
+    invalid_address_id = str(0)
+    delete_response = test_app.delete("/addresses/{address_id}".format(address_id=invalid_address_id))
+    assert delete_response.status_code == 204
