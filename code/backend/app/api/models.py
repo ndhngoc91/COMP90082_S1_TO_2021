@@ -133,6 +133,8 @@ class Package(Base):
     category = relationship('Category')
     skill_level = relationship('SkillLevel')
 
+    product_groups = relationship('ProductGroup', secondary='package_product_group')
+
 
 class Product(Base):
     __tablename__ = 'products'

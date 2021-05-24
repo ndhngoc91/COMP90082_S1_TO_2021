@@ -37,7 +37,7 @@ def get_package(package_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-def create_new_package(request: schemas.Package, db: Session = Depends(get_db)):
+def create_new_package(request: schemas.PackageToCreate, db: Session = Depends(get_db)):
     return package_service.create_new_package(request=request, db=db)
 
 

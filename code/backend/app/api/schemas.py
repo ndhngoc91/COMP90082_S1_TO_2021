@@ -88,6 +88,10 @@ class Package(BaseModel):
     skill_level_id: int
 
 
+class PackageToCreate(Package):
+    product_group_ids: Optional[List[int]]
+
+
 class Session(BaseModel):
     session_id: str
     date: datetime.datetime
