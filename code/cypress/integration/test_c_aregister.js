@@ -82,10 +82,10 @@ describe('Register customer Page', function() {
     for (const user of testRegisterUser){
         it(user.summary, function()
         {
-            // 输入用户名
+
             cy.get('#username.ant-input').type(user.username)
                 .should('have.value', user.username)
-            // 输入密码
+
             cy.get('#password.ant-input').type(user.password)
                 .should('have.value', user.password)
             if (user.username == 'test1'){
@@ -128,11 +128,11 @@ describe('Register customer Page', function() {
                 cy.get('body').should('contain', 'valid')
             }
             cy.get('#agreement').check()
-            // 提交表单
+
             cy.get('.ant-form').submit()
-            // 判断页面跳转到 http://127.0.0.1:3000/
+
             cy.url().should('include', '/')
-            // and '欢迎您：ruby' in page
+
             cy.log(user.username)
             if (user.username == 'user1'){
                 cy.get('body').should('contain', 'Username')
@@ -142,11 +142,11 @@ describe('Register customer Page', function() {
                 cy.get('body').should('contain', 'Email')
             }
 
-            //输出为空，网站不存在cookie
+
             cy.getCookies().each((cookie) => {
                 cy.log(cookie.name,cookie.value);
             })
-            // 直接截图整个页面
+
             cy.screenshot()
         })
     }
