@@ -47,7 +47,7 @@ export const useHandleRegisterCustomer = () => {
                                                 }, success, failure = () => {
     }) => {
         setHandling(true);
-        axios.post('http://127.0.0.1:8000/users', {
+        axios.post(`${BACKEND_ENDPOINT}users`, {
             username: username,
             email: email,
             password: password,
@@ -101,7 +101,7 @@ export const useHandleRegisterAdmin = () => {
                                              }, success, failure = () => {
     }) => {
         setHandling(true);
-        axios.post('http://127.0.0.1:8000/users', {
+        axios.post(`${BACKEND_ENDPOINT}/users`, {
             username: username,
             email: email,
             first_name: first_name,
@@ -156,7 +156,7 @@ export const useHandleEditProfile = () => {
                                            }, success, failure = () => {
     }) => {
         setHandling(true);
-        axios.put(`http://127.0.0.1:8000/users/${id}`, {
+        axios.put(`${BACKEND_ENDPOINT}users/${id}`, {
             username: username,
             height: height,
             weight: weight,
