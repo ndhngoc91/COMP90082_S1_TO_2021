@@ -96,7 +96,7 @@ const ProductManagementPage = observer(() => {
                                 <Title level={3}>Recipient List</Title>
                                 <Divider/>
                                 <Space direction="vertical" style={{width: "100%"}}>
-                                    {!isReadyToMakeContract &&
+                                    {nextProductGroup &&
                                     <Alert message="Selecting"
                                            description={`Please select a ${nextProductGroup.name}`}
                                            type="success"
