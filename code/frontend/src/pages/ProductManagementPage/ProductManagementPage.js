@@ -13,7 +13,7 @@ import {
     Table,
     Tag,
     Typography,
-    Input
+    Input, Alert
 } from "antd";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import {useHandleFilterProducts} from "../../hooks/ProductHooks";
@@ -23,6 +23,7 @@ import Avatar from "antd/es/avatar/avatar";
 import {useProductManagementPageStyle} from "./styles";
 import {observer} from "mobx-react-lite";
 import {useHandleAddContract} from "../../hooks/ContractHooks";
+import {useProductGroups} from "../../hooks/ProductGroupHooks";
 
 const {Content} = Layout;
 const {Column} = Table;
@@ -35,16 +36,18 @@ const avatarUrl = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.
 const ProductManagementPage = observer(() => {
     const [query, setQuery] = useState("");
     const [selectedProductStatus, setSelectedProductStatus] = useState(ProductStatus.AVAILABLE);
+    const [selectedProductGroupId, setSelectedProductGroupId] = useState(null);
     const [isViewDetailsModalVisible, setIsViewDetailsModalVisible] = useState(false);
     const [selectedViewProducts, setSelectedViewProducts] = useState([]);
 
     const {
         hiringEquipmentRegister: {
-            selectedRecipientId,
             recipients,
             recipientMap,
             isMakingContract,
             isReadyToMakeContract,
+            selectedRecipientId,
+            nextProductGroup,
             contractDetails,
             selectProduct,
             cancelSelection,
@@ -52,15 +55,17 @@ const ProductManagementPage = observer(() => {
         }
     } = useStores();
 
+    const productGroups = useProductGroups();
     const [handleFilterProducts, {products, filtering}] = useHandleFilterProducts();
     const [handleAddContract, {handling}] = useHandleAddContract();
 
     useEffect(() => {
         handleFilterProducts({
             query: query,
-            product_status: selectedProductStatus
+            product_status: selectedProductStatus,
+            product_group_id: selectedProductGroupId
         });
-    }, [query, selectedProductStatus]);
+    }, [query, selectedProductStatus, selectedProductGroupId]);
 
     const onSearch = queryValue => {
         setQuery(queryValue);
@@ -90,29 +95,36 @@ const ProductManagementPage = observer(() => {
                             <Col span={6}>
                                 <Title level={3}>Recipient List</Title>
                                 <Divider/>
-                                <List className={recipientListCls}
-                                      itemLayout="horizontal"
-                                      dataSource={recipients}
-                                      renderItem={recipient => {
-                                          const selectedProducts = recipientMap[recipient.id].selectedProducts;
-                                          return <List.Item actions={[
-                                              selectedProducts.length > 0 && <Button type="primary" onClick={() => {
-                                                  setSelectedViewProducts(selectedProducts);
-                                                  setIsViewDetailsModalVisible(true);
-                                              }}>View Details</Button>
-                                          ]}>
-                                              <List.Item.Meta style={{padding: ".5em"}}
-                                                              avatar={<Avatar src={avatarUrl}/>}
-                                                              title={<a href="https://ant.design">
-                                                                  {recipient.first_name} {recipient.last_name}
-                                                              </a>}
-                                                              description={selectedRecipientId === recipient.id ?
-                                                                  <Tag color="blue"
-                                                                       style={{fontSize: "1em"}}>Handling</Tag> :
-                                                                  <Tag color="green"
-                                                                       style={{fontSize: "1em"}}>Processed</Tag>}/>
-                                          </List.Item>
-                                      }}/>
+                                <Space direction="vertical" style={{width: "100%"}}>
+                                    {!isReadyToMakeContract &&
+                                    <Alert message="Selecting"
+                                           description={`Please select a ${nextProductGroup.name}`}
+                                           type="success"
+                                           showIcon/>}
+                                    <List className={recipientListCls}
+                                          itemLayout="horizontal"
+                                          dataSource={recipients}
+                                          renderItem={recipient => {
+                                              const selectedProducts = recipientMap[recipient.id].selectedProducts;
+                                              return <List.Item actions={[
+                                                  selectedProducts.length > 0 && <Button type="primary" onClick={() => {
+                                                      setSelectedViewProducts(selectedProducts);
+                                                      setIsViewDetailsModalVisible(true);
+                                                  }}>View Details</Button>
+                                              ]}>
+                                                  <List.Item.Meta style={{padding: ".5em"}}
+                                                                  avatar={<Avatar src={avatarUrl}/>}
+                                                                  title={<a href="https://ant.design">
+                                                                      {recipient.first_name} {recipient.last_name}
+                                                                  </a>}
+                                                                  description={selectedRecipientId === recipient.id ?
+                                                                      <Tag color="blue"
+                                                                           style={{fontSize: "1em"}}>Handling</Tag> :
+                                                                      <Tag color="green"
+                                                                           style={{fontSize: "1em"}}>Processed</Tag>}/>
+                                              </List.Item>
+                                          }}/>
+                                </Space>
                                 {isReadyToMakeContract &&
                                 <>
                                     <Divider/>
@@ -150,11 +162,24 @@ const ProductManagementPage = observer(() => {
                                                 <Option value={ProductStatus.HIRED}>Hired</Option>
                                             </Select>
                                         </Col>
+                                        <Col span={4}>
+                                            <Select placeholder="Select Product Group" style={{width: "100%"}}
+                                                    value={selectedProductGroupId}
+                                                    size="large" onSelect={value => setSelectedProductGroupId(value)}>
+                                                {productGroups.map((productGroup, index) => {
+                                                    return (
+                                                        <Option key={index}
+                                                                value={productGroup.id}>{productGroup.name}</Option>
+                                                    );
+                                                })}
+                                            </Select>
+                                        </Col>
                                         <Col>
                                             <Button size="large"
                                                     onClick={() => {
                                                         setQuery("");
                                                         setSelectedProductStatus(ProductStatus.AVAILABLE);
+                                                        setSelectedProductGroupId(null);
                                                     }}>
                                                 Clear
                                             </Button>
@@ -194,6 +219,9 @@ const ProductManagementPage = observer(() => {
                                         {isMakingContract &&
                                         <Column title="Select"
                                                 render={record => {
+                                                    if (record["product_group_id"] !== nextProductGroup["id"]) {
+                                                        return;
+                                                    }
                                                     if (record.status === ProductStatus.AVAILABLE) {
                                                         return <Checkbox onChange={(event) => {
                                                             if (event.target.checked) {
@@ -215,7 +243,7 @@ const ProductManagementPage = observer(() => {
                        onOk={() => {
                            setIsViewDetailsModalVisible(false);
                        }}>
-                    <Table dataSource={selectedViewProducts} pagination={false}>
+                    <Table dataSource={selectedViewProducts} pagination={false} rowKey="id">
                         <Column title="Name" dataIndex="name" render={value => <Text strong>{value}</Text>}/>
                         <Column title="Description" dataIndex="description"/>
                         <Column title="Key Taxcode Id" dataIndex="key_taxcode_id"/>

@@ -9,8 +9,10 @@ def get_all_products(db: Session):
     return product_repo.get_all_products(db=db)
 
 
-def filter_products(query: Optional[str], product_status: Optional[consts.ProductStatus], db: Session):
-    return product_repo.filter_products(query=query, product_status=product_status, db=db)
+def filter_products(query: Optional[str], product_status: Optional[consts.ProductStatus],
+                    product_group_id: Optional[int], db: Session):
+    return product_repo.filter_products(query=query, product_status=product_status,
+                                        product_group_id=product_group_id, db=db)
 
 
 def sync_products(session_id: str, db: Session):

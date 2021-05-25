@@ -17,6 +17,7 @@ export class HiringEquipmentRegister {
             isMakingContract: computed,
             isReadyToMakeContract: computed,
             selectedRecipientId: computed,
+            nextProductGroup: computed,
             contractDetails: computed,
             pickupOrder: action,
             selectProduct: action,
@@ -61,6 +62,15 @@ export class HiringEquipmentRegister {
 
     get selectedRecipientId() {
         return parseInt(Object.keys(this.recipientMap)[this.selectedRecipientIndex]);
+    }
+
+    get nextProductGroup() {
+        if (this.isReadyToMakeContract) {
+            return null;
+        } else {
+            const recipient = this.recipientMap[this.selectedRecipientId];
+            return recipient.productGroups[recipient.selectedProducts.length];
+        }
     }
 
     get contractDetails() {

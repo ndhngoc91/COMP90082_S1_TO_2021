@@ -8,12 +8,15 @@ def get_all_products(db: Session):
     return db.query(models.Product).all()
 
 
-def filter_products(query: Optional[str], product_status: Optional[consts.ProductStatus], db: Session):
+def filter_products(query: Optional[str], product_status: Optional[consts.ProductStatus],
+                    product_group_id: Optional[int], db: Session):
     sql_query = db.query(models.Product)
     if query is not None:
         sql_query = sql_query.filter(models.Product.name.like(f"%{query}%"))
     if product_status is not None:
         sql_query = sql_query.filter(models.Product.status == product_status.value)
+    if product_group_id is not None:
+        sql_query = sql_query.filter(models.Product.product_group_id == product_group_id)
     return sql_query.all()
 
 
