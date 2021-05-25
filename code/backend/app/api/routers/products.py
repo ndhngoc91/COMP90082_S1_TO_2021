@@ -18,5 +18,7 @@ def get_all_products(db: Session = Depends(get_db)):
 
 @router.get("/filter")
 def filter_products(query: Optional[str] = "", product_status: Optional[consts.ProductStatus] = None,
+                    product_group_id: Optional[int] = None,
                     db: Session = Depends(get_db)):
-    return product_service.filter_products(query=query, product_status=product_status, db=db)
+    return product_service.filter_products(query=query, product_status=product_status,
+                                           product_group_id=product_group_id, db=db)
