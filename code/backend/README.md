@@ -5,6 +5,16 @@ uvicorn app.main:app --reload
 
 To run all test cases:
 ```
+pip install PyMySQL
+
+pip install async-exit-stack async-generator
+
+pip install python-jose
+
+sudo pip install passlib
+
+pip install python-multipart
+
 pytest
 ```
 
