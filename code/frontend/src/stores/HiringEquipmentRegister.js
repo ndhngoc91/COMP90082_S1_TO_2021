@@ -68,8 +68,12 @@ export class HiringEquipmentRegister {
         if (this.isReadyToMakeContract) {
             return null;
         } else {
-            const recipient = this.recipientMap[this.selectedRecipientId];
-            return recipient.productGroups[recipient.selectedProducts.length];
+            if (this.isMakingContract) {
+                const recipient = this.recipientMap[this.selectedRecipientId];
+                return recipient.productGroups[recipient.selectedProducts.length];
+            } else {
+                return null;
+            }
         }
     }
 
