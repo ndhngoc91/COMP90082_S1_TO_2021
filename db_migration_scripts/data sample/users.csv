@@ -1,0 +1,7 @@
+"id";"username";"password";"height";"weight";"foot_size";"first_name";"last_name";"gender";"birthday";"phone";"email";"din";"is_enabled";"skill_level_id";"organization_id";"user_type_id"
+1;"user1";"$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS";170.0;75.0;310;"Ruby";"Nguyen 1";"Male";"1995-05-28";"0434117998";"ruby.nguyen@gmail.com";0.01;1;1;1;1
+2;"randy";"$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS";170.0;66.0;330;"Randy";"Tsai";"Male";"1995-05-05";"0434117998";"mail1@gmail.com";0.01;1;1;2;1
+3;"andrea";"$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS";169.0;66.0;300;"Andrea";"Law";"Female";"1995-05-05";"0434117998";"mail2@gmail.com";0.01;1;1;2;1
+4;"ruby";"$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS";168.0;55.0;270;"Ruby";"Nguyen";"Male";"1995-05-05";"0434117998";"mail3@gmail.com";0.01;1;1;3;2
+5;"kiet";"$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS";167.0;33.0;250;"Kiet";"To";"Male";"1995-05-05";"0434117998";"mail4@gmail.com";0.01;1;1;2;1
+6;"super";"$2b$12$lMSWuh14CuqoWpScrZe14.YCj3z9lrS1tJR8VzEhYfaNPwVSBkLwS";165.0;78.0;290;"Admin";"Super";"Male";"1995-05-05";"0434117998";"mail5@gmail.com";0.01;1;1;3;3
