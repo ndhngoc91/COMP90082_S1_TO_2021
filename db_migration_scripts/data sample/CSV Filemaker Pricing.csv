@@ -1,0 +1,60 @@
+﻿Category,Sell Code,Description,day 1,day 2,day 3,day 4,day 5,day 6,day 7,day 8,Day 9
+DH Beg,0,"DH Budget skis, boots, poles",50,85,100,115,125,130,135,140,145
+DH Int,DI,"DH Inter skis, boots, poles",70,110,130,140,150,160,165,170,175
+DH Per,DP,"DH Perf skis, boots, poles",85,130,150,165,170,180,190,200,210
+DH U14,DK,"DH U15 skis, boots, poles",40,68,80,92,100,104,108,112,116
+DH U6,DPS,"DH U5 skis, boots, poles",25,42,50,58,63,65,68,73,
+XC Cla,X,"XC Classic Ski, Boots, poles",50,85,100,115,125,130,135,140,145
+SB Perf,SP,SB Perf board and Boots,85,130,150,165,170,180,190,200,
+XC Ska,XS,"XC Skate, skis, boots, poles",60,100,120,130,140,160,165,170,
+XC U14,XK,"XC U15, skis, boots, poles",40,68,80,92,100,104,108,113,
+XC U6,XCP,"XC U5, skis boots, poles",25,42,50,58,63,65,68,73,
+SB Beg,SB,SB & Boots - Budget,50,85,100,115,125,130,135,140,145
+SB Only,SBO,Snowboard Only,40,75,90,105,115,120,125,130,
+Per brd,SIO,Snowboard only - Inter,60,100,120,130,140,150,155,160,
+SB U14,SK,SB and Boots U15,40,68,80,92,100,104,108,112,116
+BC Bud,B,"BC Budget Skis, boots, poles",50,85,100,115,125,130,135,140,145
+BC Per,BP,"BC Perf, skis, boots, poles",85,130,150,165,170,180,190,200,210
+Tele,TeleP,"Telemark skis, boots, poles",85,130,150,165,170,180,190,200,210
+Yowies,Y,Yowies/snowshoes,25,35,45,50,55,60,66,70,73
+Boots,boot,Ski/SB or BC boots only,20,35,45,50,55,60,65,70,
+Beg ski,ski,DH skis/poles no boots,40,75,90,105,115,120,125,130,135
+P or P,P,Pants Adult,20,30,35,40,45,50,55,60,
+P&P,PP,Pants and Parka Adult,30,40,45,50,55,60,65,70,
+P&PK,PPK,Pants and Parka/suit U6,18,23,27,31,35,39,43,46,
+PorPK,PK,Pants or Parka U6,14,19,23,27,31,35,39,42,
+PorPY,PY,Pants or Parka U14,18,23,27,31,35,39,43,46,
+P&PY,PPY,Pants and Parka U14,24,34,39,44,49,53,57,60,
+Apres,A,Apres Boots Adults,10,15,20,25,30,35,35,35,
+ApresK,AK,Apres Boots U14,8,12,15,17,19,21,23,25,27
+Helmet,H,Helmet,10,15,20,23,26,29,31,33,35
+Helm U14,HK,Helmet kids,0,0,0,0,0,0,0,0,0
+Wrist G,WG,Wrist Guard,5,10,12,14,16,18,20,22,24
+Goggle,G,Goggles,10,15,20,23,26,29,31,33,35
+Poles,Poles,Poles Only,5,10,15,20,25,30,35,40,
+Helm/gogg,HG,Helmet & Goggles,15,25,35,40,44,48,50,52,
+Helm/WG,HWG,Helmet & WG,15,25,32,37,42,47,51,53,
+Diamond,CD,Diamond Chain Hire,20,35,45,55,60,65,70,75,80
+Ladder,LC,Ladder Chain Hire,15,25,35,45,50,55,55,57,
+Toboggan,TS,Toboggan,10,15,20,23,26,29,31,33,
+Tob Carve,TC,Toboggan Carve,20,30,40,46,52,58,62,64,
+Garmon,BPB,Backcountry Garmont/Scarpa Boot,35,55,70,80,90,100,110,120,
+ski u14,SKIK,Ski only under 15,32,60,72,84,92,96,100,104,
+ski u6,SKIPS,Ski Only under 6,20,37,45,52,57,60,63,66,
+Bootu14,BK,Boot only Under 14,15,25,30,35,40,45,50,,
+Boot u6,BPS,Boot only Under 6,10,15,20,25,30,35,40,,
+Per ski,PSKI,Performance ski only,60,100,120,135,145,155,165,175,185
+Int ski,ISKI,Intermediiate ski only,60,100,120,135,145,155,165,175,185
+Int Boot,IB,Intermediate Boot only,30,40,50,55,60,65,70,75,80
+SB Inter,SI,SB & Boots Interm,70,110,130,140,150,160,165,170,175
+Pants,P,Pants Adults,20,30,35,40,45,50,55,60,
+Jacket,J,Jacket Adults,20,30,35,40,45,50,55,60,
+P & J,PP,Pants & Jacket Adults,30,40,45,50,55,60,65,70,
+Pants U6,PK,Pants U6,14,19,23,27,31,35,39,42,
+Jacket U6,JK,Jacket U6,14,19,23,27,31,35,39,42,
+P&J U6,PPK,Pants & Jacket U6/Suit,18,23,27,31,35,39,43,46,
+Pants U15,PY,Pants U15,18,23,27,31,35,39,43,46,
+Jacket U15,JY,Jacket U15,18,23,27,31,35,39,43,46,
+P&J U15,PPY,Pants & Jacket U15,24,34,39,44,49,53,57,60,
+Per Boot,PB,Performance Boot Only,35,55,70,80,90,100,110,120,
+NNNBC,B,Backcountry NNNBC,50,85,100,115,125,130,135,140,
