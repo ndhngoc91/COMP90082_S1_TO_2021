@@ -1,3 +1,4 @@
+DROP DATABASE `squizz_app`;
 CREATE DATABASE  IF NOT EXISTS `squizz_app` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `squizz_app`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
