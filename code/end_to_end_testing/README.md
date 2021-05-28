@@ -27,10 +27,6 @@ npm run cypress:open
 
 Method to run all the test codes in integration folder:
 
-``
-npm run cypress:open
-``
-
 cd to ./cypress/integration
 
 ``
