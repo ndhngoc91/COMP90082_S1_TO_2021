@@ -57,5 +57,8 @@ Follow these steps to deploy with Docker:
 
 IMPORTANT: Everytime you make change to the code, remember to run step 6 again. If any problem persists, please "DELETE" the current Container/Image and then re-run step 6 again. This can be done easily with Docker Desktop, Go to "Containers/Apps" and hit the "Trash Bin icon" to delete it (will cost a few secs).
 
+## CONTACT
+Please contact hongngocn@student.unimelb.edu.au or ndhngoc91@gmail.com if you have any concerns
+
 ## LICENSE
   [MIT](LICENSE)
