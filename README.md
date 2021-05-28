@@ -11,10 +11,17 @@ At Rocky Valley we have plenty of activities to make your holiday fun. From Ski 
     |   ├── end_to_end_testing                      # End-to-end testing (Cypress)
     │   ├── backend                                 # Backend Code (FastAPI)
     |       ├── tests                               # Unit tests for the backend
+    |       ├── Dockerfile                          # Dockerfile to deploy the backend
     │       └── ...                                 # ...
     │   └── frontend                                # Frontend Code (ReactJS + MobX + CSS-IN-JS)
+    |       ├── Dockerfile                          # Dockerfile to deploy the frontend
     │       └── ...                                 # ...
-    ├── db_migration_scripts                        # MySQL migration scripts to import the database
+    ├── db_migration_scripts                        # Migration scripts
+    |   ├── data sample                             # Data sample exported from the db
+    │   ├── data                                    # MySQL migration scripts to import the database on local
+    │   ├── deploydata                              # MySQL migration scripts used with Docker
+    │   ├── reference files                         # Price data received from Rocky Valley
+    │   └── Dockerfile                              # Dockerfile to deploy a MySQL database
     ├── deployment                                  # Deployment Guide (Local & Auto)
     │   ├── scripts                                 # Scripts to deploy (planning to do in week 10)
     │   ├── CICD Pipeline.pdf                       # The CI/CD pipeline
