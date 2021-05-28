@@ -8,10 +8,11 @@ At Rocky Valley we have plenty of activities to make your holiday fun. From Ski 
 
     .
     ├── code                                        # Code
+    |   ├── end_to_end_testing                      # End-to-end testing (Cypress)
     │   ├── backend                                 # Backend Code (FastAPI)
     |       ├── tests                               # Unit tests for the backend
     │       └── ...                                 # ...
-    │   └── frontend                                # Frontend Code (ReactJS)
+    │   └── frontend                                # Frontend Code (ReactJS + MobX + CSS-IN-JS)
     │       └── ...                                 # ...
     ├── db_migration_scripts                        # MySQL migration scripts to import the database
     ├── deployment                                  # Deployment Guide (Local & Auto)
