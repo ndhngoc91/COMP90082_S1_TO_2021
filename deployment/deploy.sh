@@ -1,0 +1,2 @@
+#!/bin/bash
+aws cloudformation deploy --stack-name RockyValley --template-file RockyValley.yml --capabilities CAPABILITY_NAMED_IAM --parameter-overrides DeveloperIP=$1 KeyName=$2 --no-fail-on-empty-changeset

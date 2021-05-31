@@ -1,0 +1,259 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deployment of RockyValley Website，provided by the COMP90082_S1_TO team of Unimelb.
+
+Parameters:
+  VpcName:
+    Type: String
+    Default: 'RockyValleyVPC'
+    Description: VPC cloud-ops
+  CIDR:
+    Type: String
+    Default: '10.0'
+    Description: CIDR Range of this VPC
+  DeveloperIP:
+    Type: String
+    Default: '255.255.255.255'
+    Description: IP address of developer
+  KeyName:
+    Type: String
+    Default: 'squizz-TO'
+    Description: AWS key pair name
+  TimeZone:
+    Type: String
+    Default: 'Australia/Sydney'
+    Description: TimeZone
+
+Resources:
+  RockyValleyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Sub '${CIDR}.0.0/20'
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: !Ref 'VpcName'
+
+  VPCPublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref 'RockyValleyVPC'
+      CidrBlock: !Sub '${CIDR}.1.0/24'
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs
+          Ref: AWS::Region
+      Tags:
+        - Key: Name
+          Value: subnet-PUB
+
+  VPCPrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref 'RockyValleyVPC'
+      CidrBlock: !Sub '${CIDR}.2.0/28'
+      AvailabilityZone: !Select
+        - '0'
+        - !GetAZs
+          Ref: AWS::Region
+      Tags:
+        - Key: Name
+          Value: subnet-PRI
+
+  VPCInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${VpcName}-igw'
+
+  VPCAttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref 'RockyValleyVPC'
+      InternetGatewayId: !Ref 'VPCInternetGateway'
+
+  VPCPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'RockyValleyVPC'
+      Tags:
+        - Key: Name
+          Value: !Sub '${VpcName}-public-route-table'
+
+  VPCPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'RockyValleyVPC'
+      Tags:
+        - Key: Name
+          Value: !Sub '${VpcName}-private-route-table'
+
+  VPCPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCAttachGateway
+    Properties:
+      RouteTableId: !Ref 'VPCPublicRouteTable'
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref 'VPCInternetGateway'
+
+  VPCPrivateRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCAttachGateway
+    Properties:
+      RouteTableId: !Ref 'VPCPrivateRouteTable'
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId: !Ref 'NAT'
+
+  VPCPublicSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref 'VPCPublicSubnet1'
+      RouteTableId: !Ref 'VPCPublicRouteTable'
+
+  VPCPrivateSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref 'VPCPrivateSubnet1'
+      RouteTableId: !Ref 'VPCPrivateRouteTable'
+
+  NAT:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - EIP
+          - AllocationId
+      SubnetId: !Ref 'VPCPublicSubnet1'
+      Tags:
+        - Key: Name
+          Value: RockyValley
+  EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "RockyValley"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+
+  InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref 'InstanceRole'
+
+  PublicSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub '${VpcName}-sg-pb'
+      GroupDescription: PUB SecurityGroup for RockyValley
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub '${DeveloperIP}/32'
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub '${CIDR}.0.0/20'
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: '0.0.0.0/0'
+      VpcId: !Ref 'RockyValleyVPC'
+      Tags:
+        - Key: Name
+          Value: RockyValleySG
+
+  PrivateSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub '${VpcName}-sg-pv'
+      GroupDescription: PrivateSecurityGroup for RockyValley
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub '${CIDR}.0.0/20'
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Sub '${DeveloperIP}/32'
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Sub '${CIDR}.0.0/20'
+      VpcId: !Ref 'RockyValleyVPC'
+      Tags:
+        - Key: Name
+          Value: RockyValleySG
+
+  RVEC2PUB:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: "ami-0186908e2fdeea8f3"
+      KeyName: !Sub '${KeyName}'
+      SecurityGroupIds:
+        - !Ref 'PublicSecurityGroup'
+      SubnetId: !Ref 'VPCPublicSubnet1'
+      Tags:
+        - Key: Name
+          Value: EC2PUB
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sed -i '1c ZONE="${TimeZone}"' /etc/sysconfig/clock
+          ln -sf /usr/share/zoneinfo/${TimeZone} /etc/localtime
+          yum update -y
+          yum -y install xinetd
+          aws s3api get-object --bucket
+          cd ${FRONTENDPATH}
+          yarn install
+          yarn start
+
+  RVEC2PRI:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: "ami-0186908e2fdeea8f3"
+      KeyName: !Sub '${KeyName}'
+      SecurityGroupIds:
+        - !Ref 'PrivateSecurityGroup'
+      SubnetId: !Ref 'VPCPrivateSubnet1'
+      PrivateIpAddress: !Sub '${CIDR}.2.5'
+      IamInstanceProfile: !Ref 'InstanceProfile'
+      Tags:
+        - Key: Name
+          Value: EC2PRI
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sed -i '1c ZONE="${TimeZone}"' /etc/sysconfig/clock
+          ln -sf /usr/share/zoneinfo/${TimeZone} /etc/localtime
+          yum update -y
+          aws s3api get-object --bucket
+          cd ${BACKENDPATH}
+          uvicorn 
+
+Outputs:
+  VPC:
+    Description: VPC ID for VPC
+    Value: !Ref 'BelongVPC'
